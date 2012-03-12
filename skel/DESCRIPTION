@@ -9,4 +9,4 @@ License: BSD
 Depends: utils, BBmisc, digest, RSQLite, sendmailR, brew, stringr
 LazyData: yes
 ByteCompile: yes
-Version: 1.0
+Version: 1.1
