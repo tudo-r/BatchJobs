@@ -1,0 +1,33 @@
+#' Creates a job description. Usually you will not do this manually.
+#'
+#' Every object is a list that contains the passed arguments of the constructor.
+#'
+#' @param id [\code{integer(1)}]\cr
+#'   Job id, determined by DB autoincrement.
+#'   Default is \code{as.integer(NA)}.
+#' @param fun [\code{function}]\cr
+#'   Job function to apply on parameters.
+#' @param fun.id [\code{character(1)}]\cr
+#'   Id used to store function on disk.
+#'   Default is \code{digest(fun)}.
+#' @param pars [\code{list}]\cr
+#'   Parameter list for job function.
+#' @param seed [\code{integer(1)}]\cr
+#'   Random seed for job.
+#' @aliases Job
+#' @title Job description.
+#' @export
+makeJob = function(id=as.integer(NA), fun, fun.id=digest(fun), pars, seed) {
+  structure(list(id=id, fun=fun, fun.id=fun.id, pars=pars, seed=seed), class="Job")
+}
+
+
+#' @S3method print Job
+print.Job = function(x, ...) {
+  cat("BatchJobs job:\n")
+  catf("  Job id: %s", x$id)
+  catf("  Fun id: %s", x$fun.id)
+  catf("  Fun formals: %s", collapse(names(formals(x$fun))))
+  catf("  Pars: %s", listToShortString(x$pars))
+  catf("  Seed: %i", x$seed)
+}

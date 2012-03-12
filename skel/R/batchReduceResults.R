@@ -1,0 +1,64 @@
+#' Reduces results via a binary function and adds jobs for this to a registry.
+#' Each jobs reduces a certain number of results on one slave.
+#' You can then submit these jobs to the batch system.
+#' Later, you can do a final reduction with \code{\link{reduceResults}} on the master.
+#' @param reg [\code{\link{Registry}}]\cr
+#'   Registry whose results should be reduced by \code{fun}.
+#' @param reg2 [\code{\link{Registry}}]\cr
+#'   Empty registry that should store the job for the mapping.
+#' @param fun [\code{function(aggr, res)}]\cr
+#'   Function to reduce results with.
+#' @param ids [\code{integer}]\cr
+#'   Ids of jobs whose results should be reduced with \code{fun}.
+#'   Default is all jobs.
+#' @param part [\code{character(1)}]\cr
+#'   Only useful for multiple result files, then defines which result file part should be loaded.
+#'   \code{NA} means all parts are loaded, which is the default.
+#' @param init [any]\cr
+#'   Initial object for reducing.
+#' @param block.size [\code{integer(1)}]\cr
+#'   Number of results reduced in one job.
+#' @return Nothing.
+#' @examples \dontrun{
+#'  # generating example results:
+#'  reg1 <- makeRegistry(id="BatchJobsExample1", seed=123)
+#'  f <- function(x) x^2
+#'  batchMap(reg1, f, 1:10)
+#'  submitJobs(reg1)
+#'  
+#'  # Define function to collect and reduce results:
+#'  sq <- function(aggr, res) c(aggr,sqrt(res))
+#'  # calculating the square roots, with 2 calculations per job:
+#'  reg2 <- makeRegistry(id="BatchJobsExample2", seed=123)
+#'  batchReduceResults(reg1, reg2, fun=sq, init=numeric(0), block.size=2)
+#'  # starting 5 jobs:
+#'  submitJobs(reg2)
+#'  reduceResults(reg2, fun=function(aggr,job,res) c(aggr, res))
+#' }
+#' @export
+batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, block.size) {
+  checkArg(reg, cl="Registry")
+  checkArg(fun, formals=c("aggr", "res"))
+  checkArg(reg2, cl="Registry")
+  if (missing(ids)) {
+    ids = dbGetJobIdsIfAllDone(reg)
+  } else {
+    ids = convertIntegers(ids)
+    checkArg(ids, "integer", na.ok=FALSE)
+    checkIds(reg, ids)
+    if (!all(ids %in% dbGetDone(reg)))
+      stop("Not all jobs with corresponding ids finished (yet)!")
+  }
+  block.size = convertInteger(block.size)
+  checkArg(block.size, "integer", len=1L, na.ok=FALSE)
+  if (getJobNr(reg2) > 0L)
+    stop("Registry 'reg2' is not empty!")
+  if(reg$file.dir == reg2$file.dir)
+    stop("Both registries cannot point to the same file dir. Files would get overwritten!")
+  # x is id
+  fun2 = function(aggr, x) {
+    fun(aggr, loadResult(reg, x, part))
+  }
+  batchReduce(reg2, fun2, ids, init, block.size)
+  invisible(NULL)
+}

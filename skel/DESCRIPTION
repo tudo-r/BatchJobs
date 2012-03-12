@@ -1,0 +1,12 @@
+Package: BatchJobs
+Title: Provide map and reduce variants for clusters. 
+Description: 
+Author: Bernd Bischl <bernd_bischl@gmx.net>,
+  Michel Lang <michellang@gmail.com>, 
+  Olaf Mersmann <olafm@p-value.net>
+Maintainer: Bernd Bischl <bernd_bischl@gmx.net>
+License: BSD
+Depends: utils, BBmisc, digest, RSQLite, sendmailR, brew, stringr
+LazyData: yes
+ByteCompile: yes
+Version: 1.0

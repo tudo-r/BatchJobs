@@ -1,0 +1,57 @@
+<%
+walltime <- coalesce(resources$walltime, 60 * 60) ## default 1 hour
+memory <- coalesce(resources$memory, 1024) ## default 1G
+nodes <- 1 ## currently hard coded.
+##' Choose a suitable LiDO queue for job
+##'
+##' @param walltime Runtime of job in seconds
+##' @param memory Required memory in megabytes.
+##'
+##' @return Queue name
+choose_queue <- function(walltime, memory) {
+  hour <- 60 * 60
+  day <- 24 * hour
+  gigabyte <- 1024 
+  mem <- if (memory < 0) {
+    stop("Must have positive memory.")
+  } else if (memory <= 16 * gigabyte) {
+    "eth"
+  } else if (memory <= 64 * gigabyte) {
+    "quad"
+  } else {
+    stop("Too much memory requested.")
+  }
+    
+  if (walltime < 0) {
+    stop("'walltime' must be positive.")
+  } else if (walltime <= 1 * hour) {    
+    paste("short", mem, sep="_")
+  } else if (walltime <= 8 * hour) {
+    paste("med", mem, sep="_")
+  } else if (walltime <= 2 * day) {
+    paste("long", mem, sep="_")
+  } else if (walltime <= 28 * day) {
+    if (mem != "eth")
+      stop("No 'ultralong_quad' queue available. Reduce memory or walltime.")
+    "ultralong_eth"
+  } else {
+    stop("No suitable queue found for walltime.")
+  }
+}
+-%>
+#PBS -N <%= job.name %>
+#PBS -o <%= log.file %>
+#PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,vmem=<%= memory %>M
+#PBS -q <%= choose_queue(walltime, memory) %>
+#PBS -j oe
+
+## Setup modules:
+source /sysdata/shared/sfw/Modules/default/init/bash
+module add intel/cce/11.1.075 
+module add intel/fce/11.1.075 
+module add R/2.14.0
+
+## Run R:
+export TMPDIR=/scratch
+cd <%= job.dir %>
+R CMD BATCH --vanilla <%= rscript %> /dev/stdout

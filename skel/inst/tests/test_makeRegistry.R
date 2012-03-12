@@ -1,0 +1,20 @@
+context("makeRegistry")
+
+test_that("makeRegistry", {  
+  reg = makeTestRegistry()
+  expect_true(is(reg, "Registry"))
+  expect_true(is.list(reg))
+  expect_true(file.exists(reg$file.dir))
+  expect_true(file.exists(file.path(reg$file.dir, "BatchJobs.db")))
+  expect_output(print(reg), "Job registry")
+  if (interactive()) {
+    df = dbGetJobStatusTable(reg)
+    expect_true(is.data.frame(df) && nrow(df) == 0 && ncol(df) == 11)
+  }
+})
+
+
+test_that("makeRegistry checks id", {  
+  expect_error(makeRegistry(id="runit-files"),  "comply with")
+  expect_error(makeRegistry(id="-files"),  "comply with")
+})

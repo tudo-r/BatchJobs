@@ -1,0 +1,161 @@
+makeRegistryInternal = function(id, file.dir, sharding,
+  work.dir, multiple.result.files, seed, packages) {
+  cur.dir = getCurrentDir()
+  checkArg(id, cl = "character", len = 1L, na.ok = FALSE)
+  checkIdValid(id)
+  if (missing(file.dir))
+    file.dir = file.path(cur.dir, paste(id, "files", sep="-"))
+  checkArg(file.dir, cl = "character", len = 1L, na.ok = FALSE)
+  checkArg(sharding, cl = "logical", len = 1L, na.ok = FALSE)
+  if (missing(work.dir))
+    work.dir = cur.dir
+  checkArg(work.dir, cl = "character", len = 1L, na.ok = FALSE)
+  checkArg(multiple.result.files, cl = "logical", len = 1L, na.ok = FALSE)
+  if (missing(seed)) {
+    seed = getRandomSeed() 
+  } else {
+    seed = convertInteger(seed)
+    checkArg(seed, cl = "integer", len = 1L, lower = 1L, na.ok = FALSE)
+  }
+  checkArg(packages, cl = "character", na.ok = FALSE)
+
+  if (file.exists(file.dir) && !isEmptyDirectory(file.dir)) {
+    stopf("You cannot use file.dir that already exists and is not empty: %s", file.dir)
+  }
+  checkOrCreateDir(file.dir, wipe=FALSE)
+  job.dir = getJobParentDir(file.dir)
+  checkOrCreateDir(job.dir, wipe=FALSE)
+  if(!all(list.files(job.dir, all.files=TRUE) %in% c(".", "..")))
+    warning("Job dir ", job.dir, " does not seem to be empty!")
+  fun.dir = getFunDir(file.dir)
+  checkOrCreateDir(fun.dir, wipe=FALSE)
+  if(!all(list.files(fun.dir, all.files=TRUE) %in% c(".", "..")))
+    warning("Function dir ", fun.dir, " does not seem to be empty!")
+  if (!file.exists(work.dir))
+    stop("Working dir does not exist: ", work.dir)
+  if (!file.info(work.dir)$isdir)
+    stop("Working dir is a file and not a directory: ", work.dir)
+
+  file.dir = makePathAbsolute(file.dir)
+  work.dir = makePathAbsolute(work.dir)
+
+  structure(list(
+    id = id,
+    db.driver = "SQLite", 
+    db.options = list(),
+    seed = as.integer(seed),
+    file.dir = file.dir,
+    sharding = sharding,
+    work.dir = work.dir,
+    multiple.result.files = multiple.result.files,
+    packages = packages
+  ), class = "Registry")
+}
+
+
+#' Construct a registry object.
+#'
+#' Note that if you don't want links in your paths (\code{file.dir}, \code{work.dir}) to get resolved and have
+#' complete control over the way the path is used internally, pass an absolute path which begins with \dQuote{/}.
+#'
+#' Every object is a list that contains the passed arguments of the constructor.
+#
+#' @param id [\code{character(1)}]\cr
+#'   Name of registry. Displayed e.g. in mails or in cluster queue.
+#'   Default is "BatchJobsRegistry".
+#' @param file.dir [\code{character(1)}]\cr
+#'   Path where files regarding the registry / jobs should be saved.
+#'   Default is dQuote{<name of registry>_files} in current working directory.
+#' @param sharding [\code{logical(1)}]\cr
+#'   Enable sharding to distribute result files into different subdirectories?
+#'   Important if you have many experiments.
+#'   Default is \code{TRUE}.
+#' @param work.dir [\code{character(1)}]\cr
+#'   Working directory for R process when experiment is executed.
+#'   Default is the current working directory when registry is created.
+#' @param multiple.result.files [\code{logical(1)}]\cr
+#'   Should a result file be generated for every list element of the
+#'   returned list of the algorithm function?
+#'   Default is \code{FALSE} and the result file ends with
+#'   \dQuote{_result.RData}.
+#' @param seed [\code{integer(1)}]\cr
+#'   Start seed for experiments. The first experiment in the registry will use this
+#'   seed, for the subsequent ones the seed is incremented by 1.
+#'   Default is a random number from 1 to \code{.Machine$integer.max/2}.
+#' @param packages [\code{character}]\cr
+#'   Packages that will always be loaded on each node.
+#'   Default is \code{character(0)}.
+#' @return [\code{\link{Registry}}]
+#' @examples \dontrun{
+#'  reg <- makeRegistry(id="BatchJobsExample", seed=123)
+#'  print(reg)
+#' }
+#' @export
+#' @aliases Registry
+makeRegistry = function(id="BatchJobsRegistry", file.dir, sharding=TRUE,
+  work.dir, multiple.result.files = FALSE, seed, packages=character(0L)) {
+  reg = makeRegistryInternal(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages)
+  dbCreateJobStatusTable(reg)
+  dbCreateJobDefTable(reg)
+  saveRegistry(reg)
+  reg
+}
+
+#' @S3method print Registry
+print.Registry = function(x, ...) {
+  cat("Job registry: ",  x$id, "\n")
+  cat("  Number of jobs: ", getJobNr(x), "\n")
+  cat("  Files dir:", x$file.dir, "\n")
+  cat("  Work dir:", x$work.dir, "\n")
+  cat("  Multiple result files:", x$multiple.result.files, "\n")
+  cat("  Seed:", x$seed, "\n")
+  cat("  Required packages:", paste(x$packages, collapse=", "), "\n")
+}
+
+#' Load a previously saved registry.
+#' @param file.dir [\code{character(1)}]\cr
+#'   Location of the file.dir to load the registry from.
+#' @param save [\code{logical(1)}]\cr
+#'   Set \code{file.dir} in the registry and save. 
+#'   Useful if you moved the file dir, because you wanted to continue
+#'   working somewhere else.
+#'   Default is \code{FALSE}.
+#' @return [\code{\link{Registry}}].
+#' @export
+loadRegistry = function(file.dir, save=FALSE) {
+  fn = getRegistryFilePath(file.dir)
+  message("Loading registry: ", fn)
+  ee = new.env()
+  load(fn, envir=ee)
+  reg = ee$reg
+  if(save) {
+    reg$file.dir = makePathAbsolute(file.dir)
+    saveRegistry(reg)
+  }
+  reg
+}
+
+saveRegistry = function(reg) {
+  fn = getRegistryFilePath(reg$file.dir)
+  message("Saving registry: ", fn)
+  save(file=fn, reg)
+}
+
+#' Get number of jobs in registry.
+#' @param reg [\code{\link{Registry}}]\cr
+#'   Registry.
+#' @return [\code{integer(1)}].
+#' @export
+getJobNr = function(reg) {
+  dbGetJobCount(reg)
+}
+
+#' Get ids of jobs in registry.
+#' @param reg [\code{\link{Registry}}]\cr
+#'   Registry.
+#' @return [\code{character}].
+#' @export
+getJobIds = function(reg) {
+  dbGetJobIds(reg)
+}
+
