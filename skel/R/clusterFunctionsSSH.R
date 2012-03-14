@@ -30,7 +30,7 @@ onSSHWorker = function(worker, command) {
 #'   Load average (of the last 5 min) at which the worker is considered occupied, 
 #'   so that no job can be submitted. 
 #'   Default is \code{ncpus-1}.
-#' @return [\code{ClusterFunctions}].
+#' @return [\code{\link{SSHWorker}}].
 #' @export
 #' @aliases SSHWorker
 makeSSHWorker = function(nodename, rhome=R.home(), ncpus, max.jobs, max.load) {
