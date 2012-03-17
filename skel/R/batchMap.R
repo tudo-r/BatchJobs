@@ -31,7 +31,8 @@ batchMap = function(reg, fun, ..., more.args=list()) {
   seed = reg$seed
   jobs = lapply(seq_len(n), function(i) {
     ys = lapply(args, function(xs) xs[[i]])
-    makeJob(fun=fun, pars=c(ys, more.args), seed=seed+i-1L)
+    makeJob(fun=fun, pars=c(ys, more.args), 
+            seed=addIntModulo(seed, i-1L))
   })
   addJobs(reg, jobs)
   invisible(NULL)

@@ -26,6 +26,18 @@ getKillJob = function(msg=NULL) {
   return(fun)  
 }
 
-getRandomSeed = function() {
-  as.integer(runif(1L, 1, .Machine$integer.max %/% 1000L))
+getRandomSeed = function(n = 1L) {
+  as.integer(runif(n, 1, floor(.Machine$integer.max / 2L)))
+}
+
+seeder = function(seed) {
+  if(!exists(".Random.seed", envir = .GlobalEnv))
+     runif(1L)
+  prev = get(".Random.seed", envir = .GlobalEnv)
+  set.seed(seed)
+  list(reset = function() assign(".Random.seed", prev, envir=.GlobalEnv))
+}
+
+addIntModulo = function(x, y, mod = .Machine$integer.max) {
+  as.integer((as.double(x) + as.double(y)) %% mod)
 }

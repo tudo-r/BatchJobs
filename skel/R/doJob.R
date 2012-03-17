@@ -118,12 +118,9 @@ executeOneJob = function(reg, job, multiple.result.files) {
   # save current seed
   # use seed from job
   # on exit, reset to previous seed
-  if (!exists(".Random.seed", .GlobalEnv))
-    runif(1L)
-  cur.seed = get(".Random.seed", envir=.GlobalEnv)
   message("Setting seed: ", job$seed)
-  set.seed(job$seed)
-  on.exit(assign(".Random.seed", cur.seed, envir=.GlobalEnv))
+  seed = seeder(job$seed)
+  on.exit(seed$reset())
 
   result = try(applyJobFunction(reg, job), silent=TRUE)
   print(str(result, max.level=1L, list.len=5L))

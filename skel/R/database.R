@@ -108,8 +108,6 @@ dbCreateJobStatusTable = function(reg, extra.cols="", constraints="") {
 
   query = sprintf("CREATE INDEX job_def_id ON %s_job_status(job_def_id)", reg$id)
   dbDoQuery(reg, query, flags="rw")
-  # query = sprintf("CREATE INDEX seed ON %s_job_status(seed DESC)", reg$id)
-  # dbDoQuery(reg, query, flags="rw")
   
   return(invisible(TRUE))
 }
@@ -344,7 +342,6 @@ dbConvertNumericToPOSIXct = function(x) {
 ############################################
 ### INSERT
 ############################################
-
 dbAddJobs = function(reg, jobs, ...) {
   fun.ids = extractSubList(jobs, "fun.id") 
   seeds = extractSubList(jobs, "seed")
