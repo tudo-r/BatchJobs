@@ -28,11 +28,12 @@ batchMap = function(reg, fun, ..., more.args=list()) {
     stop("All args in '...' must be of the same length!")
   if (getJobNr(reg) > 0L)
     stop("Registry is not empty!")
-  seed = reg$seed
+  seeds = addIntModulo(reg$seed, seq(0L, n - 1L))
+  fun.id = digest(fun)
   jobs = lapply(seq_len(n), function(i) {
     ys = lapply(args, function(xs) xs[[i]])
-    makeJob(fun=fun, pars=c(ys, more.args), 
-            seed=addIntModulo(seed, i-1L))
+    makeJob(fun=fun, fun.id = fun.id, pars=c(ys, more.args), 
+            seed=seeds[i])
   })
   addJobs(reg, jobs)
   invisible(NULL)
