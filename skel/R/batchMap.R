@@ -28,13 +28,27 @@ batchMap = function(reg, fun, ..., more.args=list()) {
     stop("All args in '...' must be of the same length!")
   if (getJobNr(reg) > 0L)
     stop("Registry is not empty!")
-  seeds = addIntModulo(reg$seed, seq(0L, n - 1L))
+  messagef("Adding %i jobs to DB.", n)
+  # create seeds
+  seed = reg$seed
+  seeds = addIntModulo(seed, seq(0, n-1))
+  # serialize pars to char vector
+  pars = mapply(function(...) {
+    xs = list(...)
+    rawToChar(serialize(xs, connection=NULL, ascii=TRUE))
+  }, ..., USE.NAMES=FALSE, MoreArgs = more.args)
+  # save fun
   fun.id = digest(fun)
-  jobs = lapply(seq_len(n), function(i) {
-    ys = lapply(args, function(xs) xs[[i]])
-    makeJob(fun=fun, fun.id = fun.id, pars=c(ys, more.args), 
-            seed=seeds[i])
-  })
-  addJobs(reg, jobs)
+  fun.dir = getFunDir(reg$file.dir)
+  fn = file.path(fun.dir, sprintf("%s.RData", fun.id))
+  save2(file=fn, fun=fun)
+  # add jobs to DB
+  n = dbAddData(reg, "job_def", data = data.frame(fun_id=fun.id, pars=pars))
+  job.def.ids = dbGetLastAddedIds(reg, "job_def", "job_def_id", n)
+  n = dbAddData(reg, "job_status", data=data.frame(job_def_id=job.def.ids, seed=seeds))
+  job.ids = dbGetLastAddedIds(reg, "job_status", "job_id", n)  
+  # we can only create the dir after we have obtained the ids fromn the DB
+  createShardedDirs(reg, job.ids)
   invisible(NULL)
 }
+
