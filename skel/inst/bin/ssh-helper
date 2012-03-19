@@ -42,6 +42,7 @@
 
 RHOME="$1"; shift
 CMD="$1"; shift
+LC_ALL=C
 
 case $CMD in
     number-of-processors)
