@@ -24,6 +24,7 @@
 #' ch <- chunkJobs(ids, chunk.size=8)
 #' submitJobs(reg, ch)
 #' reduceResults(reg, fun=function(aggr, jobs, res) c(aggr, res))
+#' }
 chunkJobs = function(ids, chunk.size, n.chunks, shuffle=TRUE) {
   ids = convertIntegers(ids)
   checkArg(ids, "integer", min.len=1L, na.ok=FALSE)

@@ -19,8 +19,8 @@
 #' @param block.size [\code{integer(1)}]\cr
 #'   Number of results reduced in one job.
 #' @return Nothing.
-#' @examples \dontrun{
 #' @export
+#' @examples \dontrun{
 #' # generating example results:
 #' reg1 <- makeRegistry(id="BatchJobsExample1", seed=123)
 #' f <- function(x) x^2
@@ -35,6 +35,7 @@
 #' submitJobs(reg)
 #' # now reduce one final time on master
 #' reduceResults(reg, fun=function(aggr,job,res) g(aggr, res))
+#' }
 batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, block.size) {
   checkArg(reg, cl="Registry")
   checkArg(fun, formals=c("aggr", "res"))
