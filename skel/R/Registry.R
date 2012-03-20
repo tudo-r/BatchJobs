@@ -62,10 +62,9 @@ makeRegistryInternal = function(id, file.dir, sharding,
 #
 #' @param id [\code{character(1)}]\cr
 #'   Name of registry. Displayed e.g. in mails or in cluster queue.
-#'   Default is "BatchJobsRegistry".
 #' @param file.dir [\code{character(1)}]\cr
 #'   Path where files regarding the registry / jobs should be saved.
-#'   Default is dQuote{<name of registry>_files} in current working directory.
+#'   Default is \dQuote{<id>-files} in current working directory if \code{id} is set.
 #' @param sharding [\code{logical(1)}]\cr
 #'   Enable sharding to distribute result files into different subdirectories?
 #'   Important if you have many experiments.
@@ -92,7 +91,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
 #' }
 #' @export
 #' @aliases Registry
-makeRegistry = function(id="BatchJobsRegistry", file.dir, sharding=TRUE,
+makeRegistry = function(id, file.dir, sharding=TRUE,
   work.dir, multiple.result.files = FALSE, seed, packages=character(0L)) {
   reg = makeRegistryInternal(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages)
   dbCreateJobStatusTable(reg)
