@@ -79,6 +79,9 @@ makeSSHWorker = function(nodename, rhome=R.home(), ncpus, max.jobs, max.load) {
 #'
 #' Worker nodes must share the same file system and be accessible by ssh
 #' without manually entering passwords (e.g. by ssh-agent or passwordless pubkey).
+#' Note that you can also use this function to parallelize on multiple cores on your local machine.
+#' But you still have to run an ssh server and provide passwordless access to 
+#' localhost.
 #'
 #' @param ...  [\code{\link{SSHWorker}}]\cr
 #'   Worker objects, all created with \code{\link{makeSSHWorker}}.
