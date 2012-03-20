@@ -1,4 +1,10 @@
 #' Display the contents of a log file, useful in case of errors.
+#'
+#' Note this rare special case: When you use chunking, submit some jobs, some jobs fail,
+#' then you resubmit these jobs again in different chunks, the log files will contain the log
+#' of the old, failed job as well. But \code{showLog} will always jump to the correct part
+#' of the new log file. 
+#'
 #' @title Display the contents of a log file.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
