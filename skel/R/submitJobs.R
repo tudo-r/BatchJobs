@@ -135,7 +135,7 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
       } else if (batch.result$status >= 1L && batch.result$status <= 100L) {
         # if temp error, wait and increase retries, then submit again
         sleep.secs = wait(retries)
-        bar(i-1, sprintf("Status: %i, zzz=%is.", batch.result$status, sleep.secs))
+        bar(i-1, msg=sprintf("Status: %i, zzz=%is.", batch.result$status, sleep.secs))
         warningf("Submit iteration: %i. Temporary error: %s. Retries: %i. Sleep: %i.", i, batch.result$msg, retries, sleep.secs)
         Sys.sleep(sleep.secs)
         retries = retries + 1L

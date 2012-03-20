@@ -10,13 +10,13 @@
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is empty list.
 #' @return Nothing.
+#' @export
 #' @examples \dontrun{
 #' reg <- makeRegistry(id="BatchJobsExample", seed=123)
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' print(reg)
 #' }
-#' @export
 batchMap = function(reg, fun, ..., more.args=list()) {
   checkArg(reg, cl="Registry")
   checkArg(fun, cl="function")

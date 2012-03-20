@@ -19,19 +19,17 @@
 #' @param ... [any]\cr
 #'   Additional arguments to \code{fun}.
 #' @return [any]. Aggregated results.
-#' @examples \dontrun{
-#'  # generate results:
-#'  reg <- makeRegistry(id="BatchJobsExample", seed=123)
-#'  f <- function(x) x^2
-#'  batchMap(reg, f, 1:10)
-#'  submitJobs(reg)
-#' 
-#'  # Define function to collect and reduce results:
-#'  sq <- function(aggr, job, res) c(aggr,sqrt(res))
-#'  reduce <- reduceResults(reg, fun=sq, init=numeric(0))
-#'  print(reduce)
-#' }
 #' @export
+#' @examples \dontrun{
+#' # generate results:
+#' reg <- makeRegistry(id="BatchJobsExample", seed=123)
+#' f <- function(x) x^2
+#' batchMap(reg, f, 1:10)
+#' submitJobs(reg)
+#' 
+#' # reduce results to a vector
+#' reduceResults(reg, fun=function(aggr, job, res) c(aggr, res))
+#' }
 reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
   checkArg(reg, "Registry")
   checkArg(fun, formals=c("aggr", "job", "res"))

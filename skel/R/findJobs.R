@@ -2,15 +2,6 @@
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 #' @return [\code{integer}]. Ids of jobs.
-#' @examples \dontrun{
-#'  reg <- makeRegistry(id="BatchJobsExample", seed=123)
-#'  f <- function(x) x^2
-#'  batchMap(reg, f, 1:10)
-#'  submitJobs(reg)
-#' #after a few moments:
-#' findDone(reg)
-#' # should show the numbers 1 to 10, so all jobs are done.
-#' }
 #' @export
 findDone = function(reg) {
   checkArg(reg, cl = "Registry")

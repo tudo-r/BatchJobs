@@ -20,21 +20,24 @@
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is empty list.
 #' @return Nothing.
-#' @examples \dontrun{
-#'  reg1 <- makeRegistry(id="BatchJobsExample1", seed=123)
-#'  f <- function(x) x^2
-#'  batchMap(reg1, f, 1:10)
-#'  submitJobs(reg1)
-#'  reduceResults(reg1, fun=function(aggr,job,res) c(aggr, res))
-#'  
-#'  reg2 <- makeRegistry(id="BatchJobsExample2", seed=123)
-#'  # Define function to tranform results:
-#'  sq <- function(job, res) sqrt(res)
-#'  batchMapResults(reg1, reg2, fun=sq)
-#'  submitJobs(reg2)
-#'  reduceResults(reg2, fun=function(aggr,job,res) c(aggr, res))
-#' }
 #' @export
+#' @examples \dontrun{
+#' reg1 <- makeRegistry(id="BatchJobsExample1", seed=123)
+#' # square some numbers
+#' f <- function(x) x^2
+#' batchMap(reg1, f, 1:10)
+#' submitJobs(reg1)
+#' # look at results
+#' reduceResults(reg1, fun=function(aggr,job,res) c(aggr, res))
+#'  
+#' reg2 <- makeRegistry(id="BatchJobsExample2", seed=123)
+#' # define function to tranform results, we simply do the inverse of the squaring
+#' g <- function(job, res) sqrt(res)
+#' batchMapResults(reg1, reg2, fun=g)
+#' submitJobs(reg2)
+#' # check results
+#' reduceResults(reg2, fun=function(aggr,job,res) c(aggr, res))
+#' }
 batchMapResults = function(reg, reg2, fun, ...,  ids, part=as.character(NA), more.args=list()) {
   checkArg(reg, cl="Registry")
   checkArg(reg2, cl="Registry")

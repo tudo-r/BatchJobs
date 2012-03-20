@@ -11,6 +11,7 @@
 #'   Default is \code{TRUE}.
 #' @return [any]. Result of job.
 #' @seealso \code{\link{reduceResults}}
+#' @export
 #' @examples \dontrun{
 #'  reg <- makeRegistry(id="BatchJobsExample", seed=123)
 #'  f <- function(x) x^2
@@ -19,7 +20,6 @@
 #'  # what is 2^2:
 #' loadResult(reg, 2)
 #' }
-#' @export
 loadResult = function(reg, id, part=as.character(NA), check.id=TRUE) {
   checkArg(reg, cl="Registry")
   if(check.id) {

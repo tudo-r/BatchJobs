@@ -12,20 +12,17 @@
 #' @param block.size [\code{integer(1)}]\cr
 #'   Number of elements of \code{xs} reduced in one job.
 #' @return Nothing.
-#' @examples \dontrun{
-#'  # generating example results:
-#'  result <- (1:10)^2
-#'  
-#'  # Define function to collect and reduce results:
-#'  sq <- function(aggr, x) c(aggr,sqrt(x))
-#'  # calculating the square roots, with 2 calculations per job:
-#'  reg <- makeRegistry(id="BatchJobsExample", seed=123)
-#'  batchReduce(reg, fun=sq, result, init=numeric(0), block.size=2)
-#'  # starting 5 jobs
-#'  submitJobs(reg)
-#'  reduceResults(reg, fun=function(aggr,job,res) c(aggr, res))
-#' }
 #' @export
+#' @examples \dontrun{
+#' # define function to reduce on slave, we want to sum a vector
+#' f <- function(aggr, x) aggr + x
+#' reg <- makeRegistry(id="BatchJobsExample", seed=123)
+#' # sum 20 numbers on each slave process, i.e. 5 jobs
+#' batchReduce(reg, fun=f, 1:100, block.size=5)
+#' submitJobs(reg)
+#' # now reduce one final time on master
+#' reduceResults(reg, fun=function(aggr,job,res) f(aggr, res))
+#' }
 batchReduce = function(reg, fun, xs, init, block.size) {
   checkArg(reg, cl="Registry")
   checkArg(fun, formals=c("aggr", "x"))

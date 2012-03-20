@@ -20,22 +20,21 @@
 #'   Number of results reduced in one job.
 #' @return Nothing.
 #' @examples \dontrun{
-#'  # generating example results:
-#'  reg1 <- makeRegistry(id="BatchJobsExample1", seed=123)
-#'  f <- function(x) x^2
-#'  batchMap(reg1, f, 1:10)
-#'  submitJobs(reg1)
-#'  
-#'  # Define function to collect and reduce results:
-#'  sq <- function(aggr, res) c(aggr,sqrt(res))
-#'  # calculating the square roots, with 2 calculations per job:
-#'  reg2 <- makeRegistry(id="BatchJobsExample2", seed=123)
-#'  batchReduceResults(reg1, reg2, fun=sq, init=numeric(0), block.size=2)
-#'  # starting 5 jobs:
-#'  submitJobs(reg2)
-#'  reduceResults(reg2, fun=function(aggr,job,res) c(aggr, res))
-#' }
 #' @export
+#' # generating example results:
+#' reg1 <- makeRegistry(id="BatchJobsExample1", seed=123)
+#' f <- function(x) x^2
+#' batchMap(reg1, f, 1:20)
+#' submitJobs(reg1)
+#'  
+#' # define function to reduce on slave, we want to sum the squares
+#' g <- function(aggr, x) aggr + x
+#' # sum 5 results on each slave process, i.e. 4 jobs
+#' reg2 <- makeRegistry(id="BatchJobsExample2", seed=123)
+#' batchReduceResults(reg1, reg2, fun=g, block.size=5)
+#' submitJobs(reg)
+#' # now reduce one final time on master
+#' reduceResults(reg, fun=function(aggr,job,res) g(aggr, res))
 batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, block.size) {
   checkArg(reg, cl="Registry")
   checkArg(fun, formals=c("aggr", "res"))
