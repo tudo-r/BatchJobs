@@ -1,9 +1,9 @@
 makeTestRegistry = function(packages=character(0)) {
-  if(unlink("runit_files", recursive=TRUE) != 0)
-    stop("Could not delete runit_files!")
+  if(unlink("unittests-files", recursive=TRUE) != 0)
+    stop("Could not delete unittests-files!")
   makeRegistry(
+    id = "unittests",
     seed = 1,
-    file.dir = "runit_files",
     packages=packages
   )  
 }
