@@ -48,12 +48,14 @@ useBatchJobsConf = function(conffile) {
   }
 }
 
-#' Set cluster specific options. Only provided parameters get changed.
+#' Set configuration options of package. Only provided parameters get changed.
 #' The mailer settings mean: 
 #' \dQuote{none} = do not mail for any job, \dQuote{all} = mail for all jobs,
 #' \dQuote{first} = mail for first job, \dQuote{last} = mail for last job, 
 #' \dQuote{first+last} = mail for first and last job.
-
+#' The default settings are: \code{\link{makeClusterFunctionsInteractive}}, no mails. 
+#' 
+#' @title Set configuration options.
 #' @param cluster.functions [\code{\link{ClusterFunctions}}]\cr
 #'   Cluster functions to use. 
 #' @param mail.start [\code{character(1)}]\cr
@@ -131,7 +133,7 @@ setBatchJobsConf = function(cluster.functions, mail.start, mail.done, mail.error
 
 useDefaultBatchJobsConf = function() {
   setBatchJobsConf(
-    cluster.functions = makeClusterFunctionsLocal(),
+    cluster.functions = makeClusterFunctionsInteractive(),
     mail.start = "none",
     mail.done = "none",
     mail.error = "none",
