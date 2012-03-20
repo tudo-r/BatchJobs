@@ -273,11 +273,15 @@ dbGetMaxSeed = function(reg, default) {
   dbGetMaxOfColumn(reg, "job_status", "seed", default)
 }
 
-
 dbGetFirstJobInChunkIds = function(reg, ids){
   query = sprintf("SELECT job_id, first_job_in_chunk_id FROM %s_job_status WHERE job_id IN ('%s')", reg$id, collapse(ids, sep="','"))
   first = dbDoQuery(reg, query)
   first[match(ids, first$job_id), "first_job_in_chunk_id"]
+}
+
+dbGetJobTimes = function(reg, ids){
+  query = sprintf("SELECT started,done FROM %s_job_status WHERE job_id IN ('%s')", reg$id, collapse(ids, sep="','"))
+  dbDoQuery(reg, query)
 }
 
 ############################################
