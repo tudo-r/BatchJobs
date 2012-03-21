@@ -12,8 +12,9 @@ test_that("doJob", {
   expect_true(is.data.frame(df) && nrow(df) == 1 && ncol(df) == 11)
   ids = findMissingResults(reg)
   expect_equal(ids, id)
+  saveConf(reg)
   expect_output({ 
-    y = doSingleJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)
+    y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)
   }, "BatchJobs job")
   expect_equal(y, 123)
   df = dbGetJobStatusTable(reg)
@@ -35,9 +36,10 @@ test_that("doJob", {
     bar+x    
   }
   job = makeJob(id=id, fun=f, pars=list(x=1), seed=reg$seed)
-  addJob(reg, job)#
+  addJob(reg, job)
+  saveConf(reg)
   expect_output({ 
-    y = doSingleJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)
+    y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)
   }, "BatchJobs job")
   expect_equal(y, bar + 1)
   expect_equal(getwd(), wd.now)
@@ -46,15 +48,17 @@ test_that("doJob", {
   reg = makeTestRegistry(packages=c("foo"))
   job = makeJob(id=id, fun=f, pars=list(x=1), seed=reg$seed)
   addJob(reg, job)  
-  expect_error(suppressAll(doSingleJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)), 
+  saveConf(reg)
+  expect_error(suppressAll(doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)), 
     "Could not load required package 'foo' on node!")  
   expect_equal(findMissingResults(reg), id)
   reg = makeTestRegistry(packages=c("randomForest"))
   f = function() randomForest(Species~., data=iris)
   job = makeJob(id, fun=f, pars=list(), seed=reg$seed)
   addJob(reg, job)  
+  saveConf(reg)
   expect_output({ 
-    y = doSingleJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)
+    y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)
   }, "BatchJobs job")
   expect_equal(length(findMissingResults(reg)), 0)
 })
