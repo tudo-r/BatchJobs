@@ -143,7 +143,7 @@ getClusterFunctions = function(conf) {
 showConf = function() {
   x = getBatchJobsConf()
   f = function(y) if(is.null(y)) "" else y
-  catf("BatchJobs configurations:")
+  catf("BatchJobs configuration:")
   catf("  cluster functions: %s", f(x$cluster.functions$name))
   catf("  mail.from: %s", f(x$mail.from))
   catf("  mail.to: %s", f(x$mail.to))
