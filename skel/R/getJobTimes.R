@@ -21,8 +21,9 @@ getJobTimes = function(reg, ids, use.names=TRUE) {
   }
   if (missing(use.names)) {
     use.names = length(ids) > 1L
+  } else {
+    checkArg(use.names, "logical", len=1, na.ok=FALSE)
   }
-  checkArg(use.names, "logical", len=1, na.ok=FALSE)
   d = dbGetJobTimes(reg, ids)
   times = d$done - d$start
   if (use.names)
