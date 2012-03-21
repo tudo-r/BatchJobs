@@ -83,8 +83,9 @@ makeRegistryInternal = function(id, file.dir, sharding,
 #'   returned list of the job function?
 #'   Note that the function provided to \code{\link{batchMap}} or 
 #'   \code{\link{batchReduce}} must return a named list if this is set to \code{TRUE}.
-#'   Default is \code{FALSE} and the result file ends with
-#'   \dQuote{_result.RData}.
+#'   The result file will be named \dQuote{<id>-result-<element name>.RData}
+#'   instead of \dQuote{<id>-result.RData}.
+#'   Default is \code{FALSE}.
 #' @param seed [\code{integer(1)}]\cr
 #'   Start seed for experiments. The first experiment in the registry will use this
 #'   seed, for the subsequent ones the seed is incremented by 1.
