@@ -18,3 +18,12 @@ test_that("makeRegistry checks id", {
   expect_error(makeRegistry(id="runit-files"),  "comply with")
   expect_error(makeRegistry(id="-files"),  "comply with")
 })
+
+
+test_that("makeRegistry checks packs", {  
+  makeTestRegistry(packages="base")
+  expect_error(makeTestRegistry(packages="foo"),  
+    "Please install the following packages: foo")
+})
+
+  

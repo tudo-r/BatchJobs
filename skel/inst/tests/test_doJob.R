@@ -45,7 +45,10 @@ test_that("doJob", {
   expect_equal(getwd(), wd.now)
   
   # test packages
-  reg = makeTestRegistry(packages=c("foo"))
+  # be sneaky otherwise we get error here due to pack check
+  reg = makeTestRegistry()
+  reg$packages = list(foo="foo")
+  saveRegistry(reg)
   job = makeJob(id=id, fun=f, pars=list(x=1), seed=reg$seed)
   addJob(reg, job)  
   saveConf(reg)
