@@ -18,6 +18,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
     checkArg(seed, cl = "integer", len = 1L, lower = 1L, na.ok = FALSE)
   }
   checkArg(packages, cl = "character", na.ok = FALSE)
+  requirePackages(packages, stop=TRUE, suppress.warnings=TRUE)
 
   if (file.exists(file.dir) && !isEmptyDirectory(file.dir)) {
     stopf("You cannot use file.dir that already exists and is not empty: %s", file.dir)
@@ -38,6 +39,11 @@ makeRegistryInternal = function(id, file.dir, sharding,
 
   file.dir = makePathAbsolute(file.dir)
   work.dir = makePathAbsolute(work.dir)
+  
+  packages = sapply(packages, 
+                    function(pkg) list(version = packageVersion(pkg)), 
+                    simplify=FALSE)
+  packages = packages[order(names(packages))]
 
   structure(list(
     id = id,
@@ -74,7 +80,9 @@ makeRegistryInternal = function(id, file.dir, sharding,
 #'   Default is the current working directory when registry is created.
 #' @param multiple.result.files [\code{logical(1)}]\cr
 #'   Should a result file be generated for every list element of the
-#'   returned list of the algorithm function?
+#'   returned list of the job function?
+#'   Note that the function provided to \code{\link{batchMap}} or 
+#'   \code{\link{batchReduce}} must return a named list if this is set to \code{TRUE}.
 #'   Default is \code{FALSE} and the result file ends with
 #'   \dQuote{_result.RData}.
 #' @param seed [\code{integer(1)}]\cr
@@ -93,7 +101,8 @@ makeRegistryInternal = function(id, file.dir, sharding,
 #' @aliases Registry
 makeRegistry = function(id, file.dir, sharding=TRUE,
   work.dir, multiple.result.files = FALSE, seed, packages=character(0L)) {
-  reg = makeRegistryInternal(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages)
+  reg = makeRegistryInternal(id, file.dir, sharding, work.dir, 
+                             multiple.result.files, seed, union(packages, "BatchJobs"))
   dbCreateJobStatusTable(reg)
   dbCreateJobDefTable(reg)
   saveRegistry(reg)
@@ -108,7 +117,7 @@ print.Registry = function(x, ...) {
   cat("  Work dir:", x$work.dir, "\n")
   cat("  Multiple result files:", x$multiple.result.files, "\n")
   cat("  Seed:", x$seed, "\n")
-  cat("  Required packages:", paste(x$packages, collapse=", "), "\n")
+  cat("  Required packages:", paste(names(x$packages), collapse=", "), "\n")
 }
 
 #' Load a previously saved registry.
