@@ -20,16 +20,15 @@
 #'   Additional arguments to \code{fun}.
 #' @return [any]. Aggregated results.
 #' @export
-#' @examples \dontrun{
+#' @examples
 #' # generate results:
-#' reg <- makeRegistry(id="BatchJobsExample", seed=123)
+#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
 #' 
 #' # reduce results to a vector
 #' reduceResults(reg, fun=function(aggr, job, res) c(aggr, res))
-#' }
 reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
   checkArg(reg, "Registry")
   checkArg(fun, formals=c("aggr", "job", "res"))

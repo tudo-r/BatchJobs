@@ -17,14 +17,14 @@
 #'   Default is \code{TRUE}.
 #' @return [list of \code{character}]. List of id vectors.
 #' @export
-#' @examples \dontrun{
-#' reg <- makeRegistry(id="BatchJobsExample", seed=123)
+#' @examples
+#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x) x^2
-#' batchMap(reg, f, 1:100)
-#' ch <- chunkJobs(ids, chunk.size=8)
+#' batchMap(reg, f, 1:10)
+#' ids <- getJobIds(reg)
+#' ch <- chunkJobs(ids, chunk.size=4)
 #' submitJobs(reg, ch)
-#' reduceResults(reg, fun=function(aggr, jobs, res) c(aggr, res))
-#' }
+#' reduceResults(reg, fun=function(aggr, job, res) c(aggr, res))
 chunkJobs = function(ids, chunk.size, n.chunks, shuffle=TRUE) {
   ids = convertIntegers(ids)
   checkArg(ids, "integer", min.len=1L, na.ok=FALSE)

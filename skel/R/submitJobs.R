@@ -29,13 +29,12 @@
 #'   number of seconds.
 #'   Default is 10 times.
 #' @return Nothing.
-#' @examples \dontrun{
-#'  reg <- makeRegistry(id="BatchJobsExample", seed=123)
-#'  f <- function(x) x^2
-#'  batchMap(reg, f, 1:10)
-#'  submitJobs(reg)
-#' }
 #' @export
+#' @examples
+#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+#' f <- function(x) x^2
+#' batchMap(reg, f, 1:10)
+#' submitJobs(reg)
 submitJobs = function(reg, ids, resources=list(),
   wait=function(retries) 10L * 2L^retries, max.retries=10L) {
 

@@ -14,17 +14,16 @@
 #'   that cluster function is not avilable, this option is ignored anyway.
 #'   Default is \code{TRUE}.
 #' @return [\code{data.frame}] Data frame of job status from database of registry. Returned invisbly.
-#' @examples \dontrun{
-#'  reg <- makeRegistry(id="BatchJobsExample", seed=123)
-#'  f <- function(x) x^2
-#'  batchMap(reg, f, 1:10)
-#'  submitJobs(reg)
+#' @export
+#' @examples
+#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+#' f <- function(x) x^2
+#' batchMap(reg, f, 1:10)
+#' submitJobs(reg)
 #'
 #' # after a few moments:
 #' showStatus(reg)
 #' # should show 10 submitted jobs, which are all done.
-#' }
-#' @export
 showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
   checkArg(reg, "Registry")
   if (missing(ids)) {

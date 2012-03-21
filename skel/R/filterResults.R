@@ -10,15 +10,14 @@
 #'   Additional arguments to \code{fun}.
 #' @return [\code{character}]. Ids of jobs where \code{fun(job, result)} returns \code{TRUE}.
 #' @export
-#' @examples \dontrun{
-#' reg <- makeRegistry(id="BatchJobsExample", seed=123)
+#' @examples
+#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
 #' 
 #' # which square numbers are even:
 #' filterResults(reg, fun=function(job, res) res %% 2 == 0)
-#' } 
 filterResults = function(reg, ids, fun, ...) {
   checkArg(reg, "Registry")
   checkArg(fun, formals=c("job", "res"))

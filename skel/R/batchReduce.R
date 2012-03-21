@@ -13,16 +13,15 @@
 #'   Number of elements of \code{xs} reduced in one job.
 #' @return Nothing.
 #' @export
-#' @examples \dontrun{
+#' @examples
 #' # define function to reduce on slave, we want to sum a vector
 #' f <- function(aggr, x) aggr + x
-#' reg <- makeRegistry(id="BatchJobsExample", seed=123)
+#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' # sum 20 numbers on each slave process, i.e. 5 jobs
-#' batchReduce(reg, fun=f, 1:100, block.size=5)
+#' batchReduce(reg, fun=f, 1:100, init=0, block.size=5)
 #' submitJobs(reg)
 #' # now reduce one final time on master
 #' reduceResults(reg, fun=function(aggr,job,res) f(aggr, res))
-#' }
 batchReduce = function(reg, fun, xs, init, block.size) {
   checkArg(reg, cl="Registry")
   checkArg(fun, formals=c("aggr", "x"))

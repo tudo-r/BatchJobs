@@ -11,12 +11,11 @@
 #'   Default is empty list.
 #' @return Nothing.
 #' @export
-#' @examples \dontrun{
-#' reg <- makeRegistry(id="BatchJobsExample", seed=123)
+#' @examples
+#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' print(reg)
-#' }
 batchMap = function(reg, fun, ..., more.args=list()) {
   checkArg(reg, cl="Registry")
   checkArg(fun, cl="function")

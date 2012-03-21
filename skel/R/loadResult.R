@@ -12,14 +12,6 @@
 #' @return [any]. Result of job.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-#' @examples \dontrun{
-#'  reg <- makeRegistry(id="BatchJobsExample", seed=123)
-#'  f <- function(x) x^2
-#'  batchMap(reg, f, 1:10)
-#'  submitJobs(reg)
-#'  # what is 2^2:
-#' loadResult(reg, 2)
-#' }
 loadResult = function(reg, id, part=as.character(NA), check.id=TRUE) {
   checkArg(reg, cl="Registry")
   if(check.id) {

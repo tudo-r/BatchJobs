@@ -93,12 +93,11 @@ makeRegistryInternal = function(id, file.dir, sharding,
 #'   Packages that will always be loaded on each node.
 #'   Default is \code{character(0)}.
 #' @return [\code{\link{Registry}}]
-#' @examples \dontrun{
-#'  reg <- makeRegistry(id="BatchJobsExample", seed=123)
-#'  print(reg)
-#' }
-#' @export
 #' @aliases Registry
+#' @export
+#' @examples 
+#' reg <- makeRegistry(id="BatchJobsExample", seed=123)
+#' print(reg)
 makeRegistry = function(id, file.dir, sharding=TRUE,
   work.dir, multiple.result.files = FALSE, seed, packages=character(0L)) {
   reg = makeRegistryInternal(id, file.dir, sharding, work.dir, 
