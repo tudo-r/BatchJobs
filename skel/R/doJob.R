@@ -1,23 +1,25 @@
 doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   messagef("%s: Starting job on slave.", as.character(Sys.time()))
   reqJobPacks(reg)
-  conf = loadConf(reg)
+  loadConf(reg)
+  conf = getBatchJobsConf()
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)
   wd = mySetWd(reg)
   if (length(ids) == 1L) {
-    doSingleJob(reg, ids, multiple.result.files, disable.mail, first, last, conf)
+    res = doSingleJob(reg, ids, multiple.result.files, disable.mail, first, last)
   } else {
-    doChunk(reg, ids, multiple.result.files, disable.mail, first, last, conf)
+    res = doChunk(reg, ids, multiple.result.files, disable.mail, first, last)
   }
   myResetWd(wd)
   messagef("%s: Job on slave is finished.", as.character(Sys.time()))
+  return(res)
 }
 
-doSingleJob = function(reg, id, multiple.result.files, disable.mail, first, last, conf) {
+doSingleJob = function(reg, id, multiple.result.files, disable.mail, first, last) {
   dbSendMessage(reg, dbMakeMessageStarted(reg, id, time=as.integer(Sys.time())))
   job = getJob(reg, id, load.fun=TRUE, check.id=FALSE)
-  sendMail(reg, job, result.str, "", disable.mail, condition = "start", first, last, conf)
+  sendMail(reg, job, result.str, "", disable.mail, condition = "start", first, last)
 
   result = executeOneJob(reg, job, multiple.result.files)
 
@@ -32,7 +34,7 @@ doSingleJob = function(reg, id, multiple.result.files, disable.mail, first, last
     result.str = calcResultString(result)
   }
   sendMail(reg, job, result.str, "", disable.mail, condition=ifelse(is.error(result), "error", "done"),
-           first, last, conf)
+           first, last)
   return(result)
 }
 
@@ -48,7 +50,7 @@ doChunkFlush = function(reg, msg.buf, last.flush, wait.flush) {
   return(msg.buf)
 }
 
-doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last, conf) {
+doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   jobs = getJobs(reg, ids, load.fun=TRUE, check.ids=FALSE)
   result.strs = character(length(jobs))
   error = logical(length(jobs))
@@ -61,7 +63,7 @@ doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last, c
   messagef("%s: Waiting %i secs between msg flushes.", 
     as.character(Sys.time()), wait.flush)
   last.flush = as.integer(Sys.time())
-  sendMail(reg, jobs, result.strs, "", disable.mail, condition="start", first, last, conf)
+  sendMail(reg, jobs, result.strs, "", disable.mail, condition="start", first, last)
   for (i in seq_along(jobs)) {
     job = jobs[[i]]
     msg.buf[length(msg.buf)+1L] = dbMakeMessageStarted(reg, job$id, time=as.integer(Sys.time()))
@@ -105,7 +107,7 @@ doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last, c
   # send mail for whole chunk
   # if one of the jobs had an error, treat the whole chunk as erroneous in mail
   sendMail(reg, jobs, result.strs, mail.extra.msg, disable.mail, condition=ifelse(any(error), "error", "done"), 
-           first, last, conf)
+           first, last)
   return(NULL)
 }
 

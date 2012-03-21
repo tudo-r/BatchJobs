@@ -76,58 +76,51 @@ useBatchJobsConf = function(conffile) {
 #'   Recipient adress of status notification mails.
 #' @param mail.control [\code{list}]\cr
 #'   Control object for \code{\link[sendmailR]{sendmail}}.
-#' @return [\code{logical}]. TRUE if file found, FALSE otherwise.
+#' @return Nothing.
 #' @export
 setBatchJobsConf = function(cluster.functions, mail.start, mail.done, mail.error, mail.from, 
                             mail.to, mail.control) {
-  if(exists(".BatchJobs.conf", .GlobalEnv))
-    ee = get(".BatchJobs.conf", .GlobalEnv)
-  else
-    ee = new.env()
-
-  if (! missing(cluster.functions)) {
+  conf = getBatchJobsConf()
+  if (!missing(cluster.functions)) {
     checkArg(cluster.functions, cl = "ClusterFunctions", na.ok = FALSE)
-    ee$cluster.functions = cluster.functions
+    conf$cluster.functions = cluster.functions
   }
 
   if (!missing(mail.start)) {
     checkArg(mail.start, choices = c("none", "first", "last", "first+last", "all"))
-    ee$mail.start = mail.start
+    conf$mail.start = mail.start
   } else {
-    ee$mail.start = "none"
+    conf$mail.start = "none"
   }
   if (!missing(mail.done)) {
     checkArg(mail.done, choices = c("none", "first", "last", "first+last", "all"))
-    ee$mail.done = mail.done
+    conf$mail.done = mail.done
   } else {
-    ee$mail.done = "none"
+    conf$mail.done = "none"
   }
   if (!missing(mail.error)) {
     checkArg(mail.error, choices = c("none", "first", "last", "first+last", "all"))
-    ee$mail.error = mail.error
+    conf$mail.error = mail.error
   } else {
-    ee$mail.error = "none"
+    conf$mail.error = "none"
   }
   if (!missing(mail.from)) {
     checkArg(mail.from, cl = "character", len = 1L, na.ok = FALSE)
-    ee$mail.from = mail.from
+    conf$mail.from = mail.from
   }
   if (!missing(mail.to)) {
     checkArg(mail.to, cl = "character", len = 1L, na.ok = FALSE)
-    ee$mail.to = mail.to
+    conf$mail.to = mail.to
   }
   if (!missing(mail.control)) {
     checkArg(mail.control, cl = "list")
-    ee$mail.control = mail.control
+    conf$mail.control = mail.control
   } else {
-    ee$mail.control = list()
+    conf$mail.control = list()
   }
- 
-  ee$db.driver = "SQLite"
-  ee$db.options = list()
-
-  assign(".BatchJobs.conf", ee, envir = .GlobalEnv)
-  invisible(TRUE)
+  conf$db.driver = "SQLite"
+  conf$db.options = list()
+  invisible(NULL)
 }
 
 
@@ -143,16 +136,21 @@ useDefaultBatchJobsConf = function() {
   )
 }
 
+# loads conf into namespace on slave
 loadConf = function(reg) {
   fn = getConfFilePath(reg)
   message("Loading conf: ", fn)
   ee = new.env()
   load(fn, envir=ee)
-  assign(".BatchJobs.conf", ee$conf, envir = .GlobalEnv)
+  ns = ls(ee$conf)
+  # assign all stuff to conf in namespace
+  conf = getBatchJobsConf()
+  lapply(ns, function(x) assign(x, ee$conf[[x]], envir=conf))
+  return(NULL)
 }
 
 getBatchJobsConf = function() {
-  get(".BatchJobs.conf", envir=.GlobalEnv)
+  get(".BatchJobs.conf", envir=getNamespace("BatchJobs"))
 }
 
 saveConf = function(reg) {
