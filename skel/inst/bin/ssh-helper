@@ -42,7 +42,7 @@
 
 RHOME="$1"; shift
 CMD="$1"; shift
-LC_ALL=C
+LC_ALL=C ## Avoid any localization issues.
 
 case $CMD in
     number-of-processors)
@@ -62,7 +62,7 @@ case $CMD in
         ;;
     start-job)
         cd "$1"
-        $RHOME/bin/R CMD BATCH --no-save --no-restore "$2" "$3" \
+        "$RHOME/bin/R" CMD BATCH --no-save --no-restore "$2" "$3" \
             > /dev/null 2> /dev/null < /dev/null &
         printf '%i\n' $!
         ;;
