@@ -40,7 +40,6 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
     checkIds(reg, ids)
     df = dbGetJobStatusTable(reg, ids)
   }
-  # FIXME: it would be better and more efficient to do the whole aggregated query in the DB!
   if (nrow(df) == 0L)  {
     message("No (matched) jobs in registry!")
     return(invisible(df))
