@@ -7,8 +7,10 @@ findSSHHelper = function(nodename, rhome) {
 }
 
 onSSHWorker = function(worker, command) {
-  cmd = paste(c(worker$ssh_helper, worker$rhome, command), collapse=" ")
+  cmd = paste("\"", c(worker$ssh_helper, worker$rhome, command), "\"",
+              collapse=" ")
   args = c(worker$nodename, paste("'", cmd, "'", sep=""))
+  print 
   res = system2("ssh", args, stdout=TRUE, stderr=TRUE)
   tryCatch(eval(parse(text=paste(res, collapse="\n"))),
     error=function(x) stop(res))
