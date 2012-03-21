@@ -6,7 +6,7 @@
 #'   Registry whose results should be reduced by \code{fun}.
 #' @param reg2 [\code{\link{Registry}}]\cr
 #'   Empty registry that should store the job for the mapping.
-#' @param fun [\code{function(aggr, res)}]\cr
+#' @param fun [\code{function(aggr, job, res)}]\cr
 #'   Function to reduce results with.
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs whose results should be reduced with \code{fun}.
@@ -28,16 +28,16 @@
 #' submitJobs(reg1)
 #'  
 #' # define function to reduce on slave, we want to sum the squares
-#' g <- function(aggr, res) aggr + res
+#' myreduce <- function(aggr, job, res) aggr + res
 #' # sum 5 results on each slave process, i.e. 4 jobs
 #' reg2 <- makeRegistry(id="BatchJobsExample2", file.dir=tempfile(), seed=123)
-#' batchReduceResults(reg1, reg2, fun=g, init=0, block.size=5)
+#' batchReduceResults(reg1, reg2, fun=myreduce, init=0, block.size=5)
 #' submitJobs(reg2)
 #' # now reduce one final time on master
-#' reduceResults(reg2, fun=function(aggr,job,res) g(aggr, res))
+#' reduceResults(reg2, fun=myreduce)
 batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, block.size) {
   checkArg(reg, cl="Registry")
-  checkArg(fun, formals=c("aggr", "res"))
+  checkArg(fun, formals=c("aggr", "job", "res"))
   checkArg(reg2, cl="Registry")
   if (missing(ids)) {
     ids = dbGetJobIdsIfAllDone(reg)
@@ -55,8 +55,11 @@ batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, 
   if(reg$file.dir == reg2$file.dir)
     stop("Both registries cannot point to the same file dir. Files would get overwritten!")
   # x is id
+  # use lazy evaluation, if fun doesn't access job or res (unlikely)
   fun2 = function(aggr, x) {
-    fun(aggr, loadResult(reg, x, part))
+    fun(aggr = aggr, 
+      job = getJob(reg, x, check.id=FALSE),
+      res = loadResult(reg, x, part))
   }
   batchReduce(reg2, fun2, ids, init, block.size)
   invisible(NULL)
