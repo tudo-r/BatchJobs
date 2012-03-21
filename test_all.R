@@ -4,24 +4,22 @@ library("testthat")
 
 if (interactive()) {
   load_all("skel")
-  cf <- makeClusterFunctionsUnitTests()
+  cf = makeClusterFunctionsUnitTests()
+  conf = getBatchJobsConf()
+  conf$interactive = TRUE
 } else {
   library("BatchJobs")
-  cf <- BatchJobs:::makeClusterFunctionsUnitTests()
+  cf = BatchJobs:::makeClusterFunctionsUnitTests()
+  conf = BatchJobs:::getBatchJobsConf()
+  
 }
 
-setBatchJobsConf(cluster.functions=cf,
-                 mail.start="none",
-                 mail.done="none",
-                 mail.error="none",
-                 mail.from="bernd_bischl@gmx.net",
-                 mail.to="bernd_bischl@gmx.net",
-                 mail.control=list(smtpServer="mail"))
+conf$cluster.functions = cf
+conf$mail.start = "none"
+conf$mail.done = "none"
+conf$mail.error = "none"
 
 source("skel/inst/tests/helpers.R")
-
-if (interactive())
-  assign("interactive", TRUE, envir=getBatchJobsConf())
 
 test_dir("skel/inst/tests")
 print(ls(all=TRUE))

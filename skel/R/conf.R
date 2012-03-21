@@ -1,139 +1,75 @@
-#' Loads a configuration file with cluster specific options.
-#' See \code{\link{setBatchJobsConf}} for available options.
-#' @param conffile [\code{character}]\cr
-#'   Configuration file. Defaults to '~/.BatchJobs.R'.
-#' @return [\code{logical}]. TRUE if file found, FALSE otherwise.
-#' @export
-useBatchJobsConf = function(conffile) {
+# sources 1 config file and returns the envir
+sourceConfFile = function(conffile) {
   template = function() {
     paste("Format must be like this:\n",
-          "  cluster.functions = <ClusterFunctions object>",
-          "  mail.start = 'none' | 'all' | 'first' | 'last' | 'first+last'",
-          "  mail.done = 'none' | 'all' | 'first' | 'last' | 'first+last'",
-          "  mail.error = 'none' | 'all' | 'first' | 'last' | 'first+last'",
-          "  mail.from = <sender address>",
-          "  mail.to = <recipient address>",
-          "  mail.control = <control object for sendmail package>\n\n",
-          "Using default configuration.",
-          sep = "\n")
+      "  cluster.functions = <ClusterFunctions object>",
+      "  mail.start = 'none' | 'all' | 'first' | 'last' | 'first+last'",
+      "  mail.done = 'none' | 'all' | 'first' | 'last' | 'first+last'",
+      "  mail.error = 'none' | 'all' | 'first' | 'last' | 'first+last'",
+      "  mail.from = <sender address>",
+      "  mail.to = <recipient address>",
+      "  mail.control = <control object for sendmail package>\n\n",
+      "Using default configuration.",
+      sep = "\n")
   }
-
-  if(missing(conffile)) {
-    possible.conffiles = c(suppressWarnings(normalizePath(".BatchJobs.R")),
-                           path.expand("~/.BatchJobs.R"),
-                           file.path(.path.package("BatchJobs"), "etc", ".BatchJobs.R"))
-    conffile = head(Filter(file.exists, possible.conffiles), 1L)
+  checkArg(conffile, "character", len=1, na.ok=FALSE)
+  if (!file.exists(conffile)) {
+    stopf("Configuration file does not exist: '%s'", conffile)
   }
-
-  if(length(conffile) == 0L || !file.exists(conffile)) {
-    message("Configuration file does not exist: '", conffile, "'")
+  message("Sourcing configuration file: ", conffile)
+  conf = new.env()
+  x = try(
+    sys.source(conffile, envir=conf)
+  )
+  if (is.error(x)) {
     message(template())
-    useDefaultBatchJobsConf()
+    stopf("There was an error in sourcing your configuration file!")
   } else {
-    message("Sourcing configuration file: ", conffile)
-    ee = new.env()
-    x = try(
-      sys.source(conffile, envir=ee)
-    )
-    if (is.error(x)) {
-      message("There was an error in sourcing your configuration file!")
-      message(template())
-      useDefaultBatchJobsConf()
-    } else {
-      conf = as.list(ee)
-      checkConf(conf)
-      do.call(setBatchJobsConf, conf)
-    }
-    invisible(TRUE)
+    checkConf(conf)
+    do.call(checkConfElements, as.list(conf))
+    return(conf)
   }
 }
 
-#' Set configuration options of package. Only provided parameters get changed.
-#' The mailer settings mean: 
-#' \dQuote{none} = do not mail for any job, \dQuote{all} = mail for all jobs,
-#' \dQuote{first} = mail for first job, \dQuote{last} = mail for last job, 
-#' \dQuote{first+last} = mail for first and last job.
-#' The default settings are: \code{\link{makeClusterFunctionsInteractive}}, no mails. 
-#' 
-#' @title Set configuration options.
-#' @param cluster.functions [\code{\link{ClusterFunctions}}]\cr
-#'   Cluster functions to use. 
-#' @param mail.start [\code{character(1)}]\cr
-#'   For which jobs should mails be sent when the job is started?
-#'   One of \dQuote{none}, \dQuote{all}, \dQuote{first}, \dQuote{last}, \dQuote{first+last}. 
-#'   Default is \dQuote{none}.
-#' @param mail.done [\code{character(1)}]\cr
-#'   For which jobs should mails be sent when the job is done?
-#'   One of \dQuote{none}, \dQuote{all}, \dQuote{first}, \dQuote{last}, \dQuote{first+last}. 
-#'   Default is \dQuote{none}.
-#' @param mail.error [\code{character(1)}]\cr
-#'   For which jobs should mails be sent when the job generates an error?
-#'   One of \dQuote{none}, \dQuote{all}, \dQuote{first}, \dQuote{last}, \dQuote{first+last}. 
-#'   Default is \dQuote{none}.
-#' @param mail.from [\code{character(1)}]\cr
-#'   Sender adress of status notification mails.
-#' @param mail.to [\code{character(1)}]\cr
-#'   Recipient adress of status notification mails.
-#' @param mail.control [\code{list}]\cr
-#'   Control object for \code{\link[sendmailR]{sendmail}}.
-#' @return Nothing.
-#' @export
-setBatchJobsConf = function(cluster.functions, mail.start, mail.done, mail.error, mail.from, 
-                            mail.to, mail.control) {
-  conf = getBatchJobsConf()
-  if (!missing(cluster.functions)) {
-    checkArg(cluster.functions, cl = "ClusterFunctions", na.ok = FALSE)
-    conf$cluster.functions = cluster.functions
+# sources multiple config files, the later overwrite the first, and returns the envir
+sourceConfFiles = function(conffiles) {
+  conf = new.env()
+  for (cf in conffiles) {
+    conf2 = sourceConfFile(cf)
+    lapply(ls(conf2), function(x) assign(x, conf2[[x]], envir=conf))
   }
+  return(conf)
+}
 
-  if (!missing(mail.start)) {
-    checkArg(mail.start, choices = c("none", "first", "last", "first+last", "all"))
-    conf$mail.start = mail.start
-  } else {
-    conf$mail.start = "none"
-  }
-  if (!missing(mail.done)) {
-    checkArg(mail.done, choices = c("none", "first", "last", "first+last", "all"))
-    conf$mail.done = mail.done
-  } else {
-    conf$mail.done = "none"
-  }
-  if (!missing(mail.error)) {
-    checkArg(mail.error, choices = c("none", "first", "last", "first+last", "all"))
-    conf$mail.error = mail.error
-  } else {
-    conf$mail.error = "none"
-  }
-  if (!missing(mail.from)) {
-    checkArg(mail.from, cl = "character", len = 1L, na.ok = FALSE)
-    conf$mail.from = mail.from
-  }
-  if (!missing(mail.to)) {
-    checkArg(mail.to, cl = "character", len = 1L, na.ok = FALSE)
-    conf$mail.to = mail.to
-  }
-  if (!missing(mail.control)) {
-    checkArg(mail.control, cl = "list")
-    conf$mail.control = mail.control
-  } else {
-    conf$mail.control = list()
-  }
+# assigns a conf to namespace
+assignConf = function(conf) {
+  conf.in.ns = getBatchJobsConf() 
+  lapply(ls(conf), function(x) assign(x, conf[[x]], envir=conf.in.ns))
+}
+
+# reads package conf, userhome conf, working dir conf
+# then assigns them to namespace
+useDefaultConfs = function() {
+  conffiles = character(0)
+  fn.pack = file.path(.path.package("BatchJobs"), "etc", ".BatchJobs.R")
+  fn.user = path.expand("~/.BatchJobs.R")
+  fn.wd = suppressWarnings(normalizePath(".BatchJobs.R"))
+  f = function(fn) if (file.exists(fn)) conffiles <<- c(conffiles, fn)
+  sapply(c(fn.pack, fn.user, fn.wd), f)
+  if (length(conffiles) == 0)
+    stopf("No configuation found at all. Not in package, not in user.home, not in work dir!")
+  conf = sourceConfFiles(conffiles) 
+  assignConf(conf) 
+}
+
+assignConfDefaults = function() {
+  conf = getBatchJobsConf()
+  conf$cluster.functions = makeClusterFunctionsInteractive()  
+  conf$mail.start = "none"   
+  conf$mail.done = "none"   
+  conf$mail.error = "none"
   conf$db.driver = "SQLite"
   conf$db.options = list()
-  invisible(NULL)
-}
-
-
-useDefaultBatchJobsConf = function() {
-  setBatchJobsConf(
-    cluster.functions = makeClusterFunctionsInteractive(),
-    mail.start = "none",
-    mail.done = "none",
-    mail.error = "none",
-    mail.from = "",
-    mail.to = "",
-    mail.control = list()
-  )
 }
 
 # loads conf into namespace on slave
@@ -165,10 +101,53 @@ checkConf = function(conf) {
   ns2 = c("cluster.functions", "mail.start", "mail.done", "mail.error", 
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options")
   if (!all(ns %in% ns2))
-    stop("You are only allowed to define the following R variables in your config file:\n",
+    stopf("You are only allowed to define the following R variables in your config file:\n%s",
       collapse(ns2, sep=", "))
+}
+
+checkConfElements = function(cluster.functions, mail.to, mail.from, 
+  mail.start, mail.done, mail.error, mail.control,
+  db.driver, db.options) {
+  
+  if (!missing(cluster.functions)) 
+    checkArg(cluster.functions, cl = "ClusterFunctions")
+  if (!missing(mail.from)) 
+    checkArg(mail.from, cl = "character", len = 1L, na.ok = FALSE)
+  if (!missing(mail.to))
+    checkArg(mail.to, cl = "character", len = 1L, na.ok = FALSE)
+  if (!missing(mail.start))
+    checkArg(mail.start, choices = c("none", "first", "last", "first+last", "all"))
+  if (!missing(mail.done))
+    checkArg(mail.done, choices = c("none", "first", "last", "first+last", "all"))
+  if (!missing(mail.error))
+    checkArg(mail.error, choices = c("none", "first", "last", "first+last", "all"))
+  if (!missing(mail.control)) 
+    checkArg(mail.control, cl = "list")
+  if (!missing(mail.control)) 
+    checkArg(mail.control, cl = "list")
+  if (!missing(mail.control)) 
+    checkArg(mail.control, cl = "list")
+  if (!missing(db.driver)) 
+    checkArg(db.driver, cl = "character", len = 1L, na.ok = FALSE)
+  if (!missing(db.options)) 
+    checkArg(db.options, cl = "list")
 }
 
 getClusterFunctions = function(conf) {
   conf$cluster.functions
+}
+
+#' Display BatchJobs configuration.
+#' @return Nothing. 
+#' @export
+showConf = function() {
+  x = getBatchJobsConf()
+  f = function(y) if(is.null(y)) "" else y
+  catf("BatchJobs configurations:")
+  catf("  cluster functions: %s", f(x$cluster.functions$name))
+  catf("  mail.from: %s", f(x$mail.from))
+  catf("  mail.to: %s", f(x$mail.to))
+  catf("  mail.start: %s", f(x$mail.start))
+  catf("  mail.done: %s", f(x$mail.done))
+  catf("  mail.error: %s", f(x$mail.error))
 }
