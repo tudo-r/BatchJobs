@@ -22,7 +22,7 @@
 #'   Default is empty list.
 #' @param wait [\code{function(retries)}]\cr
 #'   Function that defines how many seconds should be waited in case of a temporary error.
-#'   Default is exponential back-off with \code{50*2^retries}.
+#'   Default is exponential back-off with \code{10*2^retries}.
 #' @param max.retries [\code{integer(1)}]\cr
 #'   Number of times to submit one job again in case of a temporary error
 #'   (like filled queues). Each time \code{wait} is called to wait a certain
@@ -33,7 +33,7 @@
 #' @return [\code{Registry}]. Auto-created registry for the job.
 #' @export
 submitFunCall = function(id, fun, pars, file, seed, resources=list(),
-  wait=function(retries) 50L * 2L^retries, max.retries=10L, ...) {
+  wait, max.retries=10L, ...) {
 
   checkArg(id, "character", len=1L, na.ok=FALSE)
   checkArg(fun, "function")
@@ -45,6 +45,14 @@ submitFunCall = function(id, fun, pars, file, seed, resources=list(),
     seed = convertInteger(seed)
     checkArg(seed, cl = "integer", len = 1L, na.ok = FALSE)
   }
+  checkArg(resources, "list")
+  if (missing(wait))
+    wait = function(retries) 10L * 2L^retries
+  else
+    checkArg(wait, formals="retries")    
+  max.retries = convertInteger(max.retries)
+  checkArg(max.retries, "integer", len=1, na.ok=FALSE)   
+  
   # get a unique, unused tempdir. tempdir() always stays the same per session
   td = tempfile(pattern="")
   reg = makeRegistry(id=id, file.dir=td, sharding=FALSE, ...)

@@ -22,7 +22,7 @@
 #'   Default is empty list.
 #' @param wait [\code{function(retries)}]\cr
 #'   Function that defines how many seconds should be waited in case of a temporary error.
-#'   Default is exponential back-off with \code{50*2^retries}.
+#'   Default is exponential back-off with \code{10*2^retries}.
 #' @param max.retries [\code{integer(1)}]\cr
 #'   Number of times to submit one job again in case of a temporary error
 #'   (like filled queues). Each time \code{wait} is called to wait a certain
@@ -35,9 +35,7 @@
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
-submitJobs = function(reg, ids, resources=list(),
-  wait=function(retries) 10L * 2L^retries, max.retries=10L) {
-
+submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   checkArg(reg, cl="Registry")
   if (missing(ids)) {
     ids = dbGetMissingResults(reg)
@@ -58,6 +56,13 @@ submitJobs = function(reg, ids, resources=list(),
       stop("ids must have non-zero length!")
     checkIds(reg, unlist(ids))
   }
+  checkArg(resources, "list")
+  if (missing(wait))
+    wait = function(retries) 10L * 2L^retries
+  else
+    checkArg(wait, formals="retries")    
+  max.retries = convertInteger(max.retries)
+  checkArg(max.retries, "integer", len=1, na.ok=FALSE)   
   if (!is.null(getListJobs())) {
     ids.present = findOnSystem(reg)
     ids.intersect = intersect(unlist(ids), ids.present) 
