@@ -27,10 +27,12 @@ dbDoQueries = function(reg, queries, flags="ro") {
     }, silent = TRUE)
     if (!is.error(ok)) { 
       dbCommit(con)
+      dbDisconnect(con)
       return(ress)
     } else {
       ok = as.character(ok)
       dbRollback(con)
+      dbDisconnect(con)
       if(grepl("lock", ok, ignore.case=TRUE)) {
         Sys.sleep(runif(1L, min=1, max=2))
       } else {
