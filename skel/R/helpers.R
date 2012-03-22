@@ -41,3 +41,12 @@ seeder = function(seed) {
 addIntModulo = function(x, y, mod = .Machine$integer.max) {
   as.integer((as.double(x) + as.double(y)) %% mod)
 }
+
+isOnSlave = function() {
+  getOption("BatchJobs.on.slave", default=FALSE)
+}
+
+setOnSlave = function(x) {
+  checkArg(x, "logical", len=1, na.ok=FALSE)
+  options(BatchJobs.on.slave=x)
+}
