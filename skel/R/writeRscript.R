@@ -10,7 +10,7 @@ writeRscript = function(fn.rscript, file.dir, ids, mult.files, disable.mail, fir
       "first = %iL",
       "last = %iL",
       "BatchJobs:::doJob(reg, ids, mult.files, disable.mail, first, last)",
-      "setOnSlave(FALSE)",
+      "BatchJobs:::setOnSlave(FALSE)",
       sep = "\n"
    )
   else 
