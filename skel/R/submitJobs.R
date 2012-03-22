@@ -103,7 +103,6 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
     job.name = paste(reg$id, id1, sep="-")
     retries = 0L
     while (TRUE) {
-      # FIXME we could reduce the number of queries send
       if (retries > max.retries) {
         # reset everything to NULL in DB for this job
         dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
