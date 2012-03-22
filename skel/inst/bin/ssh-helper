@@ -52,7 +52,7 @@ case $CMD in
         read L1 L2 L3 REST < /proc/loadavg
         NJOBS1=$(pgrep R | wc -l)
         NJOBS2=$(pgrep R | xargs ps -o pid,pcpu -p | awk '$2 > 50.0 { print $1 }' | wc -l)
-        NJOBS3=$(pgrep R | xargs ps -o pid,cmd -p | grep  $1/jobs | wc -l)
+        NJOBS3=$(pgrep R | xargs ps -o pid,cmd -p | grep  "$1/jobs" | wc -l)
         printf "list(\n"
         printf "  load=c(%f, %f, %f),\n" $L1 $L2 $L3
         printf "  running_r_processes=%i,\n" $NJOBS1
