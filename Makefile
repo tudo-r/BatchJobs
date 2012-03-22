@@ -1,9 +1,9 @@
-R	:= R --vanilla
-RSCRIPT	:= Rscript --vanilla
+R	:= R --no-save --no-restore
+RSCRIPT	:= Rscript 
 DELETE	:= rm -fR
 
 .SILENT:
-.PHONEY: clean roxygenize package windows dependencies install test check
+.PHONEY: clean roxygenize package windows dependencies install test html check
 
 usage:
 	echo "Available targets:"
@@ -15,6 +15,7 @@ usage:
 	echo " dependencies  - install required packages"
 	echo " install       - install the package"
 	echo " test          - run tests"
+	echo " html          - install the package with HTML pages"
 	echo " check         - run R CMD check on the package"
 
 clean:
@@ -43,11 +44,15 @@ dependencies:
 
 install: roxygenize
 	echo "Installing package ..."
-	${R} CMD INSTALL --html pkg
+	${R} CMD INSTALL pkg
 
 test: install
 	echo "Testing package ..."
 	${RSCRIPT} ./test_all.R
+
+html: install
+	echo "Installing package with HTML files..."
+	${R} CMD INSTALL --html pkg
 
 check: roxygenize
 	echo "Running R CMD check ..."

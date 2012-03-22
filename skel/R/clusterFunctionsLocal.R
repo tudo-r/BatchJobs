@@ -13,8 +13,8 @@
 #' @export
 makeClusterFunctionsLocal = function() {
   submitJob = function(reg, job.name, rscript, log.file, job.dir, resources) {
-    cmd = sprintf("%s/R --vanilla --file='%s' > '%s' 2>&1",
-      R.home("bin"), rscript, log.file)
+    cmd = sprintf("%s --no-save --no-restore --file='%s' > '%s' 2>&1",
+      file.path(R.home("bin"), "R"), rscript, log.file)
     system(cmd, intern=TRUE, wait=TRUE)    
     makeSubmitJobResult(status=0L, batch.job.id=job.name)
   }
