@@ -40,7 +40,7 @@ choose_queue <- function(walltime, memory) {
 }
 -%>
 #PBS -N <%= job.name %>
-#PBS -o "<%= log.file %>"
+#PBS -o <%= log.file %>
 #PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,vmem=<%= memory %>M
 #PBS -q <%= choose_queue(walltime, memory) %>
 #PBS -j oe
