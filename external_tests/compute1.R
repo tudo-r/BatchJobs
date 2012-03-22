@@ -13,12 +13,12 @@ doExternalTest(whitespace=FALSE)
 doExternalTest(whitespace=TRUE)
 
 conf$cluster.functions = makeClusterFunctionsSSH(
-  makeSSHWorker("localhost"))
+  makeSSHWorker("compute1"))
 doExternalTest(whitespace=FALSE)
 doExternalTest(whitespace=TRUE)
 
 conf$cluster.functions = makeClusterFunctionsSSH(
-  makeSSHWorker("localhost", ncpus=4, max.load=4, max.jobs=2))
+  makeSSHWorker("compute1", ncpus=4, max.load=4, max.jobs=2))
 doExternalTest(whitespace=FALSE)
 doExternalTest(whitespace=TRUE)
 
