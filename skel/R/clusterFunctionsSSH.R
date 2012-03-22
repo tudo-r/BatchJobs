@@ -7,10 +7,11 @@ findSSHHelper = function(nodename, rhome) {
 }
 
 onSSHWorker = function(worker, command) {
-  cmd = paste("\"", c(worker$ssh_helper, worker$rhome, command), "\"",
-              collapse=" ")
+  # in paths can be whitespaces and other bad stuff, quote it!
+  cmd = sprintf("\"%s\"", c(worker$ssh_helper, worker$rhome, command))
+  # now collapse to string where the 3 parts are separated by 1 white space
+  cmd = collapse(cmd, sep=" ")
   args = c(worker$nodename, paste("'", cmd, "'", sep=""))
-  print 
   res = system2("ssh", args, stdout=TRUE, stderr=TRUE)
   tryCatch(eval(parse(text=paste(res, collapse="\n"))),
     error=function(x) stop(res))
