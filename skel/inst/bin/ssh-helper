@@ -50,9 +50,18 @@ case $CMD in
         ;;
     worker-status)
         read L1 L2 L3 REST < /proc/loadavg
-        NJOBS1=$(pgrep R | wc -l)
-        NJOBS2=$(pgrep R | xargs ps -o pid,pcpu -p | awk '$2 > 50.0 { print $1 }' | wc -l)
-        NJOBS3=$(pgrep R | xargs ps -o pid,cmd -p | grep  "$1/jobs" | wc -l)
+        PROCS=$(pgrep R)
+        # we get errors from ps if there is not a single R process running
+        if [ -n "$PROCS" ]
+        then
+            NJOBS1=$(echo $PROCS | wc -l)
+            NJOBS2=$(echo $PROCS | xargs ps -o pid,pcpu -p | awk '$2 > 50.0 { print $1 }' | wc -l)
+            NJOBS3=$(echo $PROCS | xargs ps -o pid,cmd -p | grep  "$1/jobs" | wc -l)
+        else
+            NJOBS1=0
+            NJOBS2=0
+            NJOBS3=0
+        fi
         printf "list(\n"
         printf "  load=c(%f, %f, %f),\n" $L1 $L2 $L3
         printf "  running_r_processes=%i,\n" $NJOBS1
