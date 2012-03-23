@@ -15,7 +15,7 @@ usage:
 	echo " dependencies  - install required packages"
 	echo " install       - install the package"
 	echo " test          - run tests"
-	echo " html          - install the package with HTML pages"
+	echo " html          - build static html documentation"
 	echo " check         - run R CMD check on the package"
 
 clean:
@@ -51,8 +51,8 @@ test: install
 	${RSCRIPT} ./test_all.R
 
 html: install
-	echo "Installing package with HTML files..."
-	${R} CMD INSTALL --html pkg
+	echo "Building HTML documentation"
+	${RSCRIPT} ./staticdocs.R
 
 check: roxygenize
 	echo "Running R CMD check ..."
