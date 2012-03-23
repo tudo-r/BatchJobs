@@ -1,4 +1,7 @@
+#' Kill a job on the batch system.
+#' 
 #' Kill jobs which have already been submitted to the batch system.
+#' 
 #' If a job is killed its internal state is reset as if it had not been submitted at all.
 #' The function warns if
 #' (a) the job you want to kill has not been submitted, 
@@ -7,7 +10,6 @@
 #' In all 3 cases above nothing is changed for the state of this job and no call 
 #' to the internal kill cluster function is generated.
 #'
-#' @title Kill a job on the batch system.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 #' @param ids [\code{integer}]\cr

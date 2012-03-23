@@ -17,7 +17,8 @@ onSSHWorker = function(worker, command) {
     error=function(x) stop(res))
 }
 
-#' @title Create SSH worker for SSH cluster functions.
+#' Create SSH worker for SSH cluster functions.
+#' 
 #' @param nodename [\code{character(1)}]\cr
 #'   Host name of node.
 #' @param rhome [\code{character(1)}]\cr

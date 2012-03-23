@@ -1,4 +1,5 @@
 #' Tests a job by running it with Rscript in a new process.
+#' 
 #' Useful for debugging.
 #' Note that neither the registry, database or file directory are changed.
 #' @param reg [\code{\link{Registry}}]\cr

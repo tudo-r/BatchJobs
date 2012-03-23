@@ -1,6 +1,7 @@
+#' Create a SubmitJobResult object.
+#'
 #' Use this function in your implementation of \code{\link{makeClusterFunctions}} 
 #' to create a return value for the \code{submitJob} function. 
-#' @title Create a SubmitJobResult object.
 #' @param status [\code{integer(1)}]\cr 
 #'   Launch status of job. 
 #'   0 means success, codes bewteen 1 and 100 are temporary
@@ -42,9 +43,10 @@ print.SubmitJobResult = function(x, ...) {
   catf("  Msg    : %i", x$msg)
 }
 
+#' Create a \code{ClusterFuntions} object.
+#'
 #' Use this funtion when you implement a backend for a batch system.
 #' You must define the functions specified in the arguments.
-#' @title Create a \code{ClusterFuntions} object.
 #' @param name [\code{character(1)}]\cr 
 #'   Name of cluster functions.
 #' @param submitJob [\code{function(reg, job.name, rscript, log.file, job.dir, resources, ...)}]\cr

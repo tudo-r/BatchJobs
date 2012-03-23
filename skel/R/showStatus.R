@@ -1,4 +1,5 @@
 #' Show status information about jobs.
+#' 
 #' E.g.: How many there are, how many are done, any errors, etc.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.

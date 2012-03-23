@@ -38,8 +38,9 @@ findSubmitted = function(reg) {
   dbGetSubmitted(reg)
 }
 
-#' Find jobs which are present on the batch system at the moment,
-#' either queued, running, held, etc.
+#' Find jobs which are present on the batch system at the moment.
+#' 
+#' Find jobs either queued, running, held, etc.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 #' @return [\code{integer}]. Ids of jobs.
@@ -65,10 +66,11 @@ findRunning = function(reg) {
   dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, "started IS NOT NULL")
 }
 
+#' Find jobs where walltime was probably hit.
+#' 
 #' Right now the heuristic is as follows:
 #' Find all jobs that have submitted, did not abort with an error, 
 #' did not complete with a result and are not submitted or running anymore.
-#' @title Find jobs where walltime was probably hit.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 #' @return [\code{integer}]. Ids of jobs.

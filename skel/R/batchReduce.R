@@ -1,4 +1,5 @@
 #' Reduces via a binary function over a list adding jobs to a registry.
+#'
 #' Each jobs reduces a certain number of elements on one slave.
 #' You can then submit these jobs to the batch system.
 #' @param reg [\code{\link{Registry}}]\cr

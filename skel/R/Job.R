@@ -1,5 +1,6 @@
-#' Creates a job description. Usually you will not do this manually.
-#'
+#' Creates a job description.
+#' 
+#' Usually you will not do this manually.
 #' Every object is a list that contains the passed arguments of the constructor.
 #'
 #' @param id [\code{integer(1)}]\cr
@@ -15,7 +16,6 @@
 #' @param seed [\code{integer(1)}]\cr
 #'   Random seed for job.
 #' @aliases Job
-#' @title Job description.
 #' @export
 makeJob = function(id=as.integer(NA), fun, fun.id=digest(fun), pars, seed) {
   structure(list(id=id, fun=fun, fun.id=fun.id, pars=pars, seed=seed), class="Job")

@@ -1,3 +1,5 @@
+#' Create cluster functions for synchronous execution on local host.
+#' 
 #' All jobs executed under these cluster functions are executed
 #' synchronously, but in an independent, new R session.
 #' That is, \code{submitJob} does not return until the
@@ -8,7 +10,6 @@
 #' implementation since at any one time there can be only one running
 #' job and while it is running, the master R process is blocked.
 #'
-#' @title Create cluster functions for synchronous execution on local host.
 #' @return [\code{\link{ClusterFunctions}}]. 
 #' @export
 makeClusterFunctionsLocal = function() {
