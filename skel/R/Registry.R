@@ -12,7 +12,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
   checkArg(work.dir, cl = "character", len = 1L, na.ok = FALSE)
   checkArg(multiple.result.files, cl = "logical", len = 1L, na.ok = FALSE)
   if (missing(seed)) {
-    seed = getRandomSeed() 
+    seed = getRandomSeed()
   } else {
     seed = convertInteger(seed)
     checkArg(seed, cl = "integer", len = 1L, lower = 1L, na.ok = FALSE)
@@ -20,41 +20,28 @@ makeRegistryInternal = function(id, file.dir, sharding,
   checkArg(packages, cl = "character", na.ok = FALSE)
   requirePackages(packages, stop=TRUE, suppress.warnings=TRUE)
 
-  if (file.exists(file.dir) && !isEmptyDirectory(file.dir)) {
-    stopf("You cannot use file.dir that already exists and is not empty: %s", file.dir)
-  }
-  checkOrCreateDir(file.dir, wipe=FALSE)
+
+  # FIXME is a warning really what we want to do here?
+  checkDir(file.dir, create=TRUE, check.empty="stop", check.posix=TRUE)
   job.dir = getJobParentDir(file.dir)
-  checkOrCreateDir(job.dir, wipe=FALSE)
-  if(!all(list.files(job.dir, all.files=TRUE) %in% c(".", "..")))
-    warning("Job dir ", job.dir, " does not seem to be empty!")
+  checkDir(job.dir, create=TRUE, check.empty="warn")
   fun.dir = getFunDir(file.dir)
-  checkOrCreateDir(fun.dir, wipe=FALSE)
-  if(!all(list.files(fun.dir, all.files=TRUE) %in% c(".", "..")))
-    warning("Function dir ", fun.dir, " does not seem to be empty!")
-  if (!file.exists(work.dir))
-    stop("Working dir does not exist: ", work.dir)
-  if (!file.info(work.dir)$isdir)
-    stop("Working dir is a file and not a directory: ", work.dir)
+  checkDir(fun.dir, create=TRUE, check.empty="warn")
+  checkDir(work.dir, check.posix=TRUE)
 
-  file.dir = makePathAbsolute(file.dir)
-  work.dir = makePathAbsolute(work.dir)
-  
-  packages = sapply(packages, 
-                    function(pkg) list(version = packageVersion(pkg)), 
+  packages = sapply(packages,
+                    function(pkg) list(version = packageVersion(pkg)),
                     simplify=FALSE)
-  packages = packages[order(names(packages))]
-
   structure(list(
     id = id,
-    db.driver = "SQLite", 
+    db.driver = "SQLite",
     db.options = list(),
     seed = seed,
     file.dir = file.dir,
     sharding = sharding,
     work.dir = work.dir,
     multiple.result.files = multiple.result.files,
-    packages = packages
+    packages = packages[order(names(packages))]
   ), class = "Registry")
 }
 
@@ -81,7 +68,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
 #' @param multiple.result.files [\code{logical(1)}]\cr
 #'   Should a result file be generated for every list element of the
 #'   returned list of the job function?
-#'   Note that the function provided to \code{\link{batchMap}} or 
+#'   Note that the function provided to \code{\link{batchMap}} or
 #'   \code{\link{batchReduce}} must return a named list if this is set to \code{TRUE}.
 #'   The result file will be named \dQuote{<id>-result-<element name>.RData}
 #'   instead of \dQuote{<id>-result.RData}.
@@ -96,12 +83,12 @@ makeRegistryInternal = function(id, file.dir, sharding,
 #' @return [\code{\link{Registry}}]
 #' @aliases Registry
 #' @export
-#' @examples 
+#' @examples
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' print(reg)
 makeRegistry = function(id, file.dir, sharding=TRUE,
   work.dir, multiple.result.files = FALSE, seed, packages=character(0L)) {
-  reg = makeRegistryInternal(id, file.dir, sharding, work.dir, 
+  reg = makeRegistryInternal(id, file.dir, sharding, work.dir,
                              multiple.result.files, seed, union(packages, "BatchJobs"))
   dbCreateJobStatusTable(reg)
   dbCreateJobDefTable(reg)
@@ -124,7 +111,7 @@ print.Registry = function(x, ...) {
 #' @param file.dir [\code{character(1)}]\cr
 #'   Location of the file.dir to load the registry from.
 #' @param save [\code{logical(1)}]\cr
-#'   Set \code{file.dir} in the registry and save. 
+#'   Set \code{file.dir} in the registry and save.
 #'   Useful if you moved the file dir, because you wanted to continue
 #'   working somewhere else.
 #'   Default is \code{FALSE}.

@@ -1,37 +1,38 @@
-checkOrCreateDir = function(path, wipe = FALSE) {
-  if (file.exists(path)) {
-    if (!file.info(path)$isdir)
-      stop("File in place where dir should be created: ", path)
-
-    if (wipe) {
-      message("Wiping dir: ", path)
-      # Don't unlink and re-make! Permissions get lost!
-      # recursively deleting files in R is really slow.
-      if (getOperatingSystem() != "Windows") {
-        system(sprintf("rm -rf %s/*", path))
-      } else {
-        delete = list.files(path, all.files = TRUE)
-        delete = setdiff(delete, c(".", ".."))
-        ok = unlink(file.path(path, delete), recursive = TRUE)
-        if (ok != 0)
-          stop("Could not wipe dir: ", path)
-      }
+checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE) {
+  if (create) {
+    if (file.exists(path)) {
+      if (!file.info(path)$isdir)
+        stop("File in place where dir should be created: ", path)
+    } else {
+      message("Creating dir: ", path)
+      if (!dir.create(path))
+        stop("Could not create dir: ", path)
     }
-  } else {
-    message("Creating dir: ", path)
-    if (!dir.create(path))
-      stop("Could not create dir: ", path)
   }
 
   if (file.access(path, mode=2L) != 0L)
     stop("Dir ", path, " is not writable!")
+
+  if(!identical(check.empty, FALSE) &&
+     !all(list.files(path, all.files=TRUE) %in% c(".", ".."))) {
+    msg = paste("Dir", path, "does not seem to be empty!")
+    if(check.empty == "stop")
+      stop(msg)
+    warning(msg)
+  }
+
+  if(check.posix) {
+    pattern = "^[[:alnum:]/_.-]*$"
+    if(! grepl(pattern, normalizePath(path)))
+      stopf("Directory '%s' contains illegal characters! Allowed: a-z A-Z 0-9 . - _", normalizePath(path))
+  }
 }
 
 createShardedDirs = function(reg, ids) {
   if (reg$sharding) {
     paths = file.path(getJobParentDir(reg$file.dir), unique(getShardedSubDir(ids)))
-    lapply(paths, checkOrCreateDir)
-  } 
+    lapply(paths, checkDir, create=TRUE)
+  }
 }
 
 getOperatingSystem = function() {
