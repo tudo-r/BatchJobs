@@ -23,7 +23,7 @@ sourceConfFile = function(conffile) {
   )
   if (is.error(x)) {
     message(template())
-    stopf("There was an error in sourcing your configuration file!")
+    stopf("There was an error in sourcing your configuration file '%s'!", conffile)
   } else {
     checkConf(conf)
     do.call(checkConfElements, as.list(conf))
