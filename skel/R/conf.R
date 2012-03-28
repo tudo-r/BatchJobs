@@ -1,7 +1,16 @@
 # sources 1 config file and returns the envir
 sourceConfFile = function(conffile) {
-  template = function() {
-    paste("Format must be like this:\n",
+  checkArg(conffile, "character", len=1, na.ok=FALSE)
+  if (!file.exists(conffile)) {
+    stopf("Configuration file does not exist: '%s'", conffile)
+  }
+  message("Sourcing configuration file: ", conffile)
+  conf = new.env()
+  x = try(sys.source(conffile, envir=conf))
+  
+  if (is.error(x)) {
+    message(paste(
+      "Format must be like this:\n",
       "  cluster.functions = <ClusterFunctions object>",
       "  mail.start = 'none' | 'all' | 'first' | 'last' | 'first+last'",
       "  mail.done = 'none' | 'all' | 'first' | 'last' | 'first+last'",
@@ -10,25 +19,12 @@ sourceConfFile = function(conffile) {
       "  mail.to = <recipient address>",
       "  mail.control = <control object for sendmail package>\n\n",
       "Using default configuration.",
-      sep = "\n")
+      sep = "\n"))
+    stopf("There was an error in sourcing your configuration file '%s': %s!", conffile, as.character(x))
   }
-  checkArg(conffile, "character", len=1, na.ok=FALSE)
-  if (!file.exists(conffile)) {
-    stopf("Configuration file does not exist: '%s'", conffile)
-  }
-  message("Sourcing configuration file: ", conffile)
-  conf = new.env()
-  x = try(
-    sys.source(conffile, envir=conf)
-  )
-  if (is.error(x)) {
-    message(template())
-    stopf("There was an error in sourcing your configuration file '%s'!", conffile)
-  } else {
-    checkConf(conf)
-    do.call(checkConfElements, as.list(conf))
-    return(conf)
-  }
+  checkConf(conf)
+  do.call(checkConfElements, as.list(conf))
+  return(conf)
 }
 
 # sources multiple config files, the later overwrite the first, and returns the envir
@@ -50,12 +46,10 @@ assignConf = function(conf) {
 # reads package conf, userhome conf, working dir conf
 # then assigns them to namespace
 useDefaultConfs = function() {
-  conffiles = character(0)
   fn.pack = file.path(.path.package("BatchJobs"), "etc", ".BatchJobs.R")
   fn.user = path.expand("~/.BatchJobs.R")
   fn.wd = suppressWarnings(normalizePath(".BatchJobs.R"))
-  f = function(fn) if (file.exists(fn)) conffiles <<- c(conffiles, fn)
-  sapply(c(fn.pack, fn.user, fn.wd), f)
+  conffiles = Filter(file.exists, c(fn.pack, fn.user, fn.wd))
   if (length(conffiles) == 0)
     stopf("No configuation found at all. Not in package, not in user.home, not in work dir!")
   conf = sourceConfFiles(conffiles) 

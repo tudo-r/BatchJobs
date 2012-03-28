@@ -1,5 +1,5 @@
 writeRscript = function(fn.rscript, file.dir, ids, mult.files, disable.mail, first, last, interactive.test) {
-  if (!interactive.test)
+  if (!interactive.test) {
     template = paste(
       "options(BatchJobs.on.slave=TRUE)",
       "library(BatchJobs)",
@@ -13,7 +13,7 @@ writeRscript = function(fn.rscript, file.dir, ids, mult.files, disable.mail, fir
       "BatchJobs:::setOnSlave(FALSE)",
       sep = "\n"
    )
-  else 
+  } else {
     template = paste(
       "setOnSlave(TRUE)",
       "reg = loadRegistry('%s')",
@@ -26,6 +26,7 @@ writeRscript = function(fn.rscript, file.dir, ids, mult.files, disable.mail, fir
       "setOnSlave(FALSE)",
       sep = "\n"
     )
-    rscript = sprintf(template, file.dir, collapse(paste(ids, "L", sep = "")), mult.files, disable.mail, first, last)
-    cat(file = fn.rscript, rscript)
+  }
+  rscript = sprintf(template, file.dir, collapse(paste(ids, "L", sep = "")), mult.files, disable.mail, first, last)
+  cat(file = fn.rscript, rscript)
 }

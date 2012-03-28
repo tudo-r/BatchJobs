@@ -10,12 +10,16 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE) {
     }
   }
 
+  if (! file.exists(path)) {
+    stopf("Directory '%s' does not exists", path)
+  }
+
   if (file.access(path, mode=2L) != 0L)
-    stop("Dir ", path, " is not writable!")
+    stopf("Directory '%s' is not writable!", path)
 
   if(!identical(check.empty, FALSE) &&
      !all(list.files(path, all.files=TRUE) %in% c(".", ".."))) {
-    msg = paste("Dir", path, "does not seem to be empty!")
+    msg = sprintf("Directory '%s' does not seem to be empty!", path)
     if(check.empty == "stop")
       stop(msg)
     warning(msg)
