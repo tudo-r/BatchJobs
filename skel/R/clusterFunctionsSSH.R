@@ -13,8 +13,10 @@ onSSHWorker = function(worker, command) {
   cmd = collapse(cmd, sep=" ")
   args = c(worker$nodename, paste("'", cmd, "'", sep=""))
   res = system2("ssh", args, stdout=TRUE, stderr=TRUE)
-  tryCatch(eval(parse(text=paste(res, collapse="\n"))),
-    error=function(x) stop(res))
+  evaluated = try(eval(parse(text=paste(res, collapse="\n"))))
+  if(is.error(evaluated))
+    stopf("Error in onSSHWorker: %s (res: %s || args: %s)", as.character(evaluated), as.character(res), args)
+  evaluated
 }
 
 #' Create SSH worker for SSH cluster functions.
