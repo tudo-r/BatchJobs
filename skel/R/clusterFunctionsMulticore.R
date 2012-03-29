@@ -28,8 +28,7 @@ makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load) {
       if (is.error(pid)) {
         makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="submit failed.")
       } else {
-        makeSubmitJobResult(status=0L,
-          batch.job.id=paste(worker$nodename, pid, sep="#"))
+        makeSubmitJobResult(status=0L, batch.job.id=pid)
       }
     }
   }

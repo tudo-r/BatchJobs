@@ -6,7 +6,9 @@ doExternalTest = function(whitespace=FALSE, long=FALSE) {
     fd = "foo bär"
   else
     fd = "foo"  
-  unlink(fd, recursive=TRUE)
+  ok = unlink(fd, recursive=TRUE)
+  if (ok != 0)
+    stopf("could not delete file dir: %s", fd)
   reg = makeRegistry(id=id, file.dir=fd, sharding=FALSE)
   xs = 1:5
   if (long)
