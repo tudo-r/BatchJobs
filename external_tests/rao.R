@@ -12,7 +12,7 @@ doExternalTest(whitespace=FALSE)
 
 conf$cluster.functions = makeClusterFunctionsMulticore()
 doExternalTest(whitespace=FALSE)
-doKillTest(reg)
+doKillTest()
 
 conf$cluster.functions = makeClusterFunctionsSSH(
   makeSSHWorker("rao"))
