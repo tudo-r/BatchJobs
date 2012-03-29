@@ -53,5 +53,4 @@ module add R/2.14.0
 
 ## Run R:
 export TMPDIR=/scratch
-cd "<%= job.dir %>"
 R CMD BATCH --no-save --no-restore "<%= rscript %>" /dev/stdout
