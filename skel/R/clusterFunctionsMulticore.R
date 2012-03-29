@@ -24,7 +24,7 @@ makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load) {
     if (is.null(worker)) {
       makeSubmitJobResult(status=1L, batch.job.id=NULL, msg="No free core available")
     } else {
-      pid = try(startWorkerJob(worker, job.dir, rscript, log.file))
+      pid = try(startWorkerJob(worker, rscript, log.file))
       if (is.error(pid)) {
         makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="submit failed.")
       } else {

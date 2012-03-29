@@ -3,11 +3,11 @@ getWorkerNumberOfCPUs = function(worker) {
   UseMethod("getWorkerNumberOfCPUs")
 }
 
-getWorkerStatus = function(worker, job.dir) {
+getWorkerStatus = function(worker, file.dir) {
   UseMethod("getWorkerStatus")
 }
 
-startWorkerJob = function(worker, work.dir, rfile, outfile) {
+startWorkerJob = function(worker, rfile, outfile) {
   UseMethod("startWorkerJob")
 }
 

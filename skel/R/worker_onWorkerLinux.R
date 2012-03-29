@@ -53,7 +53,7 @@ findHelperScriptLinux = function(rhome, ssh=FALSE, nodename) {
 #   Arguments for helper command.
 #   number-of-cpus: Nothing.
 #   worker-status: job.dir
-#   start-job: work.dir, rfile, outfile.
+#   start-job: rfile, outfile.
 #   kill-job: pid.
 #   list-jobs: Nothing.
 # @return [any]. 

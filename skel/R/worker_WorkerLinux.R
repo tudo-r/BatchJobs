@@ -9,8 +9,8 @@ getWorkerStatus.WorkerLinux = function(worker, file.dir) {
   onWorkerLinux(worker, "worker-status", file.dir)
 }
 
-startWorkerJob.WorkerLinux = function(worker, work.dir, rfile, outfile) {
-  onWorkerLinux(worker, "start-job", c(work.dir, rfile, outfile))
+startWorkerJob.WorkerLinux = function(worker, rfile, outfile) {
+  onWorkerLinux(worker, "start-job", c(rfile, outfile))
 }
 
 killWorkerJob.WorkerLinux = function(worker, pid) {

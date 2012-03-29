@@ -26,8 +26,8 @@
 ##       '-f $FILEDIR/jobs' in 'ps -o cmd'.  
 ##   number of running R jobs.
 ##
-## start-job CWD RFILE OUTFILE
-##   Start an R CMD BATCH process in $CWD running $RFILE and saving
+## start-job RFILE OUTFILE
+##   Start an R CMD BATCH process running $RFILE and log
 ##   the output in $OUTFILE.
 ##
 ## kill-job PID
@@ -77,10 +77,9 @@ case $CMD in
         printf ")\n"
         ;;
     start-job)
-        cd "$1"
          # nothing should be on all 3 streams except maybe a segfault. throw away. 
          # see comment also in cfLocal
-        "$RCMD" CMD BATCH --no-save --no-restore "$2" "$3" \
+        "$RCMD" CMD BATCH --no-save --no-restore "$1" "$2" \
             > /dev/null 2> /dev/null < /dev/null &
         printf '%i\n' $!
         ;;

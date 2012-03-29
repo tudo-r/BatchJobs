@@ -72,7 +72,7 @@ makeClusterFunctionsSSH = function(...) {
     if (is.null(worker)) {
       makeSubmitJobResult(status=1L, batch.job.id=NULL, msg="No free worker available")
     } else {
-      pid = try(startWorkerJob(worker, job.dir, rscript, log.file))
+      pid = try(startWorkerJob(worker, rscript, log.file))
       if (is.error(pid)) {
         makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="submit failed.")
       } else {
