@@ -12,3 +12,4 @@ doExternalTest(whitespace=FALSE)
 
 conf$cluster.functions = makeClusterFunctionsTorque("/home/bischl/lido.tmpl")
 doExternalTest(whitespace=FALSE)
+doKillTest()
