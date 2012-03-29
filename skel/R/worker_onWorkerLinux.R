@@ -22,7 +22,7 @@ runCommand = function(cmd, args=character(0), ssh=FALSE, nodename) {
   res = try(system2(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE))
   if(is.error(res))
     stopf("Error in runCommand: %s (res: %s || args: %s)", as.character(res), sys.cmd, collapse(sys.args))
-  evaluated
+  res
 }
 
 # Find helper script on a Linux machine in package dir.
