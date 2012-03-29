@@ -14,10 +14,7 @@
 #' @export
 makeClusterFunctionsInteractive = function() {
   submitJob = function(reg, job.name, rscript, log.file, job.dir, resources) {
-    owd = getwd()
-    setwd(job.dir)    
     suppressAll(sys.source(rscript, envir=baseenv(), keep.source=FALSE))
-    setwd(owd)
     makeSubmitJobResult(status=0L, batch.job.id="", msg="")
   }
   makeClusterFunctions(name="Interactive", submitJob=submitJob, killJob=NULL, listJobs=NULL)
