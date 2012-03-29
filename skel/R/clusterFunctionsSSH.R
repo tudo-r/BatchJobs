@@ -19,6 +19,8 @@
 #' @export
 #' @aliases SSHWorker
 makeSSHWorker = function(nodename, rhome=R.home(), ncpus, max.jobs, max.load) {
+  #FIXME we might want to use autodetection of the R interpreter
+  #FIXME be careful with non-interactive sessions, R might then not be in the path!
   worker = makeWorkerRemoteLinux(nodename = nodename, rhome=rhome, 
     ncpus, max.jobs, max.load)
   worker$last.update = 0
