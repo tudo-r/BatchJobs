@@ -27,8 +27,8 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE) {
 
   if(check.posix) {
     pattern = "^[[:alnum:]/_.-]*$"
-    if(! grepl(pattern, normalizePath(path)))
-      stopf("Directory '%s' contains illegal characters! Allowed: a-z A-Z 0-9 . - _", normalizePath(path))
+    if(! grepl(pattern, makePathAbsolute(path)))
+      stopf("Directory '%s' contains illegal characters! Allowed: a-z A-Z 0-9 . - _", makePathAbsolute(path))
   }
 }
 
@@ -55,12 +55,12 @@ makePathAbsolute = function(path) {
   if (getOperatingSystem() == "Windows") {
     # as we print file paths to R files later on, we must use the forward slash also on windows.
     # winslash arg is not available in slightly older versions of R
-    path = normalizePath(path)
+    path = normalizePath(path, mustWork=TRUE)
     path = gsub("\\", "/", path, fixed=TRUE)
   } else {
     # if path starts with / we use that as a heuristic that we dont have to change it
     if(substr(path, 1L, 1L) != "/")
-      path = normalizePath(path)
+      path = normalizePath(path, mustWork=TRUE)
   }
   path
 }

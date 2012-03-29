@@ -1,11 +1,12 @@
 library(testthat)
 
-doExternalTest = function(whitespace=FALSE, long=FALSE) {
+doExternalTest = function(dir=getwd(), whitespace=FALSE, long=FALSE) {
   id = "external_test"
   if (whitespace)
     fd = "foo bär"
   else
     fd = "foo"  
+  fd = file.path(dir, fd)
   ok = unlink(fd, recursive=TRUE)
   if (ok != 0)
     stopf("could not delete file dir: %s", fd)
