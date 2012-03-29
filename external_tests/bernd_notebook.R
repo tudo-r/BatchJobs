@@ -22,5 +22,4 @@ doKillTest()
 conf$cluster.functions = makeClusterFunctionsSSH(
   makeSSHWorker("localhost", ncpus=4, max.load=4, max.jobs=2))
 doExternalTest(whitespace=FALSE)
-doKillTest()
 
