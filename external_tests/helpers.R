@@ -13,7 +13,7 @@ doExternalTest = function(whitespace=FALSE, long=FALSE) {
     f = function(x) x
   else 
     f = function(x) {Sys.sleep(300);x}
-  batchMap(reg, identity, xs)
+  batchMap(reg, f, xs)
   submitJobs(reg)
   if (!long) {
     Sys.sleep(5)
