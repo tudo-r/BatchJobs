@@ -71,6 +71,8 @@ case $CMD in
         ;;
     start-job)
         cd "$1"
+         # nothing should be on all 3 streams except maybe a segfault. throw away. 
+         # see comment also in cfLocal
         "$RHOME/bin/R" CMD BATCH --no-save --no-restore "$2" "$3" \
             > /dev/null 2> /dev/null < /dev/null &
         printf '%i\n' $!
