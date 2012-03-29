@@ -37,7 +37,7 @@ runCommand = function(cmd, args=character(0), ssh=FALSE, nodename) {
 findHelperScriptLinux = function(rhome, ssh=FALSE, nodename) {
   # i think we dont need to quote anything here, because system2 uses shQuote
   rscript = sprintf("%s/bin/Rscript", rhome)
-  minus.e = "-e \"message(system.file(\\\"bin/ssh-helper\\\", package=\\\"BatchJobs\\\"))\""
+  minus.e = "-e \"message(system.file(\\\"bin/linux-helper\\\", package=\\\"BatchJobs\\\"))\""
   runCommand(rscript, minus.e, ssh, nodename)
 }
 
