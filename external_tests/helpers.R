@@ -10,9 +10,9 @@ doExternalTest = function(whitespace=FALSE, long=FALSE) {
   reg = makeRegistry(id=id, file.dir=fd, sharding=FALSE)
   xs = 1:5
   if (long)
-    f = function(x) x
-  else 
     f = function(x) {Sys.sleep(300);x}
+  else 
+    f = function(x) x
   batchMap(reg, f, xs)
   submitJobs(reg)
   if (!long) {
