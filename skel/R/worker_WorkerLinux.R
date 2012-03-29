@@ -1,7 +1,6 @@
 # implementation of interface for local and remote linux workers
 # delegate to onWorkerLinux
 
-# FIXME rename helper commands / unify
 getWorkerNumberOfCPUs.WorkerLinux = function(worker) {
   onWorkerLinux(worker, "number-of-cpus")
 }

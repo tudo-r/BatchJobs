@@ -4,7 +4,10 @@
 #'   Host name of node.
 #' @param rhome [\code{character(1)}]\cr
 #'   Path to R installation on worker.
-#'   Default is \code{R.home()}. Note that the default value created on the master!
+#'   \dQuote{} means R installation on the PATH is used, 
+#'   of course this implies that it must be on the PATH 
+#'   (also for non-interactive shells)!
+#'   Default is \dQuote{}.
 #' @param ncpus [\code{integers(1)}]\cr
 #'   Number of VPUs of worker.
 #'   Default means to query the worker via \dQuote{/proc/cpuinfo}.
@@ -18,9 +21,7 @@
 #' @return [\code{\link{SSHWorker}}].
 #' @export
 #' @aliases SSHWorker
-makeSSHWorker = function(nodename, rhome=R.home(), ncpus, max.jobs, max.load) {
-  #FIXME we might want to use autodetection of the R interpreter
-  #FIXME be careful with non-interactive sessions, R might then not be in the path!
+makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load) {
   worker = makeWorkerRemoteLinux(nodename = nodename, rhome=rhome, 
     ncpus, max.jobs, max.load)
   worker$last.update = 0

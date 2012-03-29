@@ -21,7 +21,6 @@ makeRegistryInternal = function(id, file.dir, sharding,
   checkArg(packages, cl = "character", na.ok = FALSE)
   requirePackages(packages, stop=TRUE, suppress.warnings=TRUE)
 
-  #FIXME discuss this with michel, test it on lido (nocbackup) and update r doc 
   # make paths absolute to be sure. otherwise cfSSH wont work for example
   # FIXME is a warning really what we want to do here?
   checkDir(file.dir, create=TRUE, check.empty="stop", check.posix=TRUE)

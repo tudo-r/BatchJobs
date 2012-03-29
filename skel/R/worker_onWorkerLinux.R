@@ -36,7 +36,10 @@ runCommand = function(cmd, args=character(0), ssh=FALSE, nodename) {
 # @return [\code{character(1)}]. Path of script.
 findHelperScriptLinux = function(rhome, ssh=FALSE, nodename) {
   # i think we dont need to quote anything here, because system2 uses shQuote
-  rscript = sprintf("%s/bin/Rscript", rhome)
+  if (rhome == "")
+    rscript = "Rscript"
+  else
+    rscript = file.path(rhome, "bin", "Rscript")
   minus.e = "-e \"message(system.file(\\\"bin/linux-helper\\\", package=\\\"BatchJobs\\\"))\""
   runCommand(rscript, minus.e, ssh, nodename)
 }
