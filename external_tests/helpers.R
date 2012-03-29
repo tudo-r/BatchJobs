@@ -10,7 +10,7 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, long=FALSE) {
   ok = unlink(fd, recursive=TRUE)
   if (ok != 0)
     stopf("could not delete file dir: %s", fd)
-  reg = makeRegistry(id=id, file.dir=fd, sharding=FALSE)
+  reg = makeRegistry(id=id, work.dir=dir, file.dir=fd, sharding=FALSE)
   xs = 1:5
   if (long)
     f = function(x) {Sys.sleep(300);x}
@@ -26,8 +26,8 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, long=FALSE) {
   return(reg)
 }
 
-doKillTest = function() {
-  reg = doExternalTest(whitespace=FALSE, long=TRUE)
+doKillTest = function(dir=getwd()) {
+  reg = doExternalTest(dir=dir,whitespace=FALSE, long=TRUE)
   ids = getJobIds(reg)
   killJobs(reg, ids)
   expect_equal(findMissingResults(reg), ids)
