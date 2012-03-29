@@ -45,7 +45,7 @@ CMD="$1"; shift
 LC_ALL=C ## Avoid any localization issues.
 
 case $CMD in
-    number-of-processors)
+    number-of-cpus)
         cat /proc/cpuinfo | egrep '^processor' | wc -l
         ;;
     worker-status)
@@ -81,7 +81,7 @@ case $CMD in
         pkill -KILL -P $1 > /dev/null 2> /dev/null
         exit 0
         ;;
-    running-jobs)
+    list-jobs)
         printf "c("
         for pid in $(ps --no-header -o ppid -C R) ; do
             printf "%i, " $pid

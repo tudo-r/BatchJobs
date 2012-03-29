@@ -45,20 +45,20 @@ findHelperScriptLinux = function(rhome, ssh=FALSE, nodename) {
 # @param worker [\code{\link{WorkerLinux}}] 
 #   Worker.
 # @param command [\code{character(1)}]
-#   number-of-processors, worker-status, start-job, kill-job, running-jobs
+#   number-of-cpus, worker-status, start-job, kill-job, running-jobs
 # @param args [\code{character}] 
 #   Arguments for helper command.
-#   number-of-processors: Nothing.
+#   number-of-cpus: Nothing.
 #   worker-status: job.dir
 #   start-job: work.dir, rfile, outfile.
 #   kill-job: pid.
-#   running-jobs: Nothing.
+#   list-jobs: Nothing.
 # @return [any]. 
-#   number-of-processors [\code{integer(1)}]: Number of CPUs.
+#   number-of-cpus [\code{integer(1)}]: Number of CPUs.
 #   worker-status [\code{numeric(3)}]: Load, number of running R jobs, number of expensive R jobs.
 #   start-job [\code{character(1)}]: PID.
 #   kill-job [any]: Nothing
-#   running-jobs [\code{character(1)}]: PIDs of running jobs for this registry.
+#   list-jobs [\code{character(1)}]: PIDs of running jobs for this registry.
 onWorkerLinux = function(worker, command, args=character(0)) {
   script.args = c(worker$rhome, command, args)
   # in paths can be whitespaces and other bad stuff, quote it!

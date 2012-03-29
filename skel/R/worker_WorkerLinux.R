@@ -3,7 +3,7 @@
 
 # FIXME rename helper commands / unify
 getWorkerNumberOfCPUs.WorkerLinux = function(worker) {
-  onWorkerLinux(worker, "number-of-processors")
+  onWorkerLinux(worker, "number-of-cpus")
 }
 
 getWorkerStatus.WorkerLinux = function(worker, file.dir) {
@@ -20,7 +20,7 @@ killWorkerJob.WorkerLinux = function(worker, pid) {
 
 # FIXME: use job dir
 listWorkerJobs.WorkerLinux = function(worker) {
-  onWorkerLinux(worker, "running-jobs")
+  onWorkerLinux(worker, "list-jobs")
 }
 
 
