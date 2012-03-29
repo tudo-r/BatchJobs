@@ -18,8 +18,7 @@ killWorkerJob.WorkerLinux = function(worker, pid) {
   onWorkerLinux(worker, "kill-job", pid)
 }
 
-# FIXME: use job dir
-listWorkerJobs.WorkerLinux = function(worker) {
+listWorkerJobs.WorkerLinux = function(worker, file.dir) {
   onWorkerLinux(worker, "list-jobs")
 }
 

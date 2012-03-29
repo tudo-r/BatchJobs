@@ -11,10 +11,6 @@
 ## which should be valid R code, which once evaluated creates a
 ## suitable R representation of the commands result.
 ##
-## First argument must be $RHOME. If this is an empty string, R must be 
-## in the PATH. Second argument is the command. Further arguments
-## refer to the command, see below.
-##
 ## number-of-processors
 ##  Return the number of PEs on worker.
 ##
@@ -38,7 +34,7 @@
 ##   Kill the R job with PID $PID.
 ##   First a TERM is sent, then 1 sec delay, then KILL. 
 ##
-## list-jobs
+## list-jobs FILEDIR
 ##   Lists the pids of all jobs for this registry.
 ##
 ## All other commands will return a stop() condition to R.
@@ -48,43 +44,36 @@ RHOME="$1"; shift
 CMD="$1"; shift
 LC_ALL=C ## Avoid any localization issues.
 
-
-if [ -n "$RHOME" ]; then
-    RCMD="$RHOME/bin/R"
-else
-    RCMD="R"
-fi
-
 case $CMD in
     number-of-cpus)
         cat /proc/cpuinfo | egrep '^processor' | wc -l
         ;;
     worker-status)
         read L1 L2 L3 REST < /proc/loadavg
-        PROCS=$(pgrep R)
-        # we get errors from ps if there is not a single R process running
-        if [ -n "$PROCS" ]
-        then
-            NJOBS1=$(echo $PROCS | wc -l)
-            NJOBS2=$(echo $PROCS | xargs ps -o pid,pcpu -p | awk '$2 > 50.0 { print $1 }' | wc -l)
-            NJOBS3=$(echo $PROCS | xargs ps -o pid,cmd -p | grep  "$1/jobs" | wc -l)
-        else
-            NJOBS1=0
-            NJOBS2=0
-            NJOBS3=0
-        fi
+        JOBDIR="$1/jobs"
+        # we count all R processes, all R50, and all where JOBDIR was in the call args
+        # use ww for unlimited width in ps for cmd output
+        # use our own field sep, so we can take it apart with awk and dont get bothered by whitespaces
+        NJOBS=$(ps -ww -o "%p|%C|%a" -C R | \
+          awk -v j=$JOBDIR \
+          'BEGIN {FS="|";njobs1=0;njobs2=0} 
+          $2 > 50.0 {njobs1++} 
+          $3 ~ /j/ {njobs2++} 
+          END {print NR, njobs1, njobs2}')
+        # convert to array  
+        NJOBS=($NJOBS)  
         printf "list(\n"
         printf "  load=c(%f, %f, %f),\n" $L1 $L2 $L3
-        printf "  running_r_processes=%i,\n" $NJOBS1
-        printf "  running_r_processes_50=%i,\n" $NJOBS2
-        printf "  running_batch_jobs=%i\n" $NJOBS3
+        printf "  running_r_processes=%i,\n" ${NJOBS[0]}
+        printf "  running_r_processes_50=%i,\n" ${NJOBS[1]}
+        printf "  running_batch_jobs=%i\n" ${NJOBS[2]}
         printf ")\n"
         ;;
     start-job)
         cd "$1"
          # nothing should be on all 3 streams except maybe a segfault. throw away. 
          # see comment also in cfLocal
-        "$RCMD" CMD BATCH --no-save --no-restore "$2" "$3" \
+        "$RHOME/bin/R" CMD BATCH --no-save --no-restore "$2" "$3" \
             > /dev/null 2> /dev/null < /dev/null &
         printf '%i\n' $!
         ;;
@@ -95,11 +84,16 @@ case $CMD in
         exit 0
         ;;
     list-jobs)
-        printf "c("
-        for pid in $(ps --no-header -o ppid -C R) ; do
+        JOBDIR="$1/jobs"
+        # use ww for unlimited width in ps for cmd output
+        # use our own field sep, so we can take it apart with awk and dont get bothered by whitespace
+        PIDS=$(ps -ww -o "%p|%a" -C R | awk -v j=$JOBDIR 'BEGIN {FS="|"} $2 ~ /j/ {print $1}')
+        printf "as.character(c("
+        for pid in $PIDS ; do
             printf "%i, " $pid
         done
-        printf "NULL)\n"
+        # include NULL so last comma is ok, NULL then gets stripped in Reval
+        printf "NULL))\n"
         ;;
     *)
         printf "stop(\"Unknown ssh-helper command '%s'.\")\n" $CMD

@@ -1,6 +1,6 @@
 library(testthat)
 
-doExternalTest = function(dir=getwd(), whitespace=FALSE, long=FALSE) {
+doExternalTest = function(dir=getwd(), whitespace=FALSE, long="false") {
   id = "external_test"
   if (whitespace)
     fd = "foo bär"
@@ -11,24 +11,44 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, long=FALSE) {
   if (ok != 0)
     stopf("could not delete file dir: %s", fd)
   reg = makeRegistry(id=id, work.dir=dir, file.dir=fd, sharding=FALSE)
-  xs = 1:5
-  if (long)
-    f = function(x) {Sys.sleep(300);x}
-  else 
-    f = function(x) x
+  xs = 51:54
+  f = switch(long,
+    false = identity,
+    sleep = function(x) {Sys.sleep(300);x},
+    expensive = function(i) if (i<=2) i else f(i-1) + f(i-2))
   batchMap(reg, f, xs)
   submitJobs(reg)
-  if (!long) {
+  if (long == "false") {
     Sys.sleep(5)
     res = reduceResults(reg, fun=function(aggr,job,res) c(aggr, res))
     expect_equal(res, xs)
-  }
+  } 
   return(reg)
 }
 
-doKillTest = function(dir=getwd()) {
-  reg = doExternalTest(dir=dir,whitespace=FALSE, long=TRUE)
+doKillTest = function(dir=getwd(), test.worker=FALSE, long="sleep") {
+  reg = doExternalTest(dir=dir,whitespace=FALSE, long=long)
   ids = getJobIds(reg)
+  n = length(ids)
+  if (test.worker) {
+    conf = BatchJobs:::getBatchJobsConf()
+    cf = conf$cluster.functions
+    stopifnot(cf$name == "Multicore")
+    w = environment(cf$submitJob)$workers[[1]]
+    # sleep so processes can update their cpu usage
+    if (long == "expensive")
+      Sys.sleep(3)
+    status = BatchJobs:::getWorkerStatus.WorkerLinux(w, reg$file.dir)
+    print(status)
+    if (long == "sleep") {
+      expect_true(status[["running_r_processes"]] >= n)
+      expect_true(status[["running_batch_jobs"]] >= n)
+    } else if (long == "expensive") {
+      expect_true(status[["running_r_processes"]] >= n)
+      expect_true(status[["running_r_processes_50"]] >= n)
+      expect_true(status[["running_batch_jobs"]] >= n)
+    }
+  }
   killJobs(reg, ids)
   expect_equal(findMissingResults(reg), ids)
   expect_equal(findOnSystem(reg), integer(0))

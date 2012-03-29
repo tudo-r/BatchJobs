@@ -12,7 +12,8 @@ doExternalTest(whitespace=FALSE)
 
 conf$cluster.functions = makeClusterFunctionsMulticore()
 doExternalTest(whitespace=FALSE)
-doKillTest()
+doKillTest(test.worker=TRUE, long="sleep")
+doKillTest(test.worker=TRUE, long="expensive")
 
 conf$cluster.functions = makeClusterFunctionsSSH(
   makeSSHWorker("rao"))
@@ -20,7 +21,7 @@ doExternalTest(whitespace=FALSE)
 doKillTest()
 
 conf$cluster.functions = makeClusterFunctionsSSH(
-  makeSSHWorker("rao", ncpus=4, max.load=4, max.jobs=2))
+  makeSSHWorker("rao", ncpus=4, max.load=4, max.jobs=4))
 doExternalTest(whitespace=FALSE)
 doKillTest()
 

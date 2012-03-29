@@ -15,7 +15,7 @@ killWorkerJob = function(worker, pid) {
   UseMethod("killWorkerJob")
 }
 
-listWorkerJobs = function(worker) {
+listWorkerJobs = function(worker, file.dir) {
   UseMethod("listWorkerJobs")
 }
 

@@ -95,7 +95,7 @@ makeClusterFunctionsSSH = function(...) {
     res = NULL
     for (worker in worker.env$workers) {
       nodename = worker[["nodename"]]
-      pids = listWorkerJobs(worker)
+      pids = listWorkerJobs(worker, reg$file.dir)
       if (length(pids) > 0L) {
         res = c(res, paste(nodename, "#", pids, sep=""))
       }
