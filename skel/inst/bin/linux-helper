@@ -44,6 +44,13 @@ RHOME="$1"; shift
 CMD="$1"; shift
 LC_ALL=C ## Avoid any localization issues.
 
+if [ -n "$RHOME" ]; then
+    RCMD="$RHOME/bin/R"
+else
+    RCMD="R"
+fi
+
+
 case $CMD in
     number-of-cpus)
         cat /proc/cpuinfo | egrep '^processor' | wc -l
@@ -73,7 +80,7 @@ case $CMD in
         cd "$1"
          # nothing should be on all 3 streams except maybe a segfault. throw away. 
          # see comment also in cfLocal
-        "$RHOME/bin/R" CMD BATCH --no-save --no-restore "$2" "$3" \
+        "$RCMD" CMD BATCH --no-save --no-restore "$2" "$3" \
             > /dev/null 2> /dev/null < /dev/null &
         printf '%i\n' $!
         ;;
