@@ -24,7 +24,7 @@ doExternalTest = function(whitespace=FALSE, long=FALSE) {
 }
 
 doKillTest = function() {
-  reg = doExternalTest = function(whitespace=FALSE, long=TRUE)
+  reg = doExternalTest(whitespace=FALSE, long=TRUE)
   ids = getJobIds(reg)
   killJobs(reg, ids)
   expect_equal(findMissingResults(reg), ids)
