@@ -11,6 +11,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
     work.dir = cur.dir
   checkArg(work.dir, cl = "character", len = 1L, na.ok = FALSE)
   checkArg(multiple.result.files, cl = "logical", len = 1L, na.ok = FALSE)
+  
   if (missing(seed)) {
     seed = getRandomSeed()
   } else {
@@ -20,14 +21,17 @@ makeRegistryInternal = function(id, file.dir, sharding,
   checkArg(packages, cl = "character", na.ok = FALSE)
   requirePackages(packages, stop=TRUE, suppress.warnings=TRUE)
 
-
+  #FIXME discuss this with michel, test it on lido (nocbackup) and update r doc 
+  # make paths absolute to be sure. otherwise cfSSH wont work for example
   # FIXME is a warning really what we want to do here?
   checkDir(file.dir, create=TRUE, check.empty="stop", check.posix=TRUE)
+  file.dir = normalizePath(file.dir, mustWork=TRUE)
   job.dir = getJobParentDir(file.dir)
   checkDir(job.dir, create=TRUE, check.empty="warn")
   fun.dir = getFunDir(file.dir)
   checkDir(fun.dir, create=TRUE, check.empty="warn")
   checkDir(work.dir, check.posix=TRUE)
+  work.dir = normalizePath(work.dir, mustWork=TRUE)
 
   packages = sapply(packages,
                     function(pkg) list(version = packageVersion(pkg)),
