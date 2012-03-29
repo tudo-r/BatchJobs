@@ -86,7 +86,7 @@ makeClusterFunctionsSSH = function(...) {
     worker = worker.env$workers[[nodename]]
     if (is.null(worker))
       stop("Unknown worker node '", nodename, "'.")
-    killJob(worker, pid)  
+    killWorkerJob(worker, pid)  
   }
   
   listJobs = function(reg) {
