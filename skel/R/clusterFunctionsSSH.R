@@ -61,8 +61,9 @@ makeClusterFunctionsSSH = function(...) {
   checkArg(workers, "list")
   checkListElementClass(workers, "WorkerRemoteLinux")
   nodenames = extractSubList(workers, "nodename") 
-  if (any(duplicated(nodenames)))
-    stop("Multiple definitions for a worker nodename!")
+  dup = duplicated(nodenames)
+  if (any(dup))
+    stopf("Multiple definitions for worker nodenames: %s!", nodenames[dup])
   names(workers) = nodenames
   worker.env = new.env()  
   worker.env$workers = workers
@@ -88,7 +89,7 @@ makeClusterFunctionsSSH = function(...) {
     pid = parts[2L]
     worker = worker.env$workers[[nodename]]
     if (is.null(worker))
-      stop("Unknown worker node '", nodename, "'.")
+      stopf("Unknown worker node '%s'.", nodename)
     killWorkerJob(worker, pid)  
   }
   

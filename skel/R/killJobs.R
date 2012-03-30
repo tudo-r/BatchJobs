@@ -47,11 +47,11 @@ killJobs = function(reg, ids) {
   ids.kill = data.bji$job_id
   n.bjis = length(bjis)
   messagef("Killing batch.job.ids: %i", n.bjis)
-  if (n.bjis > 0) {
+  if (n.bjis > 0L) {
     bjis.str = collapse(bjis)
     # trim string so its not too long
-    if (str_length(bjis.str) > 200)
-      bjis.str = sprintf("%s...", str_sub(bjis.str, end=200))
+    if (str_length(bjis.str) > 200L)
+      bjis.str = sprintf("%s...", str_sub(bjis.str, end=200L))
     messagef(bjis.str)
     lapply(bjis, killfun, reg=reg)
   }

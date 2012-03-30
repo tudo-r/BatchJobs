@@ -1,9 +1,10 @@
 checkIds = function(reg, ids) {
-  if (any(duplicated(ids)))
-    stop("You have duplicated entries in your id vector!")
+  dup = which(duplicated(ids))
+  if (length(dup))
+    stopf("You have duplicated entries in your id vector: %s", collapse(ids[dup]))
   ids = setdiff(ids, dbGetJobIds(reg))
   if (length(ids) > 0L)
-    stop("Id is not present in registry: ", ids[1])
+    stopf("Ids not present in registry: %s", collapse(ids))
 }
 
 getListJobs = function(msg=NULL) {
@@ -22,7 +23,7 @@ getKillJob = function(msg=NULL) {
   fun = cf$killJob
   if (is.null(fun))
     if (!is.null(msg))
-      stopf("%s because %s cluster functions do not killing of jobs!", msg, cf$name)
+      stopf("%s because %s cluster functions do not support killing of jobs!", msg, cf$name)
   return(fun)  
 }
 
@@ -47,6 +48,6 @@ isOnSlave = function() {
 }
 
 setOnSlave = function(x) {
-  checkArg(x, "logical", len=1, na.ok=FALSE)
+  checkArg(x, "logical", len=1L, na.ok=FALSE)
   options(BatchJobs.on.slave=x)
 }

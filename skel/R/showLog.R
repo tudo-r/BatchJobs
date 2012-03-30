@@ -17,10 +17,9 @@
 showLog = function(reg, id) {
   checkArg(reg, "Registry")
   if (missing(id)) {
-    ids = getJobIds(reg)
-    if (length(ids) == 0)  
+    id = dbGetJobId(reg)
+    if (length(id) == 0L)  
       stop("No jobs in registry!")
-    id = ids[1]
   } else {
     id = convertInteger(id)
     checkArg(id, "integer", len=1L, na.ok=FALSE)

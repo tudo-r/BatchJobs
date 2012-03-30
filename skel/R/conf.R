@@ -1,6 +1,6 @@
 # sources 1 config file and returns the envir
 sourceConfFile = function(conffile) {
-  checkArg(conffile, "character", len=1, na.ok=FALSE)
+  checkArg(conffile, "character", len=1L, na.ok=FALSE)
   if (!file.exists(conffile)) {
     stopf("Configuration file does not exist: '%s'", conffile)
   }
@@ -50,7 +50,7 @@ useDefaultConfs = function() {
   fn.user = path.expand("~/.BatchJobs.R")
   fn.wd = suppressWarnings(normalizePath(".BatchJobs.R"))
   conffiles = Filter(file.exists, c(fn.pack, fn.user, fn.wd))
-  if (length(conffiles) == 0)
+  if (length(conffiles) == 0L)
     stopf("No configuation found at all. Not in package, not in user.home, not in work dir!")
   conf = sourceConfFiles(conffiles) 
   assignConf(conf) 

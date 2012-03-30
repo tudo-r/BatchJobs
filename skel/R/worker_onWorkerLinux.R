@@ -10,7 +10,7 @@
 # @param nodename [\code{character(1)}]
 #   Nodename for SSH.
 # @return [\code{character(1)}]. Result of command.
-runCommand = function(cmd, args=character(0), ssh=FALSE, nodename) {
+runCommand = function(cmd, args=character(0L), ssh=FALSE, nodename) {
   if (ssh) {
     sys.cmd = "ssh"
     ssh.cmd = sprintf("'%s'", collapse(c(cmd, args), sep=" "))
@@ -21,7 +21,7 @@ runCommand = function(cmd, args=character(0), ssh=FALSE, nodename) {
   }
   res = try(system2(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE))
   if(is.error(res))
-    stopf("Error in runCommand: %s (res: %s || args: %s)", as.character(res), sys.cmd, collapse(sys.args))
+    stopf("Error in runCommand: %s (cmd: %s || args: %s)", as.character(res), sys.cmd, collapse(sys.args))
   res
 }
 
@@ -62,13 +62,15 @@ findHelperScriptLinux = function(rhome, ssh=FALSE, nodename) {
 #   start-job [\code{character(1)}]: PID.
 #   kill-job [any]: Nothing
 #   list-jobs [\code{character(1)}]: PIDs of running jobs for this registry.
-onWorkerLinux = function(worker, command, args=character(0)) {
+onWorkerLinux = function(worker, command, args=character(0L)) {
   script.args = c(worker$rhome, command, args)
   # in paths can be whitespaces and other bad stuff, quote it!
   script.args = sprintf("\"%s\"", script.args)
   res = runCommand(worker$script, script.args, worker$ssh, worker$nodename)
-  tryCatch(eval(parse(text=paste(res, collapse="\n"))),
-    error=function(x) stop(res))
+  x = try(eval(parse(text=paste(res, collapse="\n"))))
+  if (is.error(x))
+    stopf("Error in onWorkerLinux: %s (res: %s)", as.character(x), res)
+  return(x)
 }
 
 

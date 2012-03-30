@@ -35,7 +35,7 @@ initWorker = function(worker, ncpus, max.jobs, max.load) {
     max.jobs = convertInteger(max.jobs)
     checkArg(max.jobs, "integer", len=1L, na.ok=FALSE)
     if (max.jobs > worker$ncpus)
-      stop("max.jobs must be <= ncpus!")
+      stopf("max.jobs must be <= ncpus = %i!", worker$ncpus)
     worker$max.jobs = max.jobs
   }
   if (missing(max.load)) { 
@@ -43,7 +43,7 @@ initWorker = function(worker, ncpus, max.jobs, max.load) {
   } else {
     checkArg(max.load, "numeric", len=1L, na.ok=FALSE)
     if (max.load > worker$ncpus)
-      stop("max.load must be <= ncpus!")
+      stopf("max.load must be <= ncpus = %i!", worker$ncpus)
     worker$max.load = max.load
   }
   return(worker)

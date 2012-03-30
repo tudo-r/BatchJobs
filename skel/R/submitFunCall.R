@@ -51,7 +51,7 @@ submitFunCall = function(id, fun, pars, file, seed, resources=list(),
   else
     checkArg(wait, formals="retries")    
   max.retries = convertInteger(max.retries)
-  checkArg(max.retries, "integer", len=1, na.ok=FALSE)   
+  checkArg(max.retries, "integer", len=1L, na.ok=FALSE)   
   
   # get a unique, unused tempdir. tempdir() always stays the same per session
   td = tempfile(pattern="")

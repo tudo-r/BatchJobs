@@ -19,10 +19,10 @@
 testJob = function(reg, id) {
   checkArg(reg, cl="Registry")
   if (missing(id)) {
-    ids = getJobIds(reg)
-    if (length(ids) == 0L)
+    id = dbGetJobId(reg)
+    if (length(id) == 0L)
       stop("Registry is empty!")
-    id = ids[1L]
+    messagef("Testing job with id=%i ...", id)
   } else {
     id = convertInteger(id)
     checkArg(id, "integer", len=1L, na.ok=FALSE)

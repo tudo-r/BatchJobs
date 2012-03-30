@@ -174,7 +174,7 @@ reqJobPacks = function(reg) {
   messagef("Requiring packages: [%s]", collapse(names(reg$packages)))
   for (p in names(reg$packages)) {
     if (!require(p, character.only = TRUE))
-      stopf("Could not load required package '%s' on node!", p)
+      stopf("Could not load required package '%s' on node '%s'!", p, Sys.info()["nodename"])
   }
 }
 

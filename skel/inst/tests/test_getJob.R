@@ -22,8 +22,8 @@ test_that("getJob", {
   # empty ids
   expect_equal(getJobs(reg, integer(0)), list())
   # bad id
-  expect_error(getJob(reg, "xxx"), "Id is not present in registry: xxx")
-  expect_error(getJobs(reg, "xxx"), "Id is not present in registry: xxx") 
+  expect_error(getJob(reg, "xxx"), "Ids not present in registry: xxx")
+  expect_error(getJobs(reg, "xxx"), "Ids not present in registry: xxx") 
 })
 
 test_that("getJob returns jobs in same order as ids", {  

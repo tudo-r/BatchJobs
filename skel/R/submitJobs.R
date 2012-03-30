@@ -39,8 +39,10 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   checkArg(reg, cl="Registry")
   if (missing(ids)) {
     ids = dbGetMissingResults(reg)
-    if (length(ids) == 0L)
-      stop("All jobs finished, nothing to do!")
+    if (length(ids) == 0L) {
+      message("All jobs finished, nothing to do!")
+      return(invisible(NULL))
+    }
   } else {
     if (!is.list(ids) && !is.numeric(ids))
       stop("ids must be a integer vector of job ids or a list of chunked job ids (list of integer vectors)!")        
@@ -57,16 +59,18 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
     checkIds(reg, unlist(ids))
   }
   checkArg(resources, "list")
+
   if (missing(wait))
     wait = function(retries) 10L * 2L^retries
   else
-    checkArg(wait, formals="retries")    
+    checkArg(wait, formals="retries")
+
   max.retries = convertInteger(max.retries)
-  checkArg(max.retries, "integer", len=1, na.ok=FALSE)   
+  checkArg(max.retries, "integer", len=1L, na.ok=FALSE)   
   if (!is.null(getListJobs())) {
     ids.present = findOnSystem(reg)
     ids.intersect = intersect(unlist(ids), ids.present) 
-    if (length(ids.intersect) > 0) {
+    if (length(ids.intersect) > 0L) {
       stopf("Some of the jobs you submitted are already present on the batch system! E.g. id=%i.", 
         ids.intersect[1])
     }
@@ -90,10 +94,10 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)
   bar = makeProgressBar(max=length(ids), label="submitJobs             ")
-  bar(0)
+  bar(0L)
   for (i in seq_along(ids)) {
     id = ids[[i]]
-    id1 = id[1]
+    id1 = id[1L]
 
     fn.rscript = getRScriptFilePath(reg, id1)
     writeRscript(fn.rscript, reg$file.dir, id, reg$multiple.result.files,
@@ -106,7 +110,7 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
       if (retries > max.retries) {
         # reset everything to NULL in DB for this job
         dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
-        stop("Retried already ", retries, " times in submit.")
+        stopf("Retried already %i times to submit. Aborting.", retries)
       }
       # only send submitted msg on first try
       if(retries == 0L) {
@@ -138,7 +142,7 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
       } else if (batch.result$status >= 1L && batch.result$status <= 100L) {
         # if temp error, wait and increase retries, then submit again
         sleep.secs = wait(retries)
-        bar(i-1, msg=sprintf("Status: %i, zzz=%is.", batch.result$status, sleep.secs))
+        bar(i-1L, msg=sprintf("Status: %i, zzz=%is.", batch.result$status, sleep.secs))
         warningf("Submit iteration: %i. Temporary error: %s. Retries: %i. Sleep: %i.", i, batch.result$msg, retries, sleep.secs)
         Sys.sleep(sleep.secs)
         retries = retries + 1L

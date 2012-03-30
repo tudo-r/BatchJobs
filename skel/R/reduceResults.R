@@ -33,18 +33,21 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
   checkArg(reg, "Registry")
   checkArg(fun, formals=c("aggr", "job", "res"))
 
+  done = dbGetDone(reg)
+  if (length(done) == 0L)
+    stop("No jobs finished (yet)!")
+
   if (missing(ids)) {
-    ids = dbGetDone(reg)
+    ids = done
   } else {
     ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
+    checkArg(ids, "integer", na.ok=FALSE, min.len=1L)
     checkIds(reg, ids)
+    if (! all(ids %in% done))
+      stopf("No results available for jobs with ids: %s", collapse(ids[! (ids %in% done)]))
   }
 
   n = length(ids)
-  if (n == 0L)
-    stop("No jobs with corresponding ids finished (yet)!")
-
   message("Reducing ", n, " results...")
   bar = makeProgressBar(max=n, label="reduceResults")
   bar(0L)

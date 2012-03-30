@@ -19,7 +19,8 @@ dbConnectToJobsDB = function(reg, flags="ro") {
 }
 
 dbDoQueries = function(reg, queries, flags="ro") {
-  for (i in seq_len(100L)) {
+  max.retries = 100L
+  for (i in seq_len(max.retries)) {
     con = dbConnectToJobsDB(reg, flags)
     ok = try ({
       dbBeginTransaction(con)
@@ -40,11 +41,12 @@ dbDoQueries = function(reg, queries, flags="ro") {
       }
     }
   }
-  stop("dbDoQueries: max retries reached, database is still locked!")
+  stopf("dbDoQueries: max retries (%i) reached, database is still locked!", max.retries)
 }
 
 dbDoQuery = function(reg, query, flags="ro") {
-  for (i in seq_len(100L)) {
+  max.retries = 100L
+  for (i in seq_len(max.retries)) {
     con = dbConnectToJobsDB(reg, flags)
     res = try(dbGetQuery(con, query), silent=TRUE)
     dbDisconnect(con)
@@ -58,7 +60,7 @@ dbDoQuery = function(reg, query, flags="ro") {
       stopf("Error in dbDoQuery. %s (%s)", res, query)
     }
   }
-  stop("dbDoQuery: max retries reached, database is still locked!")
+  stopf("dbDoQuery: max retries (%i) reached, database is still locked!", max.retries)
 }
 
 
@@ -199,6 +201,11 @@ dbGetJobStatusTable = function(reg, ids, convert.dates=TRUE) {
 dbGetJobCount = function(reg) {
   query = sprintf("SELECT COUNT(*) AS count FROM %s_job_status", reg$id)
   as.integer(dbDoQuery(reg, query)$count)
+}
+
+dbGetJobId = function(reg) {
+  query = sprintf("SELECT job_id FROM %s_job_status LIMIT 1", reg$id)
+  as.integer(dbDoQuery(reg, query)$job_id)
 }
 
 dbGetJobIds = function(reg) {
@@ -371,7 +378,7 @@ dbFlushMessages = function(reg, msgs) {
       return(FALSE)
     } else {
       #throw exception again
-      stop(ok)
+      stopf("Error in dbFlushMessages: %s", ok)
     }
   }
   return(TRUE)

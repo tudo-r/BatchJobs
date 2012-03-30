@@ -66,7 +66,7 @@ makePathAbsolute = function(path) {
 }
 
 getShardedSubDir = function(ids) {
-  sprintf("%02i", ids %% 100)
+  sprintf("%02i", ids %% 100L)
 }
 
 getJobParentDir = function(file.dir) {
