@@ -37,7 +37,7 @@ testJob = function(reg, id) {
   # copy reg
   reg = do.call(construct, list(id=reg$id, seed=r$seed, file.dir=td, work.dir=r$work.dir,
     sharding=FALSE, multiple.result.files=r$multiple.result.files,
-    packages=names(reg$packages)))
+    packages=reg$packages))
   # copy DB
   file.copy(from=file.path(r$file.dir, "BatchJobs.db"), to=file.path(td, "BatchJobs.db"), overwrite=TRUE)
   # copy conf
