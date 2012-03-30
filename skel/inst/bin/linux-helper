@@ -44,18 +44,12 @@ RHOME="$1"; shift
 CMD="$1"; shift
 LC_ALL=C ## Avoid any localization issues.
 
-if [ -n "$RHOME" ]; then
-    RCMD="$RHOME/bin/R"
-else
-    RCMD="R"
-fi
-
-
 case $CMD in
     number-of-cpus)
         cat /proc/cpuinfo | grep '^processor' | wc -l
         ;;
     worker-status)
+        # FIXME doesn't work!
         LOAD=uptime | awk '{print $8}'
         JOBDIR="$1/jobs"
         # we count all R processes, all R50, and all where JOBDIR was in the call args
@@ -64,9 +58,9 @@ case $CMD in
         NJOBS=$(ps -ww -o "%p|%C|%a" -C R | \
           awk -v j=$JOBDIR \
           'BEGIN {FS="|";njobs1=0;njobs2=0} 
-          $2 > 50.0 {njobs1++} 
-          $3 ~ /j/ {njobs2++} 
-          END {print NR, njobs1, njobs2}')
+           $2 > 50.0 {njobs1++} 
+           $3 ~ /j/ {njobs2++} 
+           END {print NR, njobs1, njobs2}')
         # convert to array  
         NJOBS=($NJOBS)  
         printf "list(\n"
@@ -77,8 +71,13 @@ case $CMD in
         printf ")\n"
         ;;
     start-job)
-         # nothing should be on all 3 streams except maybe a segfault. throw away. 
-         # see comment also in cfLocal
+        if [ -n "$RHOME" ]; then
+            RCMD="$RHOME/bin/R"
+        else
+            RCMD="R"
+        fi
+        # nothing should be on all 3 streams except maybe a segfault. throw away. 
+        # see comment also in cfLocal
         "$RCMD" CMD BATCH --no-save --no-restore "$1" "$2" \
             > /dev/null 2> /dev/null < /dev/null &
         printf '%i\n' $!
