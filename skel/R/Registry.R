@@ -33,7 +33,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
   checkDir(work.dir, check.posix=TRUE)
   work.dir = makePathAbsolute(work.dir)
 
-  version.info = sapply(unique(packages, add.version),
+  version.info = sapply(unique(c(packages, add.version)),
                         function(pkg) list(version = packageVersion(pkg)),
                         simplify=FALSE)
   version.info$R = version
