@@ -1,5 +1,5 @@
 makeRegistryInternal = function(id, file.dir, sharding,
-  work.dir, multiple.result.files, seed, packages, add.version=character(0L)) {
+  work.dir, multiple.result.files, seed, packages) {
   cur.dir = getCurrentDir()
   checkArg(id, cl = "character", len = 1L, na.ok = FALSE)
   checkIdValid(id)
@@ -19,7 +19,6 @@ makeRegistryInternal = function(id, file.dir, sharding,
     checkArg(seed, cl = "integer", len = 1L, lower = 1L, na.ok = FALSE)
   }
   checkArg(packages, cl = "character", na.ok = FALSE)
-  packages = unique(sort(packages))
   requirePackages(packages, stop=TRUE, suppress.warnings=TRUE)
 
   # make paths absolute to be sure. otherwise cfSSH wont work for example
@@ -33,10 +32,9 @@ makeRegistryInternal = function(id, file.dir, sharding,
   checkDir(work.dir, check.posix=TRUE)
   work.dir = makePathAbsolute(work.dir)
 
-  version.info = sapply(unique(c(packages, add.version)),
-                        function(pkg) list(version = packageVersion(pkg)),
-                        simplify=FALSE)
-  version.info$R = version
+  packages = sapply(packages,
+                    function(pkg) list(version = packageVersion(pkg)),
+                    simplify=FALSE)
   structure(list(
     id = id,
     db.driver = "SQLite",
@@ -46,8 +44,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
     sharding = sharding,
     work.dir = work.dir,
     multiple.result.files = multiple.result.files,
-    version.info = version.info,
-    packages = packages
+    packages = packages[order(names(packages))]
   ), class = "Registry")
 }
 
@@ -95,8 +92,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
 makeRegistry = function(id, file.dir, sharding=TRUE,
   work.dir, multiple.result.files = FALSE, seed, packages=character(0L)) {
   reg = makeRegistryInternal(id, file.dir, sharding, work.dir,
-                             multiple.result.files, seed, packages,
-                             add.version = "BatchJobs")
+                             multiple.result.files, seed, union(packages, "BatchJobs"))
   dbCreateJobStatusTable(reg)
   dbCreateJobDefTable(reg)
   saveRegistry(reg)
@@ -111,7 +107,7 @@ print.Registry = function(x, ...) {
   cat("  Work dir:", x$work.dir, "\n")
   cat("  Multiple result files:", x$multiple.result.files, "\n")
   cat("  Seed:", x$seed, "\n")
-  cat("  Required packages:", paste(x$packages, collapse=", "), "\n")
+  cat("  Required packages:", paste(names(x$packages), collapse=", "), "\n")
 }
 
 #' Load a previously saved registry.

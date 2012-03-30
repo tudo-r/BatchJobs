@@ -170,10 +170,9 @@ calcResultString = function(result) {
   paste(capture.output(str(result)), collapse = "\n")
 }
 
-# FIXME is this obsolete because of BBmisc::requirePackages?
 reqJobPacks = function(reg) {
-  messagef("Requiring packages: [%s]", collapse(reg$packages))
-  for (p in reg$packages) {
+  messagef("Requiring packages: [%s]", collapse(names(reg$packages)))
+  for (p in names(reg$packages)) {
     if (!require(p, character.only = TRUE))
       stopf("Could not load required package '%s' on node!", p)
   }
