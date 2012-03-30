@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-required_packages <- c("roxygen2", "RUnit", "digest", "stringr", "RSQLite",
+required_packages <- c("roxygen2", "testthat", "digest", "stringr", "RSQLite",
                        "sendmailR", "BBmisc")
 
 installed_packages <- rownames(installed.packages())
