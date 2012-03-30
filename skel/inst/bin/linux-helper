@@ -5,7 +5,7 @@
 ##
 ## Requires the following Unix command line utilities:
 ##
-##  * egrep, ps, pkill, pgrep, xargs, awk
+##  * grep, ps, kill, xargs, awk
 ##
 ## The following commands are implemented. Each command returns output
 ## which should be valid R code, which once evaluated creates a
@@ -53,10 +53,10 @@ fi
 
 case $CMD in
     number-of-cpus)
-        cat /proc/cpuinfo | egrep '^processor' | wc -l
+        cat /proc/cpuinfo | grep '^processor' | wc -l
         ;;
     worker-status)
-        read L1 L2 L3 REST < /proc/loadavg
+        LOAD=uptime | awk '{print $8}'
         JOBDIR="$1/jobs"
         # we count all R processes, all R50, and all where JOBDIR was in the call args
         # use ww for unlimited width in ps for cmd output
@@ -70,7 +70,7 @@ case $CMD in
         # convert to array  
         NJOBS=($NJOBS)  
         printf "list(\n"
-        printf "  load=c(%f, %f, %f),\n" $L1 $L2 $L3
+        printf "  load=%f,\n" $LOAD
         printf "  running_r_processes=%i,\n" ${NJOBS[0]}
         printf "  running_r_processes_50=%i,\n" ${NJOBS[1]}
         printf "  running_batch_jobs=%i\n" ${NJOBS[2]}
@@ -84,9 +84,9 @@ case $CMD in
         printf '%i\n' $!
         ;;
     kill-job)
-        pkill -TERM -P $1 > /dev/null 2> /dev/null
+        ps -o pid --ppid $1 --no-heading | xargs kill -TERM > /dev/null 2> /dev/null
         sleep 1
-        pkill -KILL -P $1 > /dev/null 2> /dev/null
+        ps -o pid --ppid $1 --no-heading | xargs kill -KILL > /dev/null 2> /dev/null
         exit 0
         ;;
     list-jobs)
