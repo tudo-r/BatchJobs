@@ -1,5 +1,8 @@
 # Construct a worker for local Linux machine to spawn parallel jobs.
 # 
+# @param script [\code{character(1)}]\cr
+#   Path to helper script on worker.
+#   Default means to take it from package directory.
 # @param ncpus [\code{integers(1)}]\cr
 #   Number of VPUs of worker.
 #   Default means to query the worker via \dQuote{/proc/cpuinfo}.
@@ -11,14 +14,13 @@
 #   so that no job can be submitted. 
 #   Default is \code{ncpus-1}.
 # @return [\code{\link{WorkerLocalLinux}}].
-makeWorkerLocalLinux = function(ncpus, max.jobs, max.load) {
+makeWorkerLocalLinux = function(script, ncpus, max.jobs, max.load) {
   rhome = R.home()
   w = structure(list(
     ssh = FALSE,  
     nodename = "localhost",
-    rhome = rhome,
-    script = findHelperScriptLinux(rhome, ssh=FALSE)
+    rhome = rhome
   ), class=c("WorkerLocalLinux", "WorkerLinux", "Worker"))
-  w = initWorker(w, ncpus, max.jobs, max.load)
+  w = initWorker(w, script, ncpus, max.jobs, max.load)
   return(w)
 }

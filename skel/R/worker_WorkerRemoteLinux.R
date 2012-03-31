@@ -4,6 +4,9 @@
 #   Host name of node.
 # @param rhome [\code{character(1)}]\cr
 #   Path to R installation on worker.
+# @param script [\code{character(1)}]\cr
+#   Path to helper script on worker.
+#   Default means to take it from package directory.
 # @param ncpus [\code{integers(1)}]\cr
 #   Number of VPUs of worker.
 #   Default means to query the worker via \dQuote{/proc/cpuinfo}.
@@ -15,15 +18,14 @@
 #   so that no job can be submitted. 
 #   Default is \code{ncpus-1}.
 # @return [\code{\link{WorkerLocalLinux}}].
-makeWorkerRemoteLinux = function(nodename, rhome, ncpus, max.jobs, max.load) {
+makeWorkerRemoteLinux = function(nodename, rhome, script, ncpus, max.jobs, max.load) {
   checkArg(nodename, "character", len=1L, na.ok=FALSE)
   checkArg(rhome, "character", len=1L, na.ok=FALSE)
   w = structure(list(
     ssh = TRUE,  
     nodename = nodename,    
-    rhome = rhome,
-    script = findHelperScriptLinux(rhome, ssh=TRUE, nodename=nodename)
+    rhome = rhome
   ), class=c("WorkerRemoteLinux", "WorkerLinux", "Worker"))
-  w = initWorker(w, ncpus, max.jobs, max.load)
+  w = initWorker(w, script, ncpus, max.jobs, max.load)
   return(w)
 }

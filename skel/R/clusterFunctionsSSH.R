@@ -18,12 +18,19 @@
 #'   Load average (of the last 5 min) at which the worker is considered occupied, 
 #'   so that no job can be submitted. 
 #'   Default is \code{ncpus-1}.
+#' @param script [\code{character(1)}]\cr
+#'   Path to helper bash script which interacts with the worker.
+#'   You really should not have to touch this, as this would imply that we have screwed up and 
+#'   published an incompatible version for your system.
+#'   This option is only provided as a last resort for very experienced hackers.
+#'   This is what is done in the package:
+#'   \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/skel/inst/bin/linux-helper}
+#'   Default means to take it from package directory.
 #' @return [\code{\link{SSHWorker}}].
 #' @export
 #' @aliases SSHWorker
-makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load) {
-  worker = makeWorkerRemoteLinux(nodename = nodename, rhome=rhome, 
-    ncpus, max.jobs, max.load)
+makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, script) {
+  worker = makeWorkerRemoteLinux(nodename, rhome, script, ncpus, max.jobs, max.load)
   worker$last.update = 0
   return(worker)
 }
