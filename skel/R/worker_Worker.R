@@ -23,7 +23,7 @@ listWorkerJobs = function(worker, file.dir) {
 initWorker = function(worker, script, ncpus, max.jobs, max.load) {
   if (missing(script)) {
     # FIXME dont use linux specific in base class
-    worker$ncpus = findHelperScriptLinux(worker$rhome, worker$ssh, worker$nodename)
+    worker$script = findHelperScriptLinux(worker$rhome, worker$ssh, worker$nodename)
   } else {
     checkArg(script, "character", len=1L, na.ok=FALSE)
     worker$script = script

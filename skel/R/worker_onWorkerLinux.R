@@ -48,14 +48,14 @@ findHelperScriptLinux = function(rhome, ssh=FALSE, nodename) {
 # @param worker [\code{\link{WorkerLinux}}] 
 #   Worker.
 # @param command [\code{character(1)}]
-#   number-of-cpus, worker-status, start-job, kill-job, running-jobs
+#   Helper command.
 # @param args [\code{character}] 
 #   Arguments for helper command.
 # See documenation of linux-helper.
 onWorkerLinux = function(worker, command, args=character(0L)) {
-  script.args = c(worker$rhome, command, args)
   # in paths can be whitespaces and other bad stuff, quote it!
-  script.args = sprintf("\"%s\"", script.args)
-  runCommand(worker$script, script.args, worker$ssh, worker$nodename))
+  args = sprintf("\"%s\"", args)
+  script.args = c(command, args)
+  runCommand(worker$script, script.args, worker$ssh, worker$nodename)
 }
 

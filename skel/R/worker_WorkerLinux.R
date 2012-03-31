@@ -2,6 +2,7 @@
 # delegate to onWorkerLinux
 
 convertLinuxWorkerStatus = function(res) {
+  res = str_trim(res)
   load = res[1]
   load = as.numeric(str_split(str_split(load, "load average: ")[[1]][2], ", ")[[1]][1])
   rprocs = res[-1]
@@ -25,13 +26,13 @@ getWorkerStatus.WorkerLinux = function(worker, file.dir) {
   list(
     load = res$load,
     n.rprocs = nrow(res$rprocs),
-    n.rprocs.50 = sum(res$rprocs[,2] >= 0.5),
+    n.rprocs.50 = sum(res$rprocs[,2] >= 50),
     n.jobs = length(getLinuxWorkerRJobs(res$rprocs[,3], file.dir))
   )
 }
 
 startWorkerJob.WorkerLinux = function(worker, rfile, outfile) {
-  onWorkerLinux(worker, "start-job", c(rfile, outfile))
+  onWorkerLinux(worker, "start-job", c(worker$rhome, rfile, outfile))
 }
 
 killWorkerJob.WorkerLinux = function(worker, pid) {

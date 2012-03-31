@@ -76,7 +76,7 @@ makeClusterFunctionsSSH = function(...) {
   worker.env$workers = workers
   
   submitJob = function(reg, job.name, rscript, log.file, job.dir, resources) {
-    worker = findWorker(worker.env, reg)
+    worker = findWorker(worker.env, reg$file.dir)
     if (is.null(worker)) {
       makeSubmitJobResult(status=1L, batch.job.id=NULL, msg="No free worker available")
     } else {
