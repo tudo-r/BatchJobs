@@ -20,21 +20,21 @@
 #' 
 #' @param template.file [\code{character(1)}]\cr
 #'   Path to a brew template file that is used for the PBS job file.
-#' @param pbs.file.in.temp.dir [\code{logical(1)}]\cr
+#' @param job.file.in.temp.dir [\code{logical(1)}]\cr
 #'   Should PBS file be created in temp dir and automatically be cleaned up?
 #'   Or place it in the jobs directory where the R script and result are put? 
 #'   Mainly for debugging purposes.
 #'   Default is \code{TRUE}.
 #' @return [\code{\link{ClusterFunctions}}]. 
 #' @export
-makeClusterFunctionsTorque = function(template.file, pbs.file.in.temp.dir=TRUE) {
+makeClusterFunctionsTorque = function(template.file, job.file.in.temp.dir=TRUE) {
   ## Read in template
   fd = file(template.file, "r")
   template = paste(readLines(fd), collapse="\n")
   close(fd)
   
   submitJob = function(reg, job.name, rscript, log.file, job.dir, resources) {
-    if (pbs.file.in.temp.dir) { 
+    if (job.file.in.temp.dir) { 
       outfile = tempfile()
     } else {
       # if not temp, use jobs dir

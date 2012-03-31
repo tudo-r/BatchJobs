@@ -25,7 +25,6 @@
 #'   Default is \code{TRUE}.
 #' @return [\code{\link{ClusterFunctions}}]. 
 #' @export
-# FIXME pbs name --> .job
 makeClusterFunctionsSGE = function(template.file, job.file.in.temp.dir=TRUE) {
   ## Read in template
   fd = file(template.file, "r")
@@ -44,7 +43,7 @@ makeClusterFunctionsSGE = function(template.file, job.file.in.temp.dir=TRUE) {
     res = system(cmd, intern=TRUE, wait=TRUE)
     # FIXME filled queues
     # FIXME errorhandling
-    makeSubmitJobResult(status=1L, batch.job.id=as.character(NA), msg=max.jobs.msg)
+    makeSubmitJobResult(status=0L, batch.job.id=res)
   }
   
   killJob = function(reg, batch.job.id) {
