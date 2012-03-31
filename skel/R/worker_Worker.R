@@ -20,7 +20,14 @@ listWorkerJobs = function(worker, file.dir) {
 }
 
 # initialize some values of worker, potenially query cpus
-initWorker = function(worker, ncpus, max.jobs, max.load) {
+initWorker = function(worker, script, ncpus, max.jobs, max.load) {
+  if (missing(script)) {
+    # FIXME dont use linux specific in base class
+    worker$ncpus = findHelperScriptLinux(worker$rhome, worker$ssh, worker$nodename)
+  } else {
+    checkArg(script, "character", len=1L, na.ok=FALSE)
+    worker$script = script
+  }
   if (missing(ncpus)) {
     worker$ncpus = getWorkerNumberOfCPUs(worker)
     messagef("Setting for worker %s: ncpus=%i", worker$nodename, worker$ncpus)
@@ -52,13 +59,13 @@ initWorker = function(worker, ncpus, max.jobs, max.load) {
 # is a worker busy, see rules below
 isWorkerBusy = function(worker) {
   # should not have too many R sessions open
-  (worker$status$running_r_processes > 3 * worker$ncpus) ||
+  (worker$status$n.rprocs > 3 * worker$ncpus) ||
     # should not have too much load average
     (worker$status$load[1L] > worker$max.load) ||
     # there are already ncpus expensive R jobs running on the node
-    (worker$status$running_r_processes_50 >= worker$ncpus) ||
+    (worker$status$n.rprocs.50 >= worker$ncpus) ||
     # we have already used up our maximal load on this node
-    (worker$status$running_batch_jobs >= worker$max.jobs)
+    (worker$status$n.jobs >= worker$max.jobs)
   # else all clear, submit the job!
 }
 
