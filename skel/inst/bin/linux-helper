@@ -5,7 +5,7 @@
 ##
 ## Requires the following Unix command line utilities:
 ##
-##  * grep, wc, ps, kill, uptime, cat
+##  * grep, wc, ps, kill, uptime, echo, cat
 ##
 ## The following commands are implemented. First argument is always the command name.
 ## For other arguments see below. Each command returns a character vector.
@@ -46,16 +46,16 @@ case $CMD in
         # see comment also in cfLocal
         "$RCMD" CMD BATCH --no-save --no-restore "$2" "$3" \
             > /dev/null 2> /dev/null < /dev/null &
-        cat $!
+        echo $!
         ;;
     kill-job)
-        ps -o pid= --ppid $1 | kill -TERM > /dev/null 2> /dev/null
+        kill -TERM $(ps -o pid= --ppid $1)  > /dev/null 2> /dev/null
         sleep 1
-        ps -o pid= --ppid $1 | kill -KILL > /dev/null 2> /dev/null
+        kill -KILL $(ps -o pid= --ppid $1)  > /dev/null 2> /dev/null
         exit 0
         ;;
     uptime-and-rprocs)
-        uptime | cat
+        uptime
         # use ww for unlimited width in ps for cmd output
         ps -ww -o ppid=,pcpu=,cmd= -C R
         ;;
