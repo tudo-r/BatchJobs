@@ -41,12 +41,12 @@ doKillTest = function(dir=getwd(), test.worker=FALSE, long="sleep") {
     status = BatchJobs:::getWorkerStatus.WorkerLinux(w, reg$file.dir)
     print(status)
     if (long == "sleep") {
-      expect_true(status[["running_r_processes"]] >= n)
-      expect_true(status[["running_batch_jobs"]] >= n)
+      expect_true(status[["n.rprocs"]] >= n)
+      expect_true(status[["n.jobs"]] >= n)
     } else if (long == "expensive") {
-      expect_true(status[["running_r_processes"]] >= n)
-      expect_true(status[["running_r_processes_50"]] >= n)
-      expect_true(status[["running_batch_jobs"]] >= n)
+      expect_true(status[["n.rprocs"]] >= n)
+      expect_true(status[["n.rprocs.50"]] >= n)
+      expect_true(status[["n.jobs"]] >= n)
     }
   }
   killJobs(reg, ids)
