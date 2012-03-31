@@ -84,7 +84,7 @@ print.SubmitJobResult = function(x, ...) {
 #'   Currently ignored.
 #' @export
 #' @aliases ClusterFunctions
-#' @seealso \code{\link{makeClusterFunctionsInteractive}}, \code{\link{makeClusterFunctionsLocal}}, \code{\link{makeClusterFunctionsSSH}}, \code{\link{makeClusterFunctionsTorque}} 
+#' @seealso \code{\link{makeClusterFunctionsInteractive}}, \code{\link{makeClusterFunctionsLocal}}, \code{\link{makeClusterFunctionsMulticore}},  \code{\link{makeClusterFunctionsSSH}}, \code{\link{makeClusterFunctionsTorque}}, \code{\link{makeClusterFunctionsSGE}}
 makeClusterFunctions = function(name, submitJob, killJob, listJobs, class, ...) {
   checkArg(name, "character", len=1L)
   checkArg(submitJob, "function", formals=c("reg", "job.name", "rscript",

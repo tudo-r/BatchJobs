@@ -9,10 +9,14 @@
 #' cluster (this is usually the case).
 #'
 #' The template file can use any of the resources defined for the job
-#' by accessing the appropirate element of the \code{resources}
+#' by accessing the appropriate element of the \code{resources}
 #' list. It is the template file's job to choose a queue for the job
-#' and add any desired resource allocations. An example of a fairly
-#' complex template is provided on the package home page.
+#' and add any desired resource allocations. A simple example
+#' is provided here 
+#' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfTorque/simple.tmpl}
+#' and a more complex one here 
+#' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfTorque/lido.tmpl}
+#' in the package repository on its homepage.
 #' 
 #' @param template.file [\code{character(1)}]\cr
 #'   Path to a brew template file that is used for the PBS job file.

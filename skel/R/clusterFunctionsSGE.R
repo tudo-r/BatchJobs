@@ -9,11 +9,13 @@
 #' cluster (this is usually the case).
 #'
 #' The template file can use any of the resources defined for the job
-#' by accessing the appropirate element of the \code{resources}
+#' by accessing the appropriate element of the \code{resources}
 #' list. It is the template file's job to choose a queue for the job
-#' and add any desired resource allocations. An example of a fairly
-#' complex template is provided on the package home page.
-#' 
+#' and add any desired resource allocations. A simple example
+#' is provided here 
+#' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfSGE/simple.tmpl}
+#' in the package repository on its homepage.
+#'
 #' @param template.file [\code{character(1)}]\cr
 #'   Path to a brew template file that is used for the job file.
 #' @param job.file.in.temp.dir [\code{logical(1)}]\cr
@@ -23,7 +25,7 @@
 #'   Default is \code{TRUE}.
 #' @return [\code{\link{ClusterFunctions}}]. 
 #' @export
-#' FIXME pbs name --> .job
+# FIXME pbs name --> .job
 makeClusterFunctionsSGE = function(template.file, job.file.in.temp.dir=TRUE) {
   ## Read in template
   fd = file(template.file, "r")
