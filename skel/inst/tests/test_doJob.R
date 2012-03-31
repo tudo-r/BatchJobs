@@ -53,7 +53,7 @@ test_that("doJob", {
   addJob(reg, job)  
   saveConf(reg)
   expect_error(suppressAll(doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)), 
-    "Could not load required package 'foo' on node!")  
+    "Could not load required package 'foo' on node")  
   expect_equal(findMissingResults(reg), id)
   reg = makeTestRegistry(packages=c("randomForest"))
   f = function() randomForest(Species~., data=iris)
