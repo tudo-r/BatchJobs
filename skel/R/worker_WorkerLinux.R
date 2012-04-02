@@ -1,14 +1,15 @@
 # implementation of interface for local and remote linux workers
 # delegate to onWorkerLinux
-
 convertLinuxWorkerStatus = function(res) {
   res = str_trim(res)
-  load = res[1]
-  load = as.numeric(str_split(str_split(load, "load average: ")[[1]][2], ", ")[[1]][1])
-  rprocs = res[-1]
-  rprocs = str_split_fixed(rprocs, " +", 3)
+  load = res[1L]
+  load = as.numeric(str_split(str_split(load, "load average: ")[[1L]][2L], ", ")[[1L]][1L])
+  # FIXME wont work with no r processes on the worker?
+  #       dont know if we want to do such things in R
+  rprocs = res[-1L]
+  rprocs = str_split_fixed(rprocs, " +", 3L)
   rprocs = as.data.frame(rprocs, stringsAsFactors=FALSE)
-  rprocs[,2]=as.numeric(rprocs[,2])
+  rprocs[,2L]=as.numeric(rprocs[,2L])
   list(load = load, rprocs = rprocs)
 }
 
@@ -26,8 +27,8 @@ getWorkerStatus.WorkerLinux = function(worker, file.dir) {
   list(
     load = res$load,
     n.rprocs = nrow(res$rprocs),
-    n.rprocs.50 = sum(res$rprocs[,2] >= 50),
-    n.jobs = length(getLinuxWorkerRJobs(res$rprocs[,3], file.dir))
+    n.rprocs.50 = sum(res$rprocs[,2L] >= 50),
+    n.jobs = length(getLinuxWorkerRJobs(res$rprocs[,3L], file.dir))
   )
 }
 
@@ -42,6 +43,6 @@ killWorkerJob.WorkerLinux = function(worker, pid) {
 listWorkerJobs.WorkerLinux = function(worker, file.dir) {
   res = onWorkerLinux(worker, "uptime-and-rprocs")
   rprocs = convertLinuxWorkerStatus(res)$rprocs
-  rprocs[getLinuxWorkerRJobs(rprocs[,3], file.dir),1]
+  rprocs[getLinuxWorkerRJobs(rprocs[,3L], file.dir),1L]
 }
 
