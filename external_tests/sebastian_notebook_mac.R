@@ -12,10 +12,10 @@ doExternalTest(whitespace=FALSE)
 
 conf$cluster.functions = makeClusterFunctionsMulticore()
 doExternalTest(whitespace=FALSE)
-doKillTest()
+doKillTest(n=2)
 
 conf$cluster.functions = makeClusterFunctionsSSH(
   makeSSHWorker("localhost"))
 doExternalTest(whitespace=FALSE)
-doKillTest()
+doKillTest(n=2)
 

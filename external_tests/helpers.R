@@ -1,6 +1,6 @@
 library(testthat)
 
-doExternalTest = function(dir=getwd(), whitespace=FALSE, long="false") {
+doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false") {
   id = "external_test"
   if (whitespace)
     fd = "foo bär"
@@ -11,7 +11,7 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, long="false") {
   if (ok != 0)
     stopf("could not delete file dir: %s", fd)
   reg = makeRegistry(id=id, work.dir=dir, file.dir=fd, sharding=FALSE)
-  xs = 51:54
+  xs = 50 + seq(1, n)
   f = switch(long,
     false = identity,
     sleep = function(x) {Sys.sleep(300);x},
@@ -26,8 +26,8 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, long="false") {
   return(reg)
 }
 
-doKillTest = function(dir=getwd(), test.worker=FALSE, long="sleep") {
-  reg = doExternalTest(dir=dir,whitespace=FALSE, long=long)
+doKillTest = function(dir=getwd(), test.worker=FALSE, n=4, long="sleep") {
+  reg = doExternalTest(dir=dir,whitespace=FALSE, n=n, long=long)
   ids = getJobIds(reg)
   n = length(ids)
   if (test.worker) {
