@@ -19,7 +19,7 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, long="false") {
   batchMap(reg, f, xs)
   submitJobs(reg)
   if (long == "false") {
-    Sys.sleep(5)
+    Sys.sleep(8)
     res = reduceResults(reg, fun=function(aggr,job,res) c(aggr, res))
     expect_equal(res, xs)
   } 
