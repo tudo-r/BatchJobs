@@ -1,6 +1,8 @@
 library(testthat)
 
-doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false") {
+doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false", 
+  sleep.master=8, sleep.job=300, resources=list()) {
+  
   id = "external_test"
   if (whitespace)
     fd = "foo bär"
@@ -14,12 +16,12 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false") {
   xs = 50 + seq(1, n)
   f = switch(long,
     false = identity,
-    sleep = function(x) {Sys.sleep(300);x},
+    sleep = function(x) {Sys.sleep(sleep.job);x},
     expensive = function(i) if (i<=2) i else f(i-1) + f(i-2))
   batchMap(reg, f, xs)
-  submitJobs(reg)
+  submitJobs(reg, resources=resources)
   if (long == "false") {
-    Sys.sleep(8)
+    Sys.sleep(sleep.master)
     res = reduceResults(reg, fun=function(aggr,job,res) c(aggr, res))
     expect_equal(res, xs)
   } 
