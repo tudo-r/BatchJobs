@@ -53,7 +53,8 @@ killJobs = function(reg, ids) {
     if (str_length(bjis.str) > 200L)
       bjis.str = sprintf("%s...", str_sub(bjis.str, end=200L))
     messagef(bjis.str)
-    lapply(bjis, killfun, reg=reg)
+    conf = getBatchJobsConf()
+    lapply(bjis, killfun, reg=reg, conf=conf)
   }
   messagef("For safety reasons waiting 3secs...")
   Sys.sleep(3)
