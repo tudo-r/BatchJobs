@@ -44,7 +44,7 @@ makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, script) {
     killWorkerJob(worker.env$workers[[1]], batch.job.id)
   }
   
-  listJobs = function(reg) {
+  listJobs = function(conf, reg) {
     listWorkerJobs(worker.env$workers[[1]], reg$file.dir)
   }
   

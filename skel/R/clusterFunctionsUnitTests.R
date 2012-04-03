@@ -1,7 +1,7 @@
 # For unit tests and not exported.
 # All jobs are executed synchronously and some output is suppressed.
 makeClusterFunctionsUnitTests = function() {
-  submitJob = function(reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     ee = new.env(parent=.GlobalEnv)
     suppressAll(sys.source(rscript, envir=ee))
     makeSubmitJobResult(status=0L, batch.job.id="", msg="")

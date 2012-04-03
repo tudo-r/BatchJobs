@@ -4,3 +4,4 @@ mail.done = "none"
 mail.error = "none"
 db.driver = "SQLite"
 db.options = list()
+debug = FALSE

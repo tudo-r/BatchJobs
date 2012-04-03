@@ -13,7 +13,7 @@
 #' @return [\code{\link{ClusterFunctions}}]. 
 #' @export
 makeClusterFunctionsLocal = function() {
-  submitJob = function(reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     # nothing should be on all 3 streams except maybe a segfault. throw away.
     cmd = sprintf("%s CMD BATCH --no-save --no-restore '%s' '%s' > /dev/null 2> /dev/null < /dev/null",
       file.path(R.home("bin"), "R"), rscript, log.file)

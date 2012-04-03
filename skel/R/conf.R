@@ -17,8 +17,8 @@ sourceConfFile = function(conffile) {
       "  mail.error = 'none' | 'all' | 'first' | 'last' | 'first+last'",
       "  mail.from = <sender address>",
       "  mail.to = <recipient address>",
-      "  mail.control = <control object for sendmail package>\n\n",
-      "  debug = TRUE | FALSE",
+      "  mail.control = <control object for sendmail package>",
+      "  debug = TRUE | FALSE\n\n",
       "Using default configuration.",
       sep = "\n"))
     stopf("There was an error in sourcing your configuration file '%s': %s!", conffile, as.character(x))

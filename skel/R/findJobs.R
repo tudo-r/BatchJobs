@@ -48,7 +48,7 @@ findSubmitted = function(reg) {
 findOnSystem = function(reg) {
   checkArg(reg, cl = "Registry")
   fun = getListJobs("Cannot find jobs on system")
-  batch.job.ids = fun(reg)
+  batch.job.ids = fun(getBatchJobsFun(), reg)
   dbGetJobIdsFromBatchJobIds(reg, batch.job.ids)
 }
 
@@ -61,7 +61,7 @@ findOnSystem = function(reg) {
 findRunning = function(reg) {
   checkArg(reg, cl = "Registry")
   fun = getListJobs("Cannot find running jobs")
-  batch.job.ids = fun(reg)
+  batch.job.ids = fun(getBatchJobsFun(), reg)
   # running jobs are running on batch system in general and must have started for this reg
   dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, "started IS NOT NULL")
 }
@@ -78,6 +78,6 @@ findRunning = function(reg) {
 findExpired = function(reg) {
   checkArg(reg, cl = "Registry")
   fun = getListJobs("Cannot find expired jobs")
-  batch.job.ids = fun(reg)
+  batch.job.ids = fun(getBatchJobsFun(), reg)
   dbGetExpiredJobs(reg, batch.job.ids)
 }
