@@ -14,11 +14,11 @@ sendMail = function(reg, job, result.str, extra.msg="",
     (mail.cond %in% c("last", "first+last") && firstjob$id == last)) {
     
     myformat = function(title, lines) {
-      sep.length = 78L
-      str.top = paste("###", title, collapse(rep("#", sep.length - 5L - nchar(title), ""), ""), sep = " ")
-      str.bot = collapse(rep("#", sep.length), "")
+      width = 76L
+      str.top = paste("###", title, collapse(rep("#", width - 5L - nchar(title), ""), ""), sep = " ")
+      str.bot = collapse(rep("#", width), "")
       paste(str.top, 
-        collapse(paste("#", lines), "\n"), 
+        collapse(strwrap(lines, width = width - 2L, prefix = "# ", exdent = 2L), "\n"),
         str.bot, "\n", sep = "\n")
     }
     
