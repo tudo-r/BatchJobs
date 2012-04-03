@@ -35,10 +35,12 @@ makeClusterFunctionsSGE = function(template.file) {
     }
     brew(text=template, output=outfile)
     res = runCommand("qsub", outfile)  
-    res = system(cmd, intern=TRUE, wait=TRUE)
     # FIXME filled queues
     # FIXME errorhandling
-    makeSubmitJobResult(status=1L, batch.job.id=as.character(NA), msg=max.jobs.msg)
+    # returns: "Your job 240933 (\"sleep 60\") has been submitted"
+    # first number in string is batch.job.id
+    batch.job.id = str_extract(res, "\\d+")
+    makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
   }
   
   killJob = function(reg, batch.job.id) {
@@ -47,8 +49,15 @@ makeClusterFunctionsSGE = function(template.file) {
   }
   
   listJobs = function(conf, reg) {
-    # Result is lines of fully quantified batch.job.ids
-    runCommand("qselect", "-u $USER")
+    # looks like this
+    # job-ID  prior   name       user         state submit/start at     queue                          slots ja-task-ID
+    #-----------------------------------------------------------------------------------------------------------------
+    #  240935 0.00000 sleep 60   matthias     qw    04/03/2012 15:45:54                                    1
+    res = runCommand("qstat", "-u $USER")
+    # drop first 2 header lines
+    res = res[-(1:2)]
+    # first number in strings are batch.job.ids
+    str_extract(res, "\\d+")
   }
   
   makeClusterFunctions(name="SGE", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
