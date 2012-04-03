@@ -1,9 +1,7 @@
+#!/bin/bash
 <%
-walltime <- coalesce(resources$walltime, 60 * 60) ## default 1 hour
-memory <- coalesce(resources$memory, 1024) ## default 1G
-nodes <- 1 ## currently hard coded.
+queue <- coalesce(resources$queue, "all.q") ## default queue
 -%>
-#PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,vmem=<%= memory %>M
 
 # The name of the job, can be anything, simply used when displaying the list of running jobs
 #$ -N <%= job.name %>
@@ -14,8 +12,11 @@ nodes <- 1 ## currently hard coded.
 # One needs to tell the queue system to use the current directory as the working directory
 # Or else the script may fail as it will execute in your top level home directory /home/username
 #$ -cwd
+# use environment variables
+#$ -V
+# use correct queue 
+#$ -q <%= queue %>
 
-# Run R:
-# we merge R output with stdout from PBS, which gets then logged via -o option
+# we merge R output with stdout from SGE, which gets then logged via -o option
 R CMD BATCH --no-save --no-restore "<%= rscript %>" /dev/stdout
 exit 0
