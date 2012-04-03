@@ -13,7 +13,7 @@
 #' @return [\code{\link{ClusterFunctions}}]. 
 #' @export
 makeClusterFunctionsInteractive = function() {
-  submitJob = function(reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     suppressAll(sys.source(rscript, envir=baseenv(), keep.source=FALSE))
     makeSubmitJobResult(status=0L, batch.job.id="", msg="")
   }

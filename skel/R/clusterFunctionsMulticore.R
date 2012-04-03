@@ -27,21 +27,20 @@ makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, script) {
   worker.env = new.env()  
   worker.env$workers = workers
   
-  submitJob = function(reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     worker = findWorker(worker.env, reg$file.dir)
     if (is.null(worker)) {
       makeSubmitJobResult(status=1L, batch.job.id=NULL, msg="No free core available")
     } else {
       pid = try(startWorkerJob(worker, rscript, log.file))
-      if (is.error(pid)) {
-        makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="submit failed.")
-      } else {
+      if (is.error(pid))
+        makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="Submit failed.")
+      else 
         makeSubmitJobResult(status=0L, batch.job.id=pid)
-      }
     }
   }
   
-  killJob = function(reg, batch.job.id) {
+  killJob = function(conf, reg, batch.job.id) {
     killWorkerJob(worker.env$workers[[1]], batch.job.id)
   }
   

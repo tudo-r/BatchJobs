@@ -120,7 +120,7 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
         ))
       }
       sent.bji = FALSE
-      batch.result = cf$submitJob(reg, job.name, fn.rscript,
+      batch.result = cf$submitJob(conf, reg, job.name, fn.rscript,
                                   fn.log, jd, resources)
       # make sure to send bji even if user intterupted submitJobs
       exit.pars = list(id=id, batch.result=batch.result)

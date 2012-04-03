@@ -16,24 +16,35 @@
 ## start-job RHOME RFILE OUTFILE
 ##   Start an R CMD BATCH process running $RFILE and log
 ##   the output in $OUTFILE. 
-##   RHOME is the path to the R installtion..
+##   RHOME is the path to the R installation.
 ##   Returns: PID of sh process which spawned R. We use that as batch.job.id. 
 ##
 ## kill-job PID
-##   Kill the R job with PPID $PID. The PPID is of the sh process returned by start-job.
+##   Kill the R job with PPID $PID. The PPID is the PID of 
+##   the sh process returned by start-job.
 ##   First a TERM is sent, then 1 sec delay, then KILL. 
 ## 
-## load-and-rprocs
-##   Return char vector:
-##    1st line: Result of uptime.
-##    rest lines: For all R processes with ps: PPID<SPACE>PCPU<SPACE>CMD  
+##  status FILEDIR
+##   Return 4 numbers:
+##    - load average of last 1 min, as given by e.g. uptime
+##    - number of R processes by _all_ users
+##    - number of R processes by _all_ users which have a load of >= 50%
+##    - number of R processes by current user 
+##      which match $FILEDIR/jobs in the cmd call of R
+##
+##  list-jobs FILEDIR
+##   Return the PPIDs of running R jobs operating on $FILEDIR/jobs.
 
 CMD="$1"; shift
-LC_ALL=C ## Avoid any localization issues.
+export LC_ALL=C ## Avoid any localization issues.
 
 case $CMD in
     number-of-cpus)
-        cat /proc/cpuinfo | grep '^processor' | wc -l
+        if [ `uname` == "Linux" ]; then
+          cat /proc/cpuinfo | grep '^processor' | wc -l
+        else  
+          sysctl -n hw.ncpu ## darwin
+        fi  
         ;;
     start-job)
         RHOME="$1"
@@ -54,10 +65,26 @@ case $CMD in
         kill -KILL $(ps -o pid= --ppid $1)  > /dev/null 2> /dev/null
         exit 0
         ;;
-    uptime-and-rprocs)
-        uptime
-        # use ww for unlimited width in ps for cmd output
-        ps -ww -o ppid=,pcpu=,cmd= -C R
+    status)
+        # remove commas in linux
+        LOAD=$(uptime | awk '{gsub(/,/,""); print $10}')
+        JOBDIR="$1/jobs"
+        # print 3 columns for all processes       
+        # use ww for unlimited width in ps for command output
+        # we count all R procs, all R50, and all where JOBDIR was in the call args
+        ps -e -ww -o pcpu=,ucomm=,command= | \
+        awk -v j=$JOBDIR -v load=$LOAD '
+          BEGIN {rprocs=0;rprocs_50=0;njobs=0} 
+          $2 != "R" {next} 
+          {rprocs++} 
+          $1 > 50.0 {rprocs_50++} 
+          $0 ~ j {njobs++} 
+          END {print load " " rprocs " " rprocs_50 " " njobs}'
+        ;;
+    list-jobs)
+        JOBDIR="$1/jobs"
+        ps -e -ww -o ppid=,ucomm=,command= | \
+        awk -v j=$JOBDIR '$2 == "R" && $0 ~ j { print $1 }'
         ;;
     *)
 esac

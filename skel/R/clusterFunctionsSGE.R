@@ -18,46 +18,37 @@
 #'
 #' @param template.file [\code{character(1)}]\cr
 #'   Path to a brew template file that is used for the job file.
-#' @param job.file.in.temp.dir [\code{logical(1)}]\cr
-#'   Should job file be created in temp dir and automatically be cleaned up?
-#'   Or place it in the jobs directory where the R script and result are put? 
-#'   Mainly for debugging purposes.
-#'   Default is \code{TRUE}.
 #' @return [\code{\link{ClusterFunctions}}]. 
 #' @export
-makeClusterFunctionsSGE = function(template.file, job.file.in.temp.dir=TRUE) {
+makeClusterFunctionsSGE = function(template.file) {
   ## Read in template
   fd = file(template.file, "r")
   template = paste(readLines(fd), collapse="\n")
   close(fd)
   
   submitJob = function(reg, job.name, rscript, log.file, job.dir, resources) {
-    if (job.file.in.temp.dir) { 
+    if (conf$debug) { 
       outfile = tempfile()
     } else {
       # if not temp, use jobs dir
       outfile = str_replace(rscript, "\\.R$", ".job")
     }
     brew(text=template, output=outfile)
-    cmd = sprintf("qsub '%s' 2>&1", outfile)
+    res = runCommand("qsub", outfile)  
     res = system(cmd, intern=TRUE, wait=TRUE)
     # FIXME filled queues
     # FIXME errorhandling
-    makeSubmitJobResult(status=0L, batch.job.id=res)
+    makeSubmitJobResult(status=1L, batch.job.id=as.character(NA), msg=max.jobs.msg)
   }
   
   killJob = function(reg, batch.job.id) {
     # qdel sends SIGTERM, delay, SIGKILL
-    cmd = sprintf("qdel '%s'", batch.job.id)
-    suppressAll(system(cmd, intern=TRUE, wait=TRUE, 
-        ignore.stderr=TRUE, ignore.stdout=TRUE))
+    runCommand("qdel", batch.job.id)
   }
   
-  listJobs = function(reg) {
-    cmd = "qselect -u $USER"
+  listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
-    jobs = system(cmd, intern=TRUE, wait=TRUE)
-    jobs
+    runCommand("qselect", "-u $USER")
   }
   
   makeClusterFunctions(name="SGE", submitJob=submitJob, killJob=killJob, listJobs=listJobs)

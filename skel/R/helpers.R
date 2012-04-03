@@ -14,7 +14,7 @@ getListJobs = function(msg=NULL) {
   if (is.null(fun))
     if (!is.null(msg))
       stopf("%s because %s cluster functions do not support listing of jobs!", msg, cf$name)
-  return(fun)  
+  function(reg) fun(conf, reg) 
 }
 
 getKillJob = function(msg=NULL) {

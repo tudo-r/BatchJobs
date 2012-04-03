@@ -11,6 +11,7 @@
 #   Nodename for SSH.
 # @return [\code{character(1)}]. Result of command.
 runCommand = function(cmd, args=character(0L), ssh=FALSE, nodename) {
+  conf = getBatchJobsConf()
   if (ssh) {
     sys.cmd = "ssh"
     ssh.cmd = sprintf("'%s'", collapse(c(cmd, args), sep=" "))
@@ -19,7 +20,13 @@ runCommand = function(cmd, args=character(0L), ssh=FALSE, nodename) {
     sys.cmd = cmd
     sys.args = args
   }
-  res = try(system2(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE))
+  if (conf$debug)
+    catf("OS cmd: %s %s", sys.cmd, collapse(sys.args, " "))
+  res = try(system2(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE, wait=TRUE))
+  if (conf$debug) {
+    catf("OS result:")
+    print(res)
+  }
   if(is.error(res))
     stopf("Error in runCommand: %s (cmd: %s || args: %s)", as.character(res), sys.cmd, collapse(sys.args))
   res

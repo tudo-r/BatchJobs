@@ -75,22 +75,20 @@ makeClusterFunctionsSSH = function(...) {
   worker.env = new.env()  
   worker.env$workers = workers
   
-  submitJob = function(reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     worker = findWorker(worker.env, reg$file.dir)
     if (is.null(worker)) {
       makeSubmitJobResult(status=1L, batch.job.id=NULL, msg="No free worker available")
     } else {
       pid = try(startWorkerJob(worker, rscript, log.file))
-      if (is.error(pid)) {
-        makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="submit failed.")
-      } else {
-        makeSubmitJobResult(status=0L,
-          batch.job.id=paste(worker$nodename, pid, sep="#"))
-      }
+      if (is.error(pid)) 
+        makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="Submit failed.")
+      else 
+        makeSubmitJobResult(status=0L,batch.job.id=paste(worker$nodename, pid, sep="#"))
     }
   }
   
-  killJob = function(reg, batch.job.id) {
+  killJob = function(conf, reg, batch.job.id) {
     parts = str_split_fixed(batch.job.id, "#", 2L)[1L,]
     nodename = parts[1L]
     pid = parts[2L]
@@ -100,7 +98,7 @@ makeClusterFunctionsSSH = function(...) {
     killWorkerJob(worker, pid)  
   }
   
-  listJobs = function(reg) {
+  listJobs = function(conf, reg) {
     res = NULL
     for (worker in worker.env$workers) {
       nodename = worker[["nodename"]]
