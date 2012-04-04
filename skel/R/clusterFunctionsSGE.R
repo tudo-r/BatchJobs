@@ -28,10 +28,10 @@ makeClusterFunctionsSGE = function(template.file) {
   
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     if (conf$debug) { 
-      outfile = tempfile()
-    } else {
       # if not temp, use jobs dir
       outfile = str_replace(rscript, "\\.R$", ".job")
+    } else {
+      outfile = tempfile()
     }
     brew(text=template, output=outfile)
     res = runCommand("qsub", outfile)  

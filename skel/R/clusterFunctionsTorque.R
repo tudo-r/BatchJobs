@@ -29,12 +29,14 @@ makeClusterFunctionsTorque = function(template.file) {
   close(fd)
   
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
+    showConf()
     if (conf$debug) { 
-      outfile = tempfile()
-    } else {
       # if not temp, use jobs dir
       outfile = str_replace(rscript, "\\.R$", ".pbs")
+    } else {
+      outfile = tempfile()
     }
+    print(outfile)
     brew(text=template, output=outfile)
     res = runCommand("qsub", outfile)  
     max.jobs.msg = "Maximum number of jobs already in queue"
