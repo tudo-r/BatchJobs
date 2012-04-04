@@ -12,8 +12,8 @@ doExternalTest(whitespace=FALSE)
 
 conf$cluster.functions = makeClusterFunctionsMulticore()
 doExternalTest(whitespace=FALSE)
-doKillTest(test.worker=TRUE, long="sleep")
-doKillTest(test.worker=TRUE, long="expensive")
+doKillTest(long="sleep")
+doKillTest(long="expensive")
 
 conf$cluster.functions = makeClusterFunctionsSSH(
   makeSSHWorker("rao"))

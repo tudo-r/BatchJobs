@@ -28,19 +28,28 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false",
   return(reg)
 }
 
-doKillTest = function(dir=getwd(), test.worker=FALSE, n=4, long="sleep") {
+doKillTest = function(dir=getwd(), n=4, long="sleep") {
+  messagef("Long = %s", long)
   reg = doExternalTest(dir=dir,whitespace=FALSE, n=n, long=long)
   ids = getJobIds(reg)
   n = length(ids)
-  if (test.worker) {
-    conf = BatchJobs:::getBatchJobsConf()
-    cf = conf$cluster.functions
-    stopifnot(cf$name == "Multicore")
-    w = environment(cf$submitJob)$workers[[1]]
+  conf = BatchJobs:::getBatchJobsConf()
+  cf = conf$cluster.functions
+  test.workers = cf$name %in% c("Multicore", "SSH")
+  getStatus = function() {
+    workers = environment(cf$submitJob)$workers
+    s = lapply(workers, function(w) {
+      z = BatchJobs:::getWorkerStatus.WorkerLinux(w, file.dir=reg$file.dir)
+      unlist(z[-1])
+    })
+    s = do.call(rbind, lapply(s, unlist))
+    apply(s, 2, sum)
+  }
+  if (test.workers) {
     # sleep so processes can update their cpu usage
     if (long == "expensive")
       Sys.sleep(3)
-    status = BatchJobs:::getWorkerStatus.WorkerLinux(w, reg$file.dir)
+    status = getStatus()
     print(status)
     if (long == "sleep") {
       expect_true(status[["n.rprocs"]] >= n)
@@ -52,6 +61,11 @@ doKillTest = function(dir=getwd(), test.worker=FALSE, n=4, long="sleep") {
     }
   }
   killJobs(reg, ids)
+  if (test.workers) {
+    status = getStatus()
+    print(status)
+    expect_equal(status[["n.jobs"]], 0)
+  }
   expect_equal(findMissingResults(reg), ids)
   expect_equal(findOnSystem(reg), integer(0))
   expect_equal(findRunning(reg), integer(0))
