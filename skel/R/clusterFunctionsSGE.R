@@ -26,7 +26,7 @@ makeClusterFunctionsSGE = function(template.file) {
   template = paste(readLines(fd), collapse="\n")
   close(fd)
   
-  submitJob = function(reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     if (conf$debug) { 
       outfile = tempfile()
     } else {

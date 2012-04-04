@@ -35,7 +35,6 @@ killJobs = function(reg, ids) {
   data = subset(data, data$job_id %in% ids)
   n.unsubm = sum(is.na(data$submitted))
   n.term = sum(!is.na(data$done) | !is.na(data$error))
-  n.nobji = sum(!is.na(data$submitted) & is.na(data$batch_job_id))
   messagef("Not submitted: %i", n.unsubm)
   messagef("Already terminated: %i", n.term)
   messagef("No batch.job.id: %i", n.term)
