@@ -63,20 +63,21 @@ case $CMD in
         RPPID=$1 
         # find R process whose ppid is the batch.job.id, i.e. the one of the sh process
         # we must list all processes (without terminal) for SSH
-        RPID=$(ps -e -o pid=,ppid= | awk -v j=$RPPID '$2 == j {print $1}')
+        RPID=$(ps -e -o pid= -o ppid= | awk -v j=$RPPID '$2 == j {print $1}')
         kill -TERM $RPID > /dev/null 2> /dev/null
         sleep 1
         kill -KILL $RPID > /dev/null 2> /dev/null
         exit 0
         ;;
     status)
-        # remove commas in linux
-        LOAD=$(uptime | awk '{gsub(/,/,""); print $10}')
+        # remove everyting till load average(s):
+        # then delete commas
+        LOAD=$(uptime | awk '{gsub(/.*:/,""); {gsub(/,/,"")}; print $1}')
         JOBDIR="$1/jobs"
         # print 3 columns for all processes       
         # use ww for unlimited width in ps for command output
         # we count all R procs, all R50, and all where JOBDIR was in the call args
-        ps -e -ww -o pcpu=,ucomm=,command= | \
+        ps -e -ww -o pcpu= -o ucomm= -o command= | \
         awk -v j=$JOBDIR -v load=$LOAD '
           BEGIN {rprocs=0;rprocs_50=0;njobs=0} 
           $2 != "R" {next} 
@@ -87,7 +88,7 @@ case $CMD in
         ;;
     list-jobs)
         JOBDIR="$1/jobs"
-        ps -e -ww -o ppid=,ucomm=,command= | \
+        ps -e -ww -o ppid= -o ucomm= -o command= | \
         awk -v j=$JOBDIR '$2 == "R" && $0 ~ j { print $1 }'
         ;;
     *)

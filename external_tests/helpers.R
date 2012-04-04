@@ -31,8 +31,8 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false",
 doKillTest = function(dir=getwd(), n=4, long="sleep") {
   messagef("Long = %s", long)
   reg = doExternalTest(dir=dir,whitespace=FALSE, n=n, long=long)
+  Sys.sleep(2)
   ids = getJobIds(reg)
-  n = length(ids)
   conf = BatchJobs:::getBatchJobsConf()
   cf = conf$cluster.functions
   test.workers = cf$name %in% c("Multicore", "SSH")
