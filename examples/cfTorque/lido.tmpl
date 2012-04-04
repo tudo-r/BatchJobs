@@ -1,18 +1,28 @@
 <%
-walltime <- coalesce(resources$walltime, 60 * 60) ## default 1 hour
-memory <- coalesce(resources$memory, 1024) ## default 1G
-nodes <- 1 ## currently hard coded.
+walltime = coalesce(resources$walltime, 60 * 60) ## default 1 hour
+memory = coalesce(resources$memory, 1024) ## default 1G
+nodes = coalesce(resources$nodes, 1L) ## default to 1 node
+
+## we have two different R versions on LiDO installed, one with GCC
+## and the other with the Intel compilers. Some packages fail to build
+## with ICC, but R compiled with ICC is in general faster.
+compiler = coalesce(resources$compiler, "icc")
+
+cmd = "R CMD BATCH --no-save --no-restore"
+if(nodes > 1L) 
+    cmd = paste("mpirun -np 1", cmd)
+
 ##' Choose a suitable LiDO queue for job
 ##'
 ##' @param walltime Runtime of job in seconds
 ##' @param memory Required memory in megabytes.
 ##'
 ##' @return Queue name
-choose_queue <- function(walltime, memory) {
-  hour <- 60 * 60
-  day <- 24 * hour
-  gigabyte <- 1024 
-  mem <- if (memory < 0) {
+choose_queue = function(walltime, memory) {
+  hour = 60 * 60
+  day = 24 * hour
+  gigabyte = 1024 
+  mem = if (memory < 0) {
     stop("Must have positive memory.")
   } else if (memory <= 16 * gigabyte) {
     "eth"
@@ -38,19 +48,34 @@ choose_queue <- function(walltime, memory) {
     stop("No suitable queue found for walltime.")
   }
 }
+
+### get the right software modules to load depending on
+### parallelization (nodes > 1) and compiler
+getModules = function(nodes, compiler) {
+  mods = switch(compiler,
+                "icc" = c("intel/cce/11.1.075", "intel/fce/11.1.075", "R/2.14.1-icc"),
+                "gcc" = c("gcc/4.3.5", "R/2.14.1-gcc"),
+                stopf("Unknown compiler '%s'", compiler))
+  if(nodes > 1L) {
+    mpi = switch(compiler, 
+                 "icc" = "openmpi/ge/intel11.1/64/1.4.2",
+                 "gcc" = "openmpi/ge/gcc4.3.5/64/1.4.2",
+                 stopf("Unknown compiler '%s'", compiler))
+    mods = c(mpi, mods)
+  }
+  collapse(mods, " ")
+}
 -%>
 #PBS -N <%= job.name %>
-#PBS -o <%= log.file %>
-#PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,vmem=<%= memory %>M
-#PBS -q <%= choose_queue(walltime, memory) %>
 #PBS -j oe
+#PBS -o <%= log.file %>
+#PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,pvmem=<%= memory %>M
+#PBS -q <%= choose_queue(walltime, memory) %>
 
 ## Setup modules:
 source /sysdata/shared/sfw/Modules/default/init/bash
-module add intel/cce/11.1.075 
-module add intel/fce/11.1.075 
-module add R/2.14.0
+module add <%= getModules(nodes, compiler) %>
 
 ## Run R:
 export TMPDIR=/scratch
-R CMD BATCH --no-save --no-restore "<%= rscript %>" /dev/stdout
+<%= cmd %> "<%= rscript %>" /dev/stdout
