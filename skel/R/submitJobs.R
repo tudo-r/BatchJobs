@@ -93,7 +93,7 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
   messagef("Cluster functions: %s.", cf$name)
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)
-  bar = makeProgressBar(max=length(ids), label="submitJobs             ")
+  bar = makeProgressBar(max=length(ids), label="submitJobs               ")
   bar(0L)
   for (i in seq_along(ids)) {
     id = ids[[i]]
@@ -110,6 +110,7 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
       if (retries > max.retries) {
         # reset everything to NULL in DB for this job
         dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
+        catf("")
         stopf("Retried already %i times to submit. Aborting.", retries)
       }
       # only send submitted msg on first try
@@ -142,8 +143,8 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
       } else if (batch.result$status >= 1L && batch.result$status <= 100L) {
         # if temp error, wait and increase retries, then submit again
         sleep.secs = wait(retries)
-        bar(i-1L, msg=sprintf("Status: %i, zzz=%is.", batch.result$status, sleep.secs))
-        warningf("Submit iteration: %i. Temporary error: %s. Retries: %i. Sleep: %i.", i, batch.result$msg, retries, sleep.secs)
+        bar(i-1L, msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
+        warningf("Submit iteration: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", i, batch.result$msg, retries, sleep.secs)
         Sys.sleep(sleep.secs)
         retries = retries + 1L
       } else if (batch.result$status >= 101L && batch.result$status <= 200L) {
@@ -152,6 +153,7 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
         dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
         message("Fatal error occured: ", batch.result$status)
         message("Fatal error msg: ", batch.result$msg)
+        catf("")
         stop("Fatal error occured: ", batch.result$status)
       }
     }
