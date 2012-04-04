@@ -47,7 +47,7 @@ findHelperScriptLinux = function(rhome, ssh=FALSE, nodename) {
     rscript = "Rscript"
   else
     rscript = file.path(rhome, "bin", "Rscript")
-  minus.e = "-e \"message(system.file(\\\"bin/linux-helper\\\", package=\\\"BatchJobs\\\"))\""
+  minus.e = "-e \"message(normalizePath(system.file(\\\"bin/linux-helper\\\", package=\\\"BatchJobs\\\")))\""
   runCommand(rscript, minus.e, ssh, nodename)
 }
 
