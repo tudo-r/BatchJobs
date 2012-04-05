@@ -25,7 +25,7 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE) {
     warning(msg)
   }
 
-  if(check.posix) {
+  if(check.posix && Sys.info()["sysname"] == "Linux") {
     pattern = "^[[:alnum:]/_.-]*$"
     if(! grepl(pattern, makePathAbsolute(path)))
       stopf("Directory '%s' contains illegal characters! Allowed: a-z A-Z 0-9 . - _", makePathAbsolute(path))
