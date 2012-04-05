@@ -8,24 +8,22 @@ f <- function(data) {
 }
 
 ## Create simple registry:
-registry <- makeRegistry(id="minimal", file.dir="minimal")
-batchMap(registry, f, 1:20)
+reg <- makeRegistry(id="minimal", file.dir="minimal")
+batchMap(regy, f, 1:20)
 
 ## Submit jobs:
-submitJobs(registry)
+submitJobs(reg)
 
-## Give jobs a chance to register as started and then show the queue
-## status:
+## Give jobs a chance to register as started and then show the job status:
 Sys.sleep(1) 
-showStatus(registry)
+showStatus(reg)
 
 ## Wait for half the jobs to finish and kill the rest
 Sys.sleep(4) 
-ids <- getJobIds(registry)
-killJobs(registry, ids) ##
-showStatus(registry)
+ids <- getJobIds(reg)
+killJobs(reg, ids)
+showStatus(reg)
 
 ## Collect (partial) results:
-res <- reduceResults(registry, fun=function(aggr, job, res) c(aggr, res),
-                     init=c())
+res <- reduceResults(reg, fun=function(aggr, job, res) c(aggr, res))
 print(res)
