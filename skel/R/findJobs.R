@@ -1,41 +1,53 @@
 #' Find jobs for which results are available.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
+#' @param ids [\code{integer}]\cr
+#'   Subset of job ids to restrict the result to.
+#'   Default is all jobs.
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
-findDone = function(reg) {
+findDone = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  dbGetDone(reg)
+  dbGetDone(reg, ids)
 }
 
 #' Find jobs for which results are still missing.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
+#' @param ids [\code{integer}]\cr
+#'   Subset of job ids to restrict the result to.
+#'   Default is all jobs.
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
-findMissingResults = function(reg) {
+findMissingResults = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  dbGetMissingResults(reg)
+  dbGetMissingResults(reg, ids)
 }
 
 #' Find jobs where errors occured.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
+#' @param ids [\code{integer}]\cr
+#'   Subset of job ids to restrict the result to.
+#'   Default is all jobs.
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
-findErrors = function(reg) {
+findErrors = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  dbGetErrors(reg)
+  dbGetErrors(reg, ids)
 }
 
 #' Find jobs which have been submitted in the past.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
+#' @param ids [\code{integer}]\cr
+#'   Subset of job ids to restrict the result to.
+#'   Default is all jobs.
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
-findSubmitted = function(reg) {
+findSubmitted = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  dbGetSubmitted(reg)
+  dbGetSubmitted(reg, ids)
 }
 
 #' Find jobs which are present on the batch system at the moment.
@@ -43,27 +55,33 @@ findSubmitted = function(reg) {
 #' Find jobs either queued, running, held, etc.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
+#' @param ids [\code{integer}]\cr
+#'   Subset of job ids to restrict the result to.
+#'   Default is all jobs.
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
-findOnSystem = function(reg) {
+findOnSystem = function(reg, ids) {
   checkArg(reg, cl = "Registry")
   fun = getListJobs("Cannot find jobs on system")
   batch.job.ids = fun(getBatchJobsFun(), reg)
-  dbGetJobIdsFromBatchJobIds(reg, batch.job.ids)
+  dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids)
 }
 
 
 #' Find jobs which are running.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
+#' @param ids [\code{integer}]\cr
+#'   Subset of job ids to restrict the result to.
+#'   Default is all jobs.
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
-findRunning = function(reg) {
+findRunning = function(reg, ids) {
   checkArg(reg, cl = "Registry")
   fun = getListJobs("Cannot find running jobs")
   batch.job.ids = fun(getBatchJobsFun(), reg)
   # running jobs are running on batch system in general and must have started for this reg
-  dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, "started IS NOT NULL")
+  dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, "started IS NOT NULL", ids)
 }
 
 #' Find jobs where walltime was probably hit.
@@ -73,11 +91,14 @@ findRunning = function(reg) {
 #' did not complete with a result and are not submitted or running anymore.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
+#' @param ids [\code{integer}]\cr
+#'   Subset of job ids to restrict the result to.
+#'   Default is all jobs.
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
-findExpired = function(reg) {
+findExpired = function(reg, ids) {
   checkArg(reg, cl = "Registry")
   fun = getListJobs("Cannot find expired jobs")
   batch.job.ids = fun(getBatchJobsFun(), reg)
-  dbGetExpiredJobs(reg, batch.job.ids)
+  dbGetExpiredJobs(reg, batch.job.ids, ids)
 }

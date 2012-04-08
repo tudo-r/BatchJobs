@@ -95,6 +95,8 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
     conf$mail.start, conf$mail.done, conf$mail.error)
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
   bar(0L)
+
+  #FIXME this is kind of slow. We could vectorize some stuff.
   for (i in seq_along(ids)) {
     id = ids[[i]]
     id1 = id[1L]

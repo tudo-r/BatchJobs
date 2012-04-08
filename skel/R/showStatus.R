@@ -27,6 +27,9 @@
 #' # should show 10 submitted jobs, which are all done.
 showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
   checkArg(reg, "Registry")
+  errors = convertInteger(errors)
+  checkArg(errors, "integer", na.ok=FALSE, len=1L)
+
   if (missing(ids)) {
     df = dbGetJobStatusTable(reg)
     ids = df$job_id
@@ -65,7 +68,7 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
   }
   catf("Errors: %i (%s)",  n.errs, getPerc(errs))
   catf("Done: %i (%s)",  sum(dones), getPerc(dones))
-  catf("Time: min=%.02f med=%.02f max=%.02f", min(times), median(times), max(times))
+  catf("Time: min=%.2f med=%.2f max=%.2f", min(times), median(times), max(times))
 
   m = min(errors, n.errs)
   if (m > 0L) {
@@ -77,3 +80,46 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
   invisible(df)
 }
 
+showStatus2 = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
+  checkArg(reg, "Registry")
+  if (!missing(ids)) {
+    if (length(ids) == 0L) {
+      message("Empty ids vector!")
+      return(invisible(df[integer(0L),,drop=FALSE]))
+    }
+    ids = convertIntegers(ids)
+    checkArg(ids, "integer", na.ok=FALSE)
+    checkIds(reg, ids)
+  }
+  errors = convertInteger(errors)
+  checkArg(errors, "integer", na.ok=FALSE, len=1L)
+
+  run.and.exp = run.and.exp && !is.null(getListJobs())
+  stats = dbGetStats(reg, ids, running = run.and.exp, expired = run.and.exp)
+  if(nrow(stats) == 0L) {
+    message("No (matched) jobs in registry!")
+    return(invisible(df))
+  }
+  
+  with(stats, {
+    catf("Status for jobs: %i", n)
+    catf("Submitted: %i (%.2f%%)", submitted, submitted / n * 100)
+    catf("Started: %i (%.2f%%)", started, started / n * 100)
+    catf("Errors: %i (%.2f%%)", error, error / n * 100)
+    catf("Running: %i (%.2f%%)", running, running / n * 100)
+    catf("Expired: %i (%.2f%%)", expired, expired / n * 100)
+    catf("Done: %i (%.2f%%)", done, done / n * 100)
+    catf("Time: min=%.2fs avg=%.2fs max=%.2fs", t_min, t_avg, t_max)
+  })
+  
+  
+  m = min(errors, stats$error)
+  if(m > 0L) {
+    query = sprintf("SELECT job_id, error from %s_job_status WHERE error IS NOT NULL", reg$id)
+    if(!missing(ids))
+      query = sprintf("%s AND job_id IN (%s)", query, collapse(ids))
+    msgs = dbDoQuery(reg, sprintf("%s LIMIT %i", query, m))
+    catf("\nShowing first %i errors: ", m)
+    cat(sprintf("Error in %i: %s", msgs$job_id, msgs$error), sep = "\n")
+  }
+}
