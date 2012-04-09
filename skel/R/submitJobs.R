@@ -45,7 +45,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
     }
   } else {
     if (!is.list(ids) && !is.numeric(ids))
-      stop("ids must be a integer vector of job ids or a list of chunked job ids (list of integer vectors)!")        
+      stop("ids must be a integer vector of job ids or a list of chunked job ids (list of integer vectors)!")
     if (is.list(ids)) {
       ids = lapply(ids, convertIntegers)
       checkListElementClass(ids, "integer")
@@ -61,17 +61,20 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   checkArg(resources, "list")
 
   if (missing(wait))
-    wait = function(retries) 10L * 2L^retries
+    wait = function(retries) 10 * 2^retries # ^ always converts to double
   else
     checkArg(wait, formals="retries")
 
-  max.retries = convertInteger(max.retries)
-  checkArg(max.retries, "integer", len=1L, na.ok=FALSE)   
+  if(! is.infinite(max.retries)) {
+    max.retries = convertInteger(max.retries)
+    checkArg(max.retries, "integer", len=1L, na.ok=FALSE)
+  }
+
   if (!is.null(getListJobs())) {
     ids.present = findOnSystem(reg)
-    ids.intersect = intersect(unlist(ids), ids.present) 
+    ids.intersect = intersect(unlist(ids), ids.present)
     if (length(ids.intersect) > 0L) {
-      stopf("Some of the jobs you submitted are already present on the batch system! E.g. id=%i.", 
+      stopf("Some of the jobs you submitted are already present on the batch system! E.g. id=%i.",
         ids.intersect[1])
     }
   }
@@ -96,68 +99,87 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
   bar(0L)
 
-  #FIXME this is kind of slow. We could vectorize some stuff.
   for (i in seq_along(ids)) {
     id = ids[[i]]
     id1 = id[1L]
 
+    # FIXME
+    # we could vectorize this stuff or do it in one run
+    # following lines call file.path in various different functions like 8 times
     fn.rscript = getRScriptFilePath(reg, id1)
     writeRscript(fn.rscript, reg$file.dir, id, reg$multiple.result.files,
       disable.mail=FALSE, first, last, interactive.test = !is.null(conf$interactive))
     fn.log = getLogFilePath(reg, id1)
     jd = getJobDir(reg, id1)
     job.name = paste(reg$id, id1, sep="-")
+
+    #FIXME could we send this msg together with makeMessageSetBatchJobId?
+    #FIXME would reduce numbers of queries by 1 - or in other words,
+    #FIXME would cut the number of queries in half if no errors occur
+    #FIXME we also may omit dbMakeMessageKilled
+    #FIXME we could remove the on.exit part, would not make a big difference
+    #FIXME since we cannot avoid ghosting processes at all (see FIXME below)
+    # only send submitted msg on first try
+    dbSendMessage(reg, dbMakeMessageSubmitted(reg, id,
+      time=as.integer(Sys.time()),
+      first.job.in.chunk.id = if(is.chunks) id1 else NULL
+    ))
+
+    # we use no for loop here to allow infinite retries
     retries = 0L
-    while (TRUE) {
-      if (retries > max.retries) {
-        # reset everything to NULL in DB for this job
-        dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
-        catf("")
-        stopf("Retried already %i times to submit. Aborting.", retries)
-      }
-      # only send submitted msg on first try
-      if(retries == 0L) {
-        dbSendMessage(reg, dbMakeMessageSubmitted(reg, id,
-          time=as.integer(Sys.time()),
-          first.job.in.chunk.id = if(is.chunks) id1 else NULL
-        ))
-      }
+    repeat {
+      # try to submit the job
       sent.bji = FALSE
       batch.result = cf$submitJob(conf, reg, job.name, fn.rscript,
                                   fn.log, jd, resources)
+
+      #FIXME if we get interrupted right here, we are pretty much fucked
       # make sure to send bji even if user intterupted submitJobs
       exit.pars = list(id=id, batch.result=batch.result)
       on.exit({
         if (exit.pars$batch.result$status == 0L && !sent.bji) {
           messagef("Interrupted. Setting last batch.job.id in DB.")
           exit.pars$reg=reg
-          msg = dbMakeMessageSetBatchJobId(reg, exit.pars$id, 
+          msg = dbMakeMessageSetBatchJobId(reg, exit.pars$id,
             batch.job.id=exit.pars$batch.result$batch.job.id)
           dbSendMessage(reg, msg)
         }
-      })                             
+      })
+
+      # validate status returned from cluster functions
       if (batch.result$status == 0L) {
         # if success send batch.job.id to db and do serve next id
         dbSendMessage(reg, dbMakeMessageSetBatchJobId(reg, id, batch.job.id=batch.result$batch.job.id))
-        sent.bji = TRUE         
+        sent.bji = TRUE
         bar(i)
         break
-      } else if (batch.result$status >= 1L && batch.result$status <= 100L) {
+      }
+
+      if (batch.result$status > 0L && batch.result$status <= 100L) {
         # if temp error, wait and increase retries, then submit again
         sleep.secs = wait(retries)
+        retries = retries + 1L
+        if (retries > max.retries) {
+          # reset everything to NULL in DB for this job
+          dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
+          stopf("Retried already %i times to submit. Aborting.", retries)
+        }
         bar(i-1L, msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
         warningf("Submit iteration: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", i, batch.result$msg, retries, sleep.secs)
         Sys.sleep(sleep.secs)
-        retries = retries + 1L
-      } else if (batch.result$status >= 101L && batch.result$status <= 200L) {
+        next
+      }
+
+      if (batch.result$status > 100L && batch.result$status <= 200L) {
         # fatal error, abort at once
         # reset everything to NULL in DB for this job
         dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
         message("Fatal error occured: ", batch.result$status)
         message("Fatal error msg: ", batch.result$msg)
-        catf("")
         stop("Fatal error occured: ", batch.result$status)
       }
+
+      stopf("Illegal status code %s returned from cluster functions!", batch.result$status)
     }
   }
 }
