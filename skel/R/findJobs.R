@@ -8,9 +8,7 @@
 #' @export
 findDone = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (missing(ids)) {
-    ids = getJobIds(reg)
-  } else { 
+  if (!missing(ids)) {
     ids = convertIntegers(ids)
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
@@ -29,9 +27,7 @@ findDone = function(reg, ids) {
 #' @export
 findMissingResults = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (missing(ids)) {
-    ids = getJobIds(reg)
-  } else { 
+  if (!missing(ids)) {
     ids = convertIntegers(ids)
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
@@ -49,9 +45,7 @@ findMissingResults = function(reg, ids) {
 #' @export
 findErrors = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (missing(ids)) {
-    ids = getJobIds(reg)
-  } else { 
+  if (!missing(ids)) {
     ids = convertIntegers(ids)
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
@@ -69,9 +63,7 @@ findErrors = function(reg, ids) {
 #' @export
 findSubmitted = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (missing(ids)) {
-    ids = getJobIds(reg)
-  } else { 
+  if (!missing(ids)) {
     ids = convertIntegers(ids)
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
@@ -91,9 +83,7 @@ findSubmitted = function(reg, ids) {
 #' @export
 findOnSystem = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (missing(ids)) {
-    ids = getJobIds(reg)
-  } else { 
+  if (!missing(ids)) {
     ids = convertIntegers(ids)
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
@@ -114,9 +104,7 @@ findOnSystem = function(reg, ids) {
 #' @export
 findRunning = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (missing(ids)) {
-    ids = getJobIds(reg)
-  } else { 
+  if (!missing(ids)) {
     ids = convertIntegers(ids)
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
@@ -141,9 +129,7 @@ findRunning = function(reg, ids) {
 #' @export
 findExpired = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (missing(ids)) {
-    ids = getJobIds(reg)
-  } else { 
+  if (!missing(ids)) {
     ids = convertIntegers(ids)
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
