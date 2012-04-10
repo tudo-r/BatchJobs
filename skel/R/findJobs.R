@@ -8,6 +8,14 @@
 #' @export
 findDone = function(reg, ids) {
   checkArg(reg, cl = "Registry")
+  if (missing(ids)) {
+    ids = getJobIds(reg)
+  } else { 
+    ids = convertIntegers(ids)
+    checkArg(ids, "integer", na.ok=FALSE)
+    checkIds(reg, ids)
+  }
+  killfun = getKillJob("Cannot kill jobs")
   dbGetDone(reg, ids)
 }
 
@@ -21,6 +29,13 @@ findDone = function(reg, ids) {
 #' @export
 findMissingResults = function(reg, ids) {
   checkArg(reg, cl = "Registry")
+  if (missing(ids)) {
+    ids = getJobIds(reg)
+  } else { 
+    ids = convertIntegers(ids)
+    checkArg(ids, "integer", na.ok=FALSE)
+    checkIds(reg, ids)
+  }
   dbGetMissingResults(reg, ids)
 }
 
@@ -34,6 +49,13 @@ findMissingResults = function(reg, ids) {
 #' @export
 findErrors = function(reg, ids) {
   checkArg(reg, cl = "Registry")
+  if (missing(ids)) {
+    ids = getJobIds(reg)
+  } else { 
+    ids = convertIntegers(ids)
+    checkArg(ids, "integer", na.ok=FALSE)
+    checkIds(reg, ids)
+  }
   dbGetErrors(reg, ids)
 }
 
@@ -47,6 +69,13 @@ findErrors = function(reg, ids) {
 #' @export
 findSubmitted = function(reg, ids) {
   checkArg(reg, cl = "Registry")
+  if (missing(ids)) {
+    ids = getJobIds(reg)
+  } else { 
+    ids = convertIntegers(ids)
+    checkArg(ids, "integer", na.ok=FALSE)
+    checkIds(reg, ids)
+  }
   dbGetSubmitted(reg, ids)
 }
 
@@ -62,6 +91,13 @@ findSubmitted = function(reg, ids) {
 #' @export
 findOnSystem = function(reg, ids) {
   checkArg(reg, cl = "Registry")
+  if (missing(ids)) {
+    ids = getJobIds(reg)
+  } else { 
+    ids = convertIntegers(ids)
+    checkArg(ids, "integer", na.ok=FALSE)
+    checkIds(reg, ids)
+  }
   fun = getListJobs("Cannot find jobs on system")
   batch.job.ids = fun(getBatchJobsFun(), reg)
   dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids)
@@ -78,6 +114,13 @@ findOnSystem = function(reg, ids) {
 #' @export
 findRunning = function(reg, ids) {
   checkArg(reg, cl = "Registry")
+  if (missing(ids)) {
+    ids = getJobIds(reg)
+  } else { 
+    ids = convertIntegers(ids)
+    checkArg(ids, "integer", na.ok=FALSE)
+    checkIds(reg, ids)
+  }
   fun = getListJobs("Cannot find running jobs")
   batch.job.ids = fun(getBatchJobsFun(), reg)
   # running jobs are running on batch system in general and must have started for this reg
@@ -98,6 +141,13 @@ findRunning = function(reg, ids) {
 #' @export
 findExpired = function(reg, ids) {
   checkArg(reg, cl = "Registry")
+  if (missing(ids)) {
+    ids = getJobIds(reg)
+  } else { 
+    ids = convertIntegers(ids)
+    checkArg(ids, "integer", na.ok=FALSE)
+    checkIds(reg, ids)
+  }
   fun = getListJobs("Cannot find expired jobs")
   batch.job.ids = fun(getBatchJobsFun(), reg)
   dbGetExpiredJobs(reg, batch.job.ids, ids)
