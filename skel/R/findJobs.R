@@ -13,7 +13,6 @@ findDone = function(reg, ids) {
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
   }
-  killfun = getKillJob("Cannot kill jobs")
   dbGetDone(reg, ids)
 }
 
