@@ -11,10 +11,11 @@ conf$cluster.functions = makeClusterFunctionsLocal()
 doExternalTest(whitespace=FALSE)
 
 conf$cluster.functions = makeClusterFunctionsTorque("/home/bischl/lido.tmpl")
-doExternalTest(whitespace=FALSE)
+doExternalTest(whitespace=FALSE, sleep.master=15)
 doKillTest()
 
 # spam queue
-conf$cluster.functions = makeClusterFunctionsTorque("/home/bischl/lido.tmpl")
-doExternalTest(whitespace=FALSE, n=50, resources=list(walltime=3*24*60*60),
-  sleep.master=100, sleep.job=10)
+# FIXME: better test?
+#conf$cluster.functions = makeClusterFunctionsTorque("/home/bischl/lido.tmpl")
+#doExternalTest(whitespace=FALSE, n=50, resources=list(walltime=3*24*60*60),
+#  sleep.master=100, sleep.job=10)

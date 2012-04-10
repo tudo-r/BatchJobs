@@ -64,8 +64,6 @@ doKillTest = function(dir=getwd(), n=4, long="sleep") {
   }
   st = showStatus(reg)
   expect_equal(st$submitted, n)
-  expect_equal(st$started, n)
-  expect_equal(st$running, n)
   killJobs(reg, ids)
   if (test.workers) {
     status = getStatus()
