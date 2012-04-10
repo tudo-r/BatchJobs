@@ -15,7 +15,7 @@ batchMap(reg, f, 1:20)
 submitJobs(reg)
 
 ## Give jobs a chance to register as started and then show the job status:
-Sys.sleep(1) 
+Sys.sleep(5) 
 showStatus(reg)
 
 ## Wait for half the jobs to finish and kill the rest
