@@ -1,20 +1,53 @@
-# generics
+# Return number of cores on worker.
+# @param worker [\code{\link{Worker}}].
+#   Worker. 
+# @return [\code{integer(1)}].
 getWorkerNumberOfCPUs = function(worker) {
   UseMethod("getWorkerNumberOfCPUs")
 }
 
+# Return 4 numbers to describe worker status.
+# - load average of last 1 min, as given by e.g. uptime
+# - number of R processes by _all_ users
+# - number of R processes by _all_ users which have a load of >= 50%
+# - number of R processes by current user which match $FILEDIR/jobs in the cmd call of R
+# @param worker [\code{\link{Worker}}].
+#   Worker. 
+# @param file.dir [\code{character(1)}}].
+#   File dir of registry. 
+# @return [named \code{list} of \code{numeric(1)}].
 getWorkerStatus = function(worker, file.dir) {
   UseMethod("getWorkerStatus")
 }
 
+# Start a job on worker, probably with R CMD BATCH.  
+# @param worker [\code{\link{Worker}}].
+#   Worker. 
+# @param rfile [\code{character(1)}].
+#   Path to R file to execute. 
+# @param outfile [\code{character(1)}].
+#   Path to log file for R process. 
+# @return [\code{character(1)}]. Relevant process id.
 startWorkerJob = function(worker, rfile, outfile) {
   UseMethod("startWorkerJob")
 }
 
+# Kill a job on worker. Really do it.  
+# @param worker [\code{\link{Worker}}].
+#   Worker. 
+# @param pid [\code{character(1)}].
+#   Process id from DB/batch.job.id to kill.
+# @return Nothing.
 killWorkerJob = function(worker, pid) {
   UseMethod("killWorkerJob")
 }
 
+# List all jobs on worker belonging to the current registry.
+# @param worker [\code{\link{Worker}}].
+#   Worker. 
+# @param file.dir [\code{character(1)}}].
+#   File dir of registry. 
+# @return [\code{character}]. Vector of process ids.
 listWorkerJobs = function(worker, file.dir) {
   UseMethod("listWorkerJobs")
 }
