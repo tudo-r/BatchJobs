@@ -36,12 +36,17 @@ makeClusterFunctionsTorque = function(template.file) {
       outfile = tempfile()
     }
     brew(text=template, output=outfile)
-    res = runCommand("qsub", outfile)  
+    res = runCommand("qsub", outfile, stop.on.exit.code=FALSE)  
+    
     max.jobs.msg = "Maximum number of jobs already in queue"
-    if (str_detect(res, max.jobs.msg))
+    if (str_detect(res$output, max.jobs.msg)) {
       makeSubmitJobResult(status=1L, batch.job.id=as.character(NA), msg=max.jobs.msg)
-    else
-      makeSubmitJobResult(status=0L, batch.job.id=res)
+    } else if (res$exit.code > 0) {
+      msg = sprintf("qsub produced exit code %i; output %s", res$exit.code, res$output)
+      makeSubmitJobResult(status=101L, msg=msg)
+    } else  {
+      makeSubmitJobResult(status=0L, batch.job.id=res$output)
+    }
   }
   
   killJob = function(conf, reg, batch.job.id) {

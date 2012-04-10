@@ -4,13 +4,16 @@
 # @param args [\code{character}]
 #   System command arguments. 
 #   Default is \code{character(0)}.
+# @param stop.on.exit.code [\code{character}]
+#   See \code{\link{system3}}.
+#   Default is \code{TRUE}.
 # @param ssh [\code{logical(1)}]
 #   Use SSH?
 #   Default is \code{FALSE}.
 # @param nodename [\code{character(1)}]
 #   Nodename for SSH.
 # @return [\code{character(1)}]. Result of command.
-runCommand = function(cmd, args=character(0L), ssh=FALSE, nodename) {
+runCommand = function(cmd, args=character(0L), stop.on.exit.code=TRUE, ssh=FALSE, nodename) {
   conf = getBatchJobsConf()
   if (ssh) {
     sys.cmd = "ssh"
@@ -20,9 +23,12 @@ runCommand = function(cmd, args=character(0L), ssh=FALSE, nodename) {
     sys.cmd = cmd
     sys.args = args
   }
-  if (conf$debug)
+  if (conf$debug) {
     catf("OS cmd: %s %s", sys.cmd, collapse(sys.args, " "))
-  res = try(system2(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE, wait=TRUE))
+    res = try(system3(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE, wait=TRUE, stop.on.exit.code=stop.on.exit.code))
+  } else {
+    res = system3(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE, wait=TRUE, stop.on.exit.code=stop.on.exit.code)
+  }
   if (conf$debug) {
     catf("OS result:")
     print(res)

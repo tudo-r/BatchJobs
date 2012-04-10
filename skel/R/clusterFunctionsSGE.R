@@ -34,13 +34,17 @@ makeClusterFunctionsSGE = function(template.file) {
       outfile = tempfile()
     }
     brew(text=template, output=outfile)
+    # returns: "Your job 240933 (\"sleep 60\") has been submitted"
     res = runCommand("qsub", outfile)  
     # FIXME filled queues
-    # FIXME errorhandling
-    # returns: "Your job 240933 (\"sleep 60\") has been submitted"
-    # first number in string is batch.job.id
-    batch.job.id = str_extract(res, "\\d+")
-    makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
+    if (res$exit.code > 0) {
+      msg = sprintf("qsub produced exit code %i; output %s", res$exit.code, res$output)
+      makeSubmitJobResult(status=101L, msg=msg)
+    } else  {
+      # first number in string is batch.job.id
+      batch.job.id = str_extract(res, "\\d+")
+      makeSubmitJobResult(status=0L, batch.job.id=batch.job.id
+    }
   }
   
   killJob = function(conf, reg, batch.job.id) {
