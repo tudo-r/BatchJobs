@@ -17,7 +17,7 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
 }
 
 doSingleJob = function(reg, id, multiple.result.files, disable.mail, first, last) {
-  dbSendMessage(reg, dbMakeMessageStarted(reg, id, time=as.integer(Sys.time())))
+  dbSendMessage(reg, dbMakeMessageStarted(reg, id))
   job = getJob(reg, id, load.fun=TRUE, check.id=FALSE)
   sendMail(reg, job, result.str, "", disable.mail, condition = "start", first, last)
   
@@ -30,7 +30,7 @@ doSingleJob = function(reg, id, multiple.result.files, disable.mail, first, last
     result.str = errmsg
   } else {
     saveSingleResult(reg, job, result, multiple.result.files)
-    dbSendMessage(reg, dbMakeMessageDone(reg, id, time=as.integer(Sys.time())))
+    dbSendMessage(reg, dbMakeMessageDone(reg, id))
     result.str = calcResultString(result)
   }
   sendMail(reg, job, result.str, "", disable.mail, condition=ifelse(is.error(result), "error", "done"),
@@ -58,7 +58,7 @@ doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   result.strs = character(length(jobs))
   error = logical(length(jobs))
   # set all jobs to started with too early time
-  dbSendMessage(reg, dbMakeMessageStarted(reg, ids, time=as.integer(Sys.time())))
+  dbSendMessage(reg, dbMakeMessageStarted(reg, ids))
   msg.buf = character(0L)
   # now collect messages in a buffer to reduce overhead
   # wait somewhere between 5-10 mins at least to flush them
@@ -69,7 +69,7 @@ doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   sendMail(reg, jobs, result.strs, "", disable.mail, condition="start", first, last)
   for (i in seq_along(jobs)) {
     job = jobs[[i]]
-    msg.buf[length(msg.buf)+1L] = dbMakeMessageStarted(reg, job$id, time=as.integer(Sys.time()))
+    msg.buf[length(msg.buf)+1L] = dbMakeMessageStarted(reg, job$id)
     result = executeOneJob(reg, job, multiple.result.files)
     if (is.error(result)) {
       errmsg = as.character(result)
@@ -79,7 +79,7 @@ doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last) {
       error[i] = TRUE
     } else {
       saveSingleResult(reg, job, result, multiple.result.files)
-      msg.buf[length(msg.buf)+1L] = dbMakeMessageDone(reg, job$id, time=as.integer(Sys.time()))
+      msg.buf[length(msg.buf)+1L] = dbMakeMessageDone(reg, job$id)
       result.strs[i] = calcResultString(result)
     }
     # if some minutes have passed since last flush, we can do it now

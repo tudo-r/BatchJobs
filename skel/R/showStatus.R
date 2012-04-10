@@ -14,7 +14,8 @@
 #'   Requires to list the job on the batch system. If not possible, because
 #'   that cluster function is not avilable, this option is ignored anyway.
 #'   Default is \code{TRUE}.
-#' @return [\code{data.frame}] Data frame of job status from database of registry. Returned invisbly.
+#' @return [\code{list}] List of absoulte job numbers as printed by showStatus. 
+#'   Returned invisibly.
 #' @export
 #' @examples
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
@@ -27,91 +28,41 @@
 #' # should show 10 submitted jobs, which are all done.
 showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
   checkArg(reg, "Registry")
-  errors = convertInteger(errors)
-  checkArg(errors, "integer", na.ok=FALSE, len=1L)
-
-  if (missing(ids)) {
-    df = dbGetJobStatusTable(reg)
-    ids = df$job_id
-  } else {
-    if (length(ids) == 0L) {
-      message("Empty ids vector!")
-      return(invisible(df[integer(0L),,drop=FALSE]))
-    }
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-    df = dbGetJobStatusTable(reg, ids)
-  }
-  if (nrow(df) == 0L)  {
-    message("No (matched) jobs in registry!")
-    return(invisible(df))
-  }
-  getPerc = function(x) paste(round(mean(x)*100, 2L), "%", sep="")
-  submitted = !is.na(df$submitted)
-  started = !is.na(df$started)
-  dones = !is.na(df$done)
-  errs = !is.na(df$error)
-  # convert to numeric so we always get the difference in seconds
-  times = na.omit(as.integer(df$done) - as.integer(df$started))
-  if (length(times) == 0L)
-    times = as.integer(NA)
-  n.errs = sum(errs)
-  catf("Status for jobs: %i", nrow(df))
-  catf("Submitted: %i (%s)", sum(submitted), getPerc(submitted))
-  catf("Started: %i (%s)", sum(started), getPerc(started))
-  if(run.and.exp && !is.null(getListJobs())) {
-    running = ids %in% findRunning(reg)
-    expired = ids %in% findExpired(reg)
-    catf("Running: %i (%s)", sum(running), getPerc(running))
-    catf("Expired: %i (%s)", sum(expired), getPerc(expired))
-  }
-  catf("Errors: %i (%s)",  n.errs, getPerc(errs))
-  catf("Done: %i (%s)",  sum(dones), getPerc(dones))
-  catf("Time: min=%.2f med=%.2f max=%.2f", min(times), median(times), max(times))
-
-  m = min(errors, n.errs)
-  if (m > 0L) {
-    catf("\nShowing first %i errors: ", m)
-    err.inds = which(errs)
-    for (i in seq_len(m))
-      catf("Error in %s: %s", ids[err.inds[i]], df$error[err.inds[i]])
-  }
-  invisible(df)
-}
-
-showStatus2 = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
-  checkArg(reg, "Registry")
   if (!missing(ids)) {
     if (length(ids) == 0L) {
-      message("Empty ids vector!")
-      return(invisible(df[integer(0L),,drop=FALSE]))
+      warning("Empty ids vector!")
+      return(list(n=0L, submitted=0L, started=0L, errors=0L, running=0L,
+                  expired=0L, done=0L, t_min=0, t_avg=0, t_max=0))
     }
     ids = convertIntegers(ids)
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
   }
+
   errors = convertInteger(errors)
   checkArg(errors, "integer", na.ok=FALSE, len=1L)
 
   run.and.exp = run.and.exp && !is.null(getListJobs())
   stats = dbGetStats(reg, ids, running = run.and.exp, expired = run.and.exp)
-  if(nrow(stats) == 0L) {
-    message("No (matched) jobs in registry!")
-    return(invisible(df))
-  }
   
+  procent = function(x, n) {
+    if(is.na(x))
+      return("")
+    if(n == 0L)
+      return("(0.0%)")
+    return(sprintf("(%.1f%%)", x / n * 100))
+  }
+
   with(stats, {
     catf("Status for jobs: %i", n)
-    catf("Submitted: %i (%.2f%%)", submitted, submitted / n * 100)
-    catf("Started: %i (%.2f%%)", started, started / n * 100)
-    catf("Errors: %i (%.2f%%)", error, error / n * 100)
-    catf("Running: %i (%.2f%%)", running, running / n * 100)
-    catf("Expired: %i (%.2f%%)", expired, expired / n * 100)
-    catf("Done: %i (%.2f%%)", done, done / n * 100)
+    catf("Submitted: %i %s", submitted, procent(submitted, n))
+    catf("Started: %i %s", started, procent(started, n))
+    catf("Errors: %i %s", error, procent(error, n))
+    catf("Running: %i %s", running, procent(running, n))
+    catf("Expired: %i %s", expired, procent(expired, n))
+    catf("Done: %i %s", done, procent(done, n))
     catf("Time: min=%.2fs avg=%.2fs max=%.2fs", t_min, t_avg, t_max)
   })
-  
   
   m = min(errors, stats$error)
   if(m > 0L) {
@@ -122,4 +73,6 @@ showStatus2 = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
     catf("\nShowing first %i errors: ", m)
     cat(sprintf("Error in %i: %s", msgs$job_id, msgs$error), sep = "\n")
   }
+
+  return(invisible(stats))
 }

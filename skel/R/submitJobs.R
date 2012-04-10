@@ -96,6 +96,20 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
   messagef("Cluster functions: %s.", cf$name)
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)
+
+  # set on exit handler to avoid inconsistencies caused by user interrupts
+  interrupted = FALSE
+  on.exit({
+    if(interrupted) {
+      message("Interrupted! Try to update pending job informations ...")
+      msg = dbMakeMessageSubmitted(reg, id, time=submit.time,
+                                   batch.job.id=batch.result$batch.job.id,
+                                   first.job.in.chunk.id = if(is.chunks) id1 else NULL)
+      dbSendMessage(reg, msg)
+    }
+  })
+
+
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
   bar(0L)
 
@@ -113,57 +127,38 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
     jd = getJobDir(reg, id1)
     job.name = paste(reg$id, id1, sep="-")
 
-    #FIXME could we send this msg together with makeMessageSetBatchJobId?
-    #FIXME would reduce numbers of queries by 1 - or in other words,
-    #FIXME would cut the number of queries in half if no errors occur
-    #FIXME we also may omit dbMakeMessageKilled
-    #FIXME we could remove the on.exit part, would not make a big difference
-    #FIXME since we cannot avoid ghosting processes at all (see FIXME below)
-    # only send submitted msg on first try
-    dbSendMessage(reg, dbMakeMessageSubmitted(reg, id,
-      time=as.integer(Sys.time()),
-      first.job.in.chunk.id = if(is.chunks) id1 else NULL
-    ))
 
     # we use no for loop here to allow infinite retries
     retries = 0L
     repeat {
       # try to submit the job
-      sent.bji = FALSE
+      submit.time = as.integer(Sys.time())
+      interrupted = TRUE
       batch.result = cf$submitJob(conf, reg, job.name, fn.rscript,
                                   fn.log, jd, resources)
 
-      #FIXME if we get interrupted right here, we are pretty much fucked
-      # make sure to send bji even if user intterupted submitJobs
-      exit.pars = list(id=id, batch.result=batch.result)
-      on.exit({
-        if (exit.pars$batch.result$status == 0L && !sent.bji) {
-          messagef("Interrupted. Setting last batch.job.id in DB.")
-          exit.pars$reg=reg
-          msg = dbMakeMessageSetBatchJobId(reg, exit.pars$id,
-            batch.job.id=exit.pars$batch.result$batch.job.id)
-          dbSendMessage(reg, msg)
-        }
-      })
-
       # validate status returned from cluster functions
       if (batch.result$status == 0L) {
-        # if success send batch.job.id to db and do serve next id
-        dbSendMessage(reg, dbMakeMessageSetBatchJobId(reg, id, batch.job.id=batch.result$batch.job.id))
-        sent.bji = TRUE
+        msg = dbMakeMessageSubmitted(reg, id, time=submit.time,
+                                     batch.job.id=batch.result$batch.job.id,
+                                     first.job.in.chunk.id = if(is.chunks) id1 else NULL)
+        dbSendMessage(reg, msg)
+        interrupted = FALSE
         bar(i)
         break
       }
+      
+      # submitJob was not successful, therefore we don't care for interrupts
+      interrupted = FALSE
 
       if (batch.result$status > 0L && batch.result$status <= 100L) {
         # if temp error, wait and increase retries, then submit again
         sleep.secs = wait(retries)
+        
         retries = retries + 1L
-        if (retries > max.retries) {
-          # reset everything to NULL in DB for this job
-          dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
+        if (retries > max.retries)
           stopf("Retried already %i times to submit. Aborting.", retries)
-        }
+
         bar(i-1L, msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
         warningf("Submit iteration: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", i, batch.result$msg, retries, sleep.secs)
         Sys.sleep(sleep.secs)
@@ -172,8 +167,6 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
 
       if (batch.result$status > 100L && batch.result$status <= 200L) {
         # fatal error, abort at once
-        # reset everything to NULL in DB for this job
-        dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
         message("Fatal error occured: ", batch.result$status)
         message("Fatal error msg: ", batch.result$msg)
         stop("Fatal error occured: ", batch.result$status)

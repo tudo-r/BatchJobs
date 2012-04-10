@@ -57,6 +57,8 @@ dbDoQuery = function(reg, query, flags="ro") {
     if(grepl("lock", res, ignore.case=TRUE)) {
       Sys.sleep(runif(1L, min=1, max=2))
     } else {
+      print(res)
+      print(query)
       stopf("Error in dbDoQuery. %s (%s)", res, query)
     }
   }
@@ -330,20 +332,16 @@ dbSendMessage = function(reg, msg) {
   dbDoQuery(reg, msg, flags="rw")
 }
 
-dbMakeMessageSubmitted = function(reg, job.ids, time, first.job.in.chunk.id=NULL) {
+dbMakeMessageSubmitted = function(reg, job.ids, time=as.integer(Sys.time()), 
+                                  batch.job.id, first.job.in.chunk.id=NULL) {
   if(is.null(first.job.in.chunk.id))
     first.job.in.chunk.id = "NULL"
-  updates = sprintf("first_job_in_chunk_id=%s, submitted=%i, started=NULL, batch_job_id=NULL, node=NULL, r_pid=NULL, done=NULL, error=NULL",
-                    first.job.in.chunk.id, time)
+  updates = sprintf("first_job_in_chunk_id=%s, submitted=%i, batch_job_id='%s'",
+                    first.job.in.chunk.id, time, batch.job.id)
   sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
 }
 
-dbMakeMessageSetBatchJobId = function(reg, job.ids, batch.job.id) {
-  updates = sprintf("batch_job_id='%s'", batch.job.id)
-  sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
-}
-
-dbMakeMessageStarted = function(reg, job.ids, time) {
+dbMakeMessageStarted = function(reg, job.ids, time=as.integer(Sys.time())) {
   node = gsub("'", "''", Sys.info()["nodename"], fixed=TRUE)
   updates = sprintf("started=%i, node='%s', r_pid=%i, error=NULL, done=NULL", time, node, Sys.getpid())
   sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
@@ -355,7 +353,7 @@ dbMakeMessageError = function(reg, job.ids, err.msg) {
   sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
 }
 
-dbMakeMessageDone = function(reg, job.ids, time) {
+dbMakeMessageDone = function(reg, job.ids, time=as.integer(Sys.time())) {
   updates = sprintf("done=%i, error=NULL", time)
   sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
 }
@@ -404,24 +402,37 @@ dbFlushMessages = function(reg, msgs) {
 }
   
 dbGetStats = function(reg, ids, running=FALSE, expired=FALSE) {
+  q.r = q.e = "NULL"
+
   if(running || expired) {
     fun = getListJobs("Cannot find running or expired jobs")
     batch.job.ids = fun(getBatchJobsFun(), reg)
+
+    if(running)
+      q.r = sprintf("SUM(started IS NOT NULL AND batch_job_id IN ('%s'))", collapse(batch.job.ids, sep="','"))
+    if(expired)
+      q.e = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id NOT IN ('%s'))", collapse(batch.job.ids, sep="','"))
   }
+
   query = sprintf(paste(
     "SELECT COUNT(job_id) AS n,",
     "COUNT(submitted) AS submitted,",
     "COUNT(started) AS started,",
     "COUNT(done) AS done,",
     "COUNT(error) AS error,",
+    "%s AS running,",
+    "%s AS expired,",
     "MIN(done - started) AS t_min,",
     "AVG(done - started) AS t_avg,",
-    "MAX(done - started) AS t_max,",
-    ifelse(running, sprintf("SUM(started IS NOT NULL AND batch_job_id IN (%s))", batch.job.ids), "COUNT(NULL)"), "AS running,",
-    ifelse(expired, sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id NOT IN (%s))", batch.job.ids), "COUNT(NULL)"), "AS expired",
-    "FROM %s_job_status"), reg$id)
+    "MAX(done - started) AS t_max",
+    "FROM %s_job_status"), q.r, q.e, reg$id)
 
   if(!missing(ids))
     query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
-  dbDoQuery(reg, query)
+
+  df = dbDoQuery(reg, query)
+
+  # Convert to correct type. Null has no type and casts don't work properly with RSQLite
+  doubles = c("t_min", "t_avg", "t_max")
+  sapply(names(df), function(x) if(x %in% doubles) as.double(df[[x]]) else as.integer(df[[x]]), simplify=FALSE)
 }
