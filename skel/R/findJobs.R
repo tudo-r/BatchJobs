@@ -124,7 +124,7 @@ findRunning = function(reg, ids) {
   fun = getListJobs("Cannot find running jobs")
   batch.job.ids = fun(getBatchJobsFun(), reg)
   # running jobs are running on batch system in general and must have started for this reg
-  dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, "started IS NOT NULL", ids)
+  dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids, "started IS NOT NULL")
 }
 
 #' Find jobs where walltime was probably hit.
