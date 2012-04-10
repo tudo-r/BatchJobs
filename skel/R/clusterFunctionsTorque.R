@@ -36,7 +36,6 @@ makeClusterFunctionsTorque = function(template.file) {
     } else {
       outfile = tempfile()
     }
-    print(outfile)
     brew(text=template, output=outfile)
     res = runCommand("qsub", outfile)  
     max.jobs.msg = "Maximum number of jobs already in queue"
