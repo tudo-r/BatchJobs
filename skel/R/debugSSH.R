@@ -19,7 +19,7 @@ debugSSH = function(nodenames, rhome=R.home()) {
   catf("\n") 
   
   messagef("*** which R: ***")
-  res = sapply(nodenames, BatchJobs:::runCommand, cmd="which", args="R", ssh=TRUE)
+  res = sapply(nodenames, BatchJobs:::runCommand, cmd="which", args="R", ssh=TRUE, stop.on.exit.code=TRUE)
   messagef("which R result:")
   print(res) 
   catf("\n") 

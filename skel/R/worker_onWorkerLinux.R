@@ -12,7 +12,7 @@
 #   Default is \code{FALSE}.
 # @param nodename [\code{character(1)}]
 #   Nodename for SSH.
-# @return [\code{character(1)}]. Result of command.
+# @return See \code{\link{system3}}.
 runCommand = function(cmd, args=character(0L), stop.on.exit.code=TRUE, ssh=FALSE, nodename) {
   conf = getBatchJobsConf()
   if (ssh) {
@@ -54,7 +54,7 @@ findHelperScriptLinux = function(rhome, ssh=FALSE, nodename) {
   else
     rscript = file.path(rhome, "bin", "Rscript")
   minus.e = "-e \"message(normalizePath(system.file(\\\"bin/linux-helper\\\", package=\\\"BatchJobs\\\")))\""
-  runCommand(rscript, minus.e, ssh, nodename)
+  runCommand(rscript, minus.e, ssh=ssh, nodename=nodename)$output
 }
 
 # Perform a batch helper command on a Linux machine.
@@ -69,6 +69,6 @@ onWorkerLinux = function(worker, command, args=character(0L)) {
   # in paths can be whitespaces and other bad stuff, quote it!
   args = sprintf("\"%s\"", args)
   script.args = c(command, args)
-  runCommand(worker$script, script.args, worker$ssh, worker$nodename)
+  runCommand(worker$script, script.args, ssh=worker$ssh, nodename=worker$nodename)$output
 }
 

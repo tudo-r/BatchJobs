@@ -18,7 +18,7 @@ debugMulticore = function() {
   
   messagef("*** which R: ***")
   res = BatchJobs:::runCommand("which", "R")
-  messagef("which R result: %s", res)
+  messagef("which R result: %s", res$output)
   catf("\n") 
     
   messagef("*** Find helper script: ***")

@@ -20,11 +20,13 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false",
     expensive = function(i) if (i<=2) i else f(i-1) + f(i-2))
   batchMap(reg, f, xs)
   submitJobs(reg, resources=resources)
+  showStatus(reg)
   if (long == "false") {
     Sys.sleep(sleep.master)
     res = reduceResults(reg, fun=function(aggr,job,res) c(aggr, res))
     expect_equal(res, xs)
   } 
+  st = showStatus(reg)
   return(reg)
 }
 
@@ -60,6 +62,10 @@ doKillTest = function(dir=getwd(), n=4, long="sleep") {
       expect_true(status[["n.jobs"]] >= n)
     }
   }
+  st = showStatus(reg)
+  expect_equal(st$submitted, n)
+  expect_equal(st$started, n)
+  expect_equal(st$running, n)
   killJobs(reg, ids)
   if (test.workers) {
     status = getStatus()
@@ -69,4 +75,9 @@ doKillTest = function(dir=getwd(), n=4, long="sleep") {
   expect_equal(findMissingResults(reg), ids)
   expect_equal(findOnSystem(reg), integer(0))
   expect_equal(findRunning(reg), integer(0))
+  st = showStatus(reg)
+  expect_equal(st$submitted, 0)
+  expect_equal(st$started, 0)
+  expect_equal(st$running, 0)
+  expect_equal(st$done, 0)
 }
