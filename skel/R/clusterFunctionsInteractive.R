@@ -15,7 +15,7 @@
 makeClusterFunctionsInteractive = function() {
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     suppressAll(sys.source(rscript, envir=baseenv(), keep.source=FALSE))
-    makeSubmitJobResult(status=0L, batch.job.id="", msg="")
+    makeSubmitJobResult(status=0L, batch.job.id=batch.job.id="cfInteractive", msg="")
   }
   makeClusterFunctions(name="Interactive", submitJob=submitJob, killJob=NULL, listJobs=NULL)
 }

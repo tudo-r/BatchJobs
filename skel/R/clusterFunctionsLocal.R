@@ -18,7 +18,7 @@ makeClusterFunctionsLocal = function() {
     cmd = sprintf("%s CMD BATCH --no-save --no-restore '%s' '%s' > /dev/null 2> /dev/null < /dev/null",
       file.path(R.home("bin"), "R"), rscript, log.file)
     system(cmd, intern=TRUE, wait=TRUE)    
-    makeSubmitJobResult(status=0L, batch.job.id=job.name)
+    makeSubmitJobResult(status=0L, batch.job.id="cfLocal")
   }
   makeClusterFunctions(name="Local", submitJob=submitJob, killJob=NULL, listJobs=NULL)
 }
