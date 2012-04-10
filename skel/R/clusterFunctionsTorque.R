@@ -29,7 +29,6 @@ makeClusterFunctionsTorque = function(template.file) {
   close(fd)
   
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    showConf()
     if (conf$debug) { 
       # if not temp, use jobs dir
       outfile = str_replace(rscript, "\\.R$", ".pbs")
