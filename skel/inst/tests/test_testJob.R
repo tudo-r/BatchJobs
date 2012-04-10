@@ -12,13 +12,12 @@ test_that("testJob", {
   ids = findMissingResults(reg)
   expect_equal(ids, id)
   expect_output({
-    df = showStatus(reg)
+    st = showStatus(reg)
   }, "Status for jobs: 1")
-  expect_true(is.na(df$submitted))
-  expect_true(is.na(df$started))
-  expect_true(is.na(df$done))
-  expect_true(is.na(df$error))
-  expect_true(is.na(df$submitted))
+  expect_equal(st$submitted, 0)
+  expect_equal(st$started, 0)
+  expect_equal(st$done, 0)
+  expect_equal(st$error, 0)
   
   reg = makeTestRegistry()
   f = function() {library(xxxxx);1}
@@ -30,11 +29,10 @@ test_that("testJob", {
   expect_output({
     df = showStatus(reg)
   }, "Status for jobs: 1")
-  expect_true(is.na(df$submitted))
-  expect_true(is.na(df$started))
-  expect_true(is.na(df$done))
-  expect_true(is.na(df$error))
-  expect_true(is.na(df$submitted))
+  expect_equal(st$submitted, 0)
+  expect_equal(st$started, 0)
+  expect_equal(st$done, 0)
+  expect_equal(st$error, 0)
 })
 
 }

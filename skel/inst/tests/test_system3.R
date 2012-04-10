@@ -1,5 +1,7 @@
 context("system3")
 
+if (interactive()) {
+
 test_that("system3", {  
   d = tempfile()
   dir.create(d)
@@ -28,4 +30,4 @@ test_that("system3", {
      sprintf("Command: ls xxx; exit code: 2; output: %s", msg))
 })
 
-
+}

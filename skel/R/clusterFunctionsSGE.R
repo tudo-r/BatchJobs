@@ -40,10 +40,10 @@ makeClusterFunctionsSGE = function(template.file) {
     if (res$exit.code > 0) {
       msg = sprintf("qsub produced exit code %i; output %s", res$exit.code, res$output)
       makeSubmitJobResult(status=101L, msg=msg)
-    } else  {
+    } else {
       # first number in string is batch.job.id
       batch.job.id = str_extract(res, "\\d+")
-      makeSubmitJobResult(status=0L, batch.job.id=batch.job.id
+      makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
     }
   }
   

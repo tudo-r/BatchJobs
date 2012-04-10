@@ -14,7 +14,7 @@
 #'   Requires to list the job on the batch system. If not possible, because
 #'   that cluster function is not avilable, this option is ignored anyway.
 #'   Default is \code{TRUE}.
-#' @return [\code{list}] List of absoulte job numbers as printed by showStatus. 
+#' @return [\code{list}] List of absolute job numbers as printed by showStatus. 
 #'   Returned invisibly.
 #' @export
 #' @examples
