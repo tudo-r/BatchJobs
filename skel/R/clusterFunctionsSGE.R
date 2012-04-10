@@ -43,7 +43,7 @@ makeClusterFunctionsSGE = function(template.file) {
     makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
   }
   
-  killJob = function(reg, batch.job.id) {
+  killJob = function(conf, reg, batch.job.id) {
     # qdel sends SIGTERM, delay, SIGKILL
     runCommand("qdel", batch.job.id)
   }
