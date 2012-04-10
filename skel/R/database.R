@@ -406,7 +406,7 @@ dbGetStats = function(reg, ids, running=FALSE, expired=FALSE) {
 
   if(running || expired) {
     fun = getListJobs("Cannot find running or expired jobs")
-    batch.job.ids = fun(getBatchJobsFun(), reg)
+    batch.job.ids = fun(getBatchJobsConf(), reg)
 
     if(running)
       q.r = sprintf("SUM(started IS NOT NULL AND batch_job_id IN ('%s'))", collapse(batch.job.ids, sep="','"))

@@ -88,7 +88,7 @@ findOnSystem = function(reg, ids) {
     checkIds(reg, ids)
   }
   fun = getListJobs("Cannot find jobs on system")
-  batch.job.ids = fun(getBatchJobsFun(), reg)
+  batch.job.ids = fun(getBatchJobsConf(), reg)
   dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids)
 }
 
@@ -109,7 +109,7 @@ findRunning = function(reg, ids) {
     checkIds(reg, ids)
   }
   fun = getListJobs("Cannot find running jobs")
-  batch.job.ids = fun(getBatchJobsFun(), reg)
+  batch.job.ids = fun(getBatchJobsConf(), reg)
   # running jobs are running on batch system in general and must have started for this reg
   dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids, "started IS NOT NULL")
 }
@@ -134,6 +134,6 @@ findExpired = function(reg, ids) {
     checkIds(reg, ids)
   }
   fun = getListJobs("Cannot find expired jobs")
-  batch.job.ids = fun(getBatchJobsFun(), reg)
+  batch.job.ids = fun(getBatchJobsConf(), reg)
   dbGetExpiredJobs(reg, batch.job.ids, ids)
 }
