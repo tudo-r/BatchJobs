@@ -9,7 +9,7 @@ f <- function(data) {
 
 ## Create simple registry:
 reg <- makeRegistry(id="minimal", file.dir="minimal")
-batchMap(regy, f, 1:20)
+batchMap(reg, f, 1:20)
 
 ## Submit jobs:
 submitJobs(reg)
