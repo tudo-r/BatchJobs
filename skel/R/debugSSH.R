@@ -3,10 +3,19 @@
 #' Useful in case of severe errors. 
 #' Tries different operations of increasing difficulty 
 #' and provides debug output on the console
-#' 
+#'
+#' @param nodenames [\code{character}]\cr
+#'   Nodes on which workers should be constructed for the test.
+#' @param rhome [\code{character}]\cr
+#'   Paths to R installation on the workers. 
+#'   Must be have same length and order as \code{nodenames}.
+#'   Length 1 is also allowed, which means that the path is the same for all nodes.
+#'   Default is \code{R.home()}.
 #' @return Nothing.
 #' @export
 debugSSH = function(nodenames, rhome=R.home()) {
+  checkArg(nodenames, "character", na.ok=FALSE)
+  checkArg(rhome, "character", na.ok=FALSE)
   n = length(nodenames)
   if (length(rhome) == 1)
     rhome = rep(rhome, n)
