@@ -20,9 +20,9 @@ doSingleJob = function(reg, id, multiple.result.files, disable.mail, first, last
   dbSendMessage(reg, dbMakeMessageStarted(reg, id, time=as.integer(Sys.time())))
   job = getJob(reg, id, load.fun=TRUE, check.id=FALSE)
   sendMail(reg, job, result.str, "", disable.mail, condition = "start", first, last)
-
+  
   result = executeOneJob(reg, job, multiple.result.files)
-
+  
   if (is.error(result)) {
     errmsg = as.character(result)
     message("Error occurred: ", errmsg)
@@ -34,23 +34,26 @@ doSingleJob = function(reg, id, multiple.result.files, disable.mail, first, last
     result.str = calcResultString(result)
   }
   sendMail(reg, job, result.str, "", disable.mail, condition=ifelse(is.error(result), "error", "done"),
-           first, last)
+    first, last)
   return(result)
 }
 
-doChunkFlush = function(reg, msg.buf, last.flush, wait.flush) {
-  cur.time = as.integer(Sys.time())
-  if (cur.time - last.flush > wait.flush) {
-    ok = dbFlushMessages(reg, msg.buf)
-    messagef("%s: Flushing %i msgs, succeeded: %s.", 
-      as.character(Sys.time()), length(msg.buf), ok)
-    if (ok) 
-      return(character(0))
-  }
-  return(msg.buf)
-}
 
 doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last) {
+  
+  doChunkFlush = function(reg, msg.buf, wait.flush) {
+    cur.time = as.integer(Sys.time())
+    if (cur.time - last.flush >= wait.flush) {
+      ok = dbFlushMessages(reg, msg.buf)
+      last.flush <<- as.integer(Sys.time())
+      messagef("%s: Flushing %i msgs, succeeded: %s.", 
+        as.character(Sys.time()), length(msg.buf), ok)
+      if (ok) 
+        return(character(0))
+    }
+    return(msg.buf)
+  }
+  
   jobs = getJobs(reg, ids, load.fun=TRUE, check.ids=FALSE)
   result.strs = character(length(jobs))
   error = logical(length(jobs))
@@ -80,13 +83,12 @@ doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last) {
       result.strs[i] = calcResultString(result)
     }
     # if some minutes have passed since last flush, we can do it now
-    msg.buf = doChunkFlush(reg, msg.buf, last.flush, wait.flush)
-    last.flush = as.integer(Sys.time())
+    msg.buf = doChunkFlush(reg, msg.buf, wait.flush)
   }
-
+  
   # try to flush the remaining msgs at the end
   for(tries in seq_len(10L)) {
-    msg.buf = doChunkFlush(reg, msg.buf, 0L, 0L)
+    msg.buf = doChunkFlush(reg, msg.buf, 0L)
     if (length(msg.buf) == 0L) break
     # wait between 1-2 min to try to flush last stuff
     wait.flush = round(runif(1L, 1*60, 2*60))
@@ -107,7 +109,7 @@ doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   # send mail for whole chunk
   # if one of the jobs had an error, treat the whole chunk as erroneous in mail
   sendMail(reg, jobs, result.strs, mail.extra.msg, disable.mail, condition=ifelse(any(error), "error", "done"), 
-           first, last)
+    first, last)
   return(NULL)
 }
 
@@ -123,10 +125,10 @@ executeOneJob = function(reg, job, multiple.result.files) {
   message("Setting seed: ", job$seed)
   seed = seeder(job$seed)
   on.exit(seed$reset())
-
+  
   result = try(applyJobFunction(reg, job), silent=TRUE)
   print(str(result, max.level=1L, list.len=5L))
-
+  
   if (multiple.result.files) {
     if (!is.list(result)) {
       result = structure("multiple.result.files is TRUE, but your algorithm did not return a list!",
