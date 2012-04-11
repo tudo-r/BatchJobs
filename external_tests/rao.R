@@ -16,17 +16,17 @@ doKillTest(long="sleep")
 doKillTest(long="expensive")
 
 conf$cluster.functions = makeClusterFunctionsSSH(
-  makeSSHWorker("neyman"))
+  makeSSHWorker("rao"))
 doExternalTest(whitespace=FALSE)
 doKillTest()
 
 conf$cluster.functions = makeClusterFunctionsSSH(
-  makeSSHWorker("neyman", ncpus=4, max.load=4, max.jobs=2))
+  makeSSHWorker("rao", ncpus=4, max.load=4, max.jobs=2))
 doExternalTest(whitespace=FALSE)
 
 conf$cluster.functions = makeClusterFunctionsSSH(
-  makeSSHWorker("neyman"), 
-  makeSSHWorker("kendall"))
+  makeSSHWorker("rao"), 
+  makeSSHWorker("compute1"))
 doExternalTest(whitespace=FALSE)
 doKillTest()
 
