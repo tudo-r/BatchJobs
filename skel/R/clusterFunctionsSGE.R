@@ -42,7 +42,7 @@ makeClusterFunctionsSGE = function(template.file) {
       makeSubmitJobResult(status=101L, msg=msg)
     } else {
       # first number in string is batch.job.id
-      batch.job.id = str_extract(res, "\\d+")
+      batch.job.id = str_extract(res$output, "\\d+")
       makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
     }
   }
@@ -57,7 +57,7 @@ makeClusterFunctionsSGE = function(template.file) {
     # job-ID  prior   name       user         state submit/start at     queue                          slots ja-task-ID
     #-----------------------------------------------------------------------------------------------------------------
     #  240935 0.00000 sleep 60   matthias     qw    04/03/2012 15:45:54                                    1
-    res = runCommand("qstat", "-u $USER")
+    res = runCommand("qstat", "-u $USER")$output
     # drop first 2 header lines
     res = res[-(1:2)]
     # first number in strings are batch.job.ids
