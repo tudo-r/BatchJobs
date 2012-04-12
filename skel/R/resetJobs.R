@@ -1,12 +1,13 @@
-#' Reset a job on the batch system.
+#' Reset computational state of jobs.
 #'
-#' Reset jobs in the database. Useful under two circumstances:
+#' Reset state of jobs in the database. Useful under two circumstances:
 #' Either to re-submit them because of changes in e.g. external
-#' data or to resolve rare issues whenjobs are killed in a unfortunate state 
+#' data or to resolve rare issues when jobs are killed in an unfortunate state 
 #' and therefore blocking your registry.
 #' Note that this is a dangerous operation to perform which may harm
-#' the database integrity. Especially if reseted jobs are still running
-#' this may corrupt your registry. If you are really know what you are
+#' the database integrity. You HAVE to externally make sure that none of the jobs 
+#' you want to reset are still running.
+#' If you really know what you are
 #' doing, you may set \code{force} to \code{TRUE} to omit sanity checks
 #' on running jobs.
 #'
@@ -15,14 +16,13 @@
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs to kill.
 #'   Default is none.
-#' @param force [\code{integer}]\cr
+#' @param force [\code{logical(1)}]\cr
 #'   Also reset jobs which seem to be still running.
 #'   Default is \code{FALSE}.
 #' @return Nothing.
 #' @export
 resetJobs = function(reg, ids, force=FALSE) {
   checkArg(reg, cl="Registry")
-  checkArg(force, cl="logical", len=1L, na.ok=FALSE)
   if (missing(ids))
     return(invisible(NULL))
   else {
@@ -30,14 +30,15 @@ resetJobs = function(reg, ids, force=FALSE) {
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
   }
+  checkArg(force, cl="logical", len=1L, na.ok=FALSE)
   if (!force) {
     if(is.null(getListJob()) || is.null(getKillJob())) {
       stop("Listing or killing of jobs not supported by your cluster functions\n",
-           "You need to set force=TRUE to proceed resetting jobs, but note the warning in ?resetJobs")
+           "You need to set force=TRUE to reset jobs, but note the warning in ?resetJobs")
     }
     running = findRunning(reg, ids)
     if (length(running) > 0L)
-      stopf("Can't reset jobs which are still running: %s\nYou have to kill them first.", 
+      stopf("Can't reset jobs which are still running. You have to kill them first.\nRunning: %s", 
             collapse(running))
   }
   
