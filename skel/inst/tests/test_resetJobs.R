@@ -16,5 +16,5 @@ test_that("resetJobs", {
   
   # now really reset the first job
   resetJobs(reg, done[1], force=TRUE)
-  expect_equal(intersect(done, findDone(reg)), 1)
+  expect_equal(setdiff(done, findDone(reg)), 1)
 })
