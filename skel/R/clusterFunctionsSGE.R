@@ -21,6 +21,7 @@
 #' @return [\code{\link{ClusterFunctions}}]. 
 #' @export
 makeClusterFunctionsSGE = function(template.file) {
+  checkArg(template.file, "character", len=1, na.ok=FALSE)
   ## Read in template
   fd = file(template.file, "r")
   template = paste(readLines(fd), collapse="\n")
@@ -35,7 +36,7 @@ makeClusterFunctionsSGE = function(template.file) {
     }
     brew(text=template, output=outfile)
     # returns: "Your job 240933 (\"sleep 60\") has been submitted"
-    res = runCommand("qsub", outfile)  
+    res = runCommand("qsub", outfile, stop.on.exit.code=FALSE)  
     # FIXME filled queues
     if (res$exit.code > 0) {
       msg = sprintf("qsub produced exit code %i; output %s", res$exit.code, res$output)

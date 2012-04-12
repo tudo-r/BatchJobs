@@ -23,6 +23,7 @@
 #' @return [\code{\link{ClusterFunctions}}]. 
 #' @export
 makeClusterFunctionsTorque = function(template.file) {
+  checkArg(template.file, "character", len=1, na.ok=FALSE)
   ## Read in template
   fd = file(template.file, "r")
   template = paste(readLines(fd), collapse="\n")
