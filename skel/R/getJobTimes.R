@@ -6,27 +6,25 @@
 #'   Default is all jobs.
 #' @param use.names [\code{logical(1)}]
 #'   Should result vector be named with \code{ids}?
-#'   Default is \code{TRUE} if length of \code{ids} is more than 1.
+#'   Default is \code{TRUE}.
 #' @return [\code{integer}]. Time in seconds for jobs, named with ids.
 #'   \code{NA} if job has not terminated successfully.
 #' @export
 getJobTimes = function(reg, ids, use.names=TRUE) {
   checkArg(reg, cl = "Registry")
-  if (missing(ids))
-    ids = getJobIds(reg)
-  else {
+  if (!missing(ids)) {
     ids = convertIntegers(ids)
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
   }
-  if (missing(use.names)) {
-    use.names = length(ids) > 1L
-  } else {
+  if (!missing(use.names)) {
     checkArg(use.names, "logical", len=1L, na.ok=FALSE)
   }
-  d = dbGetJobTimes(reg, ids)
-  times = d$done - d$start
-  if (use.names)
-    names(times) = ids
-  return(times)
+
+  tab = dbGetJobTimes(reg, ids)
+  if (!use.names)
+    return(tab$time)
+  times = tab$time
+  names(times) = tab$job_id
+  times
 }

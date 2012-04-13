@@ -1,6 +1,6 @@
 context("getJobTimes")
 
-test_that("getJobTimes", {  
+test_that("getJobTimes", {
   reg = makeTestRegistry()
   f = function(i) {
     if (i == 2)
@@ -24,10 +24,5 @@ test_that("getJobTimes", {
   expect_true(tt[1] >= 0 && tt[1] <= 3)
   expect_true(tt[3] >= 0 && tt[3] <= 3)
 
-  tt = getJobTimes(reg, 1)
-  expect_equal(names(tt), NULL)
   expect_true(tt >= 0 && tt <= 3)
-  tt = getJobTimes(reg, 2)
-  expect_equal(names(tt), NULL)
-  expect_true(is.na(tt))
 })

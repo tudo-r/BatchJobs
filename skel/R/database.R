@@ -26,7 +26,7 @@ dbDoQueries = function(reg, queries, flags="ro") {
       dbBeginTransaction(con)
       ress = lapply(queries, dbGetQuery, con=con)
     }, silent = TRUE)
-    if (!is.error(ok)) { 
+    if (!is.error(ok)) {
       dbCommit(con)
       dbDisconnect(con)
       return(ress)
@@ -50,9 +50,9 @@ dbDoQuery = function(reg, query, flags="ro") {
     con = dbConnectToJobsDB(reg, flags)
     res = try(dbGetQuery(con, query), silent=TRUE)
     dbDisconnect(con)
-    if (! is.error(res)) 
+    if (! is.error(res))
       return(res)
-    
+
     res = as.character(res)
     if(grepl("lock", res, ignore.case=TRUE)) {
       Sys.sleep(runif(1L, min=1, max=2))
@@ -77,7 +77,7 @@ dbAddData = function(reg, tab, data) {
     dbRollback(con)
     stopf("Error in dbAddData: %s", as.character(ok))
   }
-  
+
   dbCommit(con)
   as.integer(dbGetQuery(con, "SELECT total_changes()"))
 }
@@ -105,7 +105,7 @@ dbCreateJobDefTable.Registry = function(reg) {
 
 dbCreateJobStatusTable = function(reg, extra.cols="", constraints="") {
   message("Initializing job status table...")
- 
+
   query = sprintf(paste("CREATE TABLE %s_job_status (job_id INTEGER PRIMARY KEY, job_def_id INTEGER,",
                    "first_job_in_chunk_id INTEGER, seed INTEGER, submitted INTEGER,",
                    "started INTEGER, batch_job_id TEXT, node TEXT, r_pid INTEGER,",
@@ -114,7 +114,7 @@ dbCreateJobStatusTable = function(reg, extra.cols="", constraints="") {
 
   query = sprintf("CREATE INDEX job_def_id ON %s_job_status(job_def_id)", reg$id)
   dbDoQuery(reg, query, flags="rw")
-  
+
   return(invisible(TRUE))
 }
 
@@ -150,7 +150,7 @@ dbGetJobs.Registry = function(reg, ids) {
   } else {
     query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
     tab = dbDoQuery(reg, query)
-    if(nrow(tab) == 0L) 
+    if(nrow(tab) == 0L)
       stopf("No jobs found for ids: %s", collapse(ids))
     tab = tab[match(ids, tab$job_id),, drop=FALSE]
   }
@@ -310,8 +310,15 @@ dbGetFirstJobInChunkIds = function(reg, ids){
 }
 
 dbGetJobTimes = function(reg, ids){
-  query = sprintf("SELECT started,done FROM %s_job_status WHERE job_id IN (%s)", reg$id, collapse(ids))
-  dbDoQuery(reg, query)
+  query = sprintf("SELECT job_id, done-started AS time FROM %s_job_status", reg$id)
+  if(missing(ids)) {
+    tab = dbDoQuery(reg, query)
+  } else {
+    query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
+    tab = dbDoQuery(reg, query)
+    tab = tab[match(ids, tab$job_id),, drop=FALSE]
+  }
+  return(tab)
 }
 
 ############################################
@@ -332,7 +339,7 @@ dbSendMessage = function(reg, msg) {
   dbDoQuery(reg, msg, flags="rw")
 }
 
-dbMakeMessageSubmitted = function(reg, job.ids, time=as.integer(Sys.time()), 
+dbMakeMessageSubmitted = function(reg, job.ids, time=as.integer(Sys.time()),
                                   batch.job.id, first.job.in.chunk.id=NULL) {
   if(is.null(first.job.in.chunk.id))
     first.job.in.chunk.id = "NULL"
@@ -373,7 +380,7 @@ dbConvertNumericToPOSIXct = function(x) {
 ### INSERT
 ############################################
 dbAddJobs = function(reg, jobs, ...) {
-  fun.ids = extractSubList(jobs, "fun.id") 
+  fun.ids = extractSubList(jobs, "fun.id")
   seeds = extractSubList(jobs, "seed")
   pars = sapply(jobs, function(j) rawToChar(serialize(j$pars, connection=NULL, ascii=TRUE)))
 
@@ -386,7 +393,7 @@ dbAddJobs = function(reg, jobs, ...) {
 }
 
 
-# flushes messages en block. 
+# flushes messages en block.
 dbFlushMessages = function(reg, msgs) {
   ok = try(dbDoQueries(reg, msgs, flags="rw"))
   if (is.error(ok)) {
@@ -400,7 +407,7 @@ dbFlushMessages = function(reg, msgs) {
   }
   return(TRUE)
 }
-  
+
 dbGetStats = function(reg, ids, running=FALSE, expired=FALSE) {
   q.r = q.e = "NULL"
 
