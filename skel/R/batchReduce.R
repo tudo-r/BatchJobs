@@ -29,7 +29,7 @@ batchReduce = function(reg, fun, xs, init, block.size) {
   checkArg(xs, cl="vector")
   block.size = convertInteger(block.size)
   checkArg(block.size, "integer", len=1L, lower=1L, na.ok=FALSE)
-  if (getJobNr(reg) > 0L)
+  if (dbGetJobCount(reg) > 0L)
     stop("Registry is not empty!")
   xs.blocks = chunk(xs, chunk.size = block.size, shuffle=FALSE)
   reduceOnSlave = function(xs.block, fun, init) {

@@ -27,7 +27,7 @@
 #' f <- function(x) x^2
 #' batchMap(reg1, f, 1:20)
 #' submitJobs(reg1)
-#'  
+#'
 #' # define function to reduce on slave, we want to sum the squares
 #' myreduce <- function(aggr, job, res) aggr + res
 #' # sum 5 results on each slave process, i.e. 4 jobs
@@ -51,14 +51,14 @@ batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, 
   }
   block.size = convertInteger(block.size)
   checkArg(block.size, "integer", len=1L, na.ok=FALSE)
-  if (getJobNr(reg2) > 0L)
+  if (dbGetJobCount(reg2) > 0L)
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)
     stop("Both registries cannot point to the same file dir. Files would get overwritten!")
   # x is id
   # use lazy evaluation, if fun doesn't access job or res (unlikely)
   fun2 = function(aggr, x) {
-    fun(aggr = aggr, 
+    fun(aggr = aggr,
       job = getJob(reg, x, check.id=FALSE),
       res = loadResult(reg, x, part))
   }

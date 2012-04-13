@@ -1,5 +1,5 @@
 #' Maps a function over a list adding jobs to a registry.
-#' 
+#'
 #' You can then submit these jobs to the batch system.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Empty Registry that will store jobs for the mapping.
@@ -26,7 +26,7 @@ batchMap = function(reg, fun, ..., more.args=list()) {
   n = unique(vapply(args, length, integer(1L)))
   if(length(n) != 1L)
     stop("All args in '...' must be of the same length!")
-  if (getJobNr(reg) > 0L)
+  if (dbGetJobCount(reg) > 0L)
     stop("Registry is not empty!")
   messagef("Adding %i jobs to DB.", n)
   # create seeds
@@ -46,7 +46,7 @@ batchMap = function(reg, fun, ..., more.args=list()) {
   n = dbAddData(reg, "job_def", data = data.frame(fun_id=fun.id, pars=pars))
   job.def.ids = dbGetLastAddedIds(reg, "job_def", "job_def_id", n)
   n = dbAddData(reg, "job_status", data=data.frame(job_def_id=job.def.ids, seed=seeds))
-  job.ids = dbGetLastAddedIds(reg, "job_status", "job_id", n)  
+  job.ids = dbGetLastAddedIds(reg, "job_status", "job_id", n)
   # we can only create the dir after we have obtained the ids fromn the DB
   createShardedDirs(reg, job.ids)
   invisible(NULL)

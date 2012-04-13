@@ -104,7 +104,7 @@ makeRegistry = function(id, file.dir, sharding=TRUE,
 #' @S3method print Registry
 print.Registry = function(x, ...) {
   cat("Job registry: ",  x$id, "\n")
-  cat("  Number of jobs: ", getJobNr(x), "\n")
+  cat("  Number of jobs: ", dbGetJobCount(x), "\n")
   cat("  Files dir:", x$file.dir, "\n")
   cat("  Work dir:", x$work.dir, "\n")
   cat("  Multiple result files:", x$multiple.result.files, "\n")
@@ -147,6 +147,7 @@ saveRegistry = function(reg) {
 #' @return [\code{integer(1)}].
 #' @export
 getJobNr = function(reg) {
+  checkArg(reg, "Registry")
   dbGetJobCount(reg)
 }
 
@@ -156,6 +157,7 @@ getJobNr = function(reg) {
 #' @return [\code{character}].
 #' @export
 getJobIds = function(reg) {
+  checkArg(reg, "Registry")
   dbGetJobIds(reg)
 }
 

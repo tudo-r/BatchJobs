@@ -29,7 +29,7 @@
 #' submitJobs(reg1)
 #' # look at results
 #' reduceResults(reg1, fun=function(aggr,job,res) c(aggr, res))
-#'  
+#'
 #' reg2 <- makeRegistry(id="BatchJobsExample2", file.dir=tempfile(), seed=123)
 #' # define function to tranform results, we simply do the inverse of the squaring
 #' g <- function(job, res) sqrt(res)
@@ -50,13 +50,13 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=as.character(NA), mor
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
   checkArg(fun, formals=c("job", "res"))
-  if (getJobNr(reg2) > 0L)
+  if (dbGetJobCount(reg2) > 0L)
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)
     stop("Both registries cannot point to the same file dir. Files would get overwritten!")
   fun2 = function(id, ...) {
-    fun(job = getJob(reg, id, check.id=FALSE), 
-        res = loadResult(reg, id, part=part, check.id=FALSE), 
+    fun(job = getJob(reg, id, check.id=FALSE),
+        res = loadResult(reg, id, part=part, check.id=FALSE),
         ...)
   }
   batchMap(reg2, fun2, ids, ..., more.args=more.args)
