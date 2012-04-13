@@ -17,9 +17,7 @@ getJobTimes = function(reg, ids, use.names=TRUE) {
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
   }
-  if (!missing(use.names)) {
-    checkArg(use.names, "logical", len=1L, na.ok=FALSE)
-  }
+  checkArg(use.names, "logical", len=1L, na.ok=FALSE)
 
   tab = dbGetJobTimes(reg, ids)
   if (!use.names)
