@@ -31,12 +31,19 @@ getRandomSeed = function(n = 1L) {
   as.integer(runif(n, 1, floor(.Machine$integer.max / 2L)))
 }
 
-seeder = function(seed) {
+seeder = function(reg, seed) {
   if(!exists(".Random.seed", envir = .GlobalEnv))
      runif(1L)
-  prev = get(".Random.seed", envir = .GlobalEnv)
-  set.seed(seed)
-  list(reset = function() assign(".Random.seed", prev, envir=.GlobalEnv))
+  prev.seed = get(".Random.seed", envir = .GlobalEnv)
+  prev.kind = RNGkind()
+  set.seed(seed, kind = reg$RNGkind[1L], normal.kind=reg$RNGkind[2L])
+  
+  reset = function() {
+    RNGkind(kind = prev.kind[1L], normal.kind = prev.kind[2L])
+    assign(".Random.seed", prev.seed, envir=.GlobalEnv)
+  }
+
+  return(list(reset = reset))
 }
 
 addIntModulo = function(x, y, mod = .Machine$integer.max) {

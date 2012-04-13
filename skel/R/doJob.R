@@ -123,7 +123,7 @@ executeOneJob = function(reg, job, multiple.result.files) {
   # use seed from job
   # on exit, reset to previous seed
   message("Setting seed: ", job$seed)
-  seed = seeder(job$seed)
+  seed = seeder(reg, job$seed)
   on.exit(seed$reset())
   
   result = try(applyJobFunction(reg, job), silent=TRUE)

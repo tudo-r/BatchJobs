@@ -11,7 +11,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
     work.dir = cur.dir
   checkArg(work.dir, cl = "character", len = 1L, na.ok = FALSE)
   checkArg(multiple.result.files, cl = "logical", len = 1L, na.ok = FALSE)
-  
+
   if (missing(seed)) {
     seed = getRandomSeed()
   } else {
@@ -37,6 +37,8 @@ makeRegistryInternal = function(id, file.dir, sharding,
                     simplify=FALSE)
   structure(list(
     id = id,
+    version = R.version,
+    RNGkind = RNGkind(),
     db.driver = "SQLite",
     db.options = list(),
     seed = seed,
