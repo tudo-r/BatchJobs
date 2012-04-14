@@ -4,7 +4,7 @@
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Empty Registry that will store jobs for the mapping.
 #' @param fun [\code{function}]\cr
-#'   Function to map over \code{xs}.
+#'   Function to map over \code{...}.
 #' @param ... [any]\cr
 #'   Arguments to vectorize over (list or vector).
 #' @param more.args [\code{list}]\cr
