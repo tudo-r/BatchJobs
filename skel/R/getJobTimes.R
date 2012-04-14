@@ -4,7 +4,7 @@
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs.
 #'   Default is all jobs.
-#' @param use.names [\code{logical(1)}]
+#' @param use.names [\code{logical(1)}]\cr
 #'   Should result vector be named with \code{ids}?
 #'   Default is \code{TRUE}.
 #' @return [\code{integer}]. Time in seconds for jobs, named with ids.
@@ -24,5 +24,5 @@ getJobTimes = function(reg, ids, use.names=TRUE) {
     return(tab$time)
   times = tab$time
   names(times) = tab$job_id
-  times
+  return(times)
 }
