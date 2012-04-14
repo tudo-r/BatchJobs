@@ -23,7 +23,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
 
   # make paths absolute to be sure. otherwise cfSSH wont work for example
   # FIXME is a warning really what we want to do here?
-  checkDir(file.dir, create=TRUE, check.empty="stop", check.posix=TRUE)
+  checkDir(file.dir, create=TRUE, check.empty="stop", check.posix=TRUE, msg=TRUE)
   file.dir = makePathAbsolute(file.dir)
   job.dir = getJobParentDir(file.dir)
   checkDir(job.dir, create=TRUE, check.empty="warn")
