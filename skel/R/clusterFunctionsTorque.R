@@ -57,7 +57,7 @@ makeClusterFunctionsTorque = function(template.file) {
   
   listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
-    runCommand("qselect", "-u $USER")$outputss
+    runCommand("qselect", "-u $USER")$output
   }
   
   makeClusterFunctions(name="Torque", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
