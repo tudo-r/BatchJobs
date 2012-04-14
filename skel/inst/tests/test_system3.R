@@ -25,9 +25,13 @@ test_that("system3", {
   expect_equal(res, list(exit.code=2L, output=as.character(NA)))
   res = system3("ls", "xxx", stdout=TRUE, stderr=TRUE, stop.on.exit.code=FALSE)
   msg = "ls: cannot access xxx: No such file or directory"
-  expect_equal(res, list(exit.code=2L, output=msg))
+  expect_equal(res$exit.code, 2L)
+  expect_true(str_detect(res$output, "ls:"))
+  expect_true(str_detect(res$output, "xxx"))
   expect_error(system3("ls", "xxx", stdout=TRUE, stderr=TRUE, stop.on.exit.code=TRUE),
-     sprintf("Command: ls xxx; exit code: 2; output: %s", msg))
+    "Command: ls xxx; exit code: 2; output: ls:")
+  expect_error(system3("ls", "xxx", stdout=TRUE, stderr=TRUE, stop.on.exit.code=TRUE),
+    "xxx")
 })
 
 }

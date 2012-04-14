@@ -25,7 +25,8 @@ system3 = function(command, args = character(), stdout = "", stderr = "", wait=T
         withCallingHandlers({  
             op = system2(command=command, args=args, stdout=stdout, stderr=stderr, wait=wait, ...)
           }, warning = function(w) {
-            ec <<- as.integer(str_split(w$message, "status ")[[1]][2])
+            # get last integer in string, dont rely on words in message
+            ec <<- as.integer(rev(str_extract_all(w$message, "\\d")[[1]])[1])
           })
       })
   } else {
