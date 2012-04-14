@@ -3,8 +3,8 @@
 #'
 #' For quick computations on the cluster. 
 #' Should only be used by skilled users who know what they are doing.
-#' Creates the file.dir in a temporary directory, maps function, potentially chunks jobs
-#' and submits them.
+#' Creates the file.dir in current directory under the name \dQuote{.BatchJobs_bmq}, 
+#' maps function, potentially chunks jobs and submits them.
 #' @param fun [\code{function}]\cr
 #'   Function to map over \code{...}.
 #' @param ... [any]\cr
@@ -30,8 +30,8 @@
 batchMapQuick = function(fun, ..., more.args=list(), packages=character(0), 
   chunk.size, inds, resources=list()) {
   
-  id = sprintf("bmq_%i", round(runif(1, 1, 10000)))
-  fd = tempfile()
+  id = sprintf("bmq_%i", round(runif(1, 1, .Machine$integer.max)))
+  fd = ".BatchMap_bmq"
   reg = makeRegistry(id=id, file.dir=fd, packages=packages)
   batchMap(reg, fun, ..., more.args=more.args)
   ids = getJobIds(reg)
