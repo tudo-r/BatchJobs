@@ -1,5 +1,7 @@
 context("batchMapQuick")
 
+if (interactive()) {
+  
 test_that("batchMapQuick", {
   reg = batchMapQuick(function(x) x^2, 1:3)
   y = sapply(getJobIds(reg), function(id) loadResult(reg, id))
@@ -18,3 +20,5 @@ test_that("batchMapQuick", {
   y = sapply(c(1,3), function(id) loadResult(reg, id))
   expect_equal(y, c(1,3), check.attributes = FALSE)
 })
+
+}

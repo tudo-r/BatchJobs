@@ -31,8 +31,10 @@ batchMapQuick = function(fun, ..., more.args=list(), packages=character(0),
   chunk.size, inds, resources=list()) {
   
   id = sprintf("bmq_%i", round(runif(1, 1, .Machine$integer.max)))
-  fd = ".BatchMap_bmq"
-  reg = makeRegistry(id=id, file.dir=fd, packages=packages)
+  ok = unlink(id, recursive=TRUE)
+  if (ok != 0)
+    stopf("Could not delete file.dir: %s", id)
+  reg = makeRegistry(id=id, file.dir=id, packages=packages)
   batchMap(reg, fun, ..., more.args=more.args)
   ids = getJobIds(reg)
   if (!missing(chunk.size))
