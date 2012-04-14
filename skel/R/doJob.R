@@ -13,6 +13,8 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   }
   myResetWd(wd)
   messagef("%s: Job on slave is finished.", as.character(Sys.time()))
+  messagef("Memory usage according to gc:")
+  print(gc())
   return(res)
 }
 
