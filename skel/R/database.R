@@ -82,6 +82,14 @@ dbAddData = function(reg, tab, data) {
   as.integer(dbGetQuery(con, "SELECT total_changes()"))
 }
 
+dbSelect = function(reg, query, ids) {
+  if(missing(ids))
+    return(dbDoQuery(reg, query, flags="ro"))
+  query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
+  res = dbDoQuery(reg, query, flags="ro")
+  res[match(ids, res$job_id),, drop=FALSE]
+}
+
 ############################################
 ### CREATE
 ############################################
@@ -145,15 +153,9 @@ dbGetJobs = function(reg, ids) {
 #' @S3method dbGetJobs Registry
 dbGetJobs.Registry = function(reg, ids) {
   query = sprintf("SELECT job_id, fun_id, pars, seed FROM %s_expanded_jobs", reg$id)
-  if (missing(ids)) {
-    tab = dbDoQuery(reg, query)
-  } else {
-    query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
-    tab = dbDoQuery(reg, query)
-    if(nrow(tab) == 0L)
-      stopf("No jobs found for ids: %s", collapse(ids))
-    tab = tab[match(ids, tab$job_id),, drop=FALSE]
-  }
+  tab = dbSelect(reg, query, ids)
+  if(nrow(tab) == 0L)
+    stopf("No jobs found for ids: %s", collapse(ids))
   lapply(seq_len(nrow(tab)), function(i) {
     makeJob(id=tab$job_id[i], fun.id=tab$fun_id[i], fun=NULL,
             pars=unserialize(charToRaw(tab$pars[i])), seed=tab$seed[i])
@@ -167,13 +169,7 @@ dbGetExpandedJobsTable = function(reg, ids, columns) {
     columns2 = collapse(columns)
 
   query = sprintf("SELECT %s FROM %s_expanded_jobs", columns2, reg$id)
-  if (missing(ids)) {
-    tab = dbDoQuery(reg, query)
-  } else {
-    query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
-    tab = dbDoQuery(reg, query)
-    tab = tab[match(ids, tab$job_id),, drop=FALSE]
-  }
+  tab = dbSelect(reg, query, ids)
   if (missing(columns) || "job_id" %in% columns)
     rownames(tab) = tab$job_id
   tab
@@ -181,20 +177,12 @@ dbGetExpandedJobsTable = function(reg, ids, columns) {
 
 dbGetJobStatusTable = function(reg, ids, convert.dates=TRUE) {
   query = sprintf("SELECT * FROM %s_job_status", reg$id)
-  if (missing(ids)) {
-    tab = dbDoQuery(reg, query)
-  } else {
-    query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
-    tab = dbDoQuery(reg, query)
-    tab = tab[match(ids, tab$job_id),, drop=FALSE]
-  }
-
+  tab = dbSelect(reg, query, ids)
   if (convert.dates) {
     tab$submitted = dbConvertNumericToPOSIXct(tab$submitted)
     tab$started = dbConvertNumericToPOSIXct(tab$started)
     tab$done = dbConvertNumericToPOSIXct(tab$done)
   }
-
   rownames(tab) = tab$job_id
   tab
 }
@@ -212,7 +200,7 @@ dbGetJobId = function(reg) {
 
 dbGetJobIds = function(reg) {
   query = sprintf("SELECT job_id FROM %s_job_status", reg$id)
-  as.integer(dbDoQuery(reg, query)$job_id)
+  dbDoQuery(reg, query)$job_id
 }
 
 dbGetJobIdsIfAllDone = function(reg) {
@@ -304,21 +292,50 @@ dbGetMaxSeed = function(reg, default) {
 }
 
 dbGetFirstJobInChunkIds = function(reg, ids){
-  query = sprintf("SELECT job_id, first_job_in_chunk_id FROM %s_job_status WHERE job_id IN (%s)", reg$id, collapse(ids))
-  first = dbDoQuery(reg, query)
-  first[match(ids, first$job_id), "first_job_in_chunk_id"]
+  query = sprintf("SELECT job_id, first_job_in_chunk_id FROM %s_job_status", reg$id)
+  dbSelect(reg, query, ids)$first_job_in_chunk_id
 }
 
 dbGetJobTimes = function(reg, ids){
   query = sprintf("SELECT job_id, done-started AS time FROM %s_job_status", reg$id)
-  if(missing(ids)) {
-    tab = dbDoQuery(reg, query)
-  } else {
-    query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
-    tab = dbDoQuery(reg, query)
-    tab = tab[match(ids, tab$job_id),, drop=FALSE]
+  dbSelect(reg, query, ids)
+}
+
+
+dbGetStats = function(reg, ids, running=FALSE, expired=FALSE) {
+  q.r = q.e = "NULL"
+
+  if(running || expired) {
+    fun = getListJobs("Cannot find running or expired jobs")
+    batch.job.ids = fun(getBatchJobsConf(), reg)
+
+    if(running)
+      q.r = sprintf("SUM(started IS NOT NULL AND batch_job_id IN ('%s'))", collapse(batch.job.ids, sep="','"))
+    if(expired)
+      q.e = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id NOT IN ('%s'))", collapse(batch.job.ids, sep="','"))
   }
-  return(tab)
+
+  query = sprintf(paste(
+    "SELECT COUNT(job_id) AS n,",
+    "COUNT(submitted) AS submitted,",
+    "COUNT(started) AS started,",
+    "COUNT(done) AS done,",
+    "COUNT(error) AS error,",
+    "%s AS running,",
+    "%s AS expired,",
+    "MIN(done - started) AS t_min,",
+    "AVG(done - started) AS t_avg,",
+    "MAX(done - started) AS t_max",
+    "FROM %s_job_status"), q.r, q.e, reg$id)
+
+  if(!missing(ids))
+    query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
+
+  df = dbDoQuery(reg, query)
+
+  # Convert to correct type. Null has no type and casts don't work properly with RSQLite
+  doubles = c("t_min", "t_avg", "t_max")
+  sapply(names(df), function(x) if(x %in% doubles) as.double(df[[x]]) else as.integer(df[[x]]), simplify=FALSE)
 }
 
 ############################################
@@ -408,38 +425,3 @@ dbFlushMessages = function(reg, msgs) {
   return(TRUE)
 }
 
-dbGetStats = function(reg, ids, running=FALSE, expired=FALSE) {
-  q.r = q.e = "NULL"
-
-  if(running || expired) {
-    fun = getListJobs("Cannot find running or expired jobs")
-    batch.job.ids = fun(getBatchJobsConf(), reg)
-
-    if(running)
-      q.r = sprintf("SUM(started IS NOT NULL AND batch_job_id IN ('%s'))", collapse(batch.job.ids, sep="','"))
-    if(expired)
-      q.e = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id NOT IN ('%s'))", collapse(batch.job.ids, sep="','"))
-  }
-
-  query = sprintf(paste(
-    "SELECT COUNT(job_id) AS n,",
-    "COUNT(submitted) AS submitted,",
-    "COUNT(started) AS started,",
-    "COUNT(done) AS done,",
-    "COUNT(error) AS error,",
-    "%s AS running,",
-    "%s AS expired,",
-    "MIN(done - started) AS t_min,",
-    "AVG(done - started) AS t_avg,",
-    "MAX(done - started) AS t_max",
-    "FROM %s_job_status"), q.r, q.e, reg$id)
-
-  if(!missing(ids))
-    query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
-
-  df = dbDoQuery(reg, query)
-
-  # Convert to correct type. Null has no type and casts don't work properly with RSQLite
-  doubles = c("t_min", "t_avg", "t_max")
-  sapply(names(df), function(x) if(x %in% doubles) as.double(df[[x]]) else as.integer(df[[x]]), simplify=FALSE)
-}
