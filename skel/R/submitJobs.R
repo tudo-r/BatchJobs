@@ -117,16 +117,9 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
     id = ids[[i]]
     id1 = id[1L]
 
-    # FIXME
-    # we could vectorize this stuff or do it in one run
-    # following lines call file.path in various different functions like 8 times
     fn.rscript = getRScriptFilePath(reg, id1)
     writeRscript(fn.rscript, reg$file.dir, id, reg$multiple.result.files,
       disable.mail=FALSE, first, last, interactive.test = !is.null(conf$interactive))
-    fn.log = getLogFilePath(reg, id1)
-    jd = getJobDir(reg, id1)
-    job.name = paste(reg$id, id1, sep="-")
-
 
     # we use no for loop here to allow infinite retries
     retries = 0L
@@ -134,8 +127,12 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
       # try to submit the job
       submit.time = as.integer(Sys.time())
       interrupted = TRUE
-      batch.result = cf$submitJob(conf, reg, job.name, fn.rscript,
-                                  fn.log, jd, resources)
+      batch.result = cf$submitJob(conf=conf, reg=reg,
+                                  job.name=sprintf("%s-%i", reg$id, id1),
+                                  rscript=fn.rscript,
+                                  log.file=getLogFilePath(reg, id1),
+                                  job.dir=getJobDirs(reg, id1),
+                                  resources=resources)
 
       # validate status returned from cluster functions
       if (batch.result$status == 0L) {
@@ -147,14 +144,14 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
         bar(i)
         break
       }
-      
-      # submitJob was not successful, therefore we don't care for interrupts
+
+      # submitJob was not successful, therefore we don't care for interrupts any more
       interrupted = FALSE
 
       if (batch.result$status > 0L && batch.result$status <= 100L) {
         # if temp error, wait and increase retries, then submit again
         sleep.secs = wait(retries)
-        
+
         retries = retries + 1L
         if (retries > max.retries)
           stopf("Retried already %i times to submit. Aborting.", retries)

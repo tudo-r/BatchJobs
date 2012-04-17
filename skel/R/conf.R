@@ -7,7 +7,7 @@ sourceConfFile = function(conffile) {
   message("Sourcing configuration file: ", conffile)
   conf = new.env()
   x = try(sys.source(conffile, envir=conf))
-  
+
   if (is.error(x)) {
     message(paste(
       "Format must be like this:\n",
@@ -40,7 +40,7 @@ sourceConfFiles = function(conffiles) {
 
 # assigns a conf to namespace
 assignConf = function(conf) {
-  conf.in.ns = getBatchJobsConf() 
+  conf.in.ns = getBatchJobsConf()
   lapply(ls(conf), function(x) assign(x, conf[[x]], envir=conf.in.ns))
 }
 
@@ -53,15 +53,15 @@ useDefaultConfs = function() {
   conffiles = Filter(file.exists, c(fn.pack, fn.user, fn.wd))
   if (length(conffiles) == 0L)
     stopf("No configuation found at all. Not in package, not in user.home, not in work dir!")
-  conf = sourceConfFiles(conffiles) 
-  assignConf(conf) 
+  conf = sourceConfFiles(conffiles)
+  assignConf(conf)
 }
 
 assignConfDefaults = function() {
   conf = getBatchJobsConf()
-  conf$cluster.functions = makeClusterFunctionsInteractive()  
-  conf$mail.start = "none"   
-  conf$mail.done = "none"   
+  conf$cluster.functions = makeClusterFunctionsInteractive()
+  conf$mail.start = "none"
+  conf$mail.done = "none"
   conf$mail.error = "none"
   conf$db.driver = "SQLite"
   conf$db.options = list()
@@ -78,7 +78,7 @@ loadConf = function(reg) {
   # assign all stuff to conf in namespace
   conf = getBatchJobsConf()
   lapply(ns, function(x) assign(x, ee$conf[[x]], envir=conf))
-  return(NULL)
+  invisible(NULL)
 }
 
 getBatchJobsConf = function() {
@@ -94,20 +94,20 @@ saveConf = function(reg) {
 
 checkConf = function(conf) {
   ns = names(conf)
-  ns2 = c("cluster.functions", "mail.start", "mail.done", "mail.error", 
+  ns2 = c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options", "debug")
   if (!all(ns %in% ns2))
     stopf("You are only allowed to define the following R variables in your config file:\n%s",
       collapse(ns2, sep=", "))
 }
 
-checkConfElements = function(cluster.functions, mail.to, mail.from, 
+checkConfElements = function(cluster.functions, mail.to, mail.from,
   mail.start, mail.done, mail.error, mail.control,
   db.driver, db.options, debug) {
-  
-  if (!missing(cluster.functions)) 
+
+  if (!missing(cluster.functions))
     checkArg(cluster.functions, cl = "ClusterFunctions")
-  if (!missing(mail.from)) 
+  if (!missing(mail.from))
     checkArg(mail.from, cl = "character", len = 1L, na.ok = FALSE)
   if (!missing(mail.to))
     checkArg(mail.to, cl = "character", len = 1L, na.ok = FALSE)
@@ -117,17 +117,17 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
     checkArg(mail.done, choices = c("none", "first", "last", "first+last", "all"))
   if (!missing(mail.error))
     checkArg(mail.error, choices = c("none", "first", "last", "first+last", "all"))
-  if (!missing(mail.control)) 
+  if (!missing(mail.control))
     checkArg(mail.control, cl = "list")
-  if (!missing(mail.control)) 
+  if (!missing(mail.control))
     checkArg(mail.control, cl = "list")
-  if (!missing(mail.control)) 
+  if (!missing(mail.control))
     checkArg(mail.control, cl = "list")
-  if (!missing(db.driver)) 
+  if (!missing(db.driver))
     checkArg(db.driver, cl = "character", len = 1L, na.ok = FALSE)
-  if (!missing(db.options)) 
+  if (!missing(db.options))
     checkArg(db.options, cl = "list")
-  if (!missing(debug)) 
+  if (!missing(debug))
     checkArg(debug, cl = "logical", len = 1L, na.ok = FALSE)
 }
 
@@ -136,7 +136,7 @@ getClusterFunctions = function(conf) {
 }
 
 #' Display BatchJobs configuration.
-#' @return Nothing. 
+#' @return Nothing.
 #' @export
 showConf = function() {
   x = getBatchJobsConf()

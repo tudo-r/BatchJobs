@@ -125,9 +125,7 @@ print.Registry = function(x, ...) {
 loadRegistry = function(file.dir, save=FALSE) {
   fn = getRegistryFilePath(file.dir)
   message("Loading registry: ", fn)
-  ee = new.env()
-  load(fn, envir=ee)
-  reg = ee$reg
+  reg = load2(fn)$reg
   if(save) {
     reg$file.dir = makePathAbsolute(file.dir)
     saveRegistry(reg)
