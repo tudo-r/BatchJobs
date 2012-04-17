@@ -82,7 +82,7 @@ dbAddData = function(reg, tab, data) {
   as.integer(dbGetQuery(con, "SELECT total_changes()"))
 }
 
-dbSelect = function(reg, query, ids) {
+dbSelectWithIds = function(reg, query, ids) {
   if(missing(ids))
     return(dbDoQuery(reg, query, flags="ro"))
   query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
@@ -153,7 +153,7 @@ dbGetJobs = function(reg, ids) {
 #' @S3method dbGetJobs Registry
 dbGetJobs.Registry = function(reg, ids) {
   query = sprintf("SELECT job_id, fun_id, pars, seed FROM %s_expanded_jobs", reg$id)
-  tab = dbSelect(reg, query, ids)
+  tab = dbSelectWithIds(reg, query, ids)
   if(nrow(tab) == 0L)
     stopf("No jobs found for ids: %s", collapse(ids))
   lapply(seq_len(nrow(tab)), function(i) {
@@ -169,7 +169,7 @@ dbGetExpandedJobsTable = function(reg, ids, columns) {
     columns2 = collapse(columns)
 
   query = sprintf("SELECT %s FROM %s_expanded_jobs", columns2, reg$id)
-  tab = dbSelect(reg, query, ids)
+  tab = dbSelectWithIds(reg, query, ids)
   if (missing(columns) || "job_id" %in% columns)
     rownames(tab) = tab$job_id
   tab
@@ -177,7 +177,7 @@ dbGetExpandedJobsTable = function(reg, ids, columns) {
 
 dbGetJobStatusTable = function(reg, ids, convert.dates=TRUE) {
   query = sprintf("SELECT * FROM %s_job_status", reg$id)
-  tab = dbSelect(reg, query, ids)
+  tab = dbSelectWithIds(reg, query, ids)
   if (convert.dates) {
     tab$submitted = dbConvertNumericToPOSIXct(tab$submitted)
     tab$started = dbConvertNumericToPOSIXct(tab$started)
@@ -293,12 +293,12 @@ dbGetMaxSeed = function(reg, default) {
 
 dbGetFirstJobInChunkIds = function(reg, ids){
   query = sprintf("SELECT job_id, first_job_in_chunk_id FROM %s_job_status", reg$id)
-  dbSelect(reg, query, ids)$first_job_in_chunk_id
+  dbSelectWithIds(reg, query, ids)$first_job_in_chunk_id
 }
 
 dbGetJobTimes = function(reg, ids){
   query = sprintf("SELECT job_id, done-started AS time FROM %s_job_status", reg$id)
-  dbSelect(reg, query, ids)
+  dbSelectWithIds(reg, query, ids)
 }
 
 
