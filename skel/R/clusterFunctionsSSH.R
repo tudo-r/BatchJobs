@@ -33,6 +33,7 @@
 makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, script) {
   worker = makeWorkerRemoteLinux(nodename, rhome, script, ncpus, max.jobs, max.load)
   worker$last.update = 0
+  class(worker) = c("SSHWorker", class(worker))
   return(worker)
 }
 
@@ -46,6 +47,8 @@ makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, script) 
 #'
 #' @param ...  [\code{\link{SSHWorker}}]\cr
 #'   Worker objects, all created with \code{\link{makeSSHWorker}}.
+#' @param workers [list of \code{\link{SSHWorker}}]\cr
+#'   Alternative way to pass workers.
 #' @return [\code{ClusterFunctions}].
 #'
 #' @examples \dontrun{
@@ -64,10 +67,15 @@ makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, script) 
 #'   makeSSHWorker(nodename="moe", rhome="/opt/R/R-current"))
 #' }
 #' @export
-makeClusterFunctionsSSH = function(...) {
-  workers = list(...)
-  checkArg(workers, "list")
-  checkListElementClass(workers, "WorkerRemoteLinux")
+makeClusterFunctionsSSH = function(..., workers) {
+  args = list(...)
+  if (!xor(length(args) > 0, !missing(workers)))
+    stop("You must use exactly only 1 of: '...', 'workers'!")
+  if (!missing(workers)) 
+    checkArg(workers, "list")
+  else 
+    workers = args
+  checkListElementClass(workers, "SSHWorker")  
   nodenames = extractSubList(workers, "nodename") 
   dup = duplicated(nodenames)
   if (any(dup))
