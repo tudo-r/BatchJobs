@@ -1,9 +1,9 @@
-#' Combination of \code{\link{makeRegistry}}, \code{\link{batchMap}} 
+#' Combination of \code{\link{makeRegistry}}, \code{\link{batchMap}}
 #' and \code{\link{submitJobs}}.
 #'
-#' For quick computations on the cluster. 
+#' For quick computations on the cluster.
 #' Should only be used by skilled users who know what they are doing.
-#' Creates the file.dir in current directory under the name \dQuote{.BatchJobs_bmq}, 
+#' Creates the file.dir in current directory under the name \dQuote{.BatchJobs_bmq},
 #' maps function, potentially chunks jobs and submits them.
 #' @param fun [\code{function}]\cr
 #'   Function to map over \code{...}.
@@ -27,12 +27,12 @@
 #'   Default is empty list.
 #' @return [\code{\link{Registry}}]
 #' @export
-batchMapQuick = function(fun, ..., more.args=list(), packages=character(0), 
+batchMapQuick = function(fun, ..., more.args=list(), packages=character(0L),
   chunk.size, inds, resources=list()) {
-  
-  id = sprintf("bmq_%i", round(runif(1, 1, .Machine$integer.max)))
+  id = sprintf("bmq_%i", round(runif(1L, 1, .Machine$integer.max)))
+  # FIXME seriously?
   ok = unlink(id, recursive=TRUE)
-  if (ok != 0)
+  if (ok != 0L)
     stopf("Could not delete file.dir: %s", id)
   reg = makeRegistry(id=id, file.dir=id, packages=packages)
   batchMap(reg, fun, ..., more.args=more.args)

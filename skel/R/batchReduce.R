@@ -12,6 +12,9 @@
 #'   Initial object for reducing.
 #' @param block.size [\code{integer(1)}]\cr
 #'   Number of elements of \code{xs} reduced in one job.
+#' @param more.args [\code{list}]\cr
+#'   A list of other arguments passed to \code{fun}.
+#'   Default is empty list.
 #' @return Nothing.
 #' @export
 #' @examples
@@ -23,7 +26,7 @@
 #' submitJobs(reg)
 #' # now reduce one final time on master
 #' reduceResults(reg, fun=function(aggr,job,res) f(aggr, res))
-batchReduce = function(reg, fun, xs, init, block.size) {
+batchReduce = function(reg, fun, xs, init, block.size, more.args=list()) {
   checkArg(reg, cl="Registry")
   checkArg(fun, formals=c("aggr", "x"))
   checkArg(xs, cl="vector")
@@ -31,11 +34,12 @@ batchReduce = function(reg, fun, xs, init, block.size) {
   checkArg(block.size, "integer", len=1L, lower=1L, na.ok=FALSE)
   if (dbGetJobCount(reg) > 0L)
     stop("Registry is not empty!")
+  checkMoreArgs(more.args, reserved=c("fun", "init"))
   xs.blocks = chunk(xs, chunk.size = block.size, shuffle=FALSE)
   reduceOnSlave = function(xs.block, fun, init) {
     Reduce(fun, xs.block, init=init)
   }
-  more.args = list(fun=fun, init=init)
+  more.args = c(more.args, list(fun=fun, init=init))
   batchMap(reg, reduceOnSlave, xs.blocks, more.args=more.args)
   invisible(NULL)
 }

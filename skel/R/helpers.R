@@ -7,6 +7,37 @@ checkIds = function(reg, ids) {
     stopf("Ids not present in registry: %s", collapse(ids))
 }
 
+checkMoreArgs = function(more.args, ddd.names, reserved) {
+  checkArg(more.args, cl="list")
+  n = names(more.args)
+  if(is.null(n))
+    return(invisible(TRUE))
+
+  #FIXME Discus this.
+  # These checks are not exactly necessary ... R is fine with f(a=1, a=2), but most of
+  # the time is done accidentally. We could check the names of "..." also, then this would
+  # at least be consistent.
+  # Nevertheless, the check for reserved keywords is really useful, otherwise we might encounter
+  # some surprising behaviour.
+  check = duplicated(n)
+  if (any(check))
+    stopf("more.args has duplicated element names: %s",
+          collapse(n[check]))
+  if (!missing(ddd.names)) {
+    check = ddd.names %in% n
+    if (any(check))
+      stopf("Naming clash: more.args uses elements names which are already in use by other parameters: %s",
+            collapse(ddd.names[check]))
+  }
+  if (!missing(reserved)) {
+    check = reserved %in% n
+    if (any(n %in% reserved))
+      stopf("more.args uses element names which are internally reserved: %s",
+            collapse(reserved[check]))
+  }
+  return(invisible(TRUE))
+}
+
 getListJobs = function(msg=NULL) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)

@@ -50,6 +50,7 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=as.character(NA), mor
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
   checkArg(fun, formals=c("job", "res"))
+  # checkMoreArg(more.args, ...) done in batchMap
   if (dbGetJobCount(reg2) > 0L)
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)

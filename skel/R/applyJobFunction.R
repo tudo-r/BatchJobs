@@ -12,5 +12,5 @@ applyJobFunction = function(reg, job) {
 #' @method applyJobFunction Registry
 #' @S3method applyJobFunction Registry
 applyJobFunction.Registry = function(reg, job) {
-  do.call(job$fun, job$pars)
+  do.call(job$fun, c(job$pars, job$more.args))
 }

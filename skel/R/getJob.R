@@ -5,9 +5,9 @@
 #'   Id of job.
 #' @param load.fun [\code{logical(1)}]\cr
 #'   Load job function from disk?
-#'   Default is \code{FALSE}. 
+#'   Default is \code{FALSE}.
 #' @param check.id [\code{logical(1)}]\cr
-#'   Check the job id? 
+#'   Check the job id?
 #'   Default is \code{TRUE}.
 #' @return [\code{Job}].
 #' @export
@@ -22,13 +22,13 @@ getJob = function(reg, id, load.fun=FALSE, check.id=TRUE) {
 #'   Ids of jobs.
 #' @param load.fun [\code{logical(1)}]\cr
 #'   Load job function from disk?
-#'   Default is \code{FALSE}. 
+#'   Default is \code{FALSE}.
 #' @param check.ids [\code{logical(1)}]\cr
-#'   Check the job ids? 
+#'   Check the job ids?
 #'   Default is \code{TRUE}.
 #' @return [list of \code{\link{Job}}].
 #' @export
-getJobs = function(reg, ids, load.fun, check.ids=TRUE) {
+getJobs = function(reg, ids, load.fun=FALSE, check.ids=TRUE) {
   UseMethod("getJobs")
 }
 
@@ -43,7 +43,6 @@ getJobs.Registry = function(reg, ids, load.fun=FALSE, check.ids=TRUE) {
 
   jobs = dbGetJobs(reg, ids)
   if (load.fun)
-    lapply(jobs, loadJobFunction, reg=reg)
-  else
-    jobs  
+    return(lapply(jobs, loadJobFunction, reg=reg))
+  return(jobs)
 }
