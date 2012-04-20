@@ -71,9 +71,7 @@ makeClusterFunctionsSSH = function(..., workers) {
   args = list(...)
   if (!xor(length(args) > 0, !missing(workers)))
     stop("You must use exactly only 1 of: '...', 'workers'!")
-  if (!missing(workers)) 
-    checkArg(workers, "list")
-  else 
+  if (missing(workers)) 
     workers = args
   checkListElementClass(workers, "SSHWorker")  
   nodenames = extractSubList(workers, "nodename") 
