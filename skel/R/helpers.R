@@ -13,12 +13,6 @@ checkMoreArgs = function(more.args, ddd.names, reserved) {
   if(is.null(n))
     return(invisible(TRUE))
 
-  #FIXME Discus this.
-  # These checks are not exactly necessary ... R is fine with f(a=1, a=2), but most of
-  # the time is done accidentally. We could check the names of "..." also, then this would
-  # at least be consistent.
-  # Nevertheless, the check for reserved keywords is really useful, otherwise we might encounter
-  # some surprising behaviour.
   check = duplicated(n)
   if (any(check))
     stopf("more.args has duplicated element names: %s",
@@ -101,7 +95,7 @@ load2 = function(file, parts, stop.if.missing=TRUE, ...) {
   load(file, ee)
   if (!missing(parts)) {
     if (stop.if.missing && !all(parts %in% ls(ee))) {
-      stopf("Error: '%s' does not contain objects with names '%s'", 
+      stopf("Error: '%s' does not contain objects with names '%s'",
             file, collapse(parts[!(parts %in% ls(ee))]))
     }
     return(mget(parts, ee, ...))
@@ -119,4 +113,8 @@ loadSingleObject = function(file, name, stop.if.missing=TRUE) {
           file, name)
   }
   ee[[name]]
+}
+
+is.evaluable = function(x) {
+  return(is.call(x) || is.expression(x) || is.symbol(x))
 }
