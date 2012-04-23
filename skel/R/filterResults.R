@@ -23,11 +23,9 @@ filterResults = function(reg, ids, fun, ...) {
   checkArg(fun, formals=c("job", "res"))
   if (missing(ids))
     ids = dbGetDone(reg)
-  else {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-  }
+  else
+    ids = checkIds(reg, ids)
+
   Filter(function(id) {
     fun(job = getJob(reg, id, check.id=FALSE),
         res = loadResult(reg, id, check.id=FALSE),

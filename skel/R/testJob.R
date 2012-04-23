@@ -1,5 +1,5 @@
 #' Tests a job by running it with Rscript in a new process.
-#' 
+#'
 #' Useful for debugging.
 #' Note that neither the registry, database or file directory are changed.
 #' @param reg [\code{\link{Registry}}]\cr
@@ -24,9 +24,7 @@ testJob = function(reg, id) {
       stop("Registry is empty!")
     messagef("Testing job with id=%i ...", id)
   } else {
-    id = convertInteger(id)
-    checkArg(id, "integer", len=1L, na.ok=FALSE)
-    checkIds(reg, id)
+    id = checkId(reg, id)
   }
   # we dont want to change anything in the true registry / file dir / DB
   # so we have to copy stuff a little bit

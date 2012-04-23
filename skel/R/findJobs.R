@@ -8,11 +8,8 @@
 #' @export
 findDone = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (!missing(ids)) {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-  }
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
   dbGetDone(reg, ids)
 }
 
@@ -26,11 +23,8 @@ findDone = function(reg, ids) {
 #' @export
 findMissingResults = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (!missing(ids)) {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-  }
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
   dbGetMissingResults(reg, ids)
 }
 
@@ -44,11 +38,8 @@ findMissingResults = function(reg, ids) {
 #' @export
 findErrors = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (!missing(ids)) {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-  }
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
   dbGetErrors(reg, ids)
 }
 
@@ -62,16 +53,13 @@ findErrors = function(reg, ids) {
 #' @export
 findSubmitted = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (!missing(ids)) {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-  }
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
   dbGetSubmitted(reg, ids)
 }
 
 #' Find jobs which are present on the batch system at the moment.
-#' 
+#'
 #' Find jobs either queued, running, held, etc.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
@@ -82,11 +70,8 @@ findSubmitted = function(reg, ids) {
 #' @export
 findOnSystem = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (!missing(ids)) {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-  }
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
   fun = getListJobs("Cannot find jobs on system")
   batch.job.ids = fun(getBatchJobsConf(), reg)
   dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids)
@@ -103,11 +88,8 @@ findOnSystem = function(reg, ids) {
 #' @export
 findRunning = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (!missing(ids)) {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-  }
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
   fun = getListJobs("Cannot find running jobs")
   batch.job.ids = fun(getBatchJobsConf(), reg)
   # running jobs are running on batch system in general and must have started for this reg
@@ -115,9 +97,9 @@ findRunning = function(reg, ids) {
 }
 
 #' Find jobs where walltime was probably hit.
-#' 
+#'
 #' Right now the heuristic is as follows:
-#' Find all jobs that have submitted, did not abort with an error, 
+#' Find all jobs that have submitted, did not abort with an error,
 #' did not complete with a result and are not submitted or running anymore.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
@@ -128,11 +110,8 @@ findRunning = function(reg, ids) {
 #' @export
 findExpired = function(reg, ids) {
   checkArg(reg, cl = "Registry")
-  if (!missing(ids)) {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-  }
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
   fun = getListJobs("Cannot find expired jobs")
   batch.job.ids = fun(getBatchJobsConf(), reg)
   dbGetExpiredJobs(reg, batch.job.ids, ids)

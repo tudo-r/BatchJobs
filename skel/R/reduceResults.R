@@ -38,9 +38,7 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
   if (missing(ids)) {
     ids = done
   } else {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
+    ids = checkIds(reg, ids)
     if (! all(ids %in% done))
       stopf("No results available for jobs with ids: %s", collapse(ids[! (ids %in% done)]))
   }
@@ -96,7 +94,7 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
   res = reduceResults(reg, ids, part, fun2, init, ...)
   if (use.names)
     res = name.fun(res, ids, fun(getJob(reg, ids[1]), loadResult(reg, ids[1])))
-  return(res)  
+  return(res)
 }
 
 
@@ -110,7 +108,7 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
 #'   Only useful for multiple result files, then defines which result file part should be loaded.
 #'   \code{NA} means all parts are loaded, which is the default.
 #' @param fun [\code{function(job, res)}]\cr
-#'   Function used to select relevant parts of results. 
+#'   Function used to select relevant parts of results.
 #'   \code{job} is the current job descriptor and \code{result} is the current result object.
 #'   Default is to return \code{res}.
 #' @param ... [any]\cr
@@ -122,14 +120,14 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
 #' @export
 #' @rdname reduceResultsVector
 reduceResultsVector = function(reg, ids, part=as.character(NA), fun, ..., use.names=TRUE) {
-  nf = function(res, ids, x1) {names(res) = ids; res} 
+  nf = function(res, ids, x1) {names(res) = ids; res}
   reduceResultsReturnVal(reg, ids, part, fun, identity, c, use.names, nf, ..., init=c())
 }
 
 #' @export
 #' @rdname reduceResultsVector
 reduceResultsList = function(reg, ids, part=as.character(NA), fun, ..., use.names=TRUE) {
-  nf = function(res, ids, x1) {names(res) = ids; res} 
+  nf = function(res, ids, x1) {names(res) = ids; res}
   reduceResultsReturnVal(reg, ids, part, fun, list, c, use.names, nf, ..., init=list())
 }
 
@@ -139,7 +137,7 @@ reduceResultsMatrix = function(reg, ids, part=as.character(NA), fun, ..., rows=T
   combine = if (rows) rbind else cbind
   if (rows)
     nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
-  else 
+  else
     nf = function(res, ids, x1) {colnames(res) = ids; rownames(res) = names(x1); res}
   res = reduceResultsReturnVal(reg, ids, part, fun, unlist, combine, use.names, nf, ..., init=c())
   if (!use.names)
@@ -154,4 +152,4 @@ reduceResultsDataFrame = function(reg, ids, part=as.character(NA), fun, ...) {
   reduceResultsReturnVal(reg, ids, part, fun, as.data.frame, rbind, TRUE, nf, ..., init=data.frame())
 }
 
-  
+

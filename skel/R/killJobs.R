@@ -21,11 +21,8 @@ killJobs = function(reg, ids) {
   checkArg(reg, cl="Registry")
   if (missing(ids))
     return(invisible(NULL))
-  else {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-  }
+  else
+    ids = checkIds(reg, ids)
   killfun = getKillJob("Cannot kill jobs")
   data = dbGetJobStatusTable(reg, ids)
   messagef("Trying to kill %i jobs.", length(ids))

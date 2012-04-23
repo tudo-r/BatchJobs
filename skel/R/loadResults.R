@@ -24,9 +24,7 @@ loadResults = function(reg, ids, part=as.character(NA), simplify=FALSE, use.name
   if (missing(ids)) {
     ids = dbGetDone(reg)
   } else if(check.ids) {
-      ids = convertIntegers(ids)
-      checkArg(ids, "integer", na.ok=FALSE)
-      checkIds(reg, ids)
+    ids = checkIds(reg, ids)
   }
   checkArg(simplify, "logical", len=1, na.ok=FALSE)
   checkArg(use.names, "logical", len=1, na.ok=FALSE)

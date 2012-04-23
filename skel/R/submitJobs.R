@@ -53,7 +53,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
       ids = convertInteger(ids)
       checkArg(ids, "integer", na.ok=FALSE)
     }
-    checkIds(reg, unlist(ids))
+    checkIdsPresent(reg, unlist(ids))
   }
   checkArg(resources, "list")
 

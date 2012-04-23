@@ -35,11 +35,8 @@ getJobs = function(reg, ids, load.fun=FALSE, check.ids=TRUE) {
 #' @method getJobs Registry
 #' @S3method getJobs Registry
 getJobs.Registry = function(reg, ids, load.fun=FALSE, check.ids=TRUE) {
-  if (check.ids) {
-    ids = convertIntegers(ids)
-    checkArg(ids, cl="integer")
+  if (check.ids)
     checkIds(reg, ids)
-  }
 
   jobs = dbGetJobs(reg, ids)
   if (load.fun)

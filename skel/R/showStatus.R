@@ -28,11 +28,8 @@
 #' # should show 10 submitted jobs, which are all done.
 showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
   checkArg(reg, "Registry")
-  if (!missing(ids)) {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-  }
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
 
   errors = convertInteger(errors)
   checkArg(errors, "integer", na.ok=FALSE, len=1L)
