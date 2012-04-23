@@ -18,7 +18,6 @@
 #' @return Nothing.
 #' @export
 killJobs = function(reg, ids) {
-  #FIXME clean this up. really messy
   checkArg(reg, cl="Registry")
   if (missing(ids))
     return(invisible(NULL))
@@ -32,33 +31,30 @@ killJobs = function(reg, ids) {
   messagef("Trying to kill %i jobs.", length(ids))
   messagef("For safety reasons waiting 3secs...")
   Sys.sleep(3)
-  ids.kill = integer(0L)
-  data = subset(data, data$job_id %in% ids)
   n.unsubm = sum(is.na(data$submitted))
   n.term = sum(!is.na(data$done) | !is.na(data$error))
   messagef("Not submitted: %i", n.unsubm)
   messagef("Already terminated: %i", n.term)
   messagef("No batch.job.id: %i", n.term)
   # must submitted, be not done, no error, has bji
-  data.bji = subset(data, !is.na(data$submitted) & is.na(data$done)
+  data = subset(data, !is.na(data$submitted) & is.na(data$done)
     & is.na(data$error) & !is.na(data$batch_job_id))
   # unique because of chunking
-  bjis = unique(data.bji$batch_job_id)
-  ids.kill = data.bji$job_id
-  n.bjis = length(bjis)
-  messagef("Killing batch.job.ids: %i", n.bjis)
-  if (n.bjis > 0L) {
-    bjis.str = collapse(bjis)
+  ids.batch = unique(data$batch_job_id)
+  ids.job = data$job_id
+  messagef("Killing batch.job.ids: %i", length(ids.batch))
+  if (length(ids.batch) > 0L) {
+    ids.str = collapse(ids.batch)
     # trim string so its not too long
-    if (str_length(bjis.str) > 200L)
-      bjis.str = sprintf("%s...", str_sub(bjis.str, end=200L))
-    messagef(bjis.str)
+    if (str_length(ids.str) > 200L)
+      ids.str = sprintf("%s...", str_sub(ids.str, end=200L))
+    message(ids.str)
     conf = getBatchJobsConf()
-    lapply(bjis, killfun, reg=reg, conf=conf)
+    lapply(ids.batch, killfun, reg=reg, conf=conf)
   }
   messagef("For safety reasons waiting 3secs...")
   Sys.sleep(3)
-  messagef("Resetting %i jobs in DB.", length(ids.kill))
-  dbSendMessage(reg, dbMakeMessageKilled(reg, ids.kill))
+  messagef("Resetting %i jobs in DB.", length(ids.job))
+  dbSendMessage(reg, dbMakeMessageKilled(reg, ids.job))
   invisible(NULL)
 }
