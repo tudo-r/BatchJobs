@@ -83,7 +83,7 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
 reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names, name.fun, ..., init) {
   checkArg(reg, "Registry")
   if (missing(ids))
-    ids = findDone(reg)
+    ids = dbGetDone(reg)
   if (missing(fun)){
     fun = function(job, res) res
   } else {
