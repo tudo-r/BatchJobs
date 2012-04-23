@@ -38,3 +38,50 @@ test_that("reduceResults with multiple.result.files", {
   # right part
   expect_equal(reduceResults(reg, fun=function(aggr, job, res) c(aggr, res$foo), init = c(), part="foo"), 1:10)
 })
+
+
+test_that("reduceResultsReturnValue", {  
+  xs = 1:3
+  reg = makeTestRegistry()
+  batchMap(reg,  function(x) x^2, xs)
+  submitJobs(reg)
+  z1 = (1:3)^2
+
+  expect_equal(reduceResultsVector(reg, use.names=FALSE), z1)
+  expect_equal(reduceResultsList(reg, use.names=FALSE), as.list(z1))
+  expect_equal(reduceResultsMatrix(reg, use.names=FALSE), matrix(z1, ncol=1))
+  y = data.frame(z1); colnames(y) = NULL
+  expect_equal(reduceResultsDataFrame(reg), y)
+
+  z2 = z1
+  names(z2) = xs
+  names(z2) = xs
+  expect_equal(reduceResultsVector(reg, use.names=TRUE), z2)
+  expect_equal(reduceResultsList(reg, use.names=TRUE), as.list(z2))
+  y = matrix(z2, ncol=1); rownames(y)=xs; colnames(y) = NULL
+  expect_equal(reduceResultsMatrix(reg, use.names=TRUE), y)
+  
+  reg = makeTestRegistry()
+  batchMap(reg, function(x) list(a=x, b=x^2), xs)
+  submitJobs(reg)
+  
+  expect_equal(reduceResultsVector(reg, fun=function(job, res) res$a, use.names=FALSE), xs)
+  expect_equal(reduceResultsVector(reg, fun=function(job, res) res$b, use.names=FALSE), xs^2)
+  expect_equal(reduceResultsList(reg, fun=function(job, res) res$a, use.names=FALSE), as.list(xs))
+  expect_equal(reduceResultsList(reg, fun=function(job, res) res$b, use.names=FALSE), as.list((xs)^2))
+
+  y = cbind(xs, z1); dimnames(y) = NULL
+  expect_equal(reduceResultsMatrix(reg, use.names=FALSE), y)
+  rownames(y) = xs; colnames(y) = c("a", "b")
+  expect_equal(reduceResultsMatrix(reg, use.names=TRUE), y)
+  dimnames(y) = NULL; y = t(y)
+  expect_equal(reduceResultsMatrix(reg, use.names=FALSE, rows=FALSE), y)
+  colnames(y) = xs; rownames(y) = c("a", "b")
+  expect_equal(reduceResultsMatrix(reg, use.names=TRUE, rows=FALSE), y)
+  
+  y = as.data.frame(cbind(xs, z1)); rownames(y) = xs; colnames(y) = c("a", "b")
+  expect_equal(reduceResultsDataFrame(reg), y)
+})
+
+
+
