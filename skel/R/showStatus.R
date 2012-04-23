@@ -1,5 +1,5 @@
 #' Show status information about jobs.
-#' 
+#'
 #' E.g.: How many there are, how many are done, any errors, etc.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
@@ -14,7 +14,7 @@
 #'   Requires to list the job on the batch system. If not possible, because
 #'   that cluster function is not avilable, this option is ignored anyway.
 #'   Default is \code{TRUE}.
-#' @return [\code{list}] List of absolute job numbers as printed by showStatus. 
+#' @return [\code{list}] List of absolute job numbers as printed by showStatus.
 #'   Returned invisibly.
 #' @export
 #' @examples
@@ -29,11 +29,6 @@
 showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
   checkArg(reg, "Registry")
   if (!missing(ids)) {
-    if (length(ids) == 0L) {
-      warning("Empty ids vector!")
-      return(list(n=0L, submitted=0L, started=0L, errors=0L, running=0L,
-                  expired=0L, done=0L, t_min=0, t_avg=0, t_max=0))
-    }
     ids = convertIntegers(ids)
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
@@ -44,7 +39,7 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
 
   run.and.exp = run.and.exp && !is.null(getListJobs())
   stats = dbGetStats(reg, ids, running = run.and.exp, expired = run.and.exp)
-  
+
   procent = function(x, n) {
     if(is.na(x))
       return("")
@@ -63,7 +58,7 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
     catf("Done: %i %s", done, procent(done, n))
     catf("Time: min=%.2fs avg=%.2fs max=%.2fs", t_min, t_avg, t_max)
   })
-  
+
   m = min(errors, stats$error)
   if(m > 0L) {
     query = sprintf("SELECT job_id, error from %s_job_status WHERE error IS NOT NULL", reg$id)

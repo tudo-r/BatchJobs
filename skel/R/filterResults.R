@@ -15,7 +15,7 @@
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
-#' 
+#'
 #' # which square numbers are even:
 #' filterResults(reg, fun=function(job, res) res %% 2 == 0)
 filterResults = function(reg, ids, fun, ...) {
@@ -29,8 +29,8 @@ filterResults = function(reg, ids, fun, ...) {
     checkIds(reg, ids)
   }
   Filter(function(id) {
-    fun(job = getJob(reg, id, check.id=FALSE), 
-        res = loadResult(reg, id, check.id=FALSE), 
+    fun(job = getJob(reg, id, check.id=FALSE),
+        res = loadResult(reg, id, check.id=FALSE),
         ...)
   }, ids)
 }

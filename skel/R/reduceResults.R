@@ -18,7 +18,8 @@
 #'   Default is first result.
 #' @param ... [any]\cr
 #'   Additional arguments to \code{fun}.
-#' @return [any]. Aggregated results.
+#' @return [any]. Aggregated results. If \code{ids} is empty, returns \code{init}
+#'   if not missing and \code{NULL} otherwise.
 #' @export
 #' @examples
 #' # generate results:
@@ -26,7 +27,7 @@
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
-#' 
+#'
 #' # reduce results to a vector
 #' reduceResults(reg, fun=function(aggr, job, res) c(aggr, res))
 reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
@@ -34,14 +35,11 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
   checkArg(fun, formals=c("aggr", "job", "res"))
 
   done = dbGetDone(reg)
-  if (length(done) == 0L)
-    stop("No jobs finished (yet)!")
-
   if (missing(ids)) {
     ids = done
   } else {
     ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE, min.len=1L)
+    checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
     if (! all(ids %in% done))
       stopf("No results available for jobs with ids: %s", collapse(ids[! (ids %in% done)]))
@@ -49,6 +47,12 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
 
   n = length(ids)
   message("Reducing ", n, " results...")
+  if (n == 0L) {
+    if (missing(init))
+      return(NULL)
+    return(init)
+  }
+
   bar = makeProgressBar(max=n, label="reduceResults")
   bar(0L)
 
@@ -61,7 +65,7 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
   } else {
     aggr = init
   }
-  
+
   for (i in seq(from = 1L + missing(init), to = length(ids))) {
     id = ids[i]
     # use lazy evaluation:
@@ -69,10 +73,11 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
     # following statement is not executed. So, if the job variable
     # is not accessed, getJob will not trigger a database query
     aggr = fun(aggr,
-               job = getJob(reg, id, check.id=FALSE), 
-               res = loadResult(reg, id, part, check.id=FALSE), 
+               job = getJob(reg, id, check.id=FALSE),
+               res = loadResult(reg, id, part, check.id=FALSE),
                ...)
     bar(i)
   }
+
   return(aggr)
 }

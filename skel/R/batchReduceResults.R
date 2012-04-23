@@ -19,7 +19,7 @@
 #'   Initial object for reducing.
 #' @param block.size [\code{integer(1)}]\cr
 #'   Number of results reduced in one job.
-#' @return Nothing.
+#' @return Vector of type \code{integer} with job IDs.
 #' @export
 #' @examples
 #' # generating example results:
@@ -55,13 +55,12 @@ batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, 
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)
     stop("Both registries cannot point to the same file dir. Files would get overwritten!")
-  # x is id
-  # use lazy evaluation, if fun doesn't access job or res (unlikely)
   fun2 = function(aggr, x) {
+    # x is id
+    # use lazy evaluation, if fun doesn't access job or res (unlikely)
     fun(aggr = aggr,
       job = getJob(reg, x, check.id=FALSE),
       res = loadResult(reg, x, part))
   }
   batchReduce(reg2, fun2, ids, init, block.size)
-  invisible(NULL)
 }

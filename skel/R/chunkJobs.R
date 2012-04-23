@@ -10,10 +10,10 @@
 #'   Preferred number of jobs in each chunk.
 #'   Can not be used in combination with \code{n.chunks}
 #' @param n.chunks [\code{integer(1)}]\cr
-#'   Preferred number of chunks. 
+#'   Preferred number of chunks.
 #'   Can not be used in combination with \code{chunks.size}
 #' @param shuffle [\code{logical(1)}]\cr
-#'   Shuffle the vector of ids? 
+#'   Shuffle the vector of ids?
 #'   Default is \code{TRUE}.
 #' @return [list of \code{character}]. List of id vectors.
 #' @export
@@ -27,6 +27,6 @@
 #' reduceResults(reg, fun=function(aggr, job, res) c(aggr, res))
 chunkJobs = function(ids, chunk.size, n.chunks, shuffle=TRUE) {
   ids = convertIntegers(ids)
-  checkArg(ids, "integer", min.len=1L, na.ok=FALSE)
+  checkArg(ids, "integer", na.ok=FALSE)
   chunk(ids, chunk.size, n.chunks, shuffle)
 }

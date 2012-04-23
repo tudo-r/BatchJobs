@@ -13,4 +13,7 @@ test_that("batchMap", {
   y = sapply(getJobIds(reg), function(id) loadResult(reg, id))
   expect_equal(y, ((1:3) + (4:6))*2, check.attributes = FALSE)
 
+  reg = makeTestRegistry()
+  expect_equal(batchMap(reg, function(...) 1), integer(0L))
+  expect_equal(batchMap(reg, function(...) 1, i = integer(0L)), integer(0L))
 })

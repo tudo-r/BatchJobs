@@ -19,7 +19,7 @@
 #' @param more.args [\code{list}]\cr
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is empty list.
-#' @return Nothing.
+#' @return Vector of type \code{integer} with job IDs.
 #' @export
 #' @examples
 #' reg1 <- makeRegistry(id="BatchJobsExample1", file.dir=tempfile(), seed=123)
@@ -50,7 +50,6 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=as.character(NA), mor
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
   checkArg(fun, formals=c("job", "res"))
-  # checkMoreArg(more.args, ...) done in batchMap
   if (dbGetJobCount(reg2) > 0L)
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)

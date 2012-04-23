@@ -1,7 +1,8 @@
 checkIds = function(reg, ids) {
-  dup = which(duplicated(ids))
-  if (length(dup))
-    stopf("You have duplicated entries in your id vector: %s", collapse(ids[dup]))
+  if (anyDuplicated(ids) > 0L) {
+    dup = ids[duplicated(ids)]
+    stopf("You have duplicated entries in your id vector: %s", collapse(dup))
+  }
   ids = setdiff(ids, dbGetJobIds(reg))
   if (length(ids) > 0L)
     stopf("Ids not present in registry: %s", collapse(ids))

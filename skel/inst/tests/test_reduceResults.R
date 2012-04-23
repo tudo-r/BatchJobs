@@ -12,7 +12,11 @@ test_that("reduceResults", {
 test_that("reduceResults works with empty results", {
   reg = makeTestRegistry()
   batchMap(reg, function(x) x, 1)
-  expect_error(reduceResults(reg, fun=function(aggr, job, res) 1), ".*finished.*")
+  expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1), NULL)
+  expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, init=integer(0L)), integer(0L))
+  submitJobs(reg)
+  expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, ids=integer(0L)), NULL)
+  expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, ids=integer(0L), init=integer(0L)), integer(0L))
 })
 
 test_that("reduceResults with multiple.result.files", {

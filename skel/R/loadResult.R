@@ -14,7 +14,7 @@
 #' @export
 loadResult = function(reg, id, part=as.character(NA), check.id=TRUE) {
   checkArg(reg, cl="Registry")
-  if(check.id) {
+  if (check.id) {
     id = convertInteger(id)
     checkArg(id, "integer", len=1L, na.ok=FALSE)
     checkIds(reg, id)

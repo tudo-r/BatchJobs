@@ -82,10 +82,10 @@ dbAddData = function(reg, tab, data) {
   as.integer(dbGetQuery(con, "SELECT total_changes()"))
 }
 
-dbSelectWithIds = function(reg, query, ids) {
+dbSelectWithIds = function(reg, query, ids, where=TRUE) {
   if(missing(ids))
     return(dbDoQuery(reg, query, flags="ro"))
-  query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
+  query = sprintf("%s %s job_id IN (%s)", query, ifelse(where, "WHERE", "AND"), collapse(ids))
   res = dbDoQuery(reg, query, flags="ro")
   res[match(ids, res$job_id),, drop=FALSE]
 }
@@ -154,8 +154,6 @@ dbGetJobs = function(reg, ids) {
 dbGetJobs.Registry = function(reg, ids) {
   query = sprintf("SELECT job_id, fun_id, pars, seed FROM %s_expanded_jobs", reg$id)
   tab = dbSelectWithIds(reg, query, ids)
-  if(nrow(tab) == 0L)
-    stopf("No jobs found for ids: %s", collapse(ids))
   lapply(seq_len(nrow(tab)), function(i) {
     makeJob(id=tab$job_id[i], fun.id=tab$fun_id[i], fun=NULL,
             pars=unserialize(charToRaw(tab$pars[i])), seed=tab$seed[i])
@@ -219,64 +217,48 @@ dbGetLastAddedIds = function(reg, tab, id.col, n) {
 
 dbGetDone = function(reg, ids) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE done IS NOT NULL", reg$id)
-  if(!missing(ids))
-    query = sprintf("%s AND job_id IN (%s)", query, collapse(ids))
-  dbDoQuery(reg, query)$job_id
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
 dbGetMissingResults = function(reg, ids) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE done IS NULL", reg$id)
-  if(!missing(ids))
-    query = sprintf("%s AND job_id IN (%s)", query, collapse(ids))
-  dbDoQuery(reg, query)$job_id
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
 dbGetErrors = function(reg, ids) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE error IS NOT NULL", reg$id)
-  if(!missing(ids))
-    query = sprintf("%s AND job_id IN (%s)", query, collapse(ids))
-  dbDoQuery(reg, query)$job_id
+  dbSelectWithIds(reg, query, where=FALSE)$job_id
 }
 
 dbGetSubmitted = function(reg, ids) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE submitted IS NOT NULL", reg$id)
-  if(!missing(ids))
-    query = sprintf("%s AND job_id IN (%s)", query, collapse(ids))
-  dbDoQuery(reg, query)$job_id
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
 dbGetStarted = function(reg, ids) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE started IS NOT NULL", reg$id)
-  if(!missing(ids))
-    query = sprintf("%s AND job_id IN (%s)", query, collapse(ids))
-  dbDoQuery(reg, query)$job_id
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
 dbGetJobIdsFromBatchJobIds = function(reg, batch.job.ids, ids, clause="") {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE batch_job_id IN ('%s')",
                   reg$id, collapse(batch.job.ids, sep="','"), clause)
-  if(!missing(ids))
-    query = sprintf("%s AND job_id IN (%s)", query, collapse(ids))
   if (clause != "")
     query = sprintf("%s AND %s", query, clause)
-  dbDoQuery(reg, query)$job_id
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
 dbGetExpiredJobs = function(reg, batch.job.ids, ids) {
   # started, not terminated, not running
   query = sprintf("SELECT job_id FROM %s_job_status WHERE started IS NOT NULL AND done IS NULL AND error is NULL AND
       batch_job_id NOT IN ('%s')", reg$id, collapse(batch.job.ids, sep="','"))
-  if(!missing(ids))
-    query = sprintf("%s AND job_id IN (%s)", query, collapse(ids))
-  dbDoQuery(reg, query)$job_id
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
 dbGetSubmittedAndNotTerminatedJobs = function(reg, ids) {
   # we cannot check if job is running in DB, do this later
   query = sprintf("SELECT job_id FROM %s_job_status WHERE submitted IS NOT NULL AND done IS NULL AND error is NULL", reg$id)
-  if(!missing(ids))
-    query = sprintf("%s AND job_id IN (%s)", query, collapse(ids))
-  dbDoQuery(reg, query)$job_id
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
 dbGetMaxOfColumn = function(reg, tab, column, default) {
@@ -298,7 +280,10 @@ dbGetFirstJobInChunkIds = function(reg, ids){
 
 dbGetJobTimes = function(reg, ids){
   query = sprintf("SELECT job_id, done-started AS time FROM %s_job_status", reg$id)
-  dbSelectWithIds(reg, query, ids)
+  # incorrect type for empty id vec possible
+  tab = dbSelectWithIds(reg, query, ids)
+  tab$time = as.integer(tab$time)
+  tab
 }
 
 

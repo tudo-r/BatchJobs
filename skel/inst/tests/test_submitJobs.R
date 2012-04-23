@@ -1,5 +1,12 @@
 context("submitJobs")
 
+test_that("submitJobs works with empty id vector", {
+  reg = makeTestRegistry()
+  batchMap(reg, identity, 1:10)
+  submitJobs(reg, ids = integer(0L))
+  expect_equal(findSubmitted(reg), integer(0L))
+})
+
 if (interactive()) {
 
 test_that("submitJobs", {

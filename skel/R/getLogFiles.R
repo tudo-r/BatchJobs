@@ -8,7 +8,7 @@
 getLogFiles = function(reg, ids) {
   checkArg(reg, "Registry")
   ids = convertIntegers(ids)
-  checkArg(ids, "integer", min.len=1L, na.ok=FALSE)
+  checkArg(ids, "integer", na.ok=FALSE)
   fids = dbGetFirstJobInChunkIds(reg, ids)
   # if no chunking, use normal id
   j = is.na(fids)

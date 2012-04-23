@@ -53,9 +53,6 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
       ids = convertInteger(ids)
       checkArg(ids, "integer", na.ok=FALSE)
     }
-    # must check length for list and vector!
-    if (length(ids) == 0L)
-      stop("ids must have non-zero length!")
     checkIds(reg, unlist(ids))
   }
   checkArg(resources, "list")
@@ -71,19 +68,20 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   }
 
   if (!is.null(getListJobs())) {
-    ids.present = findOnSystem(reg)
-    ids.intersect = intersect(unlist(ids), ids.present)
+    ids.intersect = intersect(unlist(ids), findOnSystem(reg))
     if (length(ids.intersect) > 0L) {
       stopf("Some of the jobs you submitted are already present on the batch system! E.g. id=%i.",
         ids.intersect[1])
     }
   }
   saveConf(reg)
-  submitJobsInternal(reg, ids, resources, wait, max.retries)
-}
 
-# does the real work, is called by submitJobs and submitJobsAndWait
-submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
+  #FIXME only needed because broken progress bar
+  #> bar = makeProgressBar(max=0L)
+  #> bar(0L) # throws error
+  if (length(ids) == 0L)
+    return(invisible(NULL))
+
   is.chunks = is.list(ids)
   # for chunks we take the first id of the last chunk as "last" job, as first is stored in chunk
   # results and we store the log file under that name, etc
@@ -92,7 +90,7 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)
   messagef("Submitting %i chunks / %i jobs.",
-    length(ids), sum(sapply(ids, length)))
+    length(ids), if(is.chunks) sum(sapply(ids, length)) else length(ids))
   messagef("Cluster functions: %s.", cf$name)
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)
@@ -172,4 +170,5 @@ submitJobsInternal = function(reg, ids, resources, wait, max.retries) {
       stopf("Illegal status code %s returned from cluster functions!", batch.result$status)
     }
   }
+  #FIXME better invisibly return ids?
 }

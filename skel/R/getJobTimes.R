@@ -22,6 +22,7 @@ getJobTimes = function(reg, ids, use.names=TRUE) {
   tab = dbGetJobTimes(reg, ids)
   if (!use.names)
     return(tab$time)
+
   times = tab$time
   names(times) = tab$job_id
   return(times)

@@ -1,13 +1,13 @@
 #' Kill a job on the batch system.
-#' 
+#'
 #' Kill jobs which have already been submitted to the batch system.
-#' 
+#'
 #' If a job is killed its internal state is reset as if it had not been submitted at all.
 #' The function warns if
-#' (a) the job you want to kill has not been submitted, 
-#' (b) the job is already done, 
+#' (a) the job you want to kill has not been submitted,
+#' (b) the job is already done,
 #' (c) the job already terminated with an error.
-#' In all 3 cases above nothing is changed for the state of this job and no call 
+#' In all 3 cases above nothing is changed for the state of this job and no call
 #' to the internal kill cluster function is generated.
 #'
 #' @param reg [\code{\link{Registry}}]\cr
@@ -18,10 +18,11 @@
 #' @return Nothing.
 #' @export
 killJobs = function(reg, ids) {
+  #FIXME clean this up. really messy
   checkArg(reg, cl="Registry")
   if (missing(ids))
     return(invisible(NULL))
-  else { 
+  else {
     ids = convertIntegers(ids)
     checkArg(ids, "integer", na.ok=FALSE)
     checkIds(reg, ids)
@@ -39,9 +40,9 @@ killJobs = function(reg, ids) {
   messagef("Already terminated: %i", n.term)
   messagef("No batch.job.id: %i", n.term)
   # must submitted, be not done, no error, has bji
-  data.bji = subset(data, !is.na(data$submitted) & is.na(data$done) 
+  data.bji = subset(data, !is.na(data$submitted) & is.na(data$done)
     & is.na(data$error) & !is.na(data$batch_job_id))
-  # unique because of chunking  
+  # unique because of chunking
   bjis = unique(data.bji$batch_job_id)
   ids.kill = data.bji$job_id
   n.bjis = length(bjis)

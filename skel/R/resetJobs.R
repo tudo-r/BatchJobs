@@ -25,11 +25,12 @@ resetJobs = function(reg, ids, force=FALSE) {
   checkArg(reg, cl="Registry")
   if (missing(ids))
     return(invisible(NULL))
-  else {
-    ids = convertIntegers(ids)
-    checkArg(ids, "integer", na.ok=FALSE)
-    checkIds(reg, ids)
-  }
+
+  ids = convertIntegers(ids)
+  checkArg(ids, "integer", na.ok=FALSE)
+  if (length(ids) == 0L)
+    return(invisible(NULL))
+  checkIds(reg, ids)
   checkArg(force, cl="logical", len=1L, na.ok=FALSE)
   if (!force) {
     if(is.null(getListJobs()) || is.null(getKillJob())) {

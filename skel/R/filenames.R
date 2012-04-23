@@ -18,13 +18,8 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
   if (file.access(path, mode=2L) != 0L)
     stopf("Directory '%s' is not writable!", path)
 
-  if (!identical(check.empty, FALSE) &&
-      !all(list.files(path, all.files=TRUE) %in% c(".", ".."))) {
-    msg = sprintf("Directory '%s' does not seem to be empty!", path)
-    if(check.empty == "stop")
-      stop(msg)
-    warning(msg)
-  }
+  if (check.empty && !all(list.files(path, all.files=TRUE) %in% c(".", "..")))
+    stopf("Directory '%s' does not seem to be empty!", path)
 
   if(check.posix) {
     pattern = "^[[:alnum:]/_.+-]+$"

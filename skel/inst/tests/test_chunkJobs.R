@@ -19,7 +19,10 @@ test_that("chunkJobs", {
   expect_error(chunkJobs(ids, n.chunks=list()))
   # convertIntegers cannot work with NULL
   #expect_error(chunkJobs(NULL, 2))
-  
+
   chunks = chunkJobs(ids, chunk.size = 10)
   expect_true(all(ids %in% unlist(chunks)))
+
+  expect_equal(chunkJobs(integer(0L), n.chunks=99), list())
+  expect_equal(chunkJobs(integer(0L), chunk.size=99), list())
 })

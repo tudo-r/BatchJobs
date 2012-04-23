@@ -1,11 +1,11 @@
 #' Display the contents of a log file.
-#' 
+#'
 #' Display the contents of a log file, useful in case of errors.
 #'
 #' Note this rare special case: When you use chunking, submit some jobs, some jobs fail,
 #' then you resubmit these jobs again in different chunks, the log files will contain the log
 #' of the old, failed job as well. But \code{showLog} will always jump to the correct part
-#' of the new log file. 
+#' of the new log file.
 #'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
@@ -18,7 +18,7 @@ showLog = function(reg, id) {
   checkArg(reg, "Registry")
   if (missing(id)) {
     id = dbGetJobId(reg)
-    if (length(id) == 0L)  
+    if (length(id) == 0L)
       stop("No jobs in registry!")
   } else {
     id = convertInteger(id)
@@ -36,12 +36,12 @@ showLog = function(reg, id) {
 
   pager = getOption("pager")
   sys.pager = Sys.getenv("PAGER")
-  if (grepl("/pager$", pager) && sys.pager != "") { 
+  if (grepl("/pager$", pager) && sys.pager != "") {
     # no user configured pager, we use the system pager
     pager = sys.pager
   }
   bn = basename(strsplit(pager, " ", fixed=TRUE)[[1L]][1L])
-   
+
   # check for less or vim as pagers
   # if we find the pattern, we jump to the matching line
   if (bn %in% c("less", "vim")) {
@@ -54,8 +54,8 @@ showLog = function(reg, id) {
         pager = sprintf("%s +%i", pager, pos)
     }
   }
-  
+
   file.show(fn, pager = pager, header=collapse(header, sep="\n"))
-  
+
   invisible(fn)
 }

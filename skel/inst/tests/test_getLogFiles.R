@@ -1,6 +1,6 @@
 context("getLogFiles")
 
-test_that("getLogFiles", {  
+test_that("getLogFiles", {
   reg = makeTestRegistry()
   batchMap(reg, identity, 1:10)
   ids = getJobIds(reg)
@@ -11,5 +11,7 @@ test_that("getLogFiles", {
   expect_equal(length(unique(fs)), 4)
   expect_true(str_detect(fs[9], "9"))
   expect_true(str_detect(fs[10], "10"))
+
+  expect_equal(getLogFiles(reg, integer(0L)), character(0L))
 })
 
