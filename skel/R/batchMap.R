@@ -26,7 +26,7 @@ batchMap = function(reg, fun, ..., more.args=list()) {
   n = unique(vapply(args, length, integer(1L)))
   if(length(n) != 1L)
     stop("All args in '...' must be of the same length!")
-  checkMoreArgs(more.args, names(args))
+  checkMoreArgs(more.args)
   if (dbGetJobCount(reg) > 0L)
     stop("Registry is not empty!")
   messagef("Adding %i jobs to DB.", n)

@@ -27,7 +27,7 @@ loadResults = function(reg, ids, part=as.character(NA), simplify=FALSE, use.name
     if(check.ids) {
       ids = convertIntegers(ids)
       checkArg(ids, "integer", na.ok=FALSE)
-      checkIds(reg, id)
+      checkIds(reg, ids)
     }
   }
   checkArg(simplify, "logical", len=1, na.ok=FALSE)
@@ -35,7 +35,7 @@ loadResults = function(reg, ids, part=as.character(NA), simplify=FALSE, use.name
   checkArg(check.ids, "logical", len=1, na.ok=FALSE)
   if (length(ids) == 0)
     return(list())
-  res = sapply(ids, loadResult, reg=reg, part=part, check.id=FALSE, 
+  res = sapply(ids, loadResult, reg=reg, part=part, check.id=FALSE,
     simplify=simplify, USE.NAMES=FALSE)
   if (use.names)
     names(res) = ids

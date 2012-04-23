@@ -7,28 +7,16 @@ checkIds = function(reg, ids) {
     stopf("Ids not present in registry: %s", collapse(ids))
 }
 
-checkMoreArgs = function(more.args, ddd.names, reserved) {
+checkMoreArgs = function(more.args, reserved) {
   checkArg(more.args, cl="list")
   n = names(more.args)
-  if(is.null(n))
+  if(is.null(n) || missing(reserved))
     return(invisible(TRUE))
 
-  check = duplicated(n)
+  check = reserved %in% n
   if (any(check))
-    stopf("more.args has duplicated element names: %s",
-          collapse(n[check]))
-  if (!missing(ddd.names)) {
-    check = ddd.names %in% n
-    if (any(check))
-      stopf("Naming clash: more.args uses elements names which are already in use by other parameters: %s",
-            collapse(ddd.names[check]))
-  }
-  if (!missing(reserved)) {
-    check = reserved %in% n
-    if (any(n %in% reserved))
-      stopf("more.args uses element names which are internally reserved: %s",
-            collapse(reserved[check]))
-  }
+    stopf("more.args uses element names which are internally reserved: %s",
+          collapse(reserved[check]))
   return(invisible(TRUE))
 }
 
