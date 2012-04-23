@@ -27,13 +27,10 @@
 #'   Default is empty list.
 #' @return [\code{\link{Registry}}]
 #' @export
+#  FIXME check that this is ok for CRAN test
 batchMapQuick = function(fun, ..., more.args=list(), packages=character(0L),
   chunk.size, inds, resources=list()) {
-  id = sprintf("bmq_%i", round(runif(1L, 1, .Machine$integer.max)))
-  # FIXME seriously?
-  ok = unlink(id, recursive=TRUE)
-  if (ok != 0L)
-    stopf("Could not delete file.dir: %s", id)
+  id = basename(tempfile(pattern="bmq_"))
   reg = makeRegistry(id=id, file.dir=id, packages=packages)
   ids = batchMap(reg, fun, ..., more.args=more.args)
   if (!missing(chunk.size))
