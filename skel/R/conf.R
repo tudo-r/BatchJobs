@@ -7,22 +7,8 @@ sourceConfFile = function(conffile) {
   message("Sourcing configuration file: ", conffile)
   conf = new.env()
   x = try(sys.source(conffile, envir=conf))
-
-  if (is.error(x)) {
-    message(paste(
-      "Format must be like this:\n",
-      "  cluster.functions = <ClusterFunctions object>",
-      "  mail.start = 'none' | 'all' | 'first' | 'last' | 'first+last'",
-      "  mail.done = 'none' | 'all' | 'first' | 'last' | 'first+last'",
-      "  mail.error = 'none' | 'all' | 'first' | 'last' | 'first+last'",
-      "  mail.from = <sender address>",
-      "  mail.to = <recipient address>",
-      "  mail.control = <control object for sendmail package>",
-      "  debug = TRUE | FALSE\n\n",
-      "Using default configuration.",
-      sep = "\n"))
+  if (is.error(x))
     stopf("There was an error in sourcing your configuration file '%s': %s!", conffile, as.character(x))
-  }
   checkConf(conf)
   do.call(checkConfElements, as.list(conf))
   return(conf)
@@ -93,7 +79,7 @@ saveConf = function(reg) {
 }
 
 checkConf = function(conf) {
-  ns = names(conf)
+  ns = ls(conf)
   ns2 = c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options", "debug")
   if (!all(ns %in% ns2))
