@@ -28,7 +28,7 @@
 #'   (like filled queues). Each time \code{wait} is called to wait a certain
 #'   number of seconds.
 #'   Default is 10 times.
-#' @return Nothing.
+#' @return Vector of submitted job ids.
 #' @export
 #' @examples
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
@@ -77,10 +77,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   saveConf(reg)
 
   #FIXME only needed because broken progress bar
-  #> bar = makeProgressBar(max=0L)
-  #> bar(0L) # throws error
   if (length(ids) == 0L)
-    return(invisible(NULL))
+    return(integer(0L))
 
   is.chunks = is.list(ids)
   # for chunks we take the first id of the last chunk as "last" job, as first is stored in chunk
@@ -170,5 +168,5 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
       stopf("Illegal status code %s returned from cluster functions!", batch.result$status)
     }
   }
-  #FIXME better invisibly return ids?
+  return(invisible(ids))
 }
