@@ -19,7 +19,7 @@
 #'   Initial object for reducing.
 #' @param block.size [\code{integer(1)}]\cr
 #'   Number of results reduced in one job.
-#' @return Vector of type \code{integer} with job IDs.
+#' @return Vector of type \code{integer} with job ids.
 #' @export
 #' @examples
 #' # generating example results:

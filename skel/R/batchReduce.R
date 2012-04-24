@@ -15,7 +15,7 @@
 #' @param more.args [\code{list}]\cr
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is empty list.
-#' @return Vector of type \code{integer} with job IDs.
+#' @return Vector of type \code{integer} with job ids.
 #' @export
 #' @examples
 #' # define function to reduce on slave, we want to sum a vector

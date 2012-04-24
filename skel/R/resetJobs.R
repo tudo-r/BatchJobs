@@ -19,18 +19,15 @@
 #' @param force [\code{logical(1)}]\cr
 #'   Also reset jobs which seem to be still running.
 #'   Default is \code{FALSE}.
-#' @return Nothing.
+#' @return Vector of reseted job ids.
 #' @export
 resetJobs = function(reg, ids, force=FALSE) {
   checkArg(reg, cl="Registry")
-  if (missing(ids))
-    return(invisible(NULL))
-
+  if (missing(ids) || length(ids) == 0L)
+    return(integer(0L))
   ids = checkIds(reg, ids)
-  if (length(ids) == 0L)
-    return(invisible(NULL))
-
   checkArg(force, cl="logical", len=1L, na.ok=FALSE)
+
   if (!force) {
     if(is.null(getListJobs()) || is.null(getKillJob())) {
       stop("Listing or killing of jobs not supported by your cluster functions\n",
@@ -46,5 +43,5 @@ resetJobs = function(reg, ids, force=FALSE) {
   Sys.sleep(3)
   messagef("Resetting %i jobs in DB.", length(ids))
   dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
-  invisible(NULL)
+  invisible(ids)
 }

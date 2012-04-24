@@ -10,7 +10,7 @@
 #' @param more.args [\code{list}]\cr
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is empty list.
-#' @return Vector of type \code{integer} with job IDs.
+#' @return Vector of type \code{integer} with job ids.
 #' @examples
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x) x^2

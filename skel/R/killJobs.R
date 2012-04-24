@@ -15,14 +15,15 @@
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs to kill.
 #'   Default is none.
-#' @return Nothing.
+#' @return Vector of type \code{integer} with ids of killed jobs.
 #' @export
 killJobs = function(reg, ids) {
   checkArg(reg, cl="Registry")
   if (missing(ids))
-    return(invisible(NULL))
+    return(invisible(integer(0L)))
   else
     ids = checkIds(reg, ids)
+
   killfun = getKillJob("Cannot kill jobs")
   data = dbGetJobStatusTable(reg, ids)
   messagef("Trying to kill %i jobs.", length(ids))
@@ -53,5 +54,5 @@ killJobs = function(reg, ids) {
   Sys.sleep(3)
   messagef("Resetting %i jobs in DB.", length(ids.job))
   dbSendMessage(reg, dbMakeMessageKilled(reg, ids.job))
-  invisible(NULL)
+  invisible(ids.job)
 }
