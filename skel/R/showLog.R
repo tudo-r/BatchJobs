@@ -21,7 +21,7 @@ showLog = function(reg, id) {
     if (length(id) == 0L)
       stop("No jobs in registry!")
   } else {
-    id = checkId(id)
+    id = checkId(reg, id)
   }
 
   fn = getLogFiles(reg, id)
