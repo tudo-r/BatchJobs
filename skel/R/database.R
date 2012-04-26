@@ -87,7 +87,7 @@ dbSelectWithIds = function(reg, query, ids, where=TRUE) {
     return(dbDoQuery(reg, query, flags="ro"))
   query = sprintf("%s %s job_id IN (%s)", query, ifelse(where, "WHERE", "AND"), collapse(ids))
   res = dbDoQuery(reg, query, flags="ro")
-  res[match(ids, res$job_id),, drop=FALSE]
+  res[match(res$job_id, ids),, drop=FALSE]
 }
 
 ############################################

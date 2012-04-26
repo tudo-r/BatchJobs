@@ -17,8 +17,8 @@ test_that("batchMapResults", {
   reg2 = makeRegistry(id="foo", file.dir = td)
   ids = getJobIds(reg)
   batchMapResults(reg, reg2, function(job, res, y, z) (res+y)*z, 5:6, ids=ids[2:3], more.args=list(z=2))
-  y = sapply(getJobIds(reg2), function(id) loadResult(reg2, id))
   submitJobs(reg2)
+  y = sapply(getJobIds(reg2), function(id) loadResult(reg2, id))
   expect_equal(y, ((2:3)^2 + (5:6))*2, check.attributes=FALSE)
 
   unlink(td, recursive=TRUE)
