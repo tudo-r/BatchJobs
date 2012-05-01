@@ -88,7 +88,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)
   messagef("Submitting %i chunks / %i jobs.",
-    length(ids), if(is.chunks) sum(sapply(ids, length)) else length(ids))
+    length(ids), if(is.chunks) sum(vapply(ids, length, integer(1L))) else length(ids))
   messagef("Cluster functions: %s.", cf$name)
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)

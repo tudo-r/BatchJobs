@@ -7,11 +7,7 @@
 #' @export
 getLogFiles = function(reg, ids) {
   checkArg(reg, "Registry")
-  ids = convertIntegers(ids)
-  checkArg(ids, "integer", na.ok=FALSE)
+  ids = BatchJobs:::checkIds(reg, ids)
   fids = dbGetFirstJobInChunkIds(reg, ids)
-  # if no chunking, use normal id
-  j = is.na(fids)
-  fids[j] = ids[j]
-  vapply(fids, getLogFilePath, character(1L), reg=reg)
+  vapply(ifelse(is.na(fids), ids, fids), getLogFilePath, character(1L), reg=reg)
 }

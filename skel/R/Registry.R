@@ -31,9 +31,8 @@ makeRegistryInternal = function(id, file.dir, sharding,
   checkDir(work.dir, check.posix=TRUE)
   work.dir = makePathAbsolute(work.dir)
 
-  packages = sapply(packages,
-                    function(pkg) list(version = packageVersion(pkg)),
-                    simplify=FALSE)
+  packages = structure(lapply(packages, function(pkg) list(version = packageVersion(pkg))),
+                       names = packages)
   structure(list(
     id = id,
     version = R.version,

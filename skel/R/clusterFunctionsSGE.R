@@ -1,5 +1,5 @@
 #' Create cluster functions for Sun Grid Engine systems.
-#' 
+#'
 #' Job files are created based on the brew template
 #' \code{template.file}. This file is processed with brew and then
 #' submitted to the queue using the \code{qsub} command. Jobs are
@@ -12,23 +12,23 @@
 #' by accessing the appropriate element of the \code{resources}
 #' list. It is the template file's job to choose a queue for the job
 #' and add any desired resource allocations. A simple example
-#' is provided here 
+#' is provided here
 #' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfSGE/simple.tmpl}
 #' in the package repository on its homepage.
 #'
 #' @param template.file [\code{character(1)}]\cr
 #'   Path to a brew template file that is used for the job file.
-#' @return [\code{\link{ClusterFunctions}}]. 
+#' @return [\code{\link{ClusterFunctions}}].
 #' @export
 makeClusterFunctionsSGE = function(template.file) {
-  checkArg(template.file, "character", len=1, na.ok=FALSE)
+  checkArg(template.file, "character", len=1L, na.ok=FALSE)
   ## Read in template
   fd = file(template.file, "r")
   template = paste(readLines(fd), collapse="\n")
   close(fd)
-  
+
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    if (conf$debug) { 
+    if (conf$debug) {
       # if not temp, use jobs dir
       outfile = str_replace(rscript, "\\.R$", ".job")
     } else {
@@ -36,9 +36,9 @@ makeClusterFunctionsSGE = function(template.file) {
     }
     brew(text=template, output=outfile)
     # returns: "Your job 240933 (\"sleep 60\") has been submitted"
-    res = runCommand("qsub", outfile, stop.on.exit.code=FALSE)  
+    res = runCommand("qsub", outfile, stop.on.exit.code=FALSE)
     # FIXME filled queues
-    if (res$exit.code > 0) {
+    if (res$exit.code > 0L) {
       msg = sprintf("qsub produced exit code %i; output %s", res$exit.code, res$output)
       makeSubmitJobResult(status=101L, msg=msg)
     } else {
@@ -47,12 +47,12 @@ makeClusterFunctionsSGE = function(template.file) {
       makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
     }
   }
-  
+
   killJob = function(conf, reg, batch.job.id) {
     # qdel sends SIGTERM, delay, SIGKILL
     runCommand("qdel", batch.job.id)$output
   }
-  
+
   listJobs = function(conf, reg) {
     # looks like this
     # job-ID  prior   name       user         state submit/start at     queue                          slots ja-task-ID
@@ -64,6 +64,6 @@ makeClusterFunctionsSGE = function(template.file) {
     # first number in strings are batch.job.ids
     str_extract(res, "\\d+")
   }
-  
+
   makeClusterFunctions(name="SGE", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
 }

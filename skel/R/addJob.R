@@ -16,11 +16,11 @@ addJob = function(reg, job) {
 
 
 saveFunctions = function(reg, jobs) {
-  funs = extractSubList(jobs, "fun", simplify=FALSE) 
-  fun.ids = extractSubList(jobs, "fun.id") 
-  notdup = which(!duplicated(fun.ids))
   fun.dir = getFunDir(reg$file.dir)
-  sapply(notdup, function(i) {
+  funs = extractSubList(jobs, "fun", simplify=FALSE)
+  fun.ids = extractSubList(jobs, "fun.id")
+
+  lapply(which(!duplicated(fun.ids)), function(i) {
     fn = file.path(fun.dir, sprintf("%s.RData", fun.ids[i]))
     save2(file=fn, fun=funs[[i]])
   })

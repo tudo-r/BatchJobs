@@ -320,7 +320,7 @@ dbGetStats = function(reg, ids, running=FALSE, expired=FALSE) {
 
   # Convert to correct type. Null has no type and casts don't work properly with RSQLite
   doubles = c("t_min", "t_avg", "t_max")
-  sapply(names(df), function(x) if(x %in% doubles) as.double(df[[x]]) else as.integer(df[[x]]), simplify=FALSE)
+  lapply(df, function(x) if(x %in% doubles) as.double(x) else as.integer(x))
 }
 
 ############################################
@@ -384,7 +384,7 @@ dbConvertNumericToPOSIXct = function(x) {
 dbAddJobs = function(reg, jobs, ...) {
   fun.ids = extractSubList(jobs, "fun.id")
   seeds = extractSubList(jobs, "seed")
-  pars = sapply(jobs, function(j) rawToChar(serialize(j$pars, connection=NULL, ascii=TRUE)))
+  pars = vapply(jobs, function(j) rawToChar(serialize(j$pars, connection=NULL, ascii=TRUE)), character(1L))
 
   n = dbAddData(reg, "job_def", data = data.frame(fun_id=fun.ids, pars=pars))
   job.def.ids = dbGetLastAddedIds(reg, "job_def", "job_def_id", n)

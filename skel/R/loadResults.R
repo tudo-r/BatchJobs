@@ -13,25 +13,24 @@
 #' @param use.names [\code{logical(1)}]\cr
 #'   Should the returned list be named with the ids?
 #'   Default is \code{TRUE}.
-#' @param check.ids [\code{logical(1)}]\cr
-#'   Check the job ids?
-#'   Default is \code{TRUE}.
 #' @return [\code{list}]. Results of jobs as list, possibly named by ids.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-loadResults = function(reg, ids, part=as.character(NA), simplify=FALSE, use.names=TRUE, check.ids=TRUE) {
+loadResults = function(reg, ids, part=as.character(NA), simplify=FALSE, use.names=TRUE) {
   checkArg(reg, "Registry")
   if (missing(ids)) {
     ids = dbGetDone(reg)
-  } else if(check.ids) {
+  } else {
     ids = checkIds(reg, ids)
   }
-  checkArg(simplify, "logical", len=1, na.ok=FALSE)
-  checkArg(use.names, "logical", len=1, na.ok=FALSE)
-  checkArg(check.ids, "logical", len=1, na.ok=FALSE)
-  res = sapply(ids, loadResult, reg=reg, part=part, check.id=FALSE,
-               simplify=simplify, USE.NAMES=FALSE)
-  if (use.names)
+  checkArg(simplify, "logical", len=1L, na.ok=FALSE)
+  checkArg(use.names, "logical", len=1L, na.ok=FALSE)
+
+  res = lapply(ids, loadResult, reg=reg, part=part, check.id=FALSE)
+  if(use.names)
     names(res) = ids
+  if(simplify && length(res) > 0L)
+    res = simplify2array(res, higher = (simplify=="array"))
+
   return(res)
 }

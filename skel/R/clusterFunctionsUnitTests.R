@@ -6,6 +6,6 @@ makeClusterFunctionsUnitTests = function() {
     suppressAll(sys.source(rscript, envir=ee))
     makeSubmitJobResult(status=0L, batch.job.id="", msg="")
   }
-  
+
   makeClusterFunctions(name="Testing", submitJob=submitJob, killJob=NULL, listJobs=NULL)
 }
