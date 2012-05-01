@@ -59,9 +59,7 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
   m = min(errors, stats$error)
   if(m > 0L) {
     query = sprintf("SELECT job_id, error from %s_job_status WHERE error IS NOT NULL", reg$id)
-    if(!missing(ids))
-      query = sprintf("%s AND job_id IN (%s)", query, collapse(ids))
-    msgs = dbDoQuery(reg, sprintf("%s LIMIT %i", query, m))
+    msgs = dbSelectWithIds(reg, query, ids, where=FALSE, limit=m)
     catf("\nShowing first %i errors: ", m)
     cat(sprintf("Error in %i: %s", msgs$job_id, msgs$error), sep = "\n")
   }

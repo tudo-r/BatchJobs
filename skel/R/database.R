@@ -82,10 +82,10 @@ dbAddData = function(reg, tab, data) {
   as.integer(dbGetQuery(con, "SELECT total_changes()"))
 }
 
-dbSelectWithIds = function(reg, query, ids, where=TRUE) {
+dbSelectWithIds = function(reg, query, ids, where=TRUE, limit=-1L) {
   if(missing(ids))
     return(dbDoQuery(reg, query, flags="ro"))
-  query = sprintf("%s %s job_id IN (%s)", query, ifelse(where, "WHERE", "AND"), collapse(ids))
+  query = sprintf("%s %s job_id IN (%s) LIMIT %i", query, ifelse(where, "WHERE", "AND"), collapse(ids), limit)
   res = dbDoQuery(reg, query, flags="ro")
   res[match(res$job_id, ids),, drop=FALSE]
 }
