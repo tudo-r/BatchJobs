@@ -64,15 +64,14 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
     aggr = init
   }
 
-  for (i in seq(from = 1L + missing(init), to = length(ids))) {
-    id = ids[i]
+  for (i in seq(from = 1L + missing(init), to = n)) {
     # use lazy evaluation:
     # If fun doesn't access job or res (unlikely), the
     # following statement is not executed. So, if the job variable
     # is not accessed, getJob will not trigger a database query
     aggr = fun(aggr,
-               job = getJob(reg, id, check.id=FALSE),
-               res = loadResult(reg, id, part, check.id=FALSE),
+               job = getJob(reg, ids[i], check.id=FALSE),
+               res = loadResult(reg, ids[i], part, check.id=FALSE),
                ...)
     bar(i)
   }
@@ -84,16 +83,15 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
   checkArg(reg, "Registry")
   if (missing(ids))
     ids = dbGetDone(reg)
-  if (missing(fun)){
+  if (missing(fun))
     fun = function(job, res) res
-  } else {
-    force(fun)
+  else
     checkArg(fun, formals=c("job", "res"))
-  }
+
   fun2 = function(aggr, job, res) combine(aggr, wrap(fun(job, res)))
   res = reduceResults(reg, ids, part, fun2, init, ...)
   if (use.names)
-    res = name.fun(res, ids, fun(getJob(reg, ids[1]), loadResult(reg, ids[1])))
+    res = name.fun(res, ids, fun(getJob(reg, ids[1L]), loadResult(reg, ids[1L])))
   return(res)
 }
 
