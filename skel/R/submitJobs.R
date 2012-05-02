@@ -107,7 +107,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
 
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
-  bar(0L)
+  bar$set(0L)
 
   for (i in seq_along(ids)) {
     id = ids[[i]]
@@ -137,7 +137,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
                                      first.job.in.chunk.id = if(is.chunks) id1 else NULL)
         dbSendMessage(reg, msg)
         interrupted = FALSE
-        bar(i)
+        bar$set(i)
         break
       }
 
@@ -152,7 +152,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
         if (retries > max.retries)
           stopf("Retried already %i times to submit. Aborting.", retries)
 
-        bar(i-1L, msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
+        bar$set(i-1L, msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
         warningf("Submit iteration: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", i, batch.result$msg, retries, sleep.secs)
         Sys.sleep(sleep.secs)
         next

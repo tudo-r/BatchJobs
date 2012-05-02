@@ -1,8 +1,8 @@
 #' Reduce results from result directory.
-#' 
+#'
 #' The following functions provide ways to reduce result files into either specific R objects (like
-#' vectors, lists, matrices or data.frames) or to arbitrarily aggregate them, which is a more general 
-#' operation. 
+#' vectors, lists, matrices or data.frames) or to arbitrarily aggregate them, which is a more general
+#' operation.
 #'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
@@ -13,12 +13,12 @@
 #'   Only useful for multiple result files, then defines which result file part should be loaded.
 #'   \code{NA} means all parts are loaded, which is the default.
 #' @param fun [\code{function}]\cr
-#'   For \code{reduceResults}, a function \code{function(aggr, job, res)} to reduce things, 
-#'   for all others, a function \code{function(job, res)} to select stuff. 
+#'   For \code{reduceResults}, a function \code{function(aggr, job, res)} to reduce things,
+#'   for all others, a function \code{function(job, res)} to select stuff.
 #'   Here, \code{job} is the current job descriptor, \code{result} is the current result object and
 #'   \code{aggr} are the so far aggregated results. When using \code{reduceResults},
 #'   your function should add the stuff you want to have from \code{job} and
-#'   \code{result} to \code{aggr} and return that. 
+#'   \code{result} to \code{aggr} and return that.
 #'   When using the other reductions, you should select the stuff you want to have from \code{job} and
 #'   \code{result} and return something that can be coerced to an element of the selected return data structure
 #'   (reasonable converion is tried internally).
@@ -35,7 +35,7 @@
 #' @param rows [\code{logical(1)}]\cr
 #'   Should the selected vectors be usedd as rows (or columns) in the result matrix?
 #'   Default is \code{TRUE}.
-#' @return Aggregated results, return type depends on function. If \code{ids} is empty: \code{reduceResults} 
+#' @return Aggregated results, return type depends on function. If \code{ids} is empty: \code{reduceResults}
 #'   returns \code{init} (if available) or \code{NULL}, \code{reduceResultsVector} returns \code{c()},
 #'   \code{reduceResultsList} returns \code{list()}, \code{reduceResultsMatrix} returns \code{matrix(0,0,0)},
 #'   \code{reduceResultsDataFrame} returns \code{data.frame()}.
@@ -46,7 +46,7 @@
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:5)
 #' submitJobs(reg)
-#' 
+#'
 #' # reduce results to a vector
 #' reduceResultsVector(reg)
 #' # reduce results to sum
@@ -91,12 +91,12 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
   }
 
   bar = makeProgressBar(max=n, label="reduceResults")
-  bar(0L)
+  bar$set(0L)
 
   if (missing(init)) {
     # fetch first result as init
     aggr = loadResult(reg, ids[1L], part, check.id=FALSE)
-    bar(1L)
+    bar$set(1L)
     if (n == 1L)
       return(aggr)
   } else {
@@ -112,7 +112,7 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
                job = getJob(reg, ids[i], check.id=FALSE),
                res = loadResult(reg, ids[i], part, check.id=FALSE),
                ...)
-    bar(i)
+    bar$set(i)
   }
 
   return(aggr)
@@ -137,21 +137,21 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
   res = reduceResults(reg, ids, part, fun2, init, ...)
   if (use.names)
     res = name.fun(res, ids, fun(getJob(reg, ids[1]), loadResult(reg, ids[1])))
-  return(res)  
+  return(res)
 }
 
 
 #' @export
 #' @rdname reduceResults
 reduceResultsVector = function(reg, ids, part=as.character(NA), fun, ..., use.names=TRUE) {
-  nf = function(res, ids, x1) {names(res) = ids; res} 
+  nf = function(res, ids, x1) {names(res) = ids; res}
   reduceResultsReturnVal(reg, ids, part, fun, identity, c, use.names, nf, ..., init=c(), empty=c())
 }
 
 #' @export
 #' @rdname reduceResults
 reduceResultsList = function(reg, ids, part=as.character(NA), fun, ..., use.names=TRUE) {
-  nf = function(res, ids, x1) {names(res) = ids; res} 
+  nf = function(res, ids, x1) {names(res) = ids; res}
   reduceResultsReturnVal(reg, ids, part, fun, list, c, use.names, nf, ..., init=list(), empty=list())
 }
 
@@ -161,7 +161,7 @@ reduceResultsMatrix = function(reg, ids, part=as.character(NA), fun, ..., rows=T
   combine = if (rows) rbind else cbind
   if (rows)
     nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
-  else 
+  else
     nf = function(res, ids, x1) {colnames(res) = ids; rownames(res) = names(x1); res}
   res = reduceResultsReturnVal(reg, ids, part, fun, unlist, combine, use.names, nf, ..., init=c(), empty=matrix(0,0,0))
   if (!use.names)

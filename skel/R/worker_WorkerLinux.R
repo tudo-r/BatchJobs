@@ -19,6 +19,6 @@ killWorkerJob.WorkerLinux = function(worker, pid) {
 
 listWorkerJobs.WorkerLinux = function(worker, file.dir) {
   res = onWorkerLinux(worker, "list-jobs", file.dir)
-  str_trim(res)
+  gsub("^\\s+|\\s+$", "", res)
 }
 

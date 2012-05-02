@@ -30,7 +30,7 @@ makeClusterFunctionsLSF = function(template.file) {
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     if (conf$debug) {
       # if not temp, use jobs dir
-      outfile = str_replace(rscript, "\\.R$", ".job")
+      outfile = sub("\\.R$", ".job", rscript)
     } else {
       outfile = tempfile()
     }
@@ -46,7 +46,7 @@ makeClusterFunctionsLSF = function(template.file) {
       makeSubmitJobResult(status=101L, msg=msg)
     } else {
       # first number in string is batch.job.id
-      batch.job.id = str_extract(res$output, "\\d+")
+      batch.job.id = strextract(res$output, "\\d+", global=FALSE)
       makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
     }
   }
@@ -59,7 +59,7 @@ makeClusterFunctionsLSF = function(template.file) {
     # JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME
     # 106560  rogon   UNKWN m_amd      hpc84       hpc25       QScript    Mar 19 12:18
     res = runCommand("bjobs", c("-u $USER", "-w"), stop.on.exit.code=FALSE)
-    if (res$exit.code == 255L && str_detect(res$output, "No unfinished job found"))
+    if (res$exit.code == 255L && grepl("No unfinished job found", res$output, fixed=TRUE))
       return(character(0L))
     if (res$exit.code > 0L)
       stopf("bjobs produced exit code %i; output %s", res$exit.code, res$output)
@@ -67,7 +67,7 @@ makeClusterFunctionsLSF = function(template.file) {
     # drop first header line
     res = res[-1L]
     # first number in strings are batch.job.ids
-    str_extract(res, "\\d+")
+    strextract(res, "\\d+")
   }
 
   makeClusterFunctions(name="LSF", submitJob=submitJob, killJob=killJob, listJobs=listJobs)

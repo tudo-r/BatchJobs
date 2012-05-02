@@ -32,7 +32,7 @@ makeClusterFunctionsTorque = function(template.file) {
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     if (conf$debug) {
       # if not temp, use jobs dir
-      outfile = str_replace(rscript, "\\.R$", ".pbs")
+      outfile = sub("\\.R$", ".pbs", rscript)
     } else {
       outfile = tempfile()
     }
@@ -40,7 +40,7 @@ makeClusterFunctionsTorque = function(template.file) {
     res = runCommand("qsub", outfile, stop.on.exit.code=FALSE)
 
     max.jobs.msg = "Maximum number of jobs already in queue"
-    if (str_detect(res$output, max.jobs.msg)) {
+    if (grepl(max.jobs.msg, res$output, fixed=TRUE)) {
       makeSubmitJobResult(status=1L, batch.job.id=as.character(NA), msg=max.jobs.msg)
     } else if (res$exit.code > 0L) {
       msg = sprintf("qsub produced exit code %i; output %s", res$exit.code, res$output)

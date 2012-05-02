@@ -13,16 +13,17 @@
 #   \item{exit.code [integer(1)]}{Exit code of command. Given if wait is \code{TRUE}, otherwise \code{NA}. 0L means success. 127L means command was not found}
 #   \item{output [character]}{Output of command on streams. Only given is \code{stdout} or \code{stderr} was set to \code{TRUE}, otherwise \code{NA}.}
 system3 = function(command, args = character(), stdout = "", stderr = "", wait=TRUE, ..., stop.on.exit.code=wait) {
+  # FIXME use the one from BBmisc without dependencies on stringr
   if (stop.on.exit.code && !wait)
     stopf("stop.on.exit.code is TRUE but wait is FALSE!")
-  output = as.character(NA)  
-  exit.code = as.integer(NA)  
+  output = as.character(NA)
+  exit.code = as.integer(NA)
   if (isTRUE(stdout) || isTRUE(stderr)) {
     wait = TRUE
     # here we wait anyway and output of cmd is returned
     ec = 0L
     suppressWarnings({
-        withCallingHandlers({  
+        withCallingHandlers({
             op = system2(command=command, args=args, stdout=stdout, stderr=stderr, wait=wait, ...)
           }, warning = function(w) {
             # get last integer in string, dont rely on words in message
@@ -41,6 +42,6 @@ system3 = function(command, args = character(), stdout = "", stderr = "", wait=T
     args = collapse(args, " ")
     stopf("Command: %s %s; exit code: %i; output: %s", command, args, ec, output)
   }
-  list(exit.code=exit.code, output=output)  
+  list(exit.code=exit.code, output=output)
 }
 

@@ -1,11 +1,11 @@
 #' Create SSH worker for SSH cluster functions.
-#' 
+#'
 #' @param nodename [\code{character(1)}]\cr
 #'   Host name of node.
 #' @param rhome [\code{character(1)}]\cr
 #'   Path to R installation on worker.
-#'   \dQuote{} means R installation on the PATH is used, 
-#'   of course this implies that it must be on the PATH 
+#'   \dQuote{} means R installation on the PATH is used,
+#'   of course this implies that it must be on the PATH
 #'   (also for non-interactive shells)!
 #'   Default is \dQuote{}.
 #' @param ncpus [\code{integers(1)}]\cr
@@ -15,12 +15,12 @@
 #'   Maximal number of jobs that can run concurrently for the current registry.
 #'   Default is \code{ncpus}.
 #' @param max.load [\code{numeric(1)}]\cr
-#'   Load average (of the last 5 min) at which the worker is considered occupied, 
-#'   so that no job can be submitted. 
+#'   Load average (of the last 5 min) at which the worker is considered occupied,
+#'   so that no job can be submitted.
 #'   Default is \code{ncpus-1}.
 #' @param script [\code{character(1)}]\cr
 #'   Path to helper bash script which interacts with the worker.
-#'   You really should not have to touch this, as this would imply that we have screwed up and 
+#'   You really should not have to touch this, as this would imply that we have screwed up and
 #'   published an incompatible version for your system.
 #'   This option is only provided as a last resort for very experienced hackers.
 #'   Note that the path has to be absolute.
@@ -42,7 +42,7 @@ makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, script) 
 #' Worker nodes must share the same file system and be accessible by ssh
 #' without manually entering passwords (e.g. by ssh-agent or passwordless pubkey).
 #' Note that you can also use this function to parallelize on multiple cores on your local machine.
-#' But you still have to run an ssh server and provide passwordless access to 
+#' But you still have to run an ssh server and provide passwordless access to
 #' localhost.
 #'
 #' @param ...  [\code{\link{SSHWorker}}]\cr
@@ -71,40 +71,40 @@ makeClusterFunctionsSSH = function(..., workers) {
   args = list(...)
   if (!xor(length(args) > 0, !missing(workers)))
     stop("You must use exactly only 1 of: '...', 'workers'!")
-  if (missing(workers)) 
+  if (missing(workers))
     workers = args
-  checkListElementClass(workers, "SSHWorker")  
-  nodenames = extractSubList(workers, "nodename") 
+  checkListElementClass(workers, "SSHWorker")
+  nodenames = extractSubList(workers, "nodename")
   dup = duplicated(nodenames)
   if (any(dup))
     stopf("Multiple definitions for worker nodenames: %s!", nodenames[dup])
   names(workers) = nodenames
-  worker.env = new.env()  
+  worker.env = new.env()
   worker.env$workers = workers
-  
+
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     worker = findWorker(worker.env, reg$file.dir)
     if (is.null(worker)) {
       makeSubmitJobResult(status=1L, batch.job.id=NULL, msg="No free worker available")
     } else {
       pid = try(startWorkerJob(worker, rscript, log.file))
-      if (is.error(pid)) 
+      if (is.error(pid))
         makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="Submit failed.")
-      else 
+      else
         makeSubmitJobResult(status=0L,batch.job.id=paste(worker$nodename, pid, sep="#"))
     }
   }
-  
+
   killJob = function(conf, reg, batch.job.id) {
-    parts = str_split_fixed(batch.job.id, "#", 2L)[1L,]
+    parts = strsplit(batch.job.id, "#", fixed=TRUE)[[1L]]
     nodename = parts[1L]
     pid = parts[2L]
     worker = worker.env$workers[[nodename]]
     if (is.null(worker))
       stopf("Unknown worker node '%s'.", nodename)
-    killWorkerJob(worker, pid)  
+    killWorkerJob(worker, pid)
   }
-  
+
   listJobs = function(conf, reg) {
     res = NULL
     for (worker in worker.env$workers) {
@@ -116,6 +116,6 @@ makeClusterFunctionsSSH = function(..., workers) {
     }
     res
   }
-  
+
   makeClusterFunctions("SSH", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
-} 
+}

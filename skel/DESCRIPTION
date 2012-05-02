@@ -7,7 +7,7 @@ Author: Bernd Bischl <bernd_bischl@gmx.net>,
 Maintainer: Bernd Bischl <bernd_bischl@gmx.net>
 URL: http://code.google.com/p/batchjobs
 License: BSD
-Depends: utils, BBmisc, digest, RSQLite, sendmailR, brew, stringr
+Depends: utils, BBmisc, digest, RSQLite, sendmailR, brew
 LazyData: yes
 ByteCompile: yes
 Version: 1.1

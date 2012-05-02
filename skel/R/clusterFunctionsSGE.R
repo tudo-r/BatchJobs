@@ -30,7 +30,7 @@ makeClusterFunctionsSGE = function(template.file) {
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     if (conf$debug) {
       # if not temp, use jobs dir
-      outfile = str_replace(rscript, "\\.R$", ".job")
+      outfile = sub("\\.R$", ".job", rscript)
     } else {
       outfile = tempfile()
     }
@@ -43,7 +43,7 @@ makeClusterFunctionsSGE = function(template.file) {
       makeSubmitJobResult(status=101L, msg=msg)
     } else {
       # first number in string is batch.job.id
-      batch.job.id = str_extract(res$output, "\\d+")
+      batch.job.id = strextract(res$output, "\\d+", global=FALSE)
       makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
     }
   }
@@ -62,7 +62,7 @@ makeClusterFunctionsSGE = function(template.file) {
     # drop first 2 header lines
     res = res[-(1:2)]
     # first number in strings are batch.job.ids
-    str_extract(res, "\\d+")
+    strextract(res, "\\d+", global=FALSE)
   }
 
   makeClusterFunctions(name="SGE", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
