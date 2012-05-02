@@ -94,7 +94,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   # set on exit handler to avoid inconsistencies caused by user interrupts
   interrupted = FALSE
   on.exit({
-    if(interrupted) {
+    # we need the second case for errors in brew (e.g. resources)  
+    if(interrupted && exists("batch.result", inherits=FALSE)) {
       message("Interrupted! Try to update pending job informations ...")
       msg = dbMakeMessageSubmitted(reg, id, time=submit.time,
                                    batch.job.id=batch.result$batch.job.id,
