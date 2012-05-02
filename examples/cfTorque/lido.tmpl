@@ -2,79 +2,62 @@
 walltime = coalesce(resources$walltime, 60 * 60) ## default 1 hour
 memory = coalesce(resources$memory, 1024) ## default 1G
 nodes = coalesce(resources$nodes, 1L) ## default to 1 node
-
 ## we have two different R versions on LiDO installed, one with GCC
 ## and the other with the Intel compilers. Some packages fail to build
 ## with ICC, but R compiled with ICC is in general faster.
 compiler = coalesce(resources$compiler, "icc")
 
+walltime = convertInteger(walltime)
+memory = convertInteger(memory)
+nodes = convertInteger(nodes)
+
+d = setdiff(names(resources), c("walltime", "memory", "nodes", "compiler"))
+if (length(d) > 0)
+  stopf("Illegal resources used: %s", collapse(d))
+checkArg(walltime, "integer", len=1L, na.ok=FALSE, lower=60, upper=60*60*24*28)
+checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=1, upper=64*1024)
+checkArg(nodes, "integer", len=1L, na.ok=FALSE, lower=1)
+checkArg(compiler, choices=c("gcc", "icc"))
+
 cmd = "R CMD BATCH --no-save --no-restore"
 if(nodes > 1L) 
     cmd = paste("mpirun -np 1", cmd)
 
-##' Choose a suitable LiDO queue for job
-##'
-##' @param walltime Runtime of job in seconds
-##' @param memory Required memory in megabytes.
-##'
-##' @return Queue name
-choose_queue = function(walltime, memory) {
-  hour = 60 * 60
-  day = 24 * hour
-  gigabyte = 1024 
-  mem = if (memory < 0) {
-    stop("Must have positive memory.")
-  } else if (memory <= 16 * gigabyte) {
-    "eth"
-  } else if (memory <= 64 * gigabyte) {
-    "quad"
-  } else {
-    stop("Too much memory requested.")
-  }
-    
-  if (walltime < 0) {
-    stop("'walltime' must be positive.")
-  } else if (walltime <= 1 * hour) {    
-    paste("short", mem, sep="_")
-  } else if (walltime <= 8 * hour) {
-    paste("med", mem, sep="_")
-  } else if (walltime <= 2 * day) {
-    paste("long", mem, sep="_")
-  } else if (walltime <= 28 * day) {
-    if (mem != "eth")
-      stop("No 'ultralong_quad' queue available. Reduce memory or walltime.")
-    "ultralong_eth"
-  } else {
-    stop("No suitable queue found for walltime.")
-  }
+## choose a suitable queue for job
+s2 = ifelse(memory <= 16*1024, "eth", "quad")
+day = 3600 * 24
+s1 = if (walltime <= 3600) {
+  "short"
+} else if (walltime <= 8 * 3600) {
+  "med"
+} else if (walltime <= 2 * day) {
+  "long"
+} else if (walltime <= 28 * day) {
+  "ultralong"
 }
+if (s1 == "ultralong" && s2 == "quad")  
+  stop("No 'ultralong_quad' queue available. Reduce memory or walltime.")
+queue = paste(s1, s2, sep="_")
 
-### get the right software modules to load depending on
-### parallelization (nodes > 1) and compiler
-getModules = function(nodes, compiler) {
-  mods = switch(compiler,
-                "icc" = c("intel/cce/11.1.075", "intel/fce/11.1.075", "R/2.14.1-icc"),
-                "gcc" = c("gcc/4.3.5", "R/2.14.1-gcc"),
-                stopf("Unknown compiler '%s'", compiler))
-  if(nodes > 1L) {
-    mpi = switch(compiler, 
-                 "icc" = "openmpi/ge/intel11.1/64/1.4.2",
-                 "gcc" = "openmpi/ge/gcc4.3.5/64/1.4.2",
-                 stopf("Unknown compiler '%s'", compiler))
-    mods = c(mpi, mods)
-  }
-  collapse(mods, " ")
-}
+## get the right software modules to load depending on
+## parallelization (nodes > 1) and compiler
+modules = switch(compiler,
+  "icc" = c("openmpi/ge/intel11.1/64/1.4.2", "intel/cce/11.1.075", "intel/fce/11.1.075", "R/2.14.1-icc"),
+  "gcc" = c("openmpi/ge/gcc4.3.5/64/1.4.2", "gcc/4.3.5", "R/2.14.1-gcc"))
+if(nodes == 1L)
+  modules = modules[-1]
+modules = collapse(modules, sep=" ")
 -%>
+
 #PBS -N <%= job.name %>
 #PBS -j oe
 #PBS -o <%= log.file %>
 #PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,pvmem=<%= memory %>M
-#PBS -q <%= choose_queue(walltime, memory) %>
+#PBS -q <%= queue %>
 
-## Setup modules:
+## setup modules
 source /sysdata/shared/sfw/Modules/default/init/bash
-module add <%= getModules(nodes, compiler) %>
+module add <%= modules %>
 
 ## create our own temp dir and clean it up later, lido does not do this automatically 
 mkdir /scratch/${USER}-${PBS_JOBID}
