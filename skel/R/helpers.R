@@ -133,7 +133,10 @@ strextract = function(string, pattern, global=TRUE) {
 
 brewWithStop = function(...) {
   pf = parent.frame()
+  old = getOption("show.error.messages")
+  options(show.error.messages=FALSE)
   z = suppressAll(brew(..., envir=pf))
+  options(show.error.messages=old)
   if (is.error(z))
     stop(z)
 }
