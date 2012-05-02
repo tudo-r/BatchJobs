@@ -47,6 +47,23 @@ modules = switch(compiler,
 if(nodes == 1L)
   modules = modules[-1]
 modules = collapse(modules, sep=" ")
+
+## very ugly hack because we cannot log to data (nobackup) filesystem on lido,
+## only home fs is available 
+## unfortunately there seems to be no generic solution
+## does log path start with /data/?
+if (length(grep("^/data/", log.file)) > 0) {
+  ## strip that
+  log.file2 = substr(log.file, 7, nchar(log.file))
+  ## find next forward slash
+  i = regexpr("/", log.file2)
+  if (i != -1) {
+    ## this must be "user": e.g. /data/bischl/...
+    user = substr(log.file2, 1, i-1)
+    ## put together
+    log.file = sprintf("/home/%s/nobackup%s", user, substr(log.file2, i, nchar(log.file2)))
+  }
+}
 -%>
 
 #PBS -N <%= job.name %>
