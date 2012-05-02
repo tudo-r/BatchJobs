@@ -56,7 +56,9 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
     checkIdsPresent(reg, unlist(ids))
   }
   checkArg(resources, "list")
-
+  if(!isProperlyNamed(resources))
+    stop("'resources' must be all be uniquely named!")
+  
   if (missing(wait))
     wait = function(retries) 10 * 2^retries # ^ always converts to double
   else
@@ -104,64 +106,66 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
   bar$set()
-
-  for (id in ids) {
-    id1 = id[1L]
-
-    fn.rscript = getRScriptFilePath(reg, id1)
-    writeRscript(fn.rscript, reg$file.dir, id, reg$multiple.result.files,
-      disable.mail=FALSE, first, last, interactive.test = !is.null(conf$interactive))
-
-    # we use no for loop here to allow infinite retries
-    retries = 0L
-    repeat {
-      # try to submit the job
-      submit.time = as.integer(Sys.time())
-      interrupted = TRUE
-      batch.result = cf$submitJob(conf=conf, reg=reg,
-                                  job.name=sprintf("%s-%i", reg$id, id1),
-                                  rscript=fn.rscript,
-                                  log.file=getLogFilePath(reg, id1),
-                                  job.dir=getJobDirs(reg, id1),
-                                  resources=resources)
-
-      # validate status returned from cluster functions
-      if (batch.result$status == 0L) {
-        msg = dbMakeMessageSubmitted(reg, id, time=submit.time,
-                                     batch.job.id=batch.result$batch.job.id,
-                                     first.job.in.chunk.id = if(is.chunks) id1 else NULL)
-        dbSendMessage(reg, msg)
+  
+  tryCatch({
+    for (id in ids) {
+      id1 = id[1L]
+  
+      fn.rscript = getRScriptFilePath(reg, id1)
+      writeRscript(fn.rscript, reg$file.dir, id, reg$multiple.result.files,
+        disable.mail=FALSE, first, last, interactive.test = !is.null(conf$interactive))
+  
+      # we use no for loop here to allow infinite retries
+      retries = 0L
+      repeat {
+        # try to submit the job
+        submit.time = as.integer(Sys.time())
+        interrupted = TRUE
+        batch.result = cf$submitJob(conf=conf, reg=reg,
+                                    job.name=sprintf("%s-%i", reg$id, id1),
+                                    rscript=fn.rscript,
+                                    log.file=getLogFilePath(reg, id1),
+                                    job.dir=getJobDirs(reg, id1),
+                                    resources=resources)
+  
+        # validate status returned from cluster functions
+        if (batch.result$status == 0L) {
+          msg = dbMakeMessageSubmitted(reg, id, time=submit.time,
+                                       batch.job.id=batch.result$batch.job.id,
+                                       first.job.in.chunk.id = if(is.chunks) id1 else NULL)
+          dbSendMessage(reg, msg)
+          interrupted = FALSE
+          bar$inc(1L)
+          break
+        }
+  
+        # submitJob was not successful, therefore we don't care for interrupts any more
         interrupted = FALSE
-        bar$inc(1L)
-        break
+  
+        if (batch.result$status > 0L && batch.result$status <= 100L) {
+          # if temp error, wait and increase retries, then submit again
+          sleep.secs = wait(retries)
+  
+          retries = retries + 1L
+          if (retries > max.retries)
+            stopf("Retried already %i times to submit. Aborting.", retries)
+  
+          bar$inc(msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
+          warningf("Submit iteration: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", i, batch.result$msg, retries, sleep.secs)
+          Sys.sleep(sleep.secs)
+          next
+        }
+  
+        if (batch.result$status > 100L && batch.result$status <= 200L) {
+          # fatal error, abort at once
+          message("Fatal error occured: ", batch.result$status)
+          message("Fatal error msg: ", batch.result$msg)
+          stop("Fatal error occured: ", batch.result$status)
+        }
+  
+        stopf("Illegal status code %s returned from cluster functions!", batch.result$status)
       }
-
-      # submitJob was not successful, therefore we don't care for interrupts any more
-      interrupted = FALSE
-
-      if (batch.result$status > 0L && batch.result$status <= 100L) {
-        # if temp error, wait and increase retries, then submit again
-        sleep.secs = wait(retries)
-
-        retries = retries + 1L
-        if (retries > max.retries)
-          stopf("Retried already %i times to submit. Aborting.", retries)
-
-        bar$inc(msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
-        warningf("Submit iteration: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", i, batch.result$msg, retries, sleep.secs)
-        Sys.sleep(sleep.secs)
-        next
-      }
-
-      if (batch.result$status > 100L && batch.result$status <= 200L) {
-        # fatal error, abort at once
-        message("Fatal error occured: ", batch.result$status)
-        message("Fatal error msg: ", batch.result$msg)
-        stop("Fatal error occured: ", batch.result$status)
-      }
-
-      stopf("Illegal status code %s returned from cluster functions!", batch.result$status)
     }
-  }
+  }, error=bar$error)
   return(invisible(ids))
 }

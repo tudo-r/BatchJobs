@@ -93,27 +93,28 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
   bar = makeProgressBar(max=n, label="reduceResults")
   bar$set()
 
-  if (missing(init)) {
-    # fetch first result as init
-    aggr = loadResult(reg, ids[1L], part, check.id=FALSE)
-    ids = tail(ids, -1L)
-    bar$inc(1L)
-  } else {
-    aggr = init
-  }
-
-  for (id in ids) {
-    # use lazy evaluation:
-    # If fun doesn't access job or res (unlikely), the
-    # following statement is not executed. So, if the job variable
-    # is not accessed, getJob will not trigger a database query
-    aggr = fun(aggr,
-               job = getJob(reg, id, check.id=FALSE),
-               res = loadResult(reg, id, part, check.id=FALSE),
-               ...)
-    bar$inc(1L)
-  }
-
+  tryCatch({
+    if (missing(init)) {
+      # fetch first result as init
+      aggr = loadResult(reg, ids[1L], part, check.id=FALSE)
+      ids = tail(ids, -1L)
+      bar$inc(1L)
+    } else {
+      aggr = init
+    }
+  
+    for (id in ids) {
+      # use lazy evaluation:
+      # If fun doesn't access job or res (unlikely), the
+      # following statement is not executed. So, if the job variable
+      # is not accessed, getJob will not trigger a database query
+      aggr = fun(aggr,
+                 job = getJob(reg, id, check.id=FALSE),
+                 res = loadResult(reg, id, part, check.id=FALSE),
+                 ...)
+      bar$inc(1L)
+    }
+  }, error=bar$error)
   return(aggr)
 }
 

@@ -34,7 +34,7 @@ makeClusterFunctionsLSF = function(template.file) {
     } else {
       outfile = tempfile()
     }
-    brew(text=template, output=outfile)
+    brewWithStop(text=template, output=outfile)
     # returns: "Job <128952> is submitted to default queue <s_amd>."
     # FIXME: system3
     res = list()

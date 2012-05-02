@@ -130,3 +130,9 @@ strextract = function(string, pattern, global=TRUE) {
     regmatches(string, regexpr(pattern, string))[[1L]]
 
 }
+
+brewWithStop = function(...) {
+  z = brew(...)
+  if (is.error(z))
+    stop(z)
+}
