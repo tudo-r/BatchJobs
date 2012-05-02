@@ -1,6 +1,6 @@
 makeRegistryInternal = function(id, file.dir, sharding,
   work.dir, multiple.result.files, seed, packages) {
-  cur.dir = getCurrentDir()
+  cur.dir = getwd()
   checkArg(id, cl = "character", len = 1L, na.ok = FALSE)
   checkIdValid(id)
   if (missing(file.dir))

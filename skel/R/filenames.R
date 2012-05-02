@@ -34,16 +34,6 @@ createShardedDirs = function(reg, ids) {
   }
 }
 
-getCurrentDir = function() {
-  #FIXME why do we need pwd? this seems pretty error prone
-  #FIXME remove this FIXME with comment or remove this function
-  if(getOperatingSystem() == "Windows")
-    getwd()
-  else
-    # it can be problematic to always resolve symbolic links
-    system("pwd", intern=TRUE, wait=TRUE)
-}
-
 makePathAbsolute = function(path) {
   if (getOperatingSystem() == "Windows") {
     # as we print file paths to R files later on, we must use the forward slash also on windows.
