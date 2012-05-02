@@ -123,7 +123,7 @@ print.Registry = function(x, ...) {
 loadRegistry = function(file.dir, save=FALSE) {
   fn = getRegistryFilePath(file.dir)
   message("Loading registry: ", fn)
-  reg = loadSingleObject(fn, "reg")
+  reg = load2(fn, "reg")
   if(save) {
     reg$file.dir = makePathAbsolute(file.dir)
     saveRegistry(reg)

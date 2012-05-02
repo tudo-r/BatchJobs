@@ -31,7 +31,7 @@ loadResult = function(reg, id, part=as.character(NA), check.id=TRUE) {
     if (length(fn) == 0L)
       stop("No partial result files found for job with id ", id)
 
-    result = lapply(fn, function(fn) loadSingleObject(fn, "result"))
+    result = lapply(fn, function(fn) load2(fn, "result"))
     names(result) = names(fn)
   } else {
     if (!is.na(part))
@@ -40,7 +40,7 @@ loadResult = function(reg, id, part=as.character(NA), check.id=TRUE) {
     fn = getResultFilePath(reg, id, part)
     if (!file.exists(fn))
       stop("Job result file does not exist: ", fn)
-    result = loadSingleObject(fn, "result")
+    result = load2(fn, "result")
   }
   result
 }

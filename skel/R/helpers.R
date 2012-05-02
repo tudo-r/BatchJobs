@@ -91,32 +91,6 @@ getOperatingSystem = function() {
   Sys.info()["sysname"]
 }
 
-# simple wrapper for load which returns the contents of file as a list. parts
-# may be used to load only specific variables. Always returns a list.
-load2 = function(file, parts, stop.if.missing=TRUE, ...) {
-  ee = new.env()
-  load(file, ee)
-  if (!missing(parts)) {
-    if (stop.if.missing && !all(parts %in% ls(ee))) {
-      stopf("Error: '%s' does not contain objects with names '%s'",
-            file, collapse(parts[!(parts %in% ls(ee))]))
-    }
-    return(mget(parts, ee, ...))
-  }
-  as.list(ee)
-}
-
-# simple wrapper for load which loads an RData file and returns exactly
-# one object
-loadSingleObject = function(file, name, stop.if.missing=TRUE) {
-  ee = new.env()
-  load(file, ee)
-  if(stop.if.missing && !(name %in% ls(ee))) {
-    stopf("Error: '%s' does not contain an object with name '%s'",
-          file, name)
-  }
-  ee[[name]]
-}
 
 is.evaluable = function(x) {
   return(is.call(x) || is.expression(x) || is.symbol(x))
