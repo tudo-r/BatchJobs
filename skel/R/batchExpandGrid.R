@@ -1,0 +1,46 @@
+#' Map function over all combinations.
+#' 
+#' Maps an n-ary-function over a list of all combinations which are given by some vectors.
+#' Internally \code{\link{expand.grid}} is used to compute the combinations, then 
+#' \code{\link{batchMap}} is called.
+#'
+#' @param reg [\code{\link{Registry}}]\cr
+#'   Empty Registry that will store jobs for the mapping.
+#' @param fun [\code{function}]\cr
+#'   Function to map over the combinations.
+#' @param ... [any]\cr
+#'   Vectors that are used to compute all combinations. 
+#'   If the arguments are named, these names are used to bind to arguments of \code{fun}.
+#' @param more.args [\code{list}]\cr
+#'   A list of other arguments passed to \code{fun}.
+#'   Default is empty list.
+#' @return Vector of type \code{integer} with job ids.
+#' @examples
+#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+#' f <- function(x, y, z) x * y  + z
+#' batchExpandGrid(reg, f, 1:2, 1:3, more.args=list(z=10))
+#' reduceResultsMatrix(reg, fun=function(job, res), cbind(job$pars, res))
+#' @export
+batchExpandGrid = function(reg, fun, ..., more.args=list()) {
+  checkArg(reg, cl="Registry")
+  checkArg(fun, cl="function")
+  args = list(...)
+  ns = names(args)
+  if (length(args) == 0L)
+    return(invisible(integer(0L)))
+  if(!all(vapply(args, is.vector, logical(1L))))
+    stop("All args in '...' must be vectors!")
+  checkMoreArgs(more.args)
+  # FIXME bad, check name collisions
+  args$KEEP.OUT.ATTRS = FALSE
+  args$stringsAsFactors = FALSE
+  grid = do.call(expand.grid, args)
+  if (is.null(ns))
+    colnames(grid) = NULL
+  fun2 = function(xs, ...) {
+    xs = c(xs, list(...))
+    do.call(fun, xs)
+  }
+  grid.list = lapply(1:nrow(grid), function(i) as.list(grid[i,,drop=FALSE]))
+  batchMap(reg, fun2, grid.list, more.args=more.args)
+}
