@@ -118,35 +118,41 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
   return(aggr)
 }
 
-reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names, name.fun, ..., init) {
+reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names, name.fun, ..., init, empty) {
   checkArg(reg, "Registry")
   if (missing(ids))
     ids = dbGetDone(reg)
-  if (missing(fun))
+  if (missing(fun)){
     fun = function(job, res) res
-  else
+  } else {
+    force(fun)
     checkArg(fun, formals=c("job", "res"))
-
+  }
+  n = length(ids)
+  if (n == 0L) {
+    message("Reducing ", n, " results...")
+    return(empty)
+  }
   fun2 = function(aggr, job, res) combine(aggr, wrap(fun(job, res)))
   res = reduceResults(reg, ids, part, fun2, init, ...)
   if (use.names)
-    res = name.fun(res, ids, fun(getJob(reg, ids[1L]), loadResult(reg, ids[1L])))
-  return(res)
+    res = name.fun(res, ids, fun(getJob(reg, ids[1]), loadResult(reg, ids[1])))
+  return(res)  
 }
 
 
 #' @export
 #' @rdname reduceResults
 reduceResultsVector = function(reg, ids, part=as.character(NA), fun, ..., use.names=TRUE) {
-  nf = function(res, ids, x1) {names(res) = ids; res}
-  reduceResultsReturnVal(reg, ids, part, fun, identity, c, use.names, nf, ..., init=c())
+  nf = function(res, ids, x1) {names(res) = ids; res} 
+  reduceResultsReturnVal(reg, ids, part, fun, identity, c, use.names, nf, ..., init=c(), empty=c())
 }
 
 #' @export
 #' @rdname reduceResults
 reduceResultsList = function(reg, ids, part=as.character(NA), fun, ..., use.names=TRUE) {
-  nf = function(res, ids, x1) {names(res) = ids; res}
-  reduceResultsReturnVal(reg, ids, part, fun, list, c, use.names, nf, ..., init=list())
+  nf = function(res, ids, x1) {names(res) = ids; res} 
+  reduceResultsReturnVal(reg, ids, part, fun, list, c, use.names, nf, ..., init=list(), empty=list())
 }
 
 #' @export
@@ -155,19 +161,20 @@ reduceResultsMatrix = function(reg, ids, part=as.character(NA), fun, ..., rows=T
   combine = if (rows) rbind else cbind
   if (rows)
     nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
-  else
+  else 
     nf = function(res, ids, x1) {colnames(res) = ids; rownames(res) = names(x1); res}
-  res = reduceResultsReturnVal(reg, ids, part, fun, unlist, combine, use.names, nf, ..., init=c())
+  res = reduceResultsReturnVal(reg, ids, part, fun, unlist, combine, use.names, nf, ..., init=c(), empty=matrix(0,0,0))
   if (!use.names)
     dimnames(res) = NULL
   return(res)
 }
 
+#FIXME stringsAsFactors
 #' @export
 #' @rdname reduceResults
 reduceResultsDataFrame = function(reg, ids, part=as.character(NA), fun, ...) {
   nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
-  reduceResultsReturnVal(reg, ids, part, fun, as.data.frame, rbind, TRUE, nf, ..., init=data.frame())
+  reduceResultsReturnVal(reg, ids, part, fun, as.data.frame, rbind, TRUE, nf, ..., init=data.frame(), empty=data.frame())
 }
 
 
