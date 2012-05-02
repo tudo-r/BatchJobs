@@ -76,6 +76,9 @@ getModules = function(nodes, compiler) {
 source /sysdata/shared/sfw/Modules/default/init/bash
 module add <%= getModules(nodes, compiler) %>
 
-## Run R:
-export TMPDIR=/scratch
+## create our own temp dir and clean it up later, lido does not do this automatically 
+mkdir /scratch/${USER}-${PBS_JOBID}
+export TMPDIR=/scratch/${USER}-${PBS_JOBID}
+## run R
 <%= cmd %> "<%= rscript %>" /dev/stdout
+rm -fR /scratch/${USER}-${PBS_JOBID}
