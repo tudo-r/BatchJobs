@@ -132,7 +132,7 @@ strextract = function(string, pattern, global=TRUE) {
 }
 
 brewWithStop = function(...) {
-  z = brew(...)
+  z = brew(..., envir=parent.frame())
   if (is.error(z))
     stop(z)
 }
