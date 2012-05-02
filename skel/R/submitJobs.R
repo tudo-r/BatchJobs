@@ -64,7 +64,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   else
     checkArg(wait, formals="retries")
 
-  if(! is.infinite(max.retries)) {
+  if(!is.infinite(max.retries)) {
     max.retries = convertInteger(max.retries)
     checkArg(max.retries, "integer", len=1L, na.ok=FALSE)
   }
@@ -152,7 +152,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
             stopf("Retried already %i times to submit. Aborting.", retries)
   
           bar$inc(msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
-          warningf("Submit iteration: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", i, batch.result$msg, retries, sleep.secs)
+          warningf("Id: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", id1, batch.result$msg, retries, sleep.secs)
           Sys.sleep(sleep.secs)
           next
         }
