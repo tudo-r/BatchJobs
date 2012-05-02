@@ -13,7 +13,6 @@
 #   \item{exit.code [integer(1)]}{Exit code of command. Given if wait is \code{TRUE}, otherwise \code{NA}. 0L means success. 127L means command was not found}
 #   \item{output [character]}{Output of command on streams. Only given is \code{stdout} or \code{stderr} was set to \code{TRUE}, otherwise \code{NA}.}
 system3 = function(command, args = character(), stdout = "", stderr = "", wait=TRUE, ..., stop.on.exit.code=wait) {
-  # FIXME use the one from BBmisc without dependencies on stringr
   if (stop.on.exit.code && !wait)
     stopf("stop.on.exit.code is TRUE but wait is FALSE!")
   output = as.character(NA)
@@ -27,7 +26,7 @@ system3 = function(command, args = character(), stdout = "", stderr = "", wait=T
             op = system2(command=command, args=args, stdout=stdout, stderr=stderr, wait=wait, ...)
           }, warning = function(w) {
             # get last integer in string, dont rely on words in message
-            ec <<- as.integer(rev(str_extract_all(w$message, "\\d")[[1]])[1])
+            ec <<- as.integer(tail(regmatches(w$message, gregexpr("\\d+", w$message))[[1L]], 1L))
           })
       })
   } else {
@@ -44,4 +43,3 @@ system3 = function(command, args = character(), stdout = "", stderr = "", wait=T
   }
   list(exit.code=exit.code, output=output)
 }
-

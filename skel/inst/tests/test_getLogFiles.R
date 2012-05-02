@@ -9,8 +9,8 @@ test_that("getLogFiles", {
   submitJobs(reg, ids[9:10])
   fs = getLogFiles(reg, ids)
   expect_equal(length(unique(fs)), 4)
-  expect_true(str_detect(fs[9], "9"))
-  expect_true(str_detect(fs[10], "10"))
+  expect_true(grepl("9", fs[9]))
+  expect_true(grepl("10", fs[10]))
 
   expect_equal(getLogFiles(reg, integer(0L)), character(0L))
 })
