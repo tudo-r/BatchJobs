@@ -13,10 +13,10 @@ test_that("reduceResults works with empty results", {
   reg = makeTestRegistry()
   batchMap(reg, function(x) x, 1)
   expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1), NULL)
-  expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, init=integer(0L)), integer(0L))
+  expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, init=0L), 0L)
   submitJobs(reg)
   expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, ids=integer(0L)), NULL)
-  expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, ids=integer(0L), init=integer(0L)), integer(0L))
+  expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, ids=integer(0L), init=0L), 0L)
 })
 
 test_that("reduceResults with multiple.result.files", {
@@ -81,6 +81,18 @@ test_that("reduceResultsReturnValue", {
   
   y = as.data.frame(cbind(xs, z1)); rownames(y) = xs; colnames(y) = c("a", "b")
   expect_equal(reduceResultsDataFrame(reg), y)
+})
+
+test_that("reduceResultsReturnValue works with empty results", {  
+  xs = integer(0)
+  reg = makeTestRegistry()
+  batchMap(reg,  function(x) identity, xs)
+  submitJobs(reg)
+
+  expect_equal(reduceResultsVector(reg, use.names=FALSE), c())
+  expect_equal(reduceResultsList(reg, use.names=FALSE), list())
+  expect_equal(reduceResultsMatrix(reg, use.names=FALSE), matrix(0,0,0))
+  expect_equal(reduceResultsDataFrame(reg, use.names=FALSE), data.frame())
 })
 
 
