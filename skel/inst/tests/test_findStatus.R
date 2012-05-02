@@ -1,6 +1,6 @@
-context("findJobs")
+context("findStatus")
 
-test_that("findJobs", {
+test_that("findStatus", {
   reg = makeTestRegistry()
   f = function(i) {
     if (i == 2)
