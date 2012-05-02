@@ -18,7 +18,7 @@ loadResult = function(reg, id, part=as.character(NA), check.id=TRUE) {
     id = checkId(reg, id)
 
   if (reg$multiple.result.files) {
-    fn = list.files(BatchJobs:::getJobDirs(reg, id),
+    fn = list.files(getJobDirs(reg, id),
                     pattern=sprintf("^%i-result-.+\\.RData$", id),
                     full.names=TRUE)
     names(fn) = sub(".+-(.+)\\.RData$", "\\1", fn)

@@ -28,13 +28,13 @@ debugSSH = function(nodenames, rhome=R.home()) {
   catf("\n") 
   
   messagef("*** which R: ***")
-  res = sapply(nodenames, BatchJobs:::runCommand, cmd="which", args="R", ssh=TRUE, stop.on.exit.code=TRUE)
+  res = sapply(nodenames, runCommand, cmd="which", args="R", ssh=TRUE, stop.on.exit.code=TRUE)
   messagef("which R result:")
   print(res) 
   catf("\n") 
   
   messagef("*** Find helper script: ***")
-  res = Map(BatchJobs:::findHelperScriptLinux, rhome, nodenames, ssh=TRUE)
+  res = Map(findHelperScriptLinux, rhome, nodenames, ssh=TRUE)
   res = unlist(res); names(res) = nodenames
   messagef("Find helper script result:")
   print(res) 
