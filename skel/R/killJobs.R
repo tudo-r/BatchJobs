@@ -42,11 +42,7 @@ killJobs = function(reg, ids) {
   ids.job = data$job_id
   messagef("Killing batch.job.ids: %i", length(ids.batch))
   if (length(ids.batch) > 0L) {
-    ids.str = collapse(ids.batch)
-    # trim string so its not too long
-    if (nchar(ids.str) > 200L)
-      ids.str = sprintf("%s...", strtrim(ids.str, 200L))
-      # FIXME this is kind of ugly: 101, 102, 10...
+    ids.str = collapse(head(ids.batch, which.min(cumsum(nchar(ids.batch) + 1L) > 200L)), ",")
     message(ids.str)
     conf = getBatchJobsConf()
     lapply(ids.batch, killfun, reg=reg, conf=conf)

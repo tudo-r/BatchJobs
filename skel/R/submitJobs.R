@@ -76,10 +76,6 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   }
   saveConf(reg)
 
-  #FIXME only needed because broken progress bar
-  if (length(ids) == 0L)
-    return(integer(0L))
-
   is.chunks = is.list(ids)
   # for chunks we take the first id of the last chunk as "last" job, as first is stored in chunk
   # results and we store the log file under that name, etc
@@ -107,10 +103,9 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
 
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
-  bar$set(0L)
+  bar$set()
 
-  for (i in seq_along(ids)) {
-    id = ids[[i]]
+  for (id in ids) {
     id1 = id[1L]
 
     fn.rscript = getRScriptFilePath(reg, id1)
@@ -137,7 +132,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
                                      first.job.in.chunk.id = if(is.chunks) id1 else NULL)
         dbSendMessage(reg, msg)
         interrupted = FALSE
-        bar$set(i)
+        bar$inc(1L)
         break
       }
 
@@ -152,7 +147,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
         if (retries > max.retries)
           stopf("Retried already %i times to submit. Aborting.", retries)
 
-        bar$set(i-1L, msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
+        bar$inc(msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
         warningf("Submit iteration: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", i, batch.result$msg, retries, sleep.secs)
         Sys.sleep(sleep.secs)
         next
