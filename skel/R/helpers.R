@@ -10,7 +10,8 @@ checkIds = function(reg, ids) {
 }
 
 checkId = function(reg, id) {
-  id = convertInteger(id)
+  if (!missing(id))
+    id = convertInteger(id)
   checkArg(id, cl="integer", na.ok=FALSE, len=1L)
   checkIdsPresent(reg, id)
   return(id)
