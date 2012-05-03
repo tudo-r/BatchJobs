@@ -13,8 +13,8 @@
 #'   Only useful for multiple result files, then defines which result file part should be loaded.
 #'   \code{NA} means all parts are loaded, which is the default.
 #' @param fun [\code{function}]\cr
-#'   For \code{reduceResults}, a function \code{function(aggr, job, res)} to reduce things,
-#'   for all others, a function \code{function(job, res)} to select stuff.
+#'   For \code{reduceResults}, a function \code{function(aggr, job, res, ...)} to reduce things,
+#'   for all others, a function \code{function(job, res, ...)} to select stuff.
 #'   Here, \code{job} is the current job descriptor, \code{result} is the current result object and
 #'   \code{aggr} are the so far aggregated results. When using \code{reduceResults},
 #'   your function should add the stuff you want to have from \code{job} and
