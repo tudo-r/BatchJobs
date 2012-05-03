@@ -28,7 +28,7 @@ test_that("reduceResults with multiple.result.files", {
   expect_equal(loadResult(reg, 2)$foo, 2)
   expect_equal(loadResult(reg, 2, part="foo"), list(foo=2))
   expect_equal(loadResult(reg, 2, part="bar"), list(bar=1))
-  expect_equal(loadResult(reg, 2, part=c("bar", "foo"), list(bar=1, foo=2))
+  expect_equal(loadResult(reg, 2, part=c("bar", "foo")), list(bar=1, foo=2))
   
   # no part = all parts
   expect_equal(reduceResults(reg, fun=function(aggr, job, res) c(aggr, res$foo), init = c()), 1:10)
