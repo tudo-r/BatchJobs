@@ -23,3 +23,6 @@ source("skel/inst/tests/helpers.R")
 
 test_dir("skel/inst/tests")
 print(ls(all=TRUE))
+
+# remove bmq stuff
+lapply(list.files("skel/inst/tests/", pattern="bmq_", full.names=TRUE), unlink, recursive=TRUE)
