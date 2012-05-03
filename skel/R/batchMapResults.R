@@ -13,8 +13,8 @@
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs whose results should be mapped with \code{fun}.
 #'   Default is all jobs.
-#' @param part [\code{character(1)}]\cr
-#'   Only useful for multiple result files, then defines which result file part should be loaded.
+#' @param part [\code{character}]
+#'   Only useful for multiple result files, then defines which result file part(s) should be loaded.
 #'   \code{NA} means all parts are loaded, which is the default.
 #' @param more.args [\code{list}]\cr
 #'   A list of other arguments passed to \code{fun}.
@@ -40,6 +40,7 @@
 batchMapResults = function(reg, reg2, fun, ...,  ids, part=as.character(NA), more.args=list()) {
   checkArg(reg, cl="Registry")
   checkArg(reg2, cl="Registry")
+  checkArg(fun, formals=c("job", "res"))
   if (missing(ids)) {
     ids = dbGetJobIdsIfAllDone(reg)
   } else {
@@ -47,7 +48,7 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=as.character(NA), mor
     if (!all(ids %in% dbGetDone(reg)))
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
-  checkArg(fun, formals=c("job", "res"))
+  checkPart(reg, part)  
   if (dbGetJobCount(reg2) > 0L)
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)

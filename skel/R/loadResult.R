@@ -3,8 +3,8 @@
 #'   Registry.
 #' @param id [\code{integer(1)}]\cr
 #'   Id of job.
-#' @param part [\code{character(1)}]
-#'   Only useful for multiple result files, then defines which result file part should be loaded.
+#' @param part [\code{character}]
+#'   Only useful for multiple result files, then defines which result file part(s) should be loaded.
 #'   \code{NA} means all parts are loaded, which is the default.
 #' @param check.id [\code{logical(1)}]\cr
 #'   Check the job id?
@@ -14,16 +14,17 @@
 #' @export
 loadResult = function(reg, id, part=as.character(NA), check.id=TRUE) {
   checkArg(reg, cl="Registry")
+  checkArg(check.id, cl="logical", len=1L, na.ok=FALSE)
   if (check.id)
     id = checkId(reg, id)
-
+  checkPart(reg, part)  
+  
   if (reg$multiple.result.files) {
     fn = list.files(getJobDirs(reg, id),
                     pattern=sprintf("^%i-result-.+\\.RData$", id),
                     full.names=TRUE)
     names(fn) = sub(".+-(.+)\\.RData$", "\\1", fn)
 
-    checkArg(part, "character", min.len=1L, na.ok=TRUE)
     if (length(part) > 1L || !is.na(part)) {
       fn = fn[names(fn) %in% part]
     }

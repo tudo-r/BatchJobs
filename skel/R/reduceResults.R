@@ -9,8 +9,8 @@
 #' @param ids [\code{integer}]\cr
 #'   Ids of selected jobs.
 #'   Default is all jobs for which results are available.
-#' @param part [\code{character(1)}]\cr
-#'   Only useful for multiple result files, then defines which result file part should be loaded.
+#' @param part [\code{character}]
+#'   Only useful for multiple result files, then defines which result file part(s) should be loaded.
 #'   \code{NA} means all parts are loaded, which is the default.
 #' @param fun [\code{function}]\cr
 #'   For \code{reduceResults}, a function \code{function(aggr, job, res, ...)} to reduce things,
@@ -71,8 +71,6 @@
 #' reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
 reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
   checkArg(reg, "Registry")
-  checkArg(fun, formals=c("aggr", "job", "res"))
-
   done = dbGetDone(reg)
   if (missing(ids)) {
     ids = done
@@ -81,6 +79,8 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
     if (! all(ids %in% done))
       stopf("No results available for jobs with ids: %s", collapse(ids[! (ids %in% done)]))
   }
+  checkPart(reg, part)
+  checkArg(fun, formals=c("aggr", "job", "res"))
 
   n = length(ids)
   message("Reducing ", n, " results...")

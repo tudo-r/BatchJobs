@@ -36,6 +36,19 @@ checkMoreArgs = function(more.args, reserved) {
   return(invisible(TRUE))
 }
 
+checkPart = function(reg, part) {
+  if (reg$multiple.result.files) {
+    if (!(
+      (is.atomic(part) && length(part) ==1 && is.na(part)) ||
+      (is.character(part) && !any(is.na(part)))
+    ))
+      stop("'part' must be NA or a character vector without NAs!")
+  } else {
+    if (!is.atomic(part) || length(part) !=1 || !is.na(part))
+      stop("'part' must be NA because multiple.result.files is FALSE!")
+  }
+}
+  
 getListJobs = function(msg=NULL) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)

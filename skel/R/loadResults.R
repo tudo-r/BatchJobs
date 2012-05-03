@@ -4,8 +4,8 @@
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs.
 #'   Default is all done jobs.
-#' @param part [\code{character(1)}]
-#'   Only useful for multiple result files, then defines which result file part should be loaded.
+#' @param part [\code{character}]
+#'   Only useful for multiple result files, then defines which result file part(s) should be loaded.
 #'   \code{NA} means all parts are loaded, which is the default.
 #' @param simplify [\code{logical(1)}]\cr
 #'   Should the result be simplified to a vector, matrix or higher dimensional array if possible?
@@ -23,6 +23,7 @@ loadResults = function(reg, ids, part=as.character(NA), simplify=FALSE, use.name
   } else {
     ids = checkIds(reg, ids)
   }
+  checkPart(reg, part)
   checkArg(simplify, "logical", len=1L, na.ok=FALSE)
   checkArg(use.names, "logical", len=1L, na.ok=FALSE)
 

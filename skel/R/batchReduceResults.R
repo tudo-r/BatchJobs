@@ -12,8 +12,8 @@
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs whose results should be reduced with \code{fun}.
 #'   Default is all jobs.
-#' @param part [\code{character(1)}]\cr
-#'   Only useful for multiple result files, then defines which result file part should be loaded.
+#' @param part [\code{character}]
+#'   Only useful for multiple result files, then defines which result file part(s) should be loaded.
 #'   \code{NA} means all parts are loaded, which is the default.
 #' @param init [any]\cr
 #'   Initial object for reducing.
@@ -38,8 +38,8 @@
 #' reduceResults(reg2, fun=myreduce)
 batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, block.size) {
   checkArg(reg, cl="Registry")
-  checkArg(fun, formals=c("aggr", "job", "res"))
   checkArg(reg2, cl="Registry")
+  checkArg(fun, formals=c("aggr", "job", "res"))
   if (missing(ids)) {
     ids = dbGetJobIdsIfAllDone(reg)
   } else {
@@ -47,8 +47,10 @@ batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, 
     if (!all(ids %in% dbGetDone(reg)))
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
+  checkPart(reg, part)  
   block.size = convertInteger(block.size)
   checkArg(block.size, "integer", len=1L, na.ok=FALSE)
+
   if (dbGetJobCount(reg2) > 0L)
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)
