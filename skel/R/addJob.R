@@ -30,4 +30,5 @@ saveFunction = function(reg, fun, fun.id, fun.dir) {
     fun.dir = getFunDir(reg$file.dir)
   fn = file.path(fun.dir, sprintf("%s.RData", fun.id))
   save2(file=fn, fun=fun)
+  return(fun.id)
 }
