@@ -41,8 +41,11 @@ batchMap = function(reg, fun, ..., more.args=list()) {
   pars = mapply(function(...) {
     rawToChar(serialize(list(...), connection=NULL, ascii=TRUE))
   }, ..., USE.NAMES=FALSE)
+  # save fun
+  fun.id = digest(fun)
   fun.dir = getFunDir(reg$file.dir)
-  fun.id = saveFunction(reg, fun, fun.dir=fun.dir)
+  fn = file.path(fun.dir, sprintf("%s.RData", fun.id))
+  save2(file=fn, fun=fun)
   # save more args
   if(length(more.args) > 0L) {
     fn = file.path(fun.dir, sprintf("%s-moreArgs.RData", fun.id))

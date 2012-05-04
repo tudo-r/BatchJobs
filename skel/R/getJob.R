@@ -48,25 +48,8 @@ getJobs = function(reg, ids, load.fun=FALSE, check.ids=TRUE) {
 #' @S3method getJobs Registry
 getJobs.Registry = function(reg, ids, load.fun=FALSE, check.ids=TRUE) {
   jobs = dbGetJobs(reg, ids)
-  if (load.fun) {
-    fun.dir = getFunDir(reg$file.dir)
-    fids = extractSubList(jobs, "fun.id")
-    loaded.stuff = Map(function(fid) {
-      fn = file.path(fun.dir, sprintf("%s.RData", fid))
-      res = list(fun=load2(fn, "fun"))
-      fn = file.path(fun.dir, sprintf("%s-moreArgs.RData", fid))
-      if(file.exists(fn))
-        res$more.args = load2(fn, "more.args")
-      return(res)
-    }, unique(fids))
-    lapply(jobs, function(job) {
-      x = loaded.stuff[[job$fun.id]]
-      job$fun = x$fun 
-      if(!is.null(x$more.args))
-        job$more.args = x$more.args
-      job
-    })
-  } else {
+  if (load.fun)
+    lapply(jobs, loadJobFunction, reg=reg)
+  else
     jobs
-  }
 }

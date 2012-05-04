@@ -19,17 +19,9 @@ saveFunctions = function(reg, jobs) {
   fun.dir = getFunDir(reg$file.dir)
   funs = extractSubList(jobs, "fun", simplify=FALSE)
   fun.ids = extractSubList(jobs, "fun.id")
-  inds = which(!duplicated(fun.ids))
-  Map(saveFunction, funs[inds], fun.ids[inds], reg=reg, fun.dir=fun.dir)
-}
 
-saveFunction = function(reg, fun, fun.id, fun.dir) {
-  environment(fun) = emptyenv()
-  if (missing(fun.id))
-    fun.id = digest(fun)
-  if (missing(fun.dir))
-    fun.dir = getFunDir(reg$file.dir)
-  fn = file.path(fun.dir, sprintf("%s.RData", fun.id))
-  save2(file=fn, fun=fun)
-  return(fun.id)
+  lapply(which(!duplicated(fun.ids)), function(i) {
+    fn = file.path(fun.dir, sprintf("%s.RData", fun.ids[i]))
+    save2(file=fn, fun=funs[[i]])
+  })
 }
