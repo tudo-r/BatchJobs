@@ -24,6 +24,7 @@ saveFunctions = function(reg, jobs) {
 }
 
 saveFunction = function(reg, fun, fun.id, fun.dir) {
+  environment(fun) = emptyenv()
   if (missing(fun.id))
     fun.id = digest(fun)
   if (missing(fun.dir))
