@@ -10,8 +10,7 @@ checkIds = function(reg, ids) {
 }
 
 checkId = function(reg, id) {
-  if (!missing(id))
-    id = convertInteger(id)
+  id = convertInteger(id)
   checkArg(id, cl="integer", na.ok=FALSE, len=1L)
   checkIdsPresent(reg, id)
   return(id)
@@ -48,7 +47,7 @@ checkPart = function(reg, part) {
       stop("'part' must be NA because multiple.result.files is FALSE!")
   }
 }
-  
+
 getListJobs = function(msg=NULL) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)
