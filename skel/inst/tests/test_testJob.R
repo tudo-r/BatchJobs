@@ -4,9 +4,8 @@ if (interactive()) {
   
 test_that("testJob", {  
   reg = makeTestRegistry()
-  f = function() 1
   id = 1L
-  addJob(reg, makeJob(id=id, fun=f, pars=list(), seed=reg$seed)) 
+  batchMap(reg, identity, 1)
   res = testJob(reg, id)
   expect_equal(res, 1)
   ids = findMissingResults(reg)
@@ -20,8 +19,8 @@ test_that("testJob", {
   expect_equal(st$error, 0)
   
   reg = makeTestRegistry()
-  f = function() {library(xxxxx);1}
-  job = addJob(reg, makeJob(id=id, fun=f, pars=list(), seed=reg$seed)) 
+  f = function(i) {library(xxxxx);1}
+  batchMap(reg, f, 1)
   res = testJob(reg, id)
   expect_true(is.null(res))
   ids = findMissingResults(reg)

@@ -5,10 +5,9 @@ if (interactive()) {
 test_that("database", {  
   err.msg = "error with 'quotes'"
   reg = makeTestRegistry()
-  f = function() 1
-  id = 1L
-  addJob(reg, makeJob(id=id, fun=f, pars=list(), seed=reg$seed))  
-  dbSendMessage(reg, dbMakeMessageError(reg, id, err.msg=err.msg))
+  batchMap(reg, identity, 1)
+  dbSendMessage(reg, dbMakeMessageError(reg, 1, err.msg=err.msg))
+  
   reg = makeTestRegistry()
   f = function(x) stop(err.msg)
   batchMap(reg, f, 1)
