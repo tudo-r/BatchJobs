@@ -49,6 +49,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
     if (is.list(ids)) {
       ids = lapply(ids, convertIntegers)
       checkListElementClass(ids, "integer")
+      if(any(is.na(unlist(ids))))
+        stop("Chunks must not contain NAs!")
     } else {
       ids = convertInteger(ids)
       checkArg(ids, "integer", na.ok=FALSE)
