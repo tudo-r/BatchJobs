@@ -85,11 +85,15 @@ dbAddData = function(reg, tab, data) {
 }
 
 dbSelectWithIds = function(reg, query, ids, where=TRUE, limit=-1L) {
-  if(missing(ids))
-    return(dbDoQuery(reg, query, flags="ro"))
-  query = sprintf("%s %s job_id IN (%s) LIMIT %i", query, ifelse(where, "WHERE", "AND"), collapse(ids), limit)
+  if(!missing(ids))
+    query = sprintf("%s %s job_id IN (%s)", query, ifelse(where, "WHERE", "AND"), collapse(ids))
+  query = sprintf("%s LIMIT %i", query, limit)
   res = dbDoQuery(reg, query, flags="ro")
-  res[match(res$job_id, ids),, drop=FALSE]
+  if(!missing(ids))
+    # order result same as ids
+    res[order(match(res$job_id, ids)),, drop=FALSE]
+  else
+    res
 }
 
 ############################################
