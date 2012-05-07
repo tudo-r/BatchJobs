@@ -98,17 +98,27 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   on.exit({
     # we need the second case for errors in brew (e.g. resources)  
     if(interrupted && exists("batch.result", inherits=FALSE)) {
-      message("Interrupted! Try to update pending job informations ...")
-      msg = dbMakeMessageSubmitted(reg, id, time=submit.time,
-                                   batch.job.id=batch.result$batch.job.id,
-                                   first.job.in.chunk.id = if(is.chunks) id1 else NULL)
-      dbSendMessage(reg, msg)
+      #message("Interrupted! Try to update pending job informations ...")
+      submit.msgs[[length(submit.msgs)+1]] = dbMakeMessageSubmitted(reg, id, time=submit.time,
+        batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL)
     }
+    # if we have remaining messages send them now
+    message("Sending remaining submit messages: %i", length(submit.msgs))
+    sendSubmitMessages(1)
   })
 
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
   bar$set()
+
+  submit.msgs = list()
+  sendSubmitMessages = function(n) {
+    if (length(submit.msgs) >= n) {
+      # FIXME: maybe save the batch.job.ids in case of dratic error in global env for user? so he can kill?
+      dbFlushMessages(reg, submit.msgs)
+      submit.msgs <<- list()
+    }
+  }
   
   tryCatch({
     for (id in ids) {
@@ -133,10 +143,9 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   
         # validate status returned from cluster functions
         if (batch.result$status == 0L) {
-          msg = dbMakeMessageSubmitted(reg, id, time=submit.time,
-                                       batch.job.id=batch.result$batch.job.id,
-                                       first.job.in.chunk.id = if(is.chunks) id1 else NULL)
-          dbSendMessage(reg, msg)
+          submit.msgs[[length(submit.msgs)+1]] = dbMakeMessageSubmitted(reg, id, time=submit.time,
+            batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL)
+          sendSubmitMessages(10)
           interrupted = FALSE
           bar$inc(1L)
           break
@@ -155,6 +164,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   
           bar$inc(msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
           warningf("Id: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", id1, batch.result$msg, retries, sleep.secs)
+          # better send all msgs before we sleep
+          sendSubmitMessages(1)
           Sys.sleep(sleep.secs)
           next
         }
