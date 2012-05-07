@@ -6,11 +6,11 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   
   # FIXME: bad style, also maybe remove this later or do it in batch system
   # we do this so jobs dont write sychronously to DB
-  if (!(conf$cluster.functions$name %in% c("Interactive", "Testing", "Local"))
+  if (!(conf$cluster.functions$name %in% c("Interactive", "Testing", "Local")))
     Sys.sleep(runif(5, 10))
   
   # we need to see all warnings immediatly
-  if (!(conf$cluster.functions$name %in% c("Interactive", "Testing"))
+  if (!(conf$cluster.functions$name %in% c("Interactive", "Testing")))
     options(warning.length=8170, warn=1)
       
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
