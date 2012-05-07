@@ -38,10 +38,8 @@ batchExpandGrid = function(reg, fun, ..., more.args=list()) {
   grid = do.call(expand.grid, args)
   if (is.null(ns))
     colnames(grid) = NULL
-  fun2 = function(xs, ...) {
-    xs = c(xs, list(...))
-    do.call(fun, xs)
-  }
-  grid.list = lapply(1:nrow(grid), function(i) as.list(grid[i,,drop=FALSE]))
-  batchMap(reg, fun2, grid.list, more.args=more.args)
+  # FIXME check name collisions
+  args = as.list(grid)
+  args = c(args, list(reg=reg, fun=fun, more.args=more.args))
+  do.call(batchMap, args)
 }

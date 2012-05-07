@@ -53,10 +53,12 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=as.character(NA), mor
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)
     stop("Both registries cannot point to the same file dir. Files would get overwritten!")
-  fun2 = function(id, ...) {
-    fun(job = getJob(reg, id, check.id=FALSE),
-        res = loadResult(reg, id, part=part, check.id=FALSE),
-        ...)
-  }
-  batchMap(reg2, fun2, ids, ..., more.args=more.args)
+  # FIXME: check name clashes
+  more.args = c(more.args, list(.reg=reg, .fun=fun, .part=part))
+  batchMap(reg2, batchMapResultsWrapper, ids, ..., more.args=more.args)
+}
+
+batchMapResultsWrapper = function(id, ..., .reg, .fun, .part) {
+  .fun(job = getJob(.reg, id, check.id=FALSE),
+    res = loadResult(.reg, id, part=.part, check.id=FALSE), ...)
 }

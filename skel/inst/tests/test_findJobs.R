@@ -13,8 +13,8 @@ test_that("findJobs", {
   
   reg = makeTestRegistry()
   batchExpandGrid(reg, function(x,y) x*y, x=1:2, y=10:11)
-  ids = findJobs(reg, pars=quote(.arg1$x == 2))
+  ids = findJobs(reg, pars=quote(x == 2))
   expect_true(length(ids) == 2)
-  ids = findJobs(reg, pars=quote(.arg1$x == 1 && .arg1$y == 11))
+  ids = findJobs(reg, pars=quote(x == 1 && y == 11))
   expect_true(length(ids) == 1)
 })

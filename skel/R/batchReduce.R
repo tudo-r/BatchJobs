@@ -4,7 +4,7 @@
 #' You can then submit these jobs to the batch system.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Empty Registry.
-#' @param fun [\code{function(aggr, x)}]\cr
+#' @param fun [\code{function(aggr, x, ...)}]\cr
 #'   Function to reduce \code{xs} with.
 #' @param xs [\code{vector}]\cr
 #'   Vector to reduce.
@@ -36,9 +36,13 @@ batchReduce = function(reg, fun, xs, init, block.size, more.args=list()) {
     stop("Registry is not empty!")
   checkMoreArgs(more.args, reserved=c("fun", "init"))
   xs.blocks = chunk(xs, chunk.size = block.size, shuffle=FALSE)
-  reduceOnSlave = function(xs.block, fun, init) {
-    Reduce(fun, xs.block, init=init)
-  }
-  more.args = c(more.args, list(fun=fun, init=init))
-  batchMap(reg, reduceOnSlave, xs.blocks, more.args=more.args)
+  # FIXME: check name clashes
+  more.args = c(more.args, list(.fun=fun, .init=init))
+  batchMap(reg, batchReduceWrapper, xs.blocks, more.args=more.args)
 }
+
+batchReduceWrapper = function(xs.block, .fun, .init, ...) {
+  fun = function(aggr, x)
+    .fun(aggr, x, ...)    
+  Reduce(fun, xs.block, init=.init)
+}  

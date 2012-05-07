@@ -7,7 +7,7 @@
 #'   Registry whose results should be reduced by \code{fun}.
 #' @param reg2 [\code{\link{Registry}}]\cr
 #'   Empty registry that should store the job for the mapping.
-#' @param fun [\code{function(aggr, job, res)}]\cr
+#' @param fun [\code{function(aggr, job, res, ...)}]\cr
 #'   Function to reduce results with.
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs whose results should be reduced with \code{fun}.
@@ -19,6 +19,9 @@
 #'   Initial object for reducing.
 #' @param block.size [\code{integer(1)}]\cr
 #'   Number of results reduced in one job.
+#' @param more.args [\code{list}]\cr
+#'   A list of other arguments passed to \code{fun}.
+#'   Default is empty list.
 #' @return Vector of type \code{integer} with job ids.
 #' @export
 #' @examples
@@ -36,7 +39,7 @@
 #' submitJobs(reg2)
 #' # now reduce one final time on master
 #' reduceResults(reg2, fun=myreduce)
-batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, block.size) {
+batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, block.size, more.args=list()) {
   checkArg(reg, cl="Registry")
   checkArg(reg2, cl="Registry")
   checkArg(fun, formals=c("aggr", "job", "res"))
@@ -55,12 +58,16 @@ batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, 
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)
     stop("Both registries cannot point to the same file dir. Files would get overwritten!")
-  fun2 = function(aggr, x) {
-    # x is id
-    # use lazy evaluation, if fun doesn't access job or res (unlikely)
-    fun(aggr = aggr,
-      job = getJob(reg, x, check.id=FALSE),
-      res = loadResult(reg, x, part))
-  }
-  batchReduce(reg2, fun2, ids, init, block.size)
+  # FIXME name clashes, also with batchReduce
+  more.args = c(more.args, list(..reg=reg, ..fun=fun, ..part=part))
+  batchReduce(reg2, batchReduceResultsWrapper, ids, init=init, block.size=block.size, 
+    more.args=more.args)
 }
+
+batchReduceResultsWrapper = function(aggr, x, ..reg, ..fun, ..part) {
+  # x is id
+  # use lazy evaluation, if fun doesn't access job or res (unlikely)
+  ..fun(aggr = aggr, job = getJob(..reg, x, check.id=FALSE),
+    res = loadResult(..reg, x, ..part))
+}
+

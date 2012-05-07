@@ -13,10 +13,7 @@
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x, y) x * y
 #' batchExpandGrid(reg, f, x=1:2, y=1:3)
-#' # the next line looks a bit clumsy, we need .arg1 because batchExpandGrid calls batchMap internally
-#' findJobs(reg, pars=quote(.arg1$y > 2))
-
-
+#' findJobs(reg, pars=quote(y > 2))
 findJobs = function(reg, pars) {
   checkArg(reg, cl="Registry")
   jobs = getJobs(reg, check.ids=FALSE)
