@@ -52,9 +52,21 @@ makeClusterFunctionsLSF = function(template.file) {
   }
 
   killJob = function(conf, reg, batch.job.id) {
-    runCommand("bkill", batch.job.id)
+    tries = 0  
+    while(TRUE) {
+      # qdel sends SIGTERM, delay, SIGKILL
+      error.code = runCommand("bkill", batch.job.id, stop.on.exit=FALSE)$error.code
+      if (error.code == 0) {
+        return()
+      } else {
+        tries = tries+1
+        if (tries > 3)
+          stopf("Really tried to kill job, but could not do it. batch job id is %s", batch.job.id)
+        Sys.sleep(1)
+      }
+    }
   }
-
+  
   listJobs = function(conf, reg) {
     # JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME
     # 106560  rogon   UNKWN m_amd      hpc84       hpc25       QScript    Mar 19 12:18

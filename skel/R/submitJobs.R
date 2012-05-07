@@ -166,7 +166,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
             stopf("Retried already %i times to submit. Aborting.", retries)
   
           bar$inc(msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
-          warningf("Id: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", id1, batch.result$msg, retries, sleep.secs)
+          #warningf("Id: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", id1, batch.result$msg, retries, sleep.secs)
           # better send all msgs before we sleep
           sendSubmitMessages(1)
           Sys.sleep(sleep.secs)

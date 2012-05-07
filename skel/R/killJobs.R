@@ -1,14 +1,18 @@
 #' Kill a job on the batch system.
 #'
 #' Kill jobs which have already been submitted to the batch system.
-#'
 #' If a job is killed its internal state is reset as if it had not been submitted at all.
-#' The function warns if
+#'
+#' The function informs if
 #' (a) the job you want to kill has not been submitted,
-#' (b) the job is already done,
-#' (c) the job already terminated with an error.
+#' (b) the job has already terminated,
+#' (c) for some reason no batch job is is available.
 #' In all 3 cases above nothing is changed for the state of this job and no call
 #' to the internal kill cluster function is generated.
+#'
+#' In case of an error when killing, the function tries after a short sleep to kill the remaining
+#' batch jobs again. If this fails again for some jobs, the function gives up. Only jobs that could be
+#' killed are reset in the DB.
 #'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
@@ -24,35 +28,82 @@ killJobs = function(reg, ids) {
   else
     ids = checkIds(reg, ids)
 
-  killfun = getKillJob("Cannot kill jobs")
-  data = dbGetJobStatusTable(reg, ids)
-  messagef("Trying to kill %i jobs.", length(ids))
-  messagef("For safety reasons waiting 3secs...")
-  Sys.sleep(3)
-  n.unsubm = sum(is.na(data$submitted))
-  n.term = sum(!is.na(data$done) | !is.na(data$error))
-  messagef("Not submitted: %i", n.unsubm)
-  messagef("Already terminated: %i", n.term)
-  messagef("No batch.job.id: %i", n.term)
-  # must submitted, be not done, no error, has bji
-  data = subset(data, !is.na(data$submitted) & is.na(data$done)
-    & is.na(data$error) & !is.na(data$batch_job_id))
-  # unique because of chunking
-  ids.batch = unique(data$batch_job_id)
-  ids.job = data$job_id
-  messagef("Killing batch.job.ids: %i", length(ids.batch))
-  if (length(ids.batch) > 0L) {
+  printInfo = function() {
+    messagef("Trying to kill %i jobs.", length(ids))
+    ids.onsys = findOnSystem(reg, ids)
+    data = dbGetJobStatusTable(reg, ids.onsys)
+    n.unsubm = sum(is.na(data$submitted))
+    n.nobji = sum(is.na(data$batch_job_id))
+    n.term = sum(!is.na(data$done) | !is.na(data$error))
+    messagef("Jobs on system: %i", length(ids.onsys))
+    messagef("Of these: %i not submitted, %i with no batch.job.id, %i already terminated",
+     n.unsubm, n.nobji, n.term)
+    messagef("Killing real batch jobs: %i", length(ids.batch))
+  }
+  
+  printBjis = function() {
+    # show first batch.job.ids
     cutoff = cumsum(nchar(ids.batch) + 1L) > 200L
     if (any(cutoff))
       ids.str = paste(collapse(head(ids.batch, head(which(cutoff), 1L))), ",...", sep="")
     else
       ids.str = collapse(ids.batch)
     message(ids.str)
-    conf = getBatchJobsConf()
-    lapply(ids.batch, killfun, reg=reg, conf=conf)
   }
-  messagef("For safety reasons waiting 3secs...")
-  Sys.sleep(3)
+  
+  killThem = function(bjis) {
+    old.warn = getOption("warn")
+    options(warn=0)
+    bar = makeProgressBar(max=length(bjis), label="killJobs")
+    bar$set()
+    notkilled = character(0)
+    for (i in seq_along(bjis)) {
+      bji = bjis[i]
+      ok = try(killfun(conf, reg, bji))
+      if (is.error(ok)) {
+        notkilled = c(notkilled, bji)
+        warning(as.character(ok))
+      } 
+      bar$inc(1)
+    }    
+    bar$kill()
+    options(warn=old.warn)
+    return(notkilled)
+  }
+  
+  conf = getBatchJobsConf()
+  killfun = getKillJob("Cannot kill jobs")
+  ids.onsys = findOnSystem(reg, ids)
+  data = dbGetJobStatusTable(reg, ids.onsys)
+  # must be submitted, be not done, no error, has bji
+  data.subset = subset(data, !is.na(data$submitted) & is.na(data$done)
+    & is.na(data$error) & !is.na(data$batch_job_id))
+  # unique because of chunking
+  ids.batch = unique(data.subset$batch_job_id)
+  ids.job = data.subset$job_id
+  
+  printInfo()
+  if (length(ids.batch) == 0) {
+    message("No batch jobs to kill.")
+    return(invisible(integer(0)))
+  }
+  
+  if (length(ids.batch) > 0L) {
+    printBjis()
+    notkilled = killThem(ids.batch)
+    if (length(notkilled) > 0) {
+      messagef("Could not kill %i batch jobs, trying again.", length(notkilled))    
+      Sys.sleep(2)
+      notkilled = killThem(notkilled)
+    }  
+  }
+  if (length(notkilled) > 0) {
+    # FIXME save bjis somewhere in global env
+    messagef("Could not kill %i batch jobs, kill them manually!", length(notkilled))
+    # only reset killed jobs
+    ids.job = subset(data.subset, !(batch_job_id %in% notkilled))
+  }
+    
   messagef("Resetting %i jobs in DB.", length(ids.job))
   dbSendMessage(reg, dbMakeMessageKilled(reg, ids.job))
   invisible(ids.job)

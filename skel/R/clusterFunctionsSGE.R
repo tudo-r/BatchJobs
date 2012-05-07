@@ -49,8 +49,19 @@ makeClusterFunctionsSGE = function(template.file) {
   }
 
   killJob = function(conf, reg, batch.job.id) {
-    # qdel sends SIGTERM, delay, SIGKILL
-    runCommand("qdel", batch.job.id)$output
+    tries = 0  
+    while(TRUE) {
+      # qdel sends SIGTERM, delay, SIGKILL
+      error.code = runCommand("qdel", batch.job.id, stop.on.exit=FALSE)$error.code
+      if (error.code == 0) {
+        return()
+      } else {
+        tries = tries+1
+        if (tries > 3)
+          stopf("Really tried to kill job, but could not do it. batch job id is %s", batch.job.id)
+        Sys.sleep(1)
+      }
+    }
   }
 
   listJobs = function(conf, reg) {
