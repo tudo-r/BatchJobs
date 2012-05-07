@@ -103,7 +103,9 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
         batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL)
     }
     # if we have remaining messages send them now
-    message("Sending remaining submit messages: %i", length(submit.msgs))
+    len = length(submit.msgs)
+    if (len > 0)
+      messagef("Sending %i remaining submit messages.", len)
     sendSubmitMessages(1)
   })
 
@@ -111,6 +113,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
   bar$set()
 
+  submit.msgs.chunk.size = 20L
   submit.msgs = list()
   sendSubmitMessages = function(n) {
     if (length(submit.msgs) >= n) {
@@ -145,7 +148,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
         if (batch.result$status == 0L) {
           submit.msgs[[length(submit.msgs)+1]] = dbMakeMessageSubmitted(reg, id, time=submit.time,
             batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL)
-          sendSubmitMessages(10)
+          sendSubmitMessages(submit.msgs.chunk.size)
           interrupted = FALSE
           bar$inc(1L)
           break
@@ -181,5 +184,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
       }
     }
   }, error=bar$error)
+  # send all here, so we dont get a console message in on.exit
+  sendSubmitMessages(1)
   return(invisible(ids))
 }
