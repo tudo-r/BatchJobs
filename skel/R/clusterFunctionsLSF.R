@@ -55,13 +55,15 @@ makeClusterFunctionsLSF = function(template.file) {
     tries = 0  
     while(TRUE) {
       # qdel sends SIGTERM, delay, SIGKILL
-      error.code = runCommand("bkill", batch.job.id, stop.on.exit=FALSE)$error.code
-      if (error.code == 0) {
+      res = runCommand("bkill", batch.job.id, stop.on.exit=FALSE)
+      if (res$exit.code == 0) {
         return()
       } else {
         tries = tries+1
-        if (tries > 3)
-          stopf("Really tried to kill job, but could not do it. batch job id is %s", batch.job.id)
+        if (tries > 3) {
+          stopf("Really tried to kill job, but could not do it. batch job id is %s.\nMessage: %s", 
+                batch.job.id, res$output)
+        }
         Sys.sleep(1)
       }
     }
