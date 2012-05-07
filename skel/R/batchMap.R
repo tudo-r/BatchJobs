@@ -41,16 +41,7 @@ batchMap = function(reg, fun, ..., more.args=list()) {
   pars = mapply(function(...) {
     rawToChar(serialize(list(...), connection=NULL, ascii=TRUE))
   }, ..., USE.NAMES=FALSE)
-  # save fun
-  fun.id = digest(fun)
-  fun.dir = getFunDir(reg$file.dir)
-  fn = file.path(fun.dir, sprintf("%s.RData", fun.id))
-  save2(file=fn, fun=fun)
-  # save more args
-  if(length(more.args) > 0L) {
-    fn = file.path(fun.dir, sprintf("%s-moreArgs.RData", fun.id))
-    save2(file=fn, more.args=more.args)
-  }
+  fun.id = saveFunction(reg, fun, more.args)
   # add jobs to DB
   n = dbAddData(reg, "job_def", data = data.frame(fun_id=fun.id, pars=pars))
   job.def.ids = dbGetLastAddedIds(reg, "job_def", "job_def_id", n)

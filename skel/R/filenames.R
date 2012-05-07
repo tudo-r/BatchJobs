@@ -69,6 +69,9 @@ getJobParentDir = function(file.dir)
 getFunDir = function(file.dir)
   file.path(file.dir, "functions")
 
+getFunFilePath = function(reg, fun.id)
+  file.path(getFunDir(reg$file.dir), sprintf("%s.RData", fun.id))
+
 getConfFilePath = function(reg)
   file.path(reg$file.dir, "conf.RData")
 

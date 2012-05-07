@@ -1,10 +1,7 @@
-saveFunctions = function(reg, jobs) {
+saveFunction = function(reg, fun, more.args) {
   fun.dir = getFunDir(reg$file.dir)
-  funs = extractSubList(jobs, "fun", simplify=FALSE)
-  fun.ids = extractSubList(jobs, "fun.id")
+  fun.id = digest(list(fun, more.args))
+  save2(file=getFunFilePath(reg, fun.id), fun=fun, more.args=more.args)
+  return(fun.id)
+} 
 
-  lapply(which(!duplicated(fun.ids)), function(i) {
-    fn = file.path(fun.dir, sprintf("%s.RData", fun.ids[i]))
-    save2(file=fn, fun=funs[[i]])
-  })
-}
