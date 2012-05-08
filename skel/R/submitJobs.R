@@ -95,7 +95,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
 
   # set on exit handler to avoid inconsistencies caused by user interrupts
   interrupted = FALSE
-  submit.msgs = vector("list", length(ids))
+  submit.msgs = list()
   
   on.exit({
     # we need the second case for errors in brew (e.g. resources)  
