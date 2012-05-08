@@ -4,11 +4,6 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   loadConf(reg)
   conf = getBatchJobsConf()
   
-  # FIXME: bad style, also maybe remove this later or do it in batch system
-  # we do this so jobs dont write sychronously to DB
-  if (!(conf$cluster.functions$name %in% c("Interactive", "Testing", "Local")))
-    Sys.sleep(runif(1, 20, 120))
-  
   # we need to see all warnings immediatly
   if (!(conf$cluster.functions$name %in% c("Interactive", "Testing")))
     options(warning.length=8170, warn=1)
@@ -69,8 +64,9 @@ doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   jobs = getJobs(reg, ids, load.fun=TRUE, check.ids=FALSE)
   result.strs = character(length(jobs))
   error = logical(length(jobs))
+  # FIXME do we really need this?
   # set all jobs to started with too early time
-  dbSendMessage(reg, dbMakeMessageStarted(reg, ids))
+  #dbSendMessage(reg, dbMakeMessageStarted(reg, ids))
   msg.buf = character(0L)
   # now collect messages in a buffer to reduce overhead
   # wait somewhere between 5-10 mins at least to flush them

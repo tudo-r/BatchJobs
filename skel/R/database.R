@@ -29,20 +29,24 @@ dbDoQueries = function(reg, queries, flags="ro") {
     if (!is.error(ok)) {
       # this can fail because DB is locked
       ok2 = dbCommit(con)
-      dbDisconnect(con)
-      if (ok2)
+      if (ok2) {
+        dbDisconnect(con)
         return(ress)
+      } else {
+        dbRollback(con)
+        dbDisconnect(con)
+      }  
     } else {
       ok = as.character(ok)
       dbRollback(con)
       dbDisconnect(con)
-      if(grepl("lock", ok, ignore.case=TRUE)) {
-        # FIXME make 5 an option
-        Sys.sleep(runif(1L, min=1, max=10))
-      } else {
+      if(!grepl("lock", ok, ignore.case=TRUE)) {
         stopf("Error in dbDoQueries. Displaying only 1st query. %s (%s)", ok, queries[1])
       }
     }
+    # if we reach this here, DB was locked
+    # FIXME make 5 an option
+    Sys.sleep(runif(1L, min=1, max=1.025^i))
   }
   stopf("dbDoQueries: max retries (%i) reached, database is still locked!", max.retries)
 }
@@ -59,7 +63,7 @@ dbDoQuery = function(reg, query, flags="ro") {
     res = as.character(res)
     if(grepl("lock", res, ignore.case=TRUE)) {
       # FIXME make 5 an option
-      Sys.sleep(runif(1L, min=1, max=10))
+      Sys.sleep(runif(1L, min=1, max=1.025^i))
     } else {
       print(res)
       print(query)

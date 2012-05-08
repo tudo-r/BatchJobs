@@ -95,6 +95,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
 
   # set on exit handler to avoid inconsistencies caused by user interrupts
   interrupted = FALSE
+  submit.msgs = vector("list", length(ids))
+  
   on.exit({
     # we need the second case for errors in brew (e.g. resources)  
     if(interrupted && exists("batch.result", inherits=FALSE)) {
@@ -104,24 +106,15 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
     }
     # if we have remaining messages send them now
     len = length(submit.msgs)
-    if (len > 0)
-      messagef("Sending %i remaining submit messages.", len)
-    sendSubmitMessages(1)
+    if (len > 0) {
+      messagef("Sending %i submit messages...", len)
+      # FIXME: maybe save the batch.job.ids in case of dratic error in global env for user? so he can kill?
+      dbFlushMessages(reg, submit.msgs)
+    }
   })
-
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
   bar$set()
-
-  submit.msgs.chunk.size = 20L
-  submit.msgs = list()
-  sendSubmitMessages = function(n) {
-    if (length(submit.msgs) >= n) {
-      # FIXME: maybe save the batch.job.ids in case of dratic error in global env for user? so he can kill?
-      dbFlushMessages(reg, submit.msgs)
-      submit.msgs <<- list()
-    }
-  }
   
   tryCatch({
     for (id in ids) {
@@ -148,7 +141,6 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
         if (batch.result$status == 0L) {
           submit.msgs[[length(submit.msgs)+1]] = dbMakeMessageSubmitted(reg, id, time=submit.time,
             batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL)
-          sendSubmitMessages(submit.msgs.chunk.size)
           interrupted = FALSE
           bar$inc(1L)
           break
@@ -167,8 +159,6 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   
           bar$inc(msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
           #warningf("Id: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", id1, batch.result$msg, retries, sleep.secs)
-          # better send all msgs before we sleep
-          sendSubmitMessages(1)
           Sys.sleep(sleep.secs)
           next
         }
@@ -185,6 +175,5 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
     }
   }, error=bar$error)
   # send all here, so we dont get a console message in on.exit
-  sendSubmitMessages(1)
   return(invisible(ids))
 }
