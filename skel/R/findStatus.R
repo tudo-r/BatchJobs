@@ -93,6 +93,7 @@ findRunning = function(reg, ids) {
   fun = getListJobs("Cannot find running jobs")
   batch.job.ids = fun(getBatchJobsConf(), reg)
   # running jobs are running on batch system in general and must have started for this reg
+  # FIXME should not have terminated
   dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids, "started IS NOT NULL")
 }
 
