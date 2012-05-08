@@ -98,8 +98,8 @@ killJobs = function(reg, ids) {
     }  
   }
   if (length(notkilled) > 0) {
-    # FIXME save bjis somewhere in global env
-    messagef("Could not kill %i batch jobs, kill them manually!", length(notkilled))
+    messagef("Could not kill %i batch jobs, kill them manually!\nTheir ids have been saved in .GlobalEnv under .batch.job.ids", length(notkilled))
+    assign(".batch.job.ids", notkilled, envir=.GlobalEnv)
     # only reset killed jobs
     ids.job = subset(data.subset, !(batch_job_id %in% notkilled))
   }

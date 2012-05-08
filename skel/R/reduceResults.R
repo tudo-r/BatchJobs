@@ -35,6 +35,9 @@
 #' @param rows [\code{logical(1)}]\cr
 #'   Should the selected vectors be usedd as rows (or columns) in the result matrix?
 #'   Default is \code{TRUE}.
+#' @param strings.as.factors [\code{logical(1)}]
+#'   Should all character columns in result be converted to factors?
+#'   Default is \code{default.stringsAsFactors()}.
 #' @return Aggregated results, return type depends on function. If \code{ids} is empty: \code{reduceResults}
 #'   returns \code{init} (if available) or \code{NULL}, \code{reduceResultsVector} returns \code{c()},
 #'   \code{reduceResultsList} returns \code{list()}, \code{reduceResultsMatrix} returns \code{matrix(0,0,0)},
@@ -169,12 +172,19 @@ reduceResultsMatrix = function(reg, ids, part=as.character(NA), fun, ..., rows=T
   return(res)
 }
 
-#FIXME stringsAsFactors
 #' @export
 #' @rdname reduceResults
-reduceResultsDataFrame = function(reg, ids, part=as.character(NA), fun, ...) {
+reduceResultsDataFrame = function(reg, ids, part=as.character(NA), fun, ..., 
+  strings.as.factors=default.stringsAsFactors()) {
+  
   nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
-  reduceResultsReturnVal(reg, ids, part, fun, as.data.frame, rbind, TRUE, nf, ..., init=data.frame(), empty=data.frame())
+  res = reduceResultsReturnVal(reg, ids, part, fun, as.data.frame, rbind, TRUE, nf, ..., init=data.frame(), empty=data.frame())
+  if (strings.as.factors) {
+    inds = which(vapply(res, is.character, logical(1L)))
+    for (j in inds)
+      res[,j] = as.factor(res[,j])
+  }
+  return(res)
 }
 
 
