@@ -101,7 +101,7 @@ killJobs = function(reg, ids) {
     messagef("Could not kill %i batch jobs, kill them manually!\nTheir ids have been saved in .GlobalEnv under .batch.job.ids", length(notkilled))
     assign(".batch.job.ids", notkilled, envir=.GlobalEnv)
     # only reset killed jobs
-    ids.job = subset(data.subset, !(batch_job_id %in% notkilled))
+    ids.job = subset(data.subset, !(data.subset$batch_job_id %in% notkilled))
   }
     
   messagef("Resetting %i jobs in DB.", length(ids.job))
