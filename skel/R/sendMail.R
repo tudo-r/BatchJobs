@@ -51,10 +51,8 @@ sendMail = function(reg, job, result.str, extra.msg="",
       sendmail(conf$mail.from, conf$mail.to, subj, msg, control=conf$mail.control)
     )
     if (is.error(ok)) {
-      # FIXME: use warningf
-      msg = sprintf("Could not send mail!\nFrom: %s\nTo: %s\nControl: %s\nError message: %s",
+      warningf("Could not send mail!\nFrom: %s\nTo: %s\nControl: %s\nError message: %s",
         conf$mail.from, conf$mail.to, listToShortString(conf$mail.control), as.character(ok))
-      warning(msg, immediate=TRUE)
     }
   }
   invisible(NULL)

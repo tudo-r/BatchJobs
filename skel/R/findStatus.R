@@ -93,8 +93,8 @@ findRunning = function(reg, ids) {
   fun = getListJobs("Cannot find running jobs")
   batch.job.ids = fun(getBatchJobsConf(), reg)
   # running jobs are running on batch system in general and must have started for this reg
-  # FIXME should not have terminated
-  dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids, "started IS NOT NULL")
+  # also not terminated
+  dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids, "started IS NOT NULL AND done is NULL AND error is NULL")
 }
 
 #' Find jobs where walltime was probably hit.

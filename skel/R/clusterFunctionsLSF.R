@@ -36,10 +36,7 @@ makeClusterFunctionsLSF = function(template.file) {
     }
     brewWithStop(text=template, output=outfile)
     # returns: "Job <128952> is submitted to default queue <s_amd>."
-    # FIXME: system3
-    res = list()
-    res$output = system2("bsub", stdin=outfile)
-    res$exit.code = 0L
+    res = system3("bsub", stdin=outfile)
     # FIXME filled queues
     if (res$exit.code > 0L) {
       msg = sprintf("bsub produced exit code %i; output %s", res$exit.code, res$output)
