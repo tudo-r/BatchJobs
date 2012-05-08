@@ -178,7 +178,8 @@ reduceResultsDataFrame = function(reg, ids, part=as.character(NA), fun, ...,
   strings.as.factors=default.stringsAsFactors()) {
   
   nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
-  res = reduceResultsReturnVal(reg, ids, part, fun, as.data.frame, rbind, TRUE, nf, ..., init=data.frame(), empty=data.frame())
+  wrap = function(x) as.data.frame(x, stringsAsFactors=FALSE)
+  res = reduceResultsReturnVal(reg, ids, part, fun, wrap, rbind, TRUE, nf, ..., init=data.frame(), empty=data.frame())
   if (strings.as.factors) {
     inds = which(vapply(res, is.character, logical(1L)))
     for (j in inds)

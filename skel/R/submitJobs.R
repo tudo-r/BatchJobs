@@ -129,12 +129,13 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   
   # write R scripts before so we save some time in the important loop
   messagef("Writing %i R scripts...", length(ids))
-  ids1 = sapply(ids, function(x) x[1])
-  for (j in seq_along(ids1)) {
-    fn.rscript = getRScriptFilePath(reg, ids1[j])
-    writeRscript(fn.rscript, reg$file.dir, ids=ids[j], reg$multiple.result.files, 
-      disable.mail=FALSE, first, last, delay=job.delay(length(ids1), j), 
+  j = 1L
+  for (id in ids) {
+    fn.rscript = getRScriptFilePath(reg, id[1L])
+    writeRscript(fn.rscript, reg$file.dir, id, reg$multiple.result.files,
+      disable.mail=FALSE, first, last, delay=job.delay(length(ids), j),
       interactive.test = !is.null(conf$interactive))
+    j = j+1
   }
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
