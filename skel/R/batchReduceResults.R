@@ -53,12 +53,12 @@ batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, 
   checkPart(reg, part)  
   block.size = convertInteger(block.size)
   checkArg(block.size, "integer", len=1L, na.ok=FALSE)
-
+  checkMoreArgs(more.args, reserved=c("..reg", "..fun", "..part"))
+  
   if (dbGetJobCount(reg2) > 0L)
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)
     stop("Both registries cannot point to the same file dir. Files would get overwritten!")
-  # FIXME name clashes, also with batchReduce
   more.args = c(more.args, list(..reg=reg, ..fun=fun, ..part=part))
   batchReduce(reg2, batchReduceResultsWrapper, ids, init=init, block.size=block.size, 
     more.args=more.args)

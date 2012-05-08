@@ -32,13 +32,14 @@ batchExpandGrid = function(reg, fun, ..., more.args=list()) {
   if(!all(vapply(args, is.vector, logical(1L))))
     stop("All args in '...' must be vectors!")
   checkMoreArgs(more.args)
-  # FIXME bad, check name collisions
+  reserved = c("KEEP.OUT.ATTRS", "stringsAsFactors")
+  if (any(reserved %in% ns))
+    stopf("You cannot use the reserved arg names %s in ... args!", collapse(reserved))
   args$KEEP.OUT.ATTRS = FALSE
   args$stringsAsFactors = FALSE
   grid = do.call(expand.grid, args)
   if (is.null(ns))
     colnames(grid) = NULL
-  # FIXME check name collisions
   args = as.list(grid)
   args = c(args, list(reg=reg, fun=fun, more.args=more.args))
   do.call(batchMap, args)

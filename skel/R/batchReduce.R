@@ -34,9 +34,8 @@ batchReduce = function(reg, fun, xs, init, block.size, more.args=list()) {
   checkArg(block.size, "integer", len=1L, lower=1L, na.ok=FALSE)
   if (dbGetJobCount(reg) > 0L)
     stop("Registry is not empty!")
-  checkMoreArgs(more.args, reserved=c("fun", "init"))
+  checkMoreArgs(more.args, reserved=c(".fun", ".init"))
   xs.blocks = chunk(xs, chunk.size = block.size, shuffle=FALSE)
-  # FIXME: check name clashes
   more.args = c(more.args, list(.fun=fun, .init=init))
   batchMap(reg, batchReduceWrapper, xs.blocks, more.args=more.args)
 }

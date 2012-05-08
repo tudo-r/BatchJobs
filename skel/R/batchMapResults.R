@@ -48,12 +48,12 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=as.character(NA), mor
     if (!all(ids %in% dbGetDone(reg)))
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
-  checkPart(reg, part)  
+  checkPart(reg, part)
+  checkMoreArgs(more.args, reserved=c(".reg", ".fun", ".part"))
   if (dbGetJobCount(reg2) > 0L)
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)
     stop("Both registries cannot point to the same file dir. Files would get overwritten!")
-  # FIXME: check name clashes
   more.args = c(more.args, list(.reg=reg, .fun=fun, .part=part))
   batchMap(reg2, batchMapResultsWrapper, ids, ..., more.args=more.args)
 }
