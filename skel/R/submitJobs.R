@@ -44,23 +44,23 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
       return(invisible(NULL))
     }
   } else {
-    if (!is.list(ids) && !is.numeric(ids))
-      stop("ids must be a integer vector of job ids or a list of chunked job ids (list of integer vectors)!")
     if (is.list(ids)) {
       ids = lapply(ids, convertIntegers)
       checkListElementClass(ids, "integer")
       if(any(is.na(unlist(ids))))
         stop("Chunks must not contain NAs!")
-    } else {
+    } else if(is.numeric(ids)) {
       ids = convertInteger(ids)
       checkArg(ids, "integer", na.ok=FALSE)
+    } else {
+      stop("ids must be a integer vector of job ids or a list of chunked job ids (list of integer vectors)!")
     }
     checkIdsPresent(reg, unlist(ids))
   }
   checkArg(resources, "list")
   if(!isProperlyNamed(resources))
     stop("'resources' must be all be uniquely named!")
-  
+
   if (missing(wait))
     wait = function(retries) 10 * 2^retries # ^ always converts to double
   else
@@ -93,37 +93,32 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)
 
-  # set on exit handler to avoid inconsistencies caused by user interrupts
   interrupted = FALSE
-  submit.msgs = list()
-  
+  submit.msgs = buffer("list", 1000L, dbFlushMessages, reg=reg)
+
+  # set on exit handler to avoid inconsistencies caused by user interrupts
   on.exit({
-    # we need the second case for errors in brew (e.g. resources)  
+    # we need the second case for errors in brew (e.g. resources)
     if(interrupted && exists("batch.result", inherits=FALSE)) {
-      #message("Interrupted! Try to update pending job informations ...")
-      submit.msgs[[length(submit.msgs)+1]] = dbMakeMessageSubmitted(reg, id, time=submit.time,
-        batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL)
+      submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
+        batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL))
     }
     # if we have remaining messages send them now
-    len = length(submit.msgs)
-    if (len > 0) {
-      messagef("Sending %i submit messages...", len)
-      # FIXME: maybe save the batch.job.ids in case of dratic error in global env for user? so he can kill?
-      dbFlushMessages(reg, submit.msgs)
-    }
+    messagef("Sending %i submit messages...", submit.msgs$size())
+    submit.msgs$clear()
   })
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
   bar$set()
-  
+
   tryCatch({
     for (id in ids) {
       id1 = id[1L]
-  
+
       fn.rscript = getRScriptFilePath(reg, id1)
       writeRscript(fn.rscript, reg$file.dir, id, reg$multiple.result.files,
         disable.mail=FALSE, first, last, interactive.test = !is.null(conf$interactive))
-  
+
       # we use no for loop here to allow infinite retries
       retries = 0L
       repeat {
@@ -136,40 +131,40 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
                                     log.file=getLogFilePath(reg, id1),
                                     job.dir=getJobDirs(reg, id1),
                                     resources=resources)
-  
+
         # validate status returned from cluster functions
         if (batch.result$status == 0L) {
-          submit.msgs[[length(submit.msgs)+1]] = dbMakeMessageSubmitted(reg, id, time=submit.time,
-            batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL)
+          submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
+            batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL))
           interrupted = FALSE
           bar$inc(1L)
           break
         }
-  
+
         # submitJob was not successful, therefore we don't care for interrupts any more
         interrupted = FALSE
-  
+
         if (batch.result$status > 0L && batch.result$status <= 100L) {
           # if temp error, wait and increase retries, then submit again
           sleep.secs = wait(retries)
-  
+
           retries = retries + 1L
           if (retries > max.retries)
             stopf("Retried already %i times to submit. Aborting.", retries)
-  
+
           bar$inc(msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
           #warningf("Id: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", id1, batch.result$msg, retries, sleep.secs)
           Sys.sleep(sleep.secs)
           next
         }
-  
+
         if (batch.result$status > 100L && batch.result$status <= 200L) {
           # fatal error, abort at once
           message("Fatal error occured: ", batch.result$status)
           message("Fatal error msg: ", batch.result$msg)
           stop("Fatal error occured: ", batch.result$status)
         }
-  
+
         stopf("Illegal status code %s returned from cluster functions!", batch.result$status)
       }
     }
