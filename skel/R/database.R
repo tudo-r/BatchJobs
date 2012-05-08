@@ -19,7 +19,7 @@ dbConnectToJobsDB = function(reg, flags="ro") {
 }
 
 dbDoQueries = function(reg, queries, flags="ro") {
-  max.retries = 100L
+  max.retries = 200L
   for (i in seq_len(max.retries)) {
     con = dbConnectToJobsDB(reg, flags)
     ok = try ({
@@ -27,16 +27,18 @@ dbDoQueries = function(reg, queries, flags="ro") {
       ress = lapply(queries, dbGetQuery, con=con)
     }, silent = TRUE)
     if (!is.error(ok)) {
-      dbCommit(con)
+      # this can fail because DB is locked
+      ok2 = dbCommit(con)
       dbDisconnect(con)
-      return(ress)
+      if (ok2)
+        return(ress)
     } else {
       ok = as.character(ok)
       dbRollback(con)
       dbDisconnect(con)
       if(grepl("lock", ok, ignore.case=TRUE)) {
         # FIXME make 5 an option
-        Sys.sleep(runif(1L, min=1, max=5))
+        Sys.sleep(runif(1L, min=1, max=10))
       } else {
         stopf("Error in dbDoQueries. Displaying only 1st query. %s (%s)", ok, queries[1])
       }
@@ -46,7 +48,7 @@ dbDoQueries = function(reg, queries, flags="ro") {
 }
 
 dbDoQuery = function(reg, query, flags="ro") {
-  max.retries = 100L
+  max.retries = 200L
   for (i in seq_len(max.retries)) {
     con = dbConnectToJobsDB(reg, flags)
     res = try(dbGetQuery(con, query), silent=TRUE)
@@ -57,7 +59,7 @@ dbDoQuery = function(reg, query, flags="ro") {
     res = as.character(res)
     if(grepl("lock", res, ignore.case=TRUE)) {
       # FIXME make 5 an option
-      Sys.sleep(runif(1L, min=1, max=5))
+      Sys.sleep(runif(1L, min=1, max=10))
     } else {
       print(res)
       print(query)
