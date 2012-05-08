@@ -180,12 +180,7 @@ reduceResultsDataFrame = function(reg, ids, part=as.character(NA), fun, ...,
   nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
   wrap = function(x) as.data.frame(x, stringsAsFactors=FALSE)
   res = reduceResultsReturnVal(reg, ids, part, fun, wrap, rbind, TRUE, nf, ..., init=data.frame(), empty=data.frame())
-  if (strings.as.factors) {
-    inds = which(vapply(res, is.character, logical(1L)))
-    for (j in inds)
-      res[,j] = as.factor(res[,j])
-  }
-  return(res)
+  stringsAsFactors(res, strings.as.factors)
 }
 
 
