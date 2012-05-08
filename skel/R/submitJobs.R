@@ -28,6 +28,15 @@
 #'   (like filled queues). Each time \code{wait} is called to wait a certain
 #'   number of seconds.
 #'   Default is 10 times.
+#' @param job.delay [\code{function(n, i)}]\cr
+#'   Function that defines how many seconds a job should be delayed before it starts.
+#'   This is an expert option and only necessary to change, when you want submit
+#'   extremely many jobs. We then delay the jobs a bit to write the submit messages as
+#'   early as possible to avoid writer starvation. 
+#'   \code{n} is the number of jobs and \code{i} the number of
+#'   the ith job.
+#'   The default is no delay for less than 100 jobs and otherwise 
+#'   \code{runif(1, 0.1*n, 0.2*n)}.
 #' @return Vector of submitted job ids.
 #' @export
 #' @examples
@@ -35,7 +44,8 @@
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
-submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
+submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.delay) {
+  
   checkArg(reg, cl="Registry")
   if (missing(ids)) {
     ids = dbGetMissingResults(reg)
@@ -70,7 +80,14 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
     max.retries = convertInteger(max.retries)
     checkArg(max.retries, "integer", len=1L, na.ok=FALSE)
   }
-
+  
+  if (missing(job.delay)) {
+    job.delay = function(n, i) 
+      if(n>100) runif(1, n*0.1, n*0.2) else 0
+  } else {
+    checkArg(job.delay, formals=c("n", "i"))
+  }
+  
   if (!is.null(getListJobs())) {
     ids.intersect = intersect(unlist(ids), findOnSystem(reg))
     if (length(ids.intersect) > 0L) {
@@ -94,7 +111,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
     conf$mail.start, conf$mail.done, conf$mail.error)
 
   interrupted = FALSE
-  submit.msgs = buffer("list", 1000L, dbFlushMessages, reg=reg)
+  submit.msgs = buffer("list", 1000L, dbFlushMessages, 
+    reg=reg, max.retries=10000L, sleep=function(r) 5)
 
   # set on exit handler to avoid inconsistencies caused by user interrupts
   on.exit({
@@ -104,9 +122,20 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
         batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL))
     }
     # if we have remaining messages send them now
-    messagef("Sending %i submit messages...", submit.msgs$size())
+    messagef("Sending %i submit messages...\nMight take some time, do not interrupt this!", 
+      submit.msgs$size())
     submit.msgs$clear()
   })
+  
+  # write R scripts before so we save some time in the important loop
+  messagef("Writing %i R scripts...", length(ids))
+  ids1 = sapply(ids, function(x) x[1])
+  for (j in seq_along(ids1)) {
+    fn.rscript = getRScriptFilePath(reg, ids1[j])
+    writeRscript(fn.rscript, reg$file.dir, ids=ids[j], reg$multiple.result.files, 
+      disable.mail=FALSE, first, last, delay=job.delay(length(ids1), j), 
+      interactive.test = !is.null(conf$interactive))
+  }
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
   bar$set()
@@ -114,11 +143,6 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
   tryCatch({
     for (id in ids) {
       id1 = id[1L]
-
-      fn.rscript = getRScriptFilePath(reg, id1)
-      writeRscript(fn.rscript, reg$file.dir, id, reg$multiple.result.files,
-        disable.mail=FALSE, first, last, interactive.test = !is.null(conf$interactive))
-
       # we use no for loop here to allow infinite retries
       retries = 0L
       repeat {
@@ -127,7 +151,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
         interrupted = TRUE
         batch.result = cf$submitJob(conf=conf, reg=reg,
                                     job.name=sprintf("%s-%i", reg$id, id1),
-                                    rscript=fn.rscript,
+                                    rscript=getRScriptFilePath(reg, id1),
                                     log.file=getLogFilePath(reg, id1),
                                     job.dir=getJobDirs(reg, id1),
                                     resources=resources)
@@ -169,6 +193,5 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L) {
       }
     }
   }, error=bar$error)
-  # send all here, so we dont get a console message in on.exit
   return(invisible(ids))
 }

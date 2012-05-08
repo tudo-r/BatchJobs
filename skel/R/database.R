@@ -18,8 +18,7 @@ dbConnectToJobsDB = function(reg, flags="ro") {
   dbGetConnection(drv, reg, flags)
 }
 
-dbDoQueries = function(reg, queries, flags="ro") {
-  max.retries = 200L
+dbDoQueries = function(reg, queries, flags="ro", max.retries=200L, sleep=function(r) 1.025^r) {
   for (i in seq_len(max.retries)) {
     con = dbConnectToJobsDB(reg, flags)
     ok = try ({
@@ -45,25 +44,21 @@ dbDoQueries = function(reg, queries, flags="ro") {
       }
     }
     # if we reach this here, DB was locked
-    # FIXME make 5 an option
-    Sys.sleep(runif(1L, min=1, max=1.025^i))
+    Sys.sleep(runif(1L, min=1, max=sleep(i)))
   }
   stopf("dbDoQueries: max retries (%i) reached, database is still locked!", max.retries)
 }
 
-dbDoQuery = function(reg, query, flags="ro") {
-  max.retries = 200L
+dbDoQuery = function(reg, query, flags="ro", max.retries=200L, sleep=function(r) 1.025^r) {
   for (i in seq_len(max.retries)) {
     con = dbConnectToJobsDB(reg, flags)
     res = try(dbGetQuery(con, query), silent=TRUE)
     dbDisconnect(con)
     if (! is.error(res))
       return(res)
-
     res = as.character(res)
     if(grepl("lock", res, ignore.case=TRUE)) {
-      # FIXME make 5 an option
-      Sys.sleep(runif(1L, min=1, max=1.025^i))
+      Sys.sleep(runif(1L, min=1, max=sleep(i)))
     } else {
       print(res)
       print(query)
@@ -408,8 +403,8 @@ dbAddJobs = function(reg, jobs, ...) {
 
 
 # flushes messages en block.
-dbFlushMessages = function(reg, msgs) {
-  ok = try(dbDoQueries(reg, msgs, flags="rw"))
+dbFlushMessages = function(reg, msgs, max.retries=200L, sleep=function(r) 1.025^r) {
+  ok = try(dbDoQueries(reg, msgs, flags="rw", max.retries, sleep))
   if (is.error(ok)) {
     ok = as.character(ok)
     if (ok == "dbDoQueries: max retries reached, database is still locked!") {

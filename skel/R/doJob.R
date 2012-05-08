@@ -29,7 +29,6 @@ doSingleJob = function(reg, id, multiple.result.files, disable.mail, first, last
   sendMail(reg, job, result.str, "", disable.mail, condition = "start", first, last)
 
   result = executeOneJob(reg, job, multiple.result.files)
-
   if (is.error(result)) {
     errmsg = as.character(result)
     message("Error occurred: ", errmsg)
@@ -64,9 +63,8 @@ doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   jobs = getJobs(reg, ids, load.fun=TRUE, check.ids=FALSE)
   result.strs = character(length(jobs))
   error = logical(length(jobs))
-  # FIXME do we really need this?
   # set all jobs to started with too early time
-  #dbSendMessage(reg, dbMakeMessageStarted(reg, ids))
+  dbSendMessage(reg, dbMakeMessageStarted(reg, ids))
   msg.buf = character(0L)
   # now collect messages in a buffer to reduce overhead
   # wait somewhere between 5-10 mins at least to flush them

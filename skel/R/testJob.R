@@ -47,7 +47,7 @@ testJob = function(reg, id) {
   # write r script
   fn.rscript = file.path(td, "test.R")
   writeRscript(fn.rscript, reg$file.dir, id, mult.files=reg$multiple.result.files,
-    disable.mail=TRUE, first=id, last=id, interactive.test=FALSE)
+    disable.mail=TRUE, first=id, last=id, delay=0, interactive.test=FALSE)
   # execute
   rhome = Sys.getenv("R_HOME")
   cmd = sprintf("%s/bin/Rscript %s", rhome, fn.rscript)
