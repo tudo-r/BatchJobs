@@ -34,7 +34,7 @@ dbDoQueries = function(reg, queries, flags="ro", max.retries=200L, sleep=functio
       } else {
         dbRollback(con)
         dbDisconnect(con)
-      }  
+      }
     } else {
       ok = as.character(ok)
       dbRollback(con)
@@ -92,7 +92,7 @@ dbSelectWithIds = function(reg, query, ids, where=TRUE, limit=-1L) {
   res = dbDoQuery(reg, query, flags="ro")
   if(!missing(ids))
     # order result same as ids
-    res[order(match(res$job_id, ids)),, drop=FALSE]
+    res[na.omit(match(ids, res$job_id)),, drop=FALSE]
   else
     res
 }
