@@ -1,4 +1,4 @@
-#' Maps a function over a list adding jobs to a registry.
+#' Maps a function over lists or vectors, adding jobs to a registry.
 #'
 #' You can then submit these jobs to the batch system.
 #' @param reg [\code{\link{Registry}}]\cr
