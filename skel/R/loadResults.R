@@ -16,7 +16,7 @@
 #' @return [\code{list}]. Results of jobs as list, possibly named by ids.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-loadResults = function(reg, ids, part=as.character(NA), simplify=FALSE, use.names=TRUE) {
+loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=TRUE) {
   checkArg(reg, "Registry")
   if (missing(ids)) {
     ids = dbGetDone(reg)

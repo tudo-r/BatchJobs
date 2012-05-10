@@ -37,7 +37,7 @@
 #' submitJobs(reg2)
 #' # check results
 #' reduceResults(reg2, fun=function(aggr,job,res) c(aggr, res))
-batchMapResults = function(reg, reg2, fun, ...,  ids, part=as.character(NA), more.args=list()) {
+batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.args=list()) {
   checkArg(reg, cl="Registry")
   checkArg(reg2, cl="Registry")
   checkArg(fun, formals=c("job", "res"))

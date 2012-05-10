@@ -84,7 +84,7 @@ getRScriptFilePath = function(reg, id)
 getLogFilePath = function(reg, id)
   getFilePaths(reg, id, NULL, "out")
 
-getResultFilePath = function(reg, id, part=as.character(NA)) {
+getResultFilePath = function(reg, id, part=NA_character_) {
   s = if (is.na(part)) "result" else paste("result", part, sep="-")
   getFilePaths(reg, id, s, "RData")
 }

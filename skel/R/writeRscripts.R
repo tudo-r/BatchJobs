@@ -1,4 +1,4 @@
-writeRscript = function(reg, ids, disable.mail, delays, interactive.test, first, last) {
+writeRscripts = function(reg, ids, disable.mail, delays, interactive.test, first, last) {
   if (!interactive.test) {
     template = paste(
       "options(BatchJobs.on.slave=TRUE)",

@@ -126,7 +126,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   # write R scripts before so we save some time in the important loop
   messagef("Writing %i R scripts...", length(ids))
   delays = vapply(seq_along(ids), job.delay, numeric(1L), n=length(ids))
-  writeRscript(reg, ids, disable.mail=FALSE, delays=delays,
+  writeRscripts(reg, ids, disable.mail=FALSE, delays=delays,
                interactive.test = !is.null(conf$interactive))
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")

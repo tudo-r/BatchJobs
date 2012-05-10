@@ -12,13 +12,13 @@
 #' @return [any]. Result of job.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-loadResult = function(reg, id, part=as.character(NA), check.id=TRUE) {
+loadResult = function(reg, id, part=NA_character_, check.id=TRUE) {
   checkArg(reg, cl="Registry")
   checkArg(check.id, cl="logical", len=1L, na.ok=FALSE)
   if (check.id)
     id = checkId(reg, id)
-  checkPart(reg, part)  
-  
+  checkPart(reg, part)
+
   if (reg$multiple.result.files) {
     fn = list.files(getJobDirs(reg, id),
                     pattern=sprintf("^%i-result-.+\\.RData$", id),

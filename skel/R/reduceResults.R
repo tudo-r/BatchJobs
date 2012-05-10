@@ -72,7 +72,7 @@
 #' print(str(reduceResultsDataFrame(reg)))
 #' # reduce results to a sum
 #' reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
-reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
+reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
   checkArg(reg, "Registry")
   done = dbGetDone(reg)
   if (missing(ids)) {
@@ -146,21 +146,21 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
 
 #' @export
 #' @rdname reduceResults
-reduceResultsVector = function(reg, ids, part=as.character(NA), fun, ..., use.names=TRUE) {
+reduceResultsVector = function(reg, ids, part=NA_character_, fun, ..., use.names=TRUE) {
   nf = function(res, ids, x1) {names(res) = ids; res}
   reduceResultsReturnVal(reg, ids, part, fun, identity, c, use.names, nf, ..., init=c(), empty=c())
 }
 
 #' @export
 #' @rdname reduceResults
-reduceResultsList = function(reg, ids, part=as.character(NA), fun, ..., use.names=TRUE) {
+reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names=TRUE) {
   nf = function(res, ids, x1) {names(res) = ids; res}
   reduceResultsReturnVal(reg, ids, part, fun, list, c, use.names, nf, ..., init=list(), empty=list())
 }
 
 #' @export
 #' @rdname reduceResults
-reduceResultsMatrix = function(reg, ids, part=as.character(NA), fun, ..., rows=TRUE, use.names=TRUE) {
+reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE, use.names=TRUE) {
   combine = if (rows) rbind else cbind
   if (rows)
     nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
@@ -174,7 +174,7 @@ reduceResultsMatrix = function(reg, ids, part=as.character(NA), fun, ..., rows=T
 
 #' @export
 #' @rdname reduceResults
-reduceResultsDataFrame = function(reg, ids, part=as.character(NA), fun, ...,
+reduceResultsDataFrame = function(reg, ids, part=NA_character_, fun, ...,
   strings.as.factors=default.stringsAsFactors()) {
 
   nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}

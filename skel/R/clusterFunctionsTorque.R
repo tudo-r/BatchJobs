@@ -41,7 +41,7 @@ makeClusterFunctionsTorque = function(template.file) {
 
     max.jobs.msg = "Maximum number of jobs already in queue"
     if (grepl(max.jobs.msg, res$output, fixed=TRUE)) {
-      makeSubmitJobResult(status=1L, batch.job.id=as.character(NA), msg=max.jobs.msg)
+      makeSubmitJobResult(status=1L, batch.job.id=NA_character_, msg=max.jobs.msg)
     } else if (res$exit.code > 0L) {
       msg = sprintf("qsub produced exit code %i; output %s", res$exit.code, res$output)
       makeSubmitJobResult(status=101L, msg=msg)

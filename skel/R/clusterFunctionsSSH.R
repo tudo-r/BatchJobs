@@ -69,7 +69,7 @@ makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, script) 
 #' @export
 makeClusterFunctionsSSH = function(..., workers) {
   args = list(...)
-  if (!xor(length(args) > 0, !missing(workers)))
+  if (!xor(length(args) > 0L, !missing(workers)))
     stop("You must use exactly only 1 of: '...', 'workers'!")
   if (missing(workers))
     workers = args

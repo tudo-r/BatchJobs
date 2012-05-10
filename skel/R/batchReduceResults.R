@@ -39,7 +39,7 @@
 #' submitJobs(reg2)
 #' # now reduce one final time on master
 #' reduceResults(reg2, fun=myreduce)
-batchReduceResults = function(reg, reg2, fun, ids, part=as.character(NA), init, block.size, more.args=list()) {
+batchReduceResults = function(reg, reg2, fun, ids, part=NA_character_, init, block.size, more.args=list()) {
   checkArg(reg, cl="Registry")
   checkArg(reg2, cl="Registry")
   checkArg(fun, formals=c("aggr", "job", "res"))
