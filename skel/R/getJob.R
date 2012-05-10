@@ -33,13 +33,8 @@ getJob = function(reg, id, load.fun=FALSE, check.id=TRUE) {
 #' @export
 getJobs = function(reg, ids, load.fun=FALSE, check.ids=TRUE) {
   checkArg(reg, "Registry")
-  if (missing(ids)) {
-    ids = getJobIds(reg)
-  } else if (check.ids) {
-    ids = checkIds(reg, ids)
-  }
-  checkArg(load.fun, "logical", len=1, na.ok=FALSE)
-  checkArg(check.ids, "logical", len=1, na.ok=FALSE)
+  checkArg(load.fun, "logical", len=1L, na.ok=FALSE)
+  checkArg(check.ids, "logical", len=1L, na.ok=FALSE)
   UseMethod("getJobs")
 }
 
@@ -47,20 +42,23 @@ getJobs = function(reg, ids, load.fun=FALSE, check.ids=TRUE) {
 #' @method getJobs Registry
 #' @S3method getJobs Registry
 getJobs.Registry = function(reg, ids, load.fun=FALSE, check.ids=TRUE) {
-  jobs = dbGetJobs(reg, ids)
-  if (load.fun) {
-    fun.dir = getFunDir(reg$file.dir)
-    fids = extractSubList(jobs, "fun.id")
-    loaded.stuff = Map(function(fid) {
-      load2(file.path(fun.dir, sprintf("%s.RData", fid)))
-    }, unique(fids))
-    lapply(jobs, function(job) {
-      x = loaded.stuff[[job$fun.id]]
-      job$fun = x$fun
-      job$more.args = x$more.args
-      job
-    })
-  } else {
-    jobs
+  if (! missing(ids) && check.ids) {
+    ids = checkIds(reg, ids)
   }
+
+  jobs = dbGetJobs(reg, ids)
+  if (!load.fun)
+    return(jobs)
+
+  fun.dir = getFunDir(reg$file.dir)
+  fid = unique(extractSubList(jobs, "fun.id"))
+  fn = file.path(fun.dir, sprintf("%s.RData", fid))
+  loaded.stuff = lapply(fn, load2, parts = c("fun", "more.args"))
+  names(loaded.stuff) = fid
+  lapply(jobs, function(job) {
+    x = loaded.stuff[[job$fun.id]]
+    job$fun = x$fun
+    job$more.args = x$more.args
+    job
+  })
 }
