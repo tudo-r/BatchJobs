@@ -82,7 +82,6 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
     if (any(ids %nin% done))
       stopf("No results available for jobs with ids: %s", collapse(ids[ids %nin% done]))
   }
-  checkPart(reg, part)
   checkArg(fun, formals=c("aggr", "job", "res"))
 
   n = length(ids)
@@ -139,7 +138,7 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
   fun2 = function(aggr, job, res) combine(aggr, wrap(fun(job, res)))
   res = reduceResults(reg, ids, part, fun2, init, ...)
   if (use.names)
-    res = name.fun(res, ids, fun(getJob(reg, ids[1L]), loadResult(reg, ids[1L])))
+    res = name.fun(res, ids, fun(getJob(reg, ids[1L]), loadResult(reg, ids[1L], check.id=FALSE)))
   return(res)
 }
 

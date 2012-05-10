@@ -59,7 +59,7 @@ testJob = function(reg, id) {
   message("### Output of new R process starts now ###")
   system(cmd, wait=TRUE)
   message("### Output of new R process ends here ###")
-  res = try(loadResult(reg, id))
+  res = try(loadResult(reg, id, check.id=FALSE))
   if (is.error(res))
     return(NULL)
   return(res)

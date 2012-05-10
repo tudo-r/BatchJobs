@@ -48,7 +48,6 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.a
     if (any(ids %nin% dbGetDone(reg)))
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
-  checkPart(reg, part)
   checkMoreArgs(more.args, reserved=c(".reg", ".fun", ".part"))
   if (dbGetJobCount(reg2) > 0L)
     stop("Registry 'reg2' is not empty!")

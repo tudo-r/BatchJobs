@@ -50,7 +50,6 @@ batchReduceResults = function(reg, reg2, fun, ids, part=NA_character_, init, blo
     if (any(ids %nin% dbGetDone(reg)))
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
-  checkPart(reg, part)
   block.size = convertInteger(block.size)
   checkArg(block.size, "integer", len=1L, na.ok=FALSE)
   checkMoreArgs(more.args, reserved=c("..reg", "..fun", "..part"))
@@ -68,6 +67,5 @@ batchReduceResultsWrapper = function(aggr, x, ..reg, ..fun, ..part) {
   # x is id
   # use lazy evaluation, if fun doesn't access job or res (unlikely)
   ..fun(aggr = aggr, job = getJob(..reg, x, check.id=FALSE),
-    res = loadResult(..reg, x, ..part))
+    res = loadResult(..reg, x, ..part, check.id=FALSE))
 }
-

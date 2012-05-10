@@ -23,7 +23,6 @@ loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=T
   } else {
     ids = checkIds(reg, ids)
   }
-  checkPart(reg, part)
   checkArg(simplify, "logical", len=1L, na.ok=FALSE)
   checkArg(use.names, "logical", len=1L, na.ok=FALSE)
 

@@ -69,7 +69,7 @@ getKillJob = function(msg=NULL) {
 }
 
 getRandomSeed = function(n = 1L) {
-  as.integer(runif(n, 1, floor(.Machine$integer.max / 2L)))
+  as.integer(runif(n, 1, .Machine$integer.max / 2L))
 }
 
 seeder = function(reg, seed) {

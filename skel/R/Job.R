@@ -5,7 +5,7 @@
 #'
 #' @param id [\code{integer(1)}]\cr
 #'   Job id, determined by DB autoincrement.
-#'   Default is \code{as.integer(NA)}.
+#'   Default is \code{NA}.
 #' @param fun [\code{function}]\cr
 #'   Job function to apply on parameters.
 #' @param fun.id [\code{character(1)}]\cr

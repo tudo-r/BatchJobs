@@ -195,7 +195,7 @@ dbGetJobStatusTable = function(reg, ids, convert.dates=TRUE) {
 
 dbGetJobCount = function(reg) {
   query = sprintf("SELECT COUNT(*) AS count FROM %s_job_status", reg$id)
-  as.integer(dbDoQuery(reg, query)$count)
+  dbDoQuery(reg, query)$count
 }
 
 dbGetJobId = function(reg) {
@@ -289,7 +289,8 @@ dbGetJobTimes = function(reg, ids){
   query = sprintf("SELECT job_id, done-started AS time FROM %s_job_status", reg$id)
   # incorrect type for empty id vec possible
   tab = dbSelectWithIds(reg, query, ids)
-  tab$time = as.integer(tab$time)
+  if (!is.integer(tab$time))
+    tab$time = as.integer(tab$time)
   tab
 }
 
