@@ -1,49 +1,45 @@
-writeRscripts = function(reg, ids, disable.mail, delays, interactive.test, first, last) {
+writeRscripts = function(reg, ids, disable.mail, delays, interactive.test) {
   if (!interactive.test) {
     template = paste(
+      "Sys.sleep(%%f)",
       "options(BatchJobs.on.slave=TRUE)",
       "library(BatchJobs)",
-      "reg = BatchJobs:::loadRegistry('%s')",
-      "ids = c(%s)",
-      "mult.files = %s",
-      "disable.mail = %s",
-      "first = %iL",
-      "last = %iL",
-      "Sys.sleep(%f)",
-      "BatchJobs:::doJob(reg, ids, mult.files, disable.mail, first, last)",
+      "BatchJobs:::doJob(",
+      "\treg=loadRegistry('%s'),",
+      "\tids=c(%%s),",
+      "\tmultiple.result.files=%s,",
+      "\tdisable.mail=%s,",
+      "\tfirst=%i,",
+      "\tlast=%i)",
       "BatchJobs:::setOnSlave(FALSE)",
-      sep = "\n"
-   )
+      sep="\n")
+
   } else {
     template = paste(
+      "ignore = %%f",
       "setOnSlave(TRUE)",
-      "reg = loadRegistry('%s')",
-      "ids = c(%s)",
-      "mult.files = %s",
-      "disable.mail = %s",
-      "first = %iL",
-      "last = %iL",
-      # ignore delay here
-      "ignore = %f",
-      "doJob(reg, ids, mult.files, disable.mail, first, last)",
+      "doJob(",
+      "\treg=loadRegistry('%s'),",
+      "\tids=c(%%s),",
+      "\tmultiple.result.files=%s,",
+      "\tdisable.mail=%s,",
+      "\tfirst=%i,",
+      "\tlast=%i)",
       "setOnSlave(FALSE)",
-      sep = "\n"
-    )
+      sep="\n")
   }
 
-  # for chunks we take the first id of the last chunk as "last" job, as first is stored in chunk
-  # results and we store the log file under that name, etc
-  if (missing(first))
-    first = if(is.list(ids)) head(unlist(head(ids, 1L)), 1L) else head(ids, 1L)
-  if (missing(last))
-    last = if(is.list(ids)) head(unlist(tail(ids, 1L)), 1L) else tail(ids, 1L)
+  fids = vapply(ids, head, integer(1L), 1L) # first job id in chunk
+  first = head(fids, 1L)
+  last = tail(fids, 1L)
+  ids.str = vapply(ids, function(id) collapse(paste(id, "L", sep="")), character(1L)) # ids as collapsed strings
 
-  idToString = function(ids)
-    vapply(ids, function(id) collapse(paste(id, "L", sep="")), character(1L))
+  # print the constant arguments (of length 1) into the template
+  template = sprintf(template, reg$file.dir, reg$multiple.result.files, disable.mail, first, last)
 
-  scripts = sprintf(template, reg$file.dir, idToString(ids),
-                    reg$multiple.result.files, disable.mail,
-                    first, last, delays)
-  mapply(function(id, script) cat(file = getRScriptFilePath(reg, id[1L]), script),
-         ids, scripts)
+  # print delays and ids into template. sprintf will return a string of length length(delays) == length(ids.str) == length(ids)
+  # put this together with file names into an mapply on cat.
+  mapply(FUN=cat, SIMPLIFY=FALSE, USE.NAMES=FALSE,
+         sprintf(template, delays, ids.str),
+         file = getRScriptFilePath(fids, reg = reg))
 }

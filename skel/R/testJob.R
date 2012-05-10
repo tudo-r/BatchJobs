@@ -51,7 +51,7 @@ testJob = function(reg, id) {
   copyRequiredJobFiles(r, reg, id)
 
   # write r script
-  writeRscripts(reg, id, disable.mail=TRUE, delays=0, interactive.test=FALSE, first=1L, last=1L)
+  writeRscripts(reg, id, disable.mail=TRUE, delays=0, interactive.test=FALSE)
 
   # execute
   rhome = Sys.getenv("R_HOME")
