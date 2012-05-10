@@ -38,10 +38,12 @@ writeRscripts = function(reg, ids, disable.mail, delays, interactive.test, first
   if (missing(last))
     last = if(is.list(ids)) head(unlist(tail(ids, 1L)), 1L) else tail(ids, 1L)
 
-  mapply(function(id, delay) {
-    cat(file = getRScriptFilePath(reg, id[1L]),
-        sprintf(template, reg$file.dir, collapse(paste(id, "L", sep = "")),
-                reg$multiple.result.files, disable.mail, first, last, delay))
-    }, ids, delays)
-}
+  idToString = function(ids)
+    vapply(ids, function(id) collapse(paste(id, "L", sep="")), character(1L))
 
+  scripts = sprintf(template, reg$file.dir, idToString(ids),
+                    reg$multiple.result.files, disable.mail,
+                    first, last, delays)
+  mapply(function(id, script) cat(file = getRScriptFilePath(reg, id[1L]), script),
+         ids, scripts)
+}
