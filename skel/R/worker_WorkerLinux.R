@@ -4,7 +4,7 @@ getWorkerNumberOfCPUs.WorkerLinux = function(worker) {
 
 getWorkerStatus.WorkerLinux = function(worker, file.dir) {
   res = onWorkerLinux(worker, "status", file.dir)
-  res = as.list(as.numeric(strsplit(res, " +")[[1]]))
+  res = as.list(as.numeric(strsplit(res, " +")[[1L]]))
   names(res) = c("load", "n.rprocs", "n.rprocs.50", "n.jobs")
   return(res)
 }

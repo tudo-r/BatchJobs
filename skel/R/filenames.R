@@ -18,7 +18,7 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
   if (file.access(path, mode=2L) != 0L)
     stopf("Directory '%s' is not writable!", path)
 
-  if (check.empty && !all(list.files(path, all.files=TRUE) %in% c(".", "..")))
+  if (check.empty && any(list.files(path, all.files=TRUE) %nin% c(".", "..")))
     stopf("Directory '%s' does not seem to be empty!", path)
 
   if(check.posix) {

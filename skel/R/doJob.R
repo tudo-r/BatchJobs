@@ -3,11 +3,11 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   reqJobPacks(reg)
   loadConf(reg)
   conf = getBatchJobsConf()
-  
+
   # we need to see all warnings immediatly
-  if (!(conf$cluster.functions$name %in% c("Interactive", "Testing")))
-    options(warning.length=8170, warn=1)
-      
+  if (conf$cluster.functions$name %nin% c("Interactive", "Testing"))
+    options(warning.length=8170L, warn=1L)
+
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)
   wd = mySetWd(reg)
@@ -68,7 +68,7 @@ doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   msg.buf = character(0L)
   # now collect messages in a buffer to reduce overhead
   # wait somewhere between 5-10 mins at least to flush them
-  wait.flush = round(runif(1L, 5*60, 10*60))
+  wait.flush = round(runif(1L, 300, 600))
   messagef("%s: Waiting %i secs between msg flushes.",
     as.character(Sys.time()), wait.flush)
   last.flush = as.integer(Sys.time())
@@ -97,7 +97,7 @@ doChunk = function(reg, ids, multiple.result.files, disable.mail, first, last) {
     msg.buf = doChunkFlush(reg, msg.buf, 0L)
     if (length(msg.buf) == 0L) break
     # wait between 1-2 min to try to flush last stuff
-    wait.flush = round(runif(1L, 1*60, 2*60))
+    wait.flush = round(runif(1L, 60, 2*60))
     messagef("%s: Waiting to flush msgs in final loop: %i secs.",
       as.character(Sys.time()), wait.flush)
     Sys.sleep(wait.flush)

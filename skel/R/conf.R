@@ -82,7 +82,7 @@ checkConf = function(conf) {
   ns = ls(conf)
   ns2 = c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options", "debug")
-  if (!all(ns %in% ns2))
+  if (any(ns %nin% ns2))
     stopf("You are only allowed to define the following R variables in your config file:\n%s",
       collapse(ns2, sep=", "))
 }

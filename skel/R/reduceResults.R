@@ -79,8 +79,8 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
     ids = done
   } else {
     ids = checkIds(reg, ids)
-    if (! all(ids %in% done))
-      stopf("No results available for jobs with ids: %s", collapse(ids[! (ids %in% done)]))
+    if (any(ids %nin% done))
+      stopf("No results available for jobs with ids: %s", collapse(ids[ids %nin% done]))
   }
   checkPart(reg, part)
   checkArg(fun, formals=c("aggr", "job", "res"))
@@ -105,7 +105,7 @@ reduceResults = function(reg, ids, part=as.character(NA), fun, init, ...) {
     } else {
       aggr = init
     }
-  
+
     for (id in ids) {
       # use lazy evaluation:
       # If fun doesn't access job or res (unlikely), the
@@ -139,7 +139,7 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
   fun2 = function(aggr, job, res) combine(aggr, wrap(fun(job, res)))
   res = reduceResults(reg, ids, part, fun2, init, ...)
   if (use.names)
-    res = name.fun(res, ids, fun(getJob(reg, ids[1]), loadResult(reg, ids[1])))
+    res = name.fun(res, ids, fun(getJob(reg, ids[1L]), loadResult(reg, ids[1L])))
   return(res)
 }
 
@@ -166,7 +166,7 @@ reduceResultsMatrix = function(reg, ids, part=as.character(NA), fun, ..., rows=T
     nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
   else
     nf = function(res, ids, x1) {colnames(res) = ids; rownames(res) = names(x1); res}
-  res = reduceResultsReturnVal(reg, ids, part, fun, unlist, combine, use.names, nf, ..., init=c(), empty=matrix(0,0,0))
+  res = reduceResultsReturnVal(reg, ids, part, fun, unlist, combine, use.names, nf, ..., init=c(), empty=matrix(0,0L,0L))
   if (!use.names)
     dimnames(res) = NULL
   return(res)
@@ -174,9 +174,9 @@ reduceResultsMatrix = function(reg, ids, part=as.character(NA), fun, ..., rows=T
 
 #' @export
 #' @rdname reduceResults
-reduceResultsDataFrame = function(reg, ids, part=as.character(NA), fun, ..., 
+reduceResultsDataFrame = function(reg, ids, part=as.character(NA), fun, ...,
   strings.as.factors=default.stringsAsFactors()) {
-  
+
   nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
   wrap = function(x) as.data.frame(x, stringsAsFactors=FALSE)
   res = reduceResultsReturnVal(reg, ids, part, fun, wrap, rbind, TRUE, nf, ..., init=data.frame(), empty=data.frame())

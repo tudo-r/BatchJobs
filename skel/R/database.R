@@ -40,7 +40,7 @@ dbDoQueries = function(reg, queries, flags="ro", max.retries=200L, sleep=functio
       dbRollback(con)
       dbDisconnect(con)
       if(!grepl("lock", ok, ignore.case=TRUE)) {
-        stopf("Error in dbDoQueries. Displaying only 1st query. %s (%s)", ok, queries[1])
+        stopf("Error in dbDoQueries. Displaying only 1st query. %s (%s)", ok, queries[1L])
       }
     }
     # if we reach this here, DB was locked

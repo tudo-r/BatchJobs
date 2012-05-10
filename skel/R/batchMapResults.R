@@ -45,7 +45,7 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=as.character(NA), mor
     ids = dbGetJobIdsIfAllDone(reg)
   } else {
     ids = checkIds(reg, ids)
-    if (!all(ids %in% dbGetDone(reg)))
+    if (any(ids %nin% dbGetDone(reg)))
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
   checkPart(reg, part)

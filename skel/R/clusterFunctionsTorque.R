@@ -51,16 +51,16 @@ makeClusterFunctionsTorque = function(template.file) {
   }
 
   killJob = function(conf, reg, batch.job.id) {
-    tries = 0  
+    tries = 0L
     while(TRUE) {
       # qdel sends SIGTERM, delay, SIGKILL
       res = runCommand("qdel", batch.job.id, stop.on.exit=FALSE)
-      if (res$exit.code == 0) {
+      if (res$exit.code == 0L) {
         return()
       } else {
-        tries = tries+1
-        if (tries > 3) {
-          stopf("Really tried to kill job, but could not do it. batch job id is %s.\nMessage: %s", 
+        tries = tries + 1L
+        if (tries > 3L) {
+          stopf("Really tried to kill job, but could not do it. batch job id is %s.\nMessage: %s",
             batch.job.id, res$output)
         }
         Sys.sleep(1)

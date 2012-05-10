@@ -1,4 +1,4 @@
-writeRscript = function(fn.rscript, file.dir, ids, mult.files, disable.mail, first, last, delay, interactive.test) {
+writeRscript = function(reg, ids, disable.mail, delays, interactive.test, first, last) {
   if (!interactive.test) {
     template = paste(
       "options(BatchJobs.on.slave=TRUE)",
@@ -25,12 +25,23 @@ writeRscript = function(fn.rscript, file.dir, ids, mult.files, disable.mail, fir
       "last = %iL",
       # ignore delay here
       "ignore = %f",
-      "doJob(reg, ids, mult.files, disable.mail, first, last)", 
+      "doJob(reg, ids, mult.files, disable.mail, first, last)",
       "setOnSlave(FALSE)",
       sep = "\n"
     )
   }
-  rscript = sprintf(template, file.dir, collapse(paste(ids, "L", sep = "")), 
-    mult.files, disable.mail, first, last, delay)
-  cat(file = fn.rscript, rscript)
+
+  # for chunks we take the first id of the last chunk as "last" job, as first is stored in chunk
+  # results and we store the log file under that name, etc
+  if (missing(first))
+    first = if(is.list(ids)) head(unlist(head(ids, 1L)), 1L) else head(ids, 1L)
+  if (missing(last))
+    last = if(is.list(ids)) head(unlist(tail(ids, 1L)), 1L) else tail(ids, 1L)
+
+  mapply(function(id, delay) {
+    cat(file = getRScriptFilePath(reg, id[1L]),
+        sprintf(template, reg$file.dir, collapse(paste(id, "L", sep = "")),
+                reg$multiple.result.files, disable.mail, first, last, delay))
+    }, ids, delays)
 }
+

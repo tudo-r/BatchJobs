@@ -26,31 +26,36 @@ testJob = function(reg, id) {
   } else {
     id = checkId(reg, id)
   }
+
   # we dont want to change anything in the true registry / file dir / DB
   # so we have to copy stuff a little bit
   r = reg
+
   # get a unique, unused tempdir. tmpdir() always stays the same per session
   td = tempfile(pattern="")
-  construct = sprintf("make%s", class(r)[1])
+  construct = sprintf("make%s", class(r)[1L])
+
   # copy reg
   reg = do.call(construct, list(id=reg$id, seed=r$seed, file.dir=td, work.dir=r$work.dir,
     sharding=FALSE, multiple.result.files=r$multiple.result.files,
     packages=names(reg$packages)))
+
   # copy DB
   file.copy(from=file.path(r$file.dir, "BatchJobs.db"), to=file.path(td, "BatchJobs.db"), overwrite=TRUE)
+
   # copy conf
   conf = getBatchJobsConf()
   save(file = getConfFilePath(reg), conf)
 
   # copy job stuff
   copyRequiredJobFiles(r, reg, id)
+
   # write r script
-  fn.rscript = file.path(td, "test.R")
-  writeRscript(fn.rscript, reg$file.dir, id, mult.files=reg$multiple.result.files,
-    disable.mail=TRUE, first=id, last=id, delay=0, interactive.test=FALSE)
+  writeRscript(reg, id, disable.mail=TRUE, delays=0, interactive.test=FALSE, first=1L, last=1L)
+
   # execute
   rhome = Sys.getenv("R_HOME")
-  cmd = sprintf("%s/bin/Rscript %s", rhome, fn.rscript)
+  cmd = sprintf("%s/bin/Rscript %s", rhome, getRScriptFilePath(reg, id))
   message("### Output of new R process starts now ###")
   system(cmd, wait=TRUE)
   message("### Output of new R process ends here ###")

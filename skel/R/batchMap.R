@@ -36,7 +36,7 @@ batchMap = function(reg, fun, ..., more.args=list()) {
   messagef("Adding %i jobs to DB.", n)
   # create seeds
   seed = reg$seed
-  seeds = addIntModulo(seed, seq(0, n-1L))
+  seeds = addIntModulo(seed, seq(0L, n-1L))
   # serialize pars to char vector
   pars = mapply(function(...) {
     rawToChar(serialize(list(...), connection=NULL, ascii=TRUE))

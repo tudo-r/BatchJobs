@@ -40,7 +40,7 @@ killJobs = function(reg, ids) {
      n.unsubm, n.nobji, n.term)
     messagef("Killing real batch jobs: %i", length(ids.batch))
   }
-  
+
   printBjis = function() {
     # show first batch.job.ids
     cutoff = cumsum(nchar(ids.batch) + 1L) > 200L
@@ -50,27 +50,27 @@ killJobs = function(reg, ids) {
       ids.str = collapse(ids.batch)
     message(ids.str)
   }
-  
+
   killThem = function(bjis) {
     old.warn = getOption("warn")
-    options(warn=0)
-    bar = makeProgressBar(max=length(bjis), label="killJobs")
+    options(warn=0L)
+    bar = makeProgressBar(min=0L, max=length(bjis), label="killJobs")
     bar$set()
-    notkilled = character(0)
+    notkilled = character(0L)
     for (i in seq_along(bjis)) {
       bji = bjis[i]
       ok = try(killfun(conf, reg, bji))
       if (is.error(ok)) {
         notkilled = c(notkilled, bji)
         warning(as.character(ok))
-      } 
-      bar$inc(1)
-    }    
+      }
+      bar$inc(1L)
+    }
     bar$kill()
     options(warn=old.warn)
     return(notkilled)
   }
-  
+
   conf = getBatchJobsConf()
   killfun = getKillJob("Cannot kill jobs")
   ids.onsys = findOnSystem(reg, ids)
@@ -81,29 +81,29 @@ killJobs = function(reg, ids) {
   # unique because of chunking
   ids.batch = unique(data.subset$batch_job_id)
   ids.job = data.subset$job_id
-  
+
   printInfo()
-  if (length(ids.batch) == 0) {
+  if (length(ids.batch) == 0L) {
     message("No batch jobs to kill.")
-    return(invisible(integer(0)))
+    return(invisible(integer(0L)))
   }
-  
+
   if (length(ids.batch) > 0L) {
     printBjis()
     notkilled = killThem(ids.batch)
-    if (length(notkilled) > 0) {
-      messagef("Could not kill %i batch jobs, trying again.", length(notkilled))    
+    if (length(notkilled) > 0L) {
+      messagef("Could not kill %i batch jobs, trying again.", length(notkilled))
       Sys.sleep(2)
       notkilled = killThem(notkilled)
-    }  
+    }
   }
-  if (length(notkilled) > 0) {
+  if (length(notkilled) > 0L) {
     messagef("Could not kill %i batch jobs, kill them manually!\nTheir ids have been saved in .GlobalEnv under .batch.job.ids", length(notkilled))
     assign(".batch.job.ids", notkilled, envir=.GlobalEnv)
     # only reset killed jobs
-    ids.job = subset(data.subset, !(data.subset$batch_job_id %in% notkilled))
+    ids.job = subset(data.subset, data.subset$batch_job_id %nin% notkilled)
   }
-    
+
   messagef("Resetting %i jobs in DB.", length(ids.job))
   dbSendMessage(reg, dbMakeMessageKilled(reg, ids.job))
   invisible(ids.job)
