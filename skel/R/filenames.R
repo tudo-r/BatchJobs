@@ -38,12 +38,14 @@ makePathAbsolute = function(path) {
   if (getOperatingSystem() == "Windows") {
     # as we print file paths to R files later on, we must use the forward slash also on windows.
     # winslash arg is not available in slightly older versions of R
-    path = normalizePath(path, mustWork=TRUE)
-    gsub("\\", "/", path, fixed=TRUE)
+    path = normalizePath(path, mustWork=FALSE)
+    # TODO replace this with the winslash arg when we are sure we will not support
+    #      R < 2.13.0 any more
+    path = gsub("\\", "/", path, fixed=TRUE)
   } else {
     # if path starts with / we use that as a heuristic that we dont have to change it
     if(substr(path, 1L, 1L) != "/")
-      path = normalizePath(path, mustWork=TRUE)
+      path = normalizePath(path, mustWork=FALSE)
   }
   path
 }

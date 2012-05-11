@@ -22,8 +22,8 @@ makeRegistryInternal = function(id, file.dir, sharding,
   requirePackages(packages, stop=TRUE, suppress.warnings=TRUE)
 
   # make paths absolute to be sure. otherwise cfSSH wont work for example
-  checkDir(file.dir, create=TRUE, check.empty=TRUE, check.posix=TRUE, msg=TRUE)
   file.dir = makePathAbsolute(file.dir)
+  checkDir(file.dir, create=TRUE, check.empty=TRUE, check.posix=TRUE, msg=TRUE)
   job.dir = getJobParentDir(file.dir)
   checkDir(job.dir, create=TRUE, check.empty=TRUE)
   fun.dir = getFunDir(file.dir)
