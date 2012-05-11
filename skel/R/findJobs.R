@@ -34,7 +34,7 @@ findJobs = function(reg, ids, pars) {
     pars
   }
 
-  e = substitute(pars)
-  jobs = Filter(function(j) eval(e, rename(j$pars), parent.frame()), jobs)
+  pars = substitute(pars)
+  jobs = Filter(function(j) eval(pars, rename(j$pars), parent.frame()), jobs)
   return(extractSubList(jobs, "id", element.value=integer(1L)))
 }
