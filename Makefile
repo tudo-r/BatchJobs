@@ -56,6 +56,6 @@ html: install
 
 check: roxygenize
 	echo "Running R CMD check ..."
-	${R} CMD check pkg
+	${R} CMD check --as-cran pkg
 
   
