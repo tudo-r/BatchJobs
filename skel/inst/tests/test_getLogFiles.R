@@ -4,7 +4,7 @@ test_that("getLogFiles", {
   reg = makeTestRegistry()
   batchMap(reg, identity, 1:10)
   ids = getJobIds(reg)
-  ch = chunkJobs(ids[1:8], chunk.size=4)
+  ch = chunk(ids[1:8], chunk.size=4)
   submitJobs(reg, ch)
   submitJobs(reg, ids[9:10])
   fs = getLogFiles(reg, ids)

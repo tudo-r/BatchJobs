@@ -1,5 +1,6 @@
 context("submitJobs")
 
+# FIXME check with chunked jobs
 test_that("submitJobs", {
   reg = makeTestRegistry()
   batchMap(reg, identity, 123)
