@@ -19,6 +19,7 @@ test_that("findJobs", {
   expect_true(length(ids) == 1)
 
   reg = makeTestRegistry()
+  # fixme interactive no problem, but in make test it is?
   xi = 3
   batchExpandGrid(reg, function(x, y) x+y, x=1:4, y=1:4)
   expect_equal(findJobs(reg, pars = (x == y)), c(1, 6, 11, 16))

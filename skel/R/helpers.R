@@ -105,11 +105,6 @@ getOperatingSystem = function() {
 }
 
 
-is.evaluable = function(x) {
-  return(is.call(x) || is.expression(x) || is.symbol(x))
-}
-
-
 strextract = function(string, pattern, global=TRUE) {
   if (global)
     regmatches(string, gregexpr(pattern, string))[[1L]]
