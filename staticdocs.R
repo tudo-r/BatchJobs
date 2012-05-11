@@ -1,7 +1,7 @@
 library(staticdocs)
 # see https://github.com/hadley/staticdocs/
 library(BBmisc)
-options(BBmisc.ProgressBar.style="off")
+#options(BBmisc.ProgressBar.style="off")
 
 ddir = "html"
 if(file.exists(ddir))
