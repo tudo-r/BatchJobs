@@ -25,16 +25,20 @@
 #' @param resources [\code{list}]\cr
 #'   Required resources for all batch jobs.
 #'   Default is empty list.
+#' @param temporary [\code{logical}]\cr
+#'   Create the \code{file.dir} inside R's \code{tempdir}?
+#'   Default is \code{FALSE}.
 #' @return [\code{\link{Registry}}]
 #' @export
-#  FIXME check that this is ok for CRAN test
 batchMapQuick = function(fun, ..., more.args=list(), packages=character(0L),
-  chunk.size, inds, resources=list()) {
+  chunk.size, inds, resources=list(), temporary=FALSE) {
+  checkArg(temporary, cl="logical", len=1L, na.ok=FALSE)
   id = basename(tempfile(pattern="bmq_"))
-  reg = makeRegistry(id=id, file.dir=id, packages=packages)
+  fd = ifelse(temporary, file.path(tempdir(), id), id)
+  reg = makeRegistry(id=id, file.dir=fd, packages=packages)
   ids = batchMap(reg, fun, ..., more.args=more.args)
   if (!missing(chunk.size))
-    ids = chunkJobs(ids, chunk.size=chunk.size)
+    ids = chunk(ids, chunk.size=chunk.size)
   if (missing(inds))
     inds = seq_along(ids)
   submitJobs(reg, ids[inds], resources=resources)
