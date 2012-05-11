@@ -4,10 +4,11 @@ Description:
 Author: Bernd Bischl <bernd_bischl@gmx.net>,
   Michel Lang <michellang@gmail.com>, 
   Olaf Mersmann <olafm@p-value.net>
-Maintainer: Bernd Bischl <bernd_bischl@gmx.net>
+Maintainer: Michel Lang <michellang@gmail.com>
 URL: http://code.google.com/p/batchjobs
 License: BSD
 Depends: utils, BBmisc, digest, RSQLite, sendmailR, brew
+Suggests: testthat
 LazyData: yes
 ByteCompile: yes
 Version: 1.1
