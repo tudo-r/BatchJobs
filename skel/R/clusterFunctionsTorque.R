@@ -54,7 +54,7 @@ makeClusterFunctionsTorque = function(template.file) {
     tries = 0L
     while(TRUE) {
       # qdel sends SIGTERM, delay, SIGKILL
-      res = runCommand("qdel", batch.job.id, stop.on.exit=FALSE)
+      res = runCommand("qdel", batch.job.id, stop.on.exit.code=FALSE)
       if (res$exit.code == 0L) {
         return()
       } else {

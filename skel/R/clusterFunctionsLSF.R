@@ -52,7 +52,7 @@ makeClusterFunctionsLSF = function(template.file) {
     tries = 0L
     while(TRUE) {
       # qdel sends SIGTERM, delay, SIGKILL
-      res = runCommand("bkill", batch.job.id, stop.on.exit=FALSE)
+      res = runCommand("bkill", batch.job.id, stop.on.exit.code=FALSE)
       if (res$exit.code == 0L) {
         return()
       } else {
@@ -69,7 +69,7 @@ makeClusterFunctionsLSF = function(template.file) {
   listJobs = function(conf, reg) {
     # JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME
     # 106560  rogon   UNKWN m_amd      hpc84       hpc25       QScript    Mar 19 12:18
-    res = runCommand("bjobs", c("-u $USER", "-w"), stop.on.exit.code=FALSE)
+    res = runCommand("bjobs", c("-u $USER", "-w"), stop.on.exit.code.code=FALSE)
     if (res$exit.code == 255L && grepl("No unfinished job found", res$output, fixed=TRUE))
       return(character(0L))
     if (res$exit.code > 0L)
