@@ -20,7 +20,7 @@
 findJobs = function(reg, ids, pars) {
   checkArg(reg, cl="Registry")
   if (!missing(ids))
-    ids = checkIds(reg, id)
+    ids = checkIds(reg, ids)
   if (!is.evaluable(pars))
     stop("Argument 'pars' must be a call, expression or symbol!")
   jobs = getJobs(reg, ids, check.ids=FALSE)
