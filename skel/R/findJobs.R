@@ -21,8 +21,6 @@ findJobs = function(reg, ids, pars) {
   checkArg(reg, cl="Registry")
   if (!missing(ids))
     ids = checkIds(reg, ids)
-  if (!is.evaluable(pars))
-    stop("Argument 'pars' must be a call, expression or symbol!")
   jobs = getJobs(reg, ids, check.ids=FALSE)
 
   rename = function(pars) {
@@ -36,6 +34,7 @@ findJobs = function(reg, ids, pars) {
     pars
   }
 
-  jobs = Filter(function(j) eval(pars, rename(j$pars)), jobs)
+  e = substitute(pars)
+  jobs = Filter(function(j) eval(e, rename(j$pars), parent.frame()), jobs)
   return(extractSubList(jobs, "id", element.value=integer(1L)))
 }
