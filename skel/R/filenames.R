@@ -22,9 +22,9 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
     stopf("Directory '%s' does not seem to be empty!", path)
 
   if(check.posix) {
-    pattern = "^[[:alnum:]/_.+-]+$"
-    if(! grepl(pattern, makePathAbsolute(path)))
-      stopf("Directory '%s' contains illegal characters! Allowed: a-z A-Z 0-9 / + . - _", makePathAbsolute(path))
+    path.abs = makePathAbsolute(path)
+    if(! grepl("^[[:alnum:]:/_.+-]+$", path.abs))
+      stopf("Directory '%s' contains illegal characters! Allowed: a-z A-Z 0-9 : / + . - _", path.abs)
   }
 }
 
@@ -35,19 +35,15 @@ createShardedDirs = function(reg, ids) {
 }
 
 makePathAbsolute = function(path) {
-  if (getOperatingSystem() == "Windows") {
-    # as we print file paths to R files later on, we must use the forward slash also on windows.
-    # winslash arg is not available in slightly older versions of R
+  if(substr(path, 1L, 1L) != "/")
     path = normalizePath(path, mustWork=FALSE)
-    # TODO replace this with the winslash arg when we are sure we will not support
-    #      R < 2.13.0 any more
+  # TODO:
+  # emulate winslash-behaviour
+  # remove this in a future version
+  if (grepl("windows", tolower(getOperatingSystem()), fixed=TRUE))
     path = gsub("\\", "/", path, fixed=TRUE)
-  } else {
-    # if path starts with / we use that as a heuristic that we dont have to change it
-    if(substr(path, 1L, 1L) != "/")
-      path = normalizePath(path, mustWork=FALSE)
-  }
-  path
+
+  return(path)
 }
 
 getJobDirs = function(reg, ids, unique=FALSE) {
