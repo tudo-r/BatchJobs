@@ -5,7 +5,7 @@
 #' @param ids [\code{integer}]\cr
 #'   Subset of job ids to restrict the result to.
 #'   Default is all jobs.
-#' @param pars [quoted R expression]\cr
+#' @param pars [R expression]\cr
 #'   All jobs whose parameters match the given expression are selected.
 #'   This implies that you have named the parameters when you passed the vectors.
 #'   If you forgot to do this you can use \code{.arg1}, \code{.arg2}, etc., to refer to the
@@ -16,7 +16,7 @@
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x, y) x * y
 #' batchExpandGrid(reg, f, x=1:2, y=1:3)
-#' findJobs(reg, pars=quote(y > 2))
+#' findJobs(reg, pars=(y > 2))
 findJobs = function(reg, ids, pars) {
   checkArg(reg, cl="Registry")
   if (!missing(ids))
@@ -34,7 +34,7 @@ findJobs = function(reg, ids, pars) {
     pars
   }
 
-  pars = substitute(pars)
-  jobs = Filter(function(j) eval(pars, rename(j$pars), parent.frame()), jobs)
-  return(extractSubList(jobs, "id", element.value=integer(1L)))
+  ind = na.omit(vapply(jobs, function(job, pars, ee) eval(pars, rename(job$pars), ee),
+                       logical(1L), pars=substitute(pars), ee=parent.frame()))
+  return(extractSubList(jobs[ind], "id", element.value=integer(1L)))
 }
