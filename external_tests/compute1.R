@@ -20,11 +20,10 @@ doExternalTest(whitespace=FALSE)
 doKillTest()
 
 conf$cluster.functions = makeClusterFunctionsSSH(
-  makeSSHWorker("compute1", ncpus=4, max.load=4, max.jobs=2))
+  makeSSHWorker("compute1", ncpus=4, max.jobs=2))
 doExternalTest(whitespace=FALSE)
 
 conf$cluster.functions = makeClusterFunctionsSSH(
-  makeSSHWorker("compute1"), 
   makeSSHWorker("rao"))
 doExternalTest(whitespace=FALSE)
 doKillTest()
