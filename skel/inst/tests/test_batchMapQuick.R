@@ -17,7 +17,7 @@ test_that("batchMapQuick", {
 
   reg = batchMapQuick(identity, 1:3, inds=c(1,3), temporary=TRUE)
   expect_equal(findDone(reg), c(1,3))
-  y = sapply(c(1,3), function(id) loadResult(reg, id), temporary=TRUE)
+  y = sapply(c(1,3), function(id) loadResult(reg, id))
   expect_equal(y, c(1,3), check.attributes = FALSE)
 
   reg = batchMapQuick(identity, temporary=TRUE)
