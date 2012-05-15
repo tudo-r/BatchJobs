@@ -1,8 +1,13 @@
-library(testthat)
+library("BBmisc")
+library("BatchJobs")
+library("testthat")
 
 doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false", 
   sleep.master=8, sleep.job=300, resources=list()) {
   
+  messagef("############################################################")
+  messagef("## BEGIN TEST (whitespace=%i)", whitespace)
+
   id = "external_test"
   if (whitespace)
     fd = "foo bär"

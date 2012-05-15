@@ -29,7 +29,8 @@ roxygenize: clean
 	${RSCRIPT} ../tools/roxygenize
 	echo "Setting version ..."
 	${RSCRIPT} ../tools/set-version
- 
+	find pkg -type d -name .svn  | xargs rm -fR
+
 package: roxygenize
 	echo "Building package file ..."
 	${R} CMD build pkg/
@@ -57,5 +58,3 @@ html: install
 check: roxygenize
 	echo "Running R CMD check ..."
 	${R} CMD check --as-cran pkg
-
-  
