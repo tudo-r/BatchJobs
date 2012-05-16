@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## linu-helper: Helper for the SSH cluster functions of the BatchJobs R
+## linux-helper: Helper for the multicore and SSH cluster functions of the BatchJobs R
 ##   package.
 ##
 ## Requires the following Unix command line utilities:

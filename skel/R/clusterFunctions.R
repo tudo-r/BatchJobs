@@ -43,7 +43,7 @@ print.SubmitJobResult = function(x, ...) {
   catf("  Msg    : %i", x$msg)
 }
 
-#' Create a \code{ClusterFuntions} object.
+#' Create a ClusterFuntions object.
 #'
 #' Use this funtion when you implement a backend for a batch system.
 #' You must define the functions specified in the arguments.

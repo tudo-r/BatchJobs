@@ -1,7 +1,8 @@
-#' Combination of \code{\link{makeRegistry}}, \code{\link{batchMap}}
-#' and \code{\link{submitJobs}}.
+#' Combination of makeRegistry, batchMap and submitJobs.
 #'
-#' For quick computations on the cluster.
+#' Combination of \code{\link{makeRegistry}}, \code{\link{batchMap}}
+#' and \code{\link{submitJobs}}
+#' for quick computations on the cluster.
 #' Should only be used by skilled users who know what they are doing.
 #' Creates the file.dir in current directory under the name \dQuote{.BatchJobs_bmq},
 #' maps function, potentially chunks jobs and submits them.
