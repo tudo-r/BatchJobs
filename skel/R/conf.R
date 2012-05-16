@@ -32,7 +32,7 @@ assignConf = function(conf) {
 
 # reads package conf, userhome conf, working dir conf
 # then assigns them to namespace
-useDefaultConfs = function() {
+readConfs = function() {
   fn.pack = file.path(.path.package("BatchJobs"), "etc", ".BatchJobs.R")
   fn.user = path.expand("~/.BatchJobs.R")
   fn.wd = suppressWarnings(normalizePath(".BatchJobs.R"))
