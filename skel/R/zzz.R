@@ -11,6 +11,6 @@
     # now load stuff from package and userhome
     useDefaultConfs()
     # show it
-    showConf()
+    lapply(capture.output(showConf()), packageStartupMessage)
   }
 }
