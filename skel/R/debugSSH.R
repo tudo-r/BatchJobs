@@ -55,12 +55,17 @@ debugSSH = function(nodenames, rhome="", dir=getwd()) {
   messagef("Auto-detecting ncpus result:")
   print(res)
   catf("\n")
-
-  messagef("*** Query worker status: ***")
-  res = lapply(workers, onWorkerLinux, command="status", args="")
-  messagef("Query worker status result:")
-  print(res)
-  catf("\n")
+  
+  queryWorkerStatus = function() {
+    messagef("*** Query worker status: ***")
+    res = lapply(workers, onWorkerLinux, command="status", args="")
+    messagef("Query worker status result:")
+    message("load n.rprocs n.rprocs.50 n.jobs")
+    print(res)
+    catf("\n")
+  }
+  
+  queryWorkerStatus()
 
   messagef("*** Submitting 1 job: ***")
   ssh.workers = Map(makeSSHWorker, nodenames, rhome)
@@ -71,11 +76,7 @@ debugSSH = function(nodenames, rhome="", dir=getwd()) {
   submitJobs(reg)
   Sys.sleep(3)
   messagef("Submitting 1 job result: %i", loadResult(reg, 1))
-  messagef("*** Query worker status: ***")
-  res = lapply(workers, onWorkerLinux, command="status", args=reg$file.dir)
-  messagef("Query worker status result:")
-  print(res)
-  catf("\n")
+  queryWorkerStatus()
 
   messagef("*** Killing 2 jobs: ***")
   id = "debug_ssh_2"
@@ -86,16 +87,10 @@ debugSSH = function(nodenames, rhome="", dir=getwd()) {
   batchMap(reg, f, xs)
   submitJobs(reg)
   Sys.sleep(3)
-  messagef("*** Query worker status: ***")
-  res = lapply(workers, onWorkerLinux, command="status", args=reg$file.dir)
-  messagef("Query worker status result:")
-  print(res)
+  queryWorkerStatus()
   messagef("Running jobs: %s", collapse(findRunning(reg)))
   killJobs(reg, ids)
-  messagef("*** Query worker status: ***")
-  res = lapply(workers, onWorkerLinux, command="status", args=reg$file.dir)
-  messagef("Query worker status result:")
-  print(res)
+  queryWorkerStatus()
   messagef("Running jobs: %s", collapse(findRunning(reg)))
   catf("\n")
 }
