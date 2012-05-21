@@ -37,7 +37,8 @@ setJobFunction = function(reg, ids, fun, more.args=list(), reset=TRUE, force=FAL
 #' @S3method setJobFunction Registry
 setJobFunction.Registry = function(reg, ids, fun, more.args=list(), reset=TRUE, force=FALSE) {
   if (missing(ids)) {
-    ids = dbGetJobIds(reg)
+    # nothing to do ...
+    return(invisible(NULL))
   } else {
     ids = checkIds(reg, ids)
   }
