@@ -68,19 +68,8 @@ makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, script) 
 #' }
 #' @export
 makeClusterFunctionsSSH = function(..., workers) {
-  args = list(...)
-  if (!xor(length(args) > 0L, !missing(workers)))
-    stop("You must use exactly only 1 of: '...', 'workers'!")
-  if (missing(workers))
-    workers = args
-  checkListElementClass(workers, "SSHWorker")
-  nodenames = extractSubList(workers, "nodename")
-  dup = duplicated(nodenames)
-  if (any(dup))
-    stopf("Multiple definitions for worker nodenames: %s!", nodenames[dup])
-  names(workers) = nodenames
   worker.env = new.env()
-  worker.env$workers = workers
+  worker.env$workers = checkSSHWorkers(..., workers=workers)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     worker = findWorker(worker.env, reg$file.dir)

@@ -122,3 +122,21 @@ brewWithStop = function(...) {
   if (is.error(z))
     stop(z)
 }
+
+
+checkSSHWorkers = function(..., workers) {
+  args = list(...)
+  if (!xor(length(args) > 0L, !missing(workers)))
+    stop("You must use exactly only 1 of: '...', 'workers'!")
+  if (missing(workers))
+    workers = args
+  checkListElementClass(workers, "SSHWorker")
+  if (length(workers) == 0)
+    stop("You must pass at least 1 SSH worker!")
+  nodenames = extractSubList(workers, "nodename")
+  dup = duplicated(nodenames)
+  if (any(dup))
+    stopf("Multiple definitions for worker nodenames: %s!", nodenames[dup])
+  names(workers) = nodenames
+  return(workers)  
+}
