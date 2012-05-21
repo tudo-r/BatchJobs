@@ -5,6 +5,8 @@
 #' of (unaffected) results. This function allows you to fix the error and to
 #' associate the jobs with the corrected function.
 #'
+#' Note that by default the computational state of the affected jobs is also reset.
+#'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 #' @param ids [\code{integer}]\cr
@@ -15,26 +17,33 @@
 #' @param more.args [\code{list}]\cr
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is empty list.
+#' @param reset [\code{logical(1)}]\cr
+#'   Reset job status via \code{\link{resetJobs}}.
+#'   Default is \code{TRUE}.
+#' @param force [\code{logical(1)}]\cr
+#'   See \code{\link{resetJobs}}.
+#'   Default is \code{FALSE}.
 #' @return Nothing.
 #' @export
-setJobFunction = function(reg, ids, fun, more.args=list()) {
+setJobFunction = function(reg, ids, fun, more.args=list(), reset=TRUE, force=FALSE) {
+  checkArg(reg, cl="Registry")
+  checkArg(fun, cl="function")
+  checkMoreArgs(more.args)
+  checkArg(reset, cl="logical", len=1L, na.ok=FALSE)
+  checkArg(force, cl="logical", len=1L, na.ok=FALSE)
   UseMethod("setJobFunction")
 }
 
 #' @S3method setJobFunction Registry
-setJobFunction.Registry = function(reg, ids, fun, more.args=list()) {
-  checkArg(fun, cl="function")
-  checkMoreArgs(more.args)
-
+setJobFunction.Registry = function(reg, ids, fun, more.args=list(), reset=TRUE, force=FALSE) {
   if (missing(ids)) {
     ids = dbGetJobIds(reg)
   } else {
     ids = checkIds(reg, ids)
-    if (!setequal(ids, dbGetJobIds(reg)))
-      stop("Subsetting ids not yet supported")
   }
-
   fun.id = saveFunction(reg, fun, more.args)
   dbSetJobFunction(reg, ids, fun.id)
+  if (reset)
+    resetJobs(reg, ids, force=force)
   invisible(NULL)
 }

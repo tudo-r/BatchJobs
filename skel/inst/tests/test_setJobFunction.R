@@ -9,7 +9,7 @@ test_that("setJobFunction", {
   expect_equal(findDone(reg), c(1, 3))
 
   f = function(x) x
-  setJobFunction(reg, fun=f)
+  setJobFunction(reg, fun=f, ids=2L, reset=TRUE, force=TRUE)
   submitJobs(reg, 2)
   expect_equal(findDone(reg), 1:3)
 })
