@@ -2,14 +2,12 @@
 
 .BatchJobs.conf <- new.env()
 
-
-.onLoad = function(libname, pkgname) {
+.onAttach = function(libname, pkgname) {
+  # FIXME: we should move this to onLoad when "is"
+  # is not used in Bmisc anymore
   if (!isOnSlave()) {
     assignConfDefaults()  
   }
-}
-
-.onAttach = function(libname, pkgname) {
   # only init the conf if we are not in slave process
   # there we load it anyway
   if (!isOnSlave()) {
