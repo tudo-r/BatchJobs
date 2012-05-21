@@ -22,6 +22,7 @@ debugSSH = function(nodenames, rhome=R.home(), file.dir="debugSSH_test") {
   conf = getBatchJobsConf()
   conf$debug = TRUE
   conf$mail.start = conf$mail.done = conf$mail.error = "none"
+  wd = file.dir
 
   messagef("*** System info: ***")
   print(Sys.info())
@@ -56,7 +57,7 @@ debugSSH = function(nodenames, rhome=R.home(), file.dir="debugSSH_test") {
   messagef("*** Submitting 1 job: ***")
   ssh.workers = Map(makeSSHWorker, nodenames, rhome)
   conf$cluster.functions = do.call(makeClusterFunctionsSSH, ssh.workers)
-  reg = makeRegistry(id = "debug_ssh", file.dir=file.dir, sharding=FALSE)
+  reg = makeRegistry(id = "debug_ssh", file.dir=file.dir, sharding=FALSE, work.dir=wd)
   batchMap(reg, identity, 1)
   submitJobs(reg)
   Sys.sleep(3)
@@ -68,7 +69,7 @@ debugSSH = function(nodenames, rhome=R.home(), file.dir="debugSSH_test") {
   catf("\n")
 
   messagef("*** Killing 2 jobs: ***")
-  reg = makeRegistry(id = "debug_ssh", file.dir=file.dir, sharding=FALSE)
+  reg = makeRegistry(id = "debug_ssh", file.dir=file.dir, sharding=FALSE, work.dir=wd)
   f = function(i) if(i <= 1) i else f(i-1) + f(i-2)
   xs = 50 + seq(1,2)
   ids = 1:2

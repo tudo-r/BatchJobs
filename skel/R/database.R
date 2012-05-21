@@ -385,6 +385,10 @@ dbConvertNumericToPOSIXct = function(x) {
   as.POSIXct(x, origin=now - as.integer(now))
 }
 
+dbSetJobFunction = function(reg, ids, fun.id) {
+  query = sprintf("UPDATE %1$s_job_def SET fun_id = '%2$s' WHERE job_def_id IN (SELECT job_def_id FROM %1$s_job_status WHERE job_id IN (%3$s))", reg$id, fun.id, collapse(ids))
+  dbDoQuery(reg, query, flags="rw")
+}
 
 ############################################
 ### INSERT
