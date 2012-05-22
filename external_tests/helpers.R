@@ -44,7 +44,7 @@ doKillTest = function(dir=getwd(), n=4, long="sleep") {
   cf = conf$cluster.functions
   test.workers = cf$name %in% c("Multicore", "SSH")
   getStatus = function() {
-    workers = environment(cf$submitJob)$workers
+    workers = environment(cf$submitJob)$worker.env$workers
     s = lapply(workers, function(w) {
       z = BatchJobs:::getWorkerStatus.WorkerLinux(w, file.dir=reg$file.dir)
       unlist(z[-1])
