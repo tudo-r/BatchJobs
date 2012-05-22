@@ -10,9 +10,9 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false",
 
   id = "external_test"
   if (whitespace)
-    fd = "foo bär"
+    fd = "external test"
   else
-    fd = "foo"  
+    fd = "external_test"  
   fd = file.path(dir, fd)
   ok = unlink(fd, recursive=TRUE)
   if (ok != 0)
