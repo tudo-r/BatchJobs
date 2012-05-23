@@ -1,6 +1,6 @@
 # Return number of cores on worker.
 # @param worker [\code{\link{Worker}}].
-#   Worker. 
+#   Worker.
 # @return [\code{integer(1)}].
 getWorkerNumberOfCPUs = function(worker) {
   UseMethod("getWorkerNumberOfCPUs")
@@ -12,29 +12,29 @@ getWorkerNumberOfCPUs = function(worker) {
 # - number of R processes by _all_ users which have a load of >= 50%
 # - number of R processes by current user which match $FILEDIR/jobs in the cmd call of R
 # @param worker [\code{\link{Worker}}].
-#   Worker. 
+#   Worker.
 # @param file.dir [\code{character(1)}}].
-#   File dir of registry. 
+#   File dir of registry.
 # @return [named \code{list} of \code{numeric(1)}].
 getWorkerStatus = function(worker, file.dir) {
   UseMethod("getWorkerStatus")
 }
 
-# Start a job on worker, probably with R CMD BATCH.  
+# Start a job on worker, probably with R CMD BATCH.
 # @param worker [\code{\link{Worker}}].
-#   Worker. 
+#   Worker.
 # @param rfile [\code{character(1)}].
-#   Path to R file to execute. 
+#   Path to R file to execute.
 # @param outfile [\code{character(1)}].
-#   Path to log file for R process. 
+#   Path to log file for R process.
 # @return [\code{character(1)}]. Relevant process id.
 startWorkerJob = function(worker, rfile, outfile) {
   UseMethod("startWorkerJob")
 }
 
-# Kill a job on worker. Really do it.  
+# Kill a job on worker. Really do it.
 # @param worker [\code{\link{Worker}}].
-#   Worker. 
+#   Worker.
 # @param pid [\code{character(1)}].
 #   Process id from DB/batch.job.id to kill.
 # @return Nothing.
@@ -44,9 +44,9 @@ killWorkerJob = function(worker, pid) {
 
 # List all jobs on worker belonging to the current registry.
 # @param worker [\code{\link{Worker}}].
-#   Worker. 
+#   Worker.
 # @param file.dir [\code{character(1)}}].
-#   File dir of registry. 
+#   File dir of registry.
 # @return [\code{character}]. Vector of process ids.
 listWorkerJobs = function(worker, file.dir) {
   UseMethod("listWorkerJobs")
@@ -68,7 +68,7 @@ initWorker = function(worker, script, ncpus, max.jobs, max.load) {
     ncpus = convertInteger(ncpus)
     checkArg(ncpus, "integer", len=1L, na.ok=FALSE)
     worker$ncpus = ncpus
-  }  
+  }
   if (missing(max.jobs)) {
     worker$max.jobs = worker$ncpus
   } else {
@@ -78,7 +78,7 @@ initWorker = function(worker, script, ncpus, max.jobs, max.load) {
       stopf("max.jobs must be <= ncpus = %i!", worker$ncpus)
     worker$max.jobs = max.jobs
   }
-  if (missing(max.load)) { 
+  if (missing(max.load)) {
     worker$max.load = worker$ncpus-1
   } else {
     checkArg(max.load, "numeric", len=1L, na.ok=FALSE)
@@ -91,25 +91,24 @@ initWorker = function(worker, script, ncpus, max.jobs, max.load) {
 
 # is a worker busy, see rules below
 getWorkerBusyStatus = function(worker) {
-  status = 0L
   # we have already used up our maximal load on this node
   if (worker$status$n.jobs >= worker$max.jobs)
-    status = 2L
+    return(2L)
   # should not have too much load average
-  else if (worker$status$load[1L] > worker$max.load)
-    status = 3L
+  if (worker$status$load[1L] > worker$max.load)
+    return(3L)
   # there are already ncpus expensive R jobs running on the node
-  else if (worker$status$n.rprocs.50 >= worker$ncpus)
-    status = 4L
+  if (worker$status$n.rprocs.50 >= worker$ncpus)
+    return(4L)
   # should not have too many R sessions open
-  else if(worker$status$n.rprocs > 3 * worker$ncpus)
-    status = 5L
+  if(worker$status$n.rprocs > 3L * worker$ncpus)
+    return(5L)
   # else all clear, submit the job!
-  return(status)  
+  return(0L)
 }
 
 # update status of worker
-updateWorker = function(worker, file.dir) {        
+updateWorker = function(worker, file.dir) {
   worker$last.update = as.integer(Sys.time())
   worker$status = getWorkerStatus(worker, file.dir)
   return(worker)
@@ -127,7 +126,7 @@ findWorker = function(worker.env, file.dir) {
       s = getWorkerBusyStatus(worker)
       if (s == 0L)
         return(list(status=0L, worker=worker))
-      else  
+      else
         return(list(status=s, worker=NULL))
     }
   }
