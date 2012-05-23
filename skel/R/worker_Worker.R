@@ -123,10 +123,13 @@ findWorker = function(worker.env, file.dir) {
     # each worker is touched maximally once in 5 secs
     if (time - worker$last.update > 5) {
       worker = updateWorker(worker, file.dir)
+      worker.env$workers[[i]] = worker
       s = getWorkerBusyStatus(worker)
       if (s == 0L)
-        return(worker)
+        return(list(status=0L, worker=worker))
+      else  
+        return(list(status=s, worker=NULL))
     }
   }
-  return(NULL)
+  return(list(status=0L, worker=worker))
 }
