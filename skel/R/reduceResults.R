@@ -21,7 +21,7 @@
 #'   \code{result} to \code{aggr} and return that.
 #'   When using the other reductions, you should select the stuff you want to have from \code{job} and
 #'   \code{result} and return something that can be coerced to an element of the selected return data structure
-#'   (reasonable converion is tried internally).
+#'   (reasonable conversion is tried internally).
 #'   Default behavior for this argument is to return \code{res}, except for \code{reduceResults} where no
 #'   default is available.
 #' @param init [\code{ANY}]\cr
