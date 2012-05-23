@@ -37,11 +37,15 @@ batchMapQuick = function(fun, ..., more.args=list(), packages=character(0L),
   id = basename(tempfile(pattern="bmq_"))
   fd = ifelse(temporary, file.path(tempdir(), id), id)
   reg = makeRegistry(id=id, file.dir=fd, packages=packages)
-  ids = batchMap(reg, fun, ..., more.args=more.args)
-  if (!missing(chunk.size))
-    ids = chunk(ids, chunk.size=chunk.size)
-  if (missing(inds))
-    inds = seq_along(ids)
-  submitJobs(reg, ids[inds], resources=resources)
+  # we want to return the reg in any case 
+  # otherwise we cannot look at it / do anything with it in case of errors
+  try({
+    ids = batchMap(reg, fun, ..., more.args=more.args)
+    if (!missing(chunk.size))
+      ids = chunk(ids, chunk.size=chunk.size)
+    if (missing(inds))
+      inds = seq_along(ids)
+    submitJobs(reg, ids[inds], resources=resources)
+  }, silent=FALSE)
   return(reg)
 }
