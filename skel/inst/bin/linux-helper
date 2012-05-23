@@ -5,7 +5,7 @@
 ##
 ## Requires the following Unix command line utilities:
 ##
-##  * grep, wc, ps, kill, uptime, echo, cat
+##  * grep, wc, ps, kill, uptime, echo, cat, possibly setsid
 ##
 ## The following commands are implemented. First argument is always the command name.
 ## For other arguments see below. Each command returns a character vector.
@@ -53,11 +53,17 @@ case $CMD in
         else
             RCMD="R"
         fi
+        # only use setsid on linux not on darwin, not available there
+ 		if [ `uname` == "Linux" ]; then
+          SETSID="setsid"
+        else  
+          SETSID=""
+        fi          
         # nothing should be on all 3 streams except maybe a segfault. throw away. 
         # see comment also in cfLocal
         # we use setsid to start the process in a different session. other ctrl+C in the master
         # session leads to killing of child processes in multicore mode as the SIGINT is passed down
-        setsid "$RCMD" CMD BATCH --no-save --no-restore "$2" "$3" \
+        "$SETSID" "$RCMD" CMD BATCH --no-save --no-restore "$2" "$3" \
             > /dev/null 2> /dev/null < /dev/null &
         echo $!
         ;;
