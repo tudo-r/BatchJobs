@@ -90,16 +90,22 @@ initWorker = function(worker, script, ncpus, max.jobs, max.load) {
 }
 
 # is a worker busy, see rules below
-isWorkerBusy = function(worker) {
+getWorkerBusyStatus = function(worker) {
+  status = 0L
+  # we have already used up our maximal load on this node
+  if (worker$status$n.jobs >= worker$max.jobs)
+    status = 2L
+  # should not have too much load average
+  else if (worker$status$load[1L] > worker$max.load)
+    status = 3L
+  # there are already ncpus expensive R jobs running on the node
+  else if (worker$status$n.rprocs.50 >= worker$ncpus)
+    status = 4L
   # should not have too many R sessions open
-  (worker$status$n.rprocs > 3 * worker$ncpus) ||
-    # should not have too much load average
-    (worker$status$load[1L] > worker$max.load) ||
-    # there are already ncpus expensive R jobs running on the node
-    (worker$status$n.rprocs.50 >= worker$ncpus) ||
-    # we have already used up our maximal load on this node
-    (worker$status$n.jobs >= worker$max.jobs)
+  else if(worker$status$n.rprocs > 3 * worker$ncpus)
+    status = 5L
   # else all clear, submit the job!
+  return(status)  
 }
 
 # update status of worker
@@ -117,7 +123,8 @@ findWorker = function(worker.env, file.dir) {
     # each worker is touched maximally once in 5 secs
     if (time - worker$last.update > 5) {
       worker = updateWorker(worker, file.dir)
-      if (!isWorkerBusy(worker))
+      s = getWorkerBusyStatus(worker)
+      if (s == 0L)
         return(worker)
     }
   }

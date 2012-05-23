@@ -31,7 +31,8 @@ makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, script) {
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     worker = findWorker(worker.env, reg$file.dir)
     if (is.null(worker)) {
-      makeSubmitJobResult(status=1L, batch.job.id=NULL, msg="No free core available")
+      s = getWorkerBusyStatus(worker.env$workers$localhost)
+      makeSubmitJobResult(status=s, batch.job.id=NULL, msg="No free core available")
     } else {
       pid = try(startWorkerJob(worker, rscript, log.file))
       if (is.error(pid))
