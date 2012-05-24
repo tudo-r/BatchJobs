@@ -8,7 +8,7 @@
 #'   Predicate function that returns \code{TRUE} or \code{FALSE}.
 #' @param ... [any]\cr
 #'   Additional arguments to \code{fun}.
-#' @return [\code{character}]. Ids of jobs where \code{fun(job, result)} returns \code{TRUE}.
+#' @return [\code{integer}]. Ids of jobs where \code{fun(job, result)} returns \code{TRUE}.
 #' @export
 #' @examples
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
