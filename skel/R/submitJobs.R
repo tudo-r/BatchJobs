@@ -48,6 +48,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
 
   checkArg(reg, cl="Registry")
   if (missing(ids)) {
+    # FIXME better default to jobs not yet submitted
     ids = dbGetMissingResults(reg)
     if (length(ids) == 0L) {
       message("All jobs finished, nothing to do!")
