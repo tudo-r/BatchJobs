@@ -37,7 +37,7 @@ debugSSH = function(nodenames, rhome="", dir=getwd()) {
   catf("\n")
 
   messagef("*** which R on slaves: ***")
-  res = sapply(nodenames, runCommand, cmd="which", args="R", ssh=TRUE, stop.on.exit.code=TRUE)
+  res = sapply(nodenames, runOSCommandLinux, cmd="which", args="R", ssh=TRUE, stop.on.exit.code=TRUE)
   messagef("which R result:")
   print(res)
   catf("\n")
@@ -51,14 +51,14 @@ debugSSH = function(nodenames, rhome="", dir=getwd()) {
 
   messagef("*** Auto-detecting ncpus for slaves: ***")
   workers = Map(makeWorkerRemoteLinux, nodenames, rhome, ncpus=1)
-  res = lapply(workers, onWorkerLinux, command="number-of-cpus")
+  res = lapply(workers, runWorkerCommand, command="number-of-cpus")
   messagef("Auto-detecting ncpus result:")
   print(res)
   catf("\n")
   
   queryWorkerStatus = function() {
     messagef("*** Query worker status: ***")
-    res = lapply(workers, onWorkerLinux, command="status", args="")
+    res = lapply(workers, runWorkerCommand, command="status", args="")
     messagef("Query worker status result:")
     message("load n.rprocs n.rprocs.50 n.jobs")
     print(res)

@@ -5,8 +5,8 @@
 # @param nodename [\code{character(1)}]\cr
 #   Host name of node.
 # @param rhome [\code{character(1)}]\cr
-#'  Path to R installation on worker.
-#'  \dQuote{} means R installation on the PATH is used.
+#  Path to R installation on worker.
+#  \dQuote{} means R installation on the PATH is used.
 # @param script [\code{character(1)}]\cr
 #   Path to helper script on worker.
 #   Default means to call \code{\link{findHelperScriptLinux}}.

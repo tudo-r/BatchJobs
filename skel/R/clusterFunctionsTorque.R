@@ -37,7 +37,7 @@ makeClusterFunctionsTorque = function(template.file) {
       outfile = tempfile()
     }
     brewWithStop(text=template, output=outfile)
-    res = runCommand("qsub", outfile, stop.on.exit.code=FALSE)
+    res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
 
     max.jobs.msg = "Maximum number of jobs already in queue"
     if (grepl(max.jobs.msg, res$output, fixed=TRUE)) {
@@ -54,7 +54,7 @@ makeClusterFunctionsTorque = function(template.file) {
     tries = 0L
     while(TRUE) {
       # qdel sends SIGTERM, delay, SIGKILL
-      res = runCommand("qdel", batch.job.id, stop.on.exit.code=FALSE)
+      res = runOSCommandLinux("qdel", batch.job.id, stop.on.exit.code=FALSE)
       if (res$exit.code == 0L) {
         return()
       } else {
@@ -70,7 +70,7 @@ makeClusterFunctionsTorque = function(template.file) {
 
   listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
-    runCommand("qselect", "-u $USER")$output
+    runOSCommandLinux("qselect", "-u $USER")$output
   }
 
   makeClusterFunctions(name="Torque", submitJob=submitJob, killJob=killJob, listJobs=listJobs)

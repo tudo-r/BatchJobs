@@ -36,7 +36,7 @@ makeClusterFunctionsSGE = function(template.file) {
     }
     brewWithStop(text=template, output=outfile)
     # returns: "Your job 240933 (\"sleep 60\") has been submitted"
-    res = runCommand("qsub", outfile, stop.on.exit.code=FALSE)
+    res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
     # FIXME filled queues
     if (res$exit.code > 0L) {
       msg = sprintf("qsub produced exit code %i; output %s", res$exit.code, res$output)
@@ -52,7 +52,7 @@ makeClusterFunctionsSGE = function(template.file) {
     tries = 0L
     while(TRUE) {
       # qdel sends SIGTERM, delay, SIGKILL
-      res = runCommand("qdel", batch.job.id, stop.on.exit.code=FALSE)
+      res = runOSCommandLinux("qdel", batch.job.id, stop.on.exit.code=FALSE)
       if (res$exit.code == 0L) {
         return()
       } else {
@@ -71,7 +71,7 @@ makeClusterFunctionsSGE = function(template.file) {
     # job-ID  prior   name       user         state submit/start at     queue                          slots ja-task-ID
     #-----------------------------------------------------------------------------------------------------------------
     #  240935 0.00000 sleep 60   matthias     qw    04/03/2012 15:45:54                                    1
-    res = runCommand("qstat", "-u $USER")$output
+    res = runOSCommandLinux("qstat", "-u $USER")$output
     # drop first 2 header lines
     res = res[-(1:2)]
     # first number in strings are batch.job.ids
