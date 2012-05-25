@@ -11,6 +11,6 @@ conf$cluster.functions = makeClusterFunctionsLocal()
 doExternalTest(whitespace=FALSE)
 
 conf$cluster.functions = makeClusterFunctionsMulticore()
-doExternalTest(whitespace=FALSE)
-doKillTest()
+doExternalTest(whitespace=FALSE, n=2)
+doKillTest(n=2)
 
