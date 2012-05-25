@@ -62,7 +62,7 @@ makeWorker = function(ssh, nodename, rhome, script, ncpus, max.jobs, max.load, c
       stopf("max.jobs must be <= ncpus = %i!", ncpus)
   }
   if (missing(max.load)) {
-    max.load = ncpus-1
+    max.load = ncpus-1L
   } else {
     checkArg(max.load, "numeric", len=1L, na.ok=FALSE)
     if (max.load > ncpus)

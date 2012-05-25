@@ -12,7 +12,7 @@ getWorkerSchedulerStatus = function(worker) {
   if (worker$status$n.rprocs.50 >= worker$ncpus)
     return("R")
   # should not have too many R sessions open
-  if(worker$status$n.rprocs > 3 * worker$ncpus)
+  if(worker$status$n.rprocs >= 3 * worker$ncpus)
     return("r")
   # else all clear, submit the job!
   return("A")
