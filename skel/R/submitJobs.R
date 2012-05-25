@@ -16,7 +16,7 @@
 #'   Vector for job id or list of vectors of chunked job ids.
 #'   Only corresponding jobs are submitted. Chunked jobs will get executed
 #'   sequentially as a single job for the scheduler.
-#'   Default is all jobs where results are missing.
+#'   Default is all jobs which were not yet submitted to the batch system.
 #' @param resources [\code{list}]\cr
 #'   Required resources for all batch jobs.
 #'   Default is empty list.
@@ -48,10 +48,9 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
 
   checkArg(reg, cl="Registry")
   if (missing(ids)) {
-    # FIXME better default to jobs not yet submitted
-    ids = dbGetMissingResults(reg)
+    ids = dbGetSubmitted(reg)
     if (length(ids) == 0L) {
-      message("All jobs finished, nothing to do!")
+      message("All jobs submitted, nothing to do!")
       return(invisible(NULL))
     }
   } else {

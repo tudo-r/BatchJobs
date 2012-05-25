@@ -58,9 +58,10 @@ batchReduceResults = function(reg, reg2, fun, ids, part=NA_character_, init, blo
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)
     stop("Both registries cannot point to the same file dir. Files would get overwritten!")
-  more.args = c(more.args, list(..reg=reg, ..fun=fun, ..part=part))
+  requirePackages(names(reg$packages))
+
   batchReduce(reg2, batchReduceResultsWrapper, ids, init=init, block.size=block.size,
-    more.args=more.args)
+    more.args=c(more.args, list(..reg=reg, ..fun=fun, ..part=part)))
 }
 
 batchReduceResultsWrapper = function(aggr, x, ..reg, ..fun, ..part) {

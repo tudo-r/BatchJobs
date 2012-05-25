@@ -53,8 +53,9 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.a
     stop("Registry 'reg2' is not empty!")
   if(reg$file.dir == reg2$file.dir)
     stop("Both registries cannot point to the same file dir. Files would get overwritten!")
-  more.args = c(more.args, list(.reg=reg, .fun=fun, .part=part))
-  batchMap(reg2, batchMapResultsWrapper, ids, ..., more.args=more.args)
+  requirePackages(names(reg$packages))
+
+  batchMap(reg2, batchMapResultsWrapper, ids, ..., more.args=c(more.args, list(.reg=reg, .fun=fun, .part=part)))
 }
 
 batchMapResultsWrapper = function(id, ..., .reg, .fun, .part) {
