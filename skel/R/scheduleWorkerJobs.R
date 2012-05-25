@@ -19,17 +19,10 @@ getWorkerSchedulerStatus = function(worker) {
 # update status of worker IN PLACE
 updateWorker = function(worker, file.dir, tdiff) {
   time = as.integer(Sys.time())
-
-  if (worker$available == "A") {
-      worker$last.update = time
-      worker$status = getWorkerStatus(worker, file.dir)
-      worker$available = getWorkerSchedulerStatus(worker)
-  } else {
-    if(time - worker$last.update >= tdiff) {
-      worker$last.update = time
-      worker$status = getWorkerStatus(worker, file.dir)
-      worker$available = getWorkerSchedulerStatus(worker)
-    }
+  if (worker$available == "A" || time - worker$last.update >= tdiff) {
+    worker$last.update = time
+    worker$status = getWorkerStatus(worker, file.dir)
+    worker$available = getWorkerSchedulerStatus(worker)
   }
 }
 
