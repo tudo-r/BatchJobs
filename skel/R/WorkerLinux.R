@@ -7,7 +7,7 @@ makeWorkerRemoteLinux = function(nodename, rhome, script, ncpus, max.jobs, max.l
 
 # Construct a worker for local Linux machine to spawn parallel jobs.
 makeWorkerLocalLinux = function(script, ncpus, max.jobs, max.load) {
-  makeWorker(ssh=TRUE, "localhost", R.home(), script, ncpus, max.jobs, max.load, c("WorkerLocalLinux", "WorkerLinux"))
+  makeWorker(ssh=FALSE, "localhost", R.home(), script, ncpus, max.jobs, max.load, c("WorkerLocalLinux", "WorkerLinux"))
 }
 
 # ******************** Interface implementation ********************
