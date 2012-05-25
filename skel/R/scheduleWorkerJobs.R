@@ -32,6 +32,6 @@ updateWorker = function(worker, file.dir, tdiff) {
 
 # find worker via isBusyWorker and update workers while looking
 findWorker = function(workers, file.dir, tdiff) {
-  lapply(workers, updateWorker, tdiff=tdiff)
+  lapply(workers, updateWorker, file.dir=file.dir, tdiff=tdiff)
   Find(function(w) getWorkerSchedulerStatus(w)=="A", workers, nomatch=NULL)
 }
