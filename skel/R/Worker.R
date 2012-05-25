@@ -1,7 +1,7 @@
 # ******************** Constructors ********************
 
 # Abstract base class constructor for general workers.
-# 
+#
 # @param nodename [\code{character(1)}]\cr
 #   Host name of node.
 # @param rhome [\code{character(1)}]\cr
@@ -17,11 +17,11 @@
 #   Maximal number of jobs that can run concurrently for the current registry.
 #   Default is \code{ncpus}.
 # @param max.load [\code{numeric(1)}]\cr
-#   Load average (of the last 5 min) at which the worker is considered occupied, 
-#   so that no job can be submitted. 
+#   Load average (of the last 5 min) at which the worker is considered occupied,
+#   so that no job can be submitted.
 #   Default is \code{ncpus-1}.
 # @param classes [\code{character}]\cr
-#   Extra classes, more specific than dQuote{Worker}. 
+#   Extra classes, more specific than dQuote{Worker}.
 #   Will be added to the class attribute of the object.
 # @return [\code{\link{Worker}}].
 makeWorker = function(ssh, nodename, rhome, script, ncpus, max.jobs, max.load, classes) {
@@ -34,22 +34,25 @@ makeWorker = function(ssh, nodename, rhome, script, ncpus, max.jobs, max.load, c
   } else {
     checkArg(script, "character", len=1L, na.ok=FALSE)
   }
-  
-  # construct object partially so we can query ncpus  
-  w = new.env()
-  w$ssh = ssh
-  w$nodename = nodename
-  w$rhome = rhome
-  w$script = script
+
+  # construct object partially so we can query ncpus
+  w = as.environment(list(
+    ssh = ssh,
+    nodename = nodename,
+    rhome = rhome,
+    script = script,
+    last.update = -Inf,
+    updated = FALSE,
+    status = NULL))
   class(w) = c(classes, "Worker")
-  
+
   if (missing(ncpus)) {
     ncpus = getWorkerNumberOfCPUs(w)
     messagef("Setting for worker %s: ncpus=%i", w$nodename, ncpus)
   } else {
     ncpus = convertInteger(ncpus)
     checkArg(ncpus, "integer", len=1L, na.ok=FALSE)
-  }  
+  }
   if (missing(max.jobs)) {
     max.jobs = ncpus
   } else {
@@ -58,19 +61,17 @@ makeWorker = function(ssh, nodename, rhome, script, ncpus, max.jobs, max.load, c
     if (max.jobs > ncpus)
       stopf("max.jobs must be <= ncpus = %i!", ncpus)
   }
-  if (missing(max.load)) { 
+  if (missing(max.load)) {
     max.load = ncpus-1
   } else {
     checkArg(max.load, "numeric", len=1L, na.ok=FALSE)
     if (max.load > ncpus)
       stopf("max.load must be <= ncpus = %i!", ncpus)
   }
-  w$ncpus = ncpus  
+
+  w$ncpus = ncpus
   w$max.jobs = max.jobs
-  w$max.load = max.load  
-  w$last.update = -Inf
-  w$updated = FALSE
-  w$status = NULL
+  w$max.load = max.load
   return(w)
 }
 
@@ -78,7 +79,7 @@ makeWorker = function(ssh, nodename, rhome, script, ncpus, max.jobs, max.load, c
 
 # Return number of cores on worker.
 # @param worker [\code{\link{Worker}}].
-#   Worker. 
+#   Worker.
 # @return [\code{integer(1)}].
 getWorkerNumberOfCPUs = function(worker) {
   UseMethod("getWorkerNumberOfCPUs")
@@ -90,29 +91,29 @@ getWorkerNumberOfCPUs = function(worker) {
 # - number of R processes by _all_ users which have a load of >= 50%
 # - number of R processes by current user which match $FILEDIR/jobs in the cmd call of R
 # @param worker [\code{\link{Worker}}].
-#   Worker. 
+#   Worker.
 # @param file.dir [\code{character(1)}}].
-#   File dir of registry. 
+#   File dir of registry.
 # @return [named \code{list} of \code{numeric(1)}].
 getWorkerStatus = function(worker, file.dir) {
   UseMethod("getWorkerStatus")
 }
 
-# Start a job on worker, probably with R CMD BATCH.  
+# Start a job on worker, probably with R CMD BATCH.
 # @param worker [\code{\link{Worker}}].
-#   Worker. 
+#   Worker.
 # @param rfile [\code{character(1)}].
-#   Path to R file to execute. 
+#   Path to R file to execute.
 # @param outfile [\code{character(1)}].
-#   Path to log file for R process. 
+#   Path to log file for R process.
 # @return [\code{character(1)}]. Relevant process id.
 startWorkerJob = function(worker, rfile, outfile) {
   UseMethod("startWorkerJob")
 }
 
-# Kill a job on worker. Really do it.  
+# Kill a job on worker. Really do it.
 # @param worker [\code{\link{Worker}}].
-#   Worker. 
+#   Worker.
 # @param pid [\code{character(1)}].
 #   Process id from DB/batch.job.id to kill.
 # @return Nothing.
@@ -122,9 +123,9 @@ killWorkerJob = function(worker, pid) {
 
 # List all jobs on worker belonging to the current registry.
 # @param worker [\code{\link{Worker}}].
-#   Worker. 
+#   Worker.
 # @param file.dir [\code{character(1)}}].
-#   File dir of registry. 
+#   File dir of registry.
 # @return [\code{character}]. Vector of process ids.
 listWorkerJobs = function(worker, file.dir) {
   UseMethod("listWorkerJobs")

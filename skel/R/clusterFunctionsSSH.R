@@ -73,7 +73,7 @@ makeClusterFunctionsSSH = function(..., workers) {
   if (missing(workers))
     workers = args
   checkListElementClass(workers, "SSHWorker")
-  if (length(workers) == 0)
+  if (length(workers) == 0L)
     stop("You must pass at least 1 SSH worker!")
   nodenames = extractSubList(workers, "nodename")
   dup = duplicated(nodenames)

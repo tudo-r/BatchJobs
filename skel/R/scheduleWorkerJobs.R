@@ -2,25 +2,24 @@
 getWorkerSchedulerStatus = function(worker) {
   # we have already used up our maximal load on this node
   if (!worker$updated)
-    "U"
-  else if (worker$status$n.jobs >= worker$max.jobs)
-    "J"
+    return("U")
+  if (worker$status$n.jobs >= worker$max.jobs)
+    return("J")
   # should not have too much load average
-  else if (worker$status$load[1L] > worker$max.load)
-    "L"
+  if (worker$status$load[1L] > worker$max.load)
+    return("L")
   # there are already ncpus expensive R jobs running on the node
-  else if (worker$status$n.rprocs.50 >= worker$ncpus)
-    "R"
+  if (worker$status$n.rprocs.50 >= worker$ncpus)
+    return("R")
   # should not have too many R sessions open
-  else if(worker$status$n.rprocs > 3 * worker$ncpus)
-    "r"
+  if(worker$status$n.rprocs > 3 * worker$ncpus)
+    return("r")
   # else all clear, submit the job!
-  else
-    "A"
+  return("A")
 }
 
 # update status of worker IN PLACE
-updateWorker = function(worker, file.dir, tdiff) {        
+updateWorker = function(worker, file.dir, tdiff) {
   time = as.integer(Sys.time())
   if (time - worker$last.update > tdiff) {
     worker$updated = TRUE

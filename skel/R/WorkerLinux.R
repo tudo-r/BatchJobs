@@ -40,9 +40,9 @@ listWorkerJobs.WorkerLinux = function(worker, file.dir) {
 
 # Runs a command, either by SSH or directly on localhost.
 # @param cmd [\code{character(1)}]
-#   System command to run. 
+#   System command to run.
 # @param args [\code{character}]
-#   System command arguments. 
+#   System command arguments.
 #   Default is \code{character(0)}.
 # @param stop.on.exit.code [\code{character}]
 #   See \code{\link{system3}}.
@@ -98,11 +98,11 @@ findHelperScriptLinux = function(rhome, ssh=FALSE, nodename) {
 }
 
 # Perform a batch helper command on a Linux machine.
-# @param worker [\code{\link{WorkerLinux}}] 
+# @param worker [\code{\link{WorkerLinux}}]
 #   Worker.
 # @param command [\code{character(1)}]
 #   Helper command.
-# @param args [\code{character}] 
+# @param args [\code{character}]
 #   Arguments for helper command.
 # See documenation of linux-helper.
 runWorkerCommand = function(worker, command, args=character(0L)) {
@@ -111,5 +111,4 @@ runWorkerCommand = function(worker, command, args=character(0L)) {
   script.args = c(command, args)
   runOSCommandLinux(worker$script, script.args, ssh=worker$ssh, nodename=worker$nodename)$output
 }
-
 
