@@ -242,6 +242,11 @@ dbGetSubmitted = function(reg, ids) {
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
+dbGetNotSubmitted = function(reg, ids) {
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE submitted IS NULL", reg$id)
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
+}
+
 dbGetStarted = function(reg, ids) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE started IS NOT NULL", reg$id)
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
