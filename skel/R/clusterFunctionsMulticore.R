@@ -22,18 +22,16 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
 makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, script) {
-  w = makeWorkerLocalLinux(script, ncpus, max.jobs, max.load)
-  w$last.update = 0
-  workers = list(localhost=w)
-  worker.env = new.env()
-  worker.env$workers = workers
+  worker = makeWorkerLocalLinux(script, ncpus, max.jobs, max.load)
+  workers = list(localhost=worker)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    find.res = findWorker(worker.env, reg$file.dir)
-    if (find.res$status != 0L) {
-      makeSubmitJobResult(status=find.res$status, batch.job.id=NULL, msg="No free core available")
+    updateWorker(worker, reg$file.dir, tdiff=0L)
+    s = getWorkerSchedulerStatus(worker)
+    if (s != "A") {
+      makeSubmitJobResult(status=1L, batch.job.id=NULL, msg=sprintf("Multicore busy: %s", s))
     } else {
-      pid = try(startWorkerJob(find.res$worker, rscript, log.file))
+      pid = try(startWorkerJob(worker, rscript, log.file))
       if (is.error(pid))
         makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="Submit failed.")
       else
@@ -42,11 +40,11 @@ makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, script) {
   }
 
   killJob = function(conf, reg, batch.job.id) {
-    killWorkerJob(worker.env$workers[[1L]], batch.job.id)
+    killWorkerJob(worker, batch.job.id)
   }
 
   listJobs = function(conf, reg) {
-    listWorkerJobs(worker.env$workers[[1L]], reg$file.dir)
+    listWorkerJobs(worker, reg$file.dir)
   }
 
   makeClusterFunctions("Multicore", submitJob=submitJob, killJob=killJob, listJobs=listJobs)

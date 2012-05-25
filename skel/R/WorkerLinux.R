@@ -1,3 +1,43 @@
+# ******************** Constructors ********************
+
+# Construct a remote worker for a Linux machine via SSH.
+makeWorkerRemoteLinux = function(nodename, rhome, script, ncpus, max.jobs, max.load) {
+  makeWorker(ssh=TRUE, nodename, rhome, script, ncpus, max.jobs, max.load, c("WorkerRemoteLinux", "WorkerLinux"))
+}
+
+# Construct a worker for local Linux machine to spawn parallel jobs.
+makeWorkerLocalLinux = function(script, ncpus, max.jobs, max.load) {
+  makeWorker(ssh=TRUE, "localhost", R.home(), script, ncpus, max.jobs, max.load, c("WorkerLocalLinux", "WorkerLinux"))
+}
+
+# ******************** Interface implementation ********************
+
+getWorkerNumberOfCPUs.WorkerLinux = function(worker) {
+  as.integer(runWorkerCommand(worker, "number-of-cpus"))
+}
+
+getWorkerStatus.WorkerLinux = function(worker, file.dir) {
+  res = runWorkerCommand(worker, "status", file.dir)
+  res = as.list(as.numeric(strsplit(res, " +")[[1L]]))
+  names(res) = c("load", "n.rprocs", "n.rprocs.50", "n.jobs")
+  return(res)
+}
+
+startWorkerJob.WorkerLinux = function(worker, rfile, outfile) {
+  runWorkerCommand(worker, "start-job", c(worker$rhome, rfile, outfile))
+}
+
+killWorkerJob.WorkerLinux = function(worker, pid) {
+  runWorkerCommand(worker, "kill-job", pid)
+}
+
+listWorkerJobs.WorkerLinux = function(worker, file.dir) {
+  res = runWorkerCommand(worker, "list-jobs", file.dir)
+  gsub("^\\s+|\\s+$", "", res)
+}
+
+# ******************** Run commands on OS ********************
+
 # Runs a command, either by SSH or directly on localhost.
 # @param cmd [\code{character(1)}]
 #   System command to run. 
@@ -13,7 +53,7 @@
 # @param nodename [\code{character(1)}]
 #   Nodename for SSH.
 # @return See \code{\link{system3}}.
-runCommand = function(cmd, args=character(0L), stop.on.exit.code=TRUE, ssh=FALSE, nodename) {
+runOSCommandLinux = function(cmd, args=character(0L), stop.on.exit.code=TRUE, ssh=FALSE, nodename) {
   conf = getBatchJobsConf()
   if (ssh) {
     sys.cmd = "ssh"
@@ -34,7 +74,7 @@ runCommand = function(cmd, args=character(0L), stop.on.exit.code=TRUE, ssh=FALSE
     print(res)
   }
   if(is.error(res))
-    stopf("Error in runCommand: %s (cmd: %s || args: %s)", as.character(res), sys.cmd, collapse(sys.args))
+    stopf("Error in runLinuxOSCommand: %s (cmd: %s || args: %s)", as.character(res), sys.cmd, collapse(sys.args))
   res
 }
 
@@ -54,7 +94,7 @@ findHelperScriptLinux = function(rhome, ssh=FALSE, nodename) {
   else
     rscript = file.path(rhome, "bin", "Rscript")
   minus.e = "-e \"message(normalizePath(system.file(\\\"bin/linux-helper\\\", package=\\\"BatchJobs\\\")))\""
-  runCommand(rscript, minus.e, ssh=ssh, nodename=nodename)$output
+  runOSCommandLinux(rscript, minus.e, ssh=ssh, nodename=nodename)$output
 }
 
 # Perform a batch helper command on a Linux machine.
@@ -65,10 +105,11 @@ findHelperScriptLinux = function(rhome, ssh=FALSE, nodename) {
 # @param args [\code{character}] 
 #   Arguments for helper command.
 # See documenation of linux-helper.
-onWorkerLinux = function(worker, command, args=character(0L)) {
+runWorkerCommand = function(worker, command, args=character(0L)) {
   # in paths can be whitespaces and other bad stuff, quote it!
   args = sprintf("\"%s\"", args)
   script.args = c(command, args)
-  runCommand(worker$script, script.args, ssh=worker$ssh, nodename=worker$nodename)$output
+  runOSCommandLinux(worker$script, script.args, ssh=worker$ssh, nodename=worker$nodename)$output
 }
+
 

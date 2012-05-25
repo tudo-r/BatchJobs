@@ -32,7 +32,6 @@
 #' @aliases SSHWorker
 makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, script) {
   worker = makeWorkerRemoteLinux(nodename, rhome, script, ncpus, max.jobs, max.load)
-  worker$last.update = 0
   class(worker) = c("SSHWorker", class(worker))
   return(worker)
 }
@@ -68,19 +67,30 @@ makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, script) 
 #' }
 #' @export
 makeClusterFunctionsSSH = function(..., workers) {
-  worker.env = new.env()
-  worker.env$workers = checkSSHWorkers(..., workers=workers)
+  args = list(...)
+  if (!xor(length(args) > 0L, !missing(workers)))
+    stop("You must use exactly only 1 of: '...', 'workers'!")
+  if (missing(workers))
+    workers = args
+  checkListElementClass(workers, "SSHWorker")
+  if (length(workers) == 0)
+    stop("You must pass at least 1 SSH worker!")
+  nodenames = extractSubList(workers, "nodename")
+  dup = duplicated(nodenames)
+  if (any(dup))
+    stopf("Multiple definitions for worker nodenames: %s!", nodenames[dup])
+  names(workers) = nodenames
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    find.res = findWorker(worker.env, reg$file.dir)
-    if (find.res$status != 0L) {
-      makeSubmitJobResult(status=1L, batch.job.id=NULL, msg="No free worker available")
+    worker = findWorker(workers, reg$file.dir, tdiff=5L)
+    if (is.null(worker)) {
+      makeSubmitJobResult(status=1L, batch.job.id=NULL, msg="SSH busy, no worker available!")
     } else {
-      pid = try(startWorkerJob(find.res$worker, rscript, log.file))
+      pid = try(startWorkerJob(worker, rscript, log.file))
       if (is.error(pid))
         makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="Submit failed.")
       else
-        makeSubmitJobResult(status=0L,batch.job.id=paste(find.res$worker$nodename, pid, sep="#"))
+        makeSubmitJobResult(status=0L,batch.job.id=paste(worker$nodename, pid, sep="#"))
     }
   }
 
@@ -88,7 +98,7 @@ makeClusterFunctionsSSH = function(..., workers) {
     parts = strsplit(batch.job.id, "#", fixed=TRUE)[[1L]]
     nodename = parts[1L]
     pid = parts[2L]
-    worker = worker.env$workers[[nodename]]
+    worker = workers[[nodename]]
     if (is.null(worker))
       stopf("Unknown worker node '%s'.", nodename)
     killWorkerJob(worker, pid)
@@ -96,7 +106,7 @@ makeClusterFunctionsSSH = function(..., workers) {
 
   listJobs = function(conf, reg) {
     res = NULL
-    for (worker in worker.env$workers) {
+    for (worker in workers) {
       nodename = worker[["nodename"]]
       pids = listWorkerJobs(worker, reg$file.dir)
       if (length(pids) > 0L) {

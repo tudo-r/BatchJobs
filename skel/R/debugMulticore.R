@@ -17,7 +17,7 @@ debugMulticore = function() {
   catf("\n") 
   
   messagef("*** which R: ***")
-  res = runCommand("which", "R")
+  res = runOSCommandLinux("which", "R")
   messagef("which R result: %s", res$output)
   catf("\n") 
     
@@ -28,12 +28,12 @@ debugMulticore = function() {
  
   messagef("*** Auto-detecting ncpus: ***")
   worker = makeWorkerLocalLinux(script, ncpus=1)
-  ncpus = onWorkerLinux(worker, "number-of-cpus") 
+  ncpus = runWorkerCommand(worker, "number-of-cpus") 
   messagef("Auto-detecting ncpus result: %s", ncpus)
   catf("\n") 
   
   messagef("*** Query worker status: ***")
-  res = onWorkerLinux(worker, "status", args="") 
+  res = runWorkerCommand(worker, "status", args="") 
   messagef("Query worker status result: %s", res)
   catf("\n") 
   
@@ -46,7 +46,7 @@ debugMulticore = function() {
   Sys.sleep(3)
   messagef("Submitting 1 job result: %i", loadResult(reg, 1))
   messagef("Query worker status:")
-  res = onWorkerLinux(worker, "status", args=reg$file.dir) 
+  res = runWorkerCommand(worker, "status", args=reg$file.dir) 
   messagef("Query worker status result: %s", res)
   catf("\n") 
  
@@ -60,12 +60,12 @@ debugMulticore = function() {
   submitJobs(reg)
   Sys.sleep(3)
   messagef("Query worker status:")
-  res = onWorkerLinux(worker, "status", args=reg$file.dir) 
+  res = runWorkerCommand(worker, "status", args=reg$file.dir) 
   messagef("Query worker status result: %s", res)
   messagef("Running jobs: %s", collapse(findRunning(reg)))
   killJobs(reg, ids)
   messagef("Query worker status:")
-  res = onWorkerLinux(worker, "status", args=reg$file.dir) 
+  res = runWorkerCommand(worker, "status", args=reg$file.dir) 
   messagef("Query worker status result: %s", res)
   messagef("Running jobs: %s", collapse(findRunning(reg)))
   catf("\n") 
