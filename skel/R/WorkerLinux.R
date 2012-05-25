@@ -12,10 +12,12 @@ makeWorkerLocalLinux = function(script, ncpus, max.jobs, max.load) {
 
 # ******************** Interface implementation ********************
 
+#' @S3method getWorkerNumberOfCPUs WorkerLinux
 getWorkerNumberOfCPUs.WorkerLinux = function(worker) {
   as.integer(runWorkerCommand(worker, "number-of-cpus"))
 }
 
+#' @S3method getWorkerStatus WorkerLinux
 getWorkerStatus.WorkerLinux = function(worker, file.dir) {
   res = runWorkerCommand(worker, "status", file.dir)
   res = as.list(as.numeric(strsplit(res, " +")[[1L]]))
@@ -23,14 +25,17 @@ getWorkerStatus.WorkerLinux = function(worker, file.dir) {
   return(res)
 }
 
+#' @S3method startWorkerJob WorkerLinux
 startWorkerJob.WorkerLinux = function(worker, rfile, outfile) {
   runWorkerCommand(worker, "start-job", c(worker$rhome, rfile, outfile))
 }
 
+#' @S3method killWorkerJob WorkerLinux
 killWorkerJob.WorkerLinux = function(worker, pid) {
   runWorkerCommand(worker, "kill-job", pid)
 }
 
+#' @S3method listWorkerJobs WorkerLinux
 listWorkerJobs.WorkerLinux = function(worker, file.dir) {
   res = runWorkerCommand(worker, "list-jobs", file.dir)
   gsub("^\\s+|\\s+$", "", res)
