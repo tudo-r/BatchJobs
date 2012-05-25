@@ -55,7 +55,7 @@ case $CMD in
         fi
         # only use setsid on linux not on darwin, not available there
  		if [ `uname` == "Linux" ]; then
-          SETSID="setsid"
+          SETSID="setsid "
         else  
           SETSID=""
         fi          
@@ -63,7 +63,7 @@ case $CMD in
         # see comment also in cfLocal
         # we use setsid to start the process in a different session. other ctrl+C in the master
         # session leads to killing of child processes in multicore mode as the SIGINT is passed down
-        "$SETSID" "$RCMD" CMD BATCH --no-save --no-restore "$2" "$3" \
+        ${SETSID}"$RCMD" CMD BATCH --no-save --no-restore "$2" "$3" \
             > /dev/null 2> /dev/null < /dev/null &
         echo $!
         ;;
