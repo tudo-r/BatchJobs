@@ -1,8 +1,6 @@
 # is a worker busy, see rules below
 getWorkerSchedulerStatus = function(worker) {
   # we have already used up our maximal load on this node
-  if (!worker$updated)
-    return("U")
   if (worker$status$n.jobs >= worker$max.jobs)
     return("J")
   # should not have too much load average
@@ -21,17 +19,22 @@ getWorkerSchedulerStatus = function(worker) {
 # update status of worker IN PLACE
 updateWorker = function(worker, file.dir, tdiff) {
   time = as.integer(Sys.time())
-  if (time - worker$last.update >= tdiff) {
-    worker$updated = TRUE
-    worker$last.update = time
-    worker$status = getWorkerStatus(worker, file.dir)
+
+  if (worker$available == "A") {
+      worker$last.update = time
+      worker$status = getWorkerStatus(worker, file.dir)
+      worker$available = getWorkerSchedulerStatus(worker)
   } else {
-    worker$updated = FALSE
+    if(time - worker$last.update >= tdiff) {
+      worker$last.update = time
+      worker$status = getWorkerStatus(worker, file.dir)
+      worker$available = getWorkerSchedulerStatus(worker)
+    }
   }
 }
 
 # find worker via isBusyWorker and update workers while looking
 findWorker = function(workers, file.dir, tdiff) {
   lapply(workers, updateWorker, file.dir=file.dir, tdiff=tdiff)
-  Find(function(w) getWorkerSchedulerStatus(w)=="A", workers, nomatch=NULL)
+  Find(function(w) w$available=="A", workers, nomatch=NULL)
 }

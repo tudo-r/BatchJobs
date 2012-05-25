@@ -27,7 +27,7 @@ makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, script) {
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     updateWorker(worker, reg$file.dir, tdiff=0L)
-    s = getWorkerSchedulerStatus(worker)
+    s = worker$available
     if (s != "A") {
       makeSubmitJobResult(status=1L, batch.job.id=NULL, msg=sprintf("Multicore busy: %s", s))
     } else {

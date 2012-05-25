@@ -42,7 +42,7 @@ makeWorker = function(ssh, nodename, rhome, script, ncpus, max.jobs, max.load, c
     rhome = rhome,
     script = script,
     last.update = -Inf,
-    updated = FALSE,
+    available = "", # worker is available, we can submit, set in update loop in scheduleWorkerJobs.R
     status = NULL))
   class(w) = c(classes, "Worker")
 
