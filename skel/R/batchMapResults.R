@@ -54,6 +54,7 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.a
   if(reg$file.dir == reg2$file.dir)
     stop("Both registries cannot point to the same file dir. Files would get overwritten!")
   reg2$packages = insert(reg2$packages, reg$packages)
+  saveRegistry(reg2)
 
   batchMap(reg2, batchMapResultsWrapper, ids, ..., more.args=c(more.args, list(.reg=reg, .fun=fun, .part=part)))
 }
