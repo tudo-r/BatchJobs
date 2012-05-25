@@ -6,7 +6,8 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false",
   sleep.master=8, sleep.job=300, resources=list()) {
   
   messagef("############################################################")
-  messagef("## BEGIN TEST (whitespace=%i)", whitespace)
+  messagef("## BEGIN TEST cf=%s whitespace=%s n=%i long=%s", 
+    BatchJobs:::getBatchJobsConf()$cluster.functions$name, whitespace, n, long)
 
   id = "external_test"
   if (whitespace)
