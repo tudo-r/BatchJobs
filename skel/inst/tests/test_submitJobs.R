@@ -1,6 +1,5 @@
 context("submitJobs")
 
-# FIXME check with chunked jobs
 test_that("submitJobs", {
   reg = makeTestRegistry()
   batchMap(reg, identity, 123)
@@ -40,3 +39,13 @@ test_that("submitJobs works with multiple result files", {
   ys = loadResults(reg, 2, part="b")
   expect_equal(ys, list("2"=list(b=4)))
 })
+
+test_that("submitJobs works with chunking", {
+  reg = makeTestRegistry()
+  batchMap(reg, identity, 1:5)
+  ch = chunk(getJobIds(reg), chunk.size=2)
+  submitJobs(reg, ids=ch)
+  expect_equal(findDone(reg), 1:5)
+  expect_equal(loadResults(reg, simplify=TRUE, use.names=FALSE), 1:5)
+})
+ 
