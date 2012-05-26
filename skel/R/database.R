@@ -39,7 +39,7 @@ dbDoQueries = function(reg, queries, flags="ro", max.retries=200L, sleep=functio
       ok = as.character(ok)
       dbRollback(con)
       dbDisconnect(con)
-      if(!grepl("lock", ok, ignore.case=TRUE, fixed=TRUE)) {
+      if(!grepl("lock", tolower(ok), fixed=TRUE)) {
         stopf("Error in dbDoQueries. Displaying only 1st query. %s (%s)", ok, queries[1L])
       }
     }
@@ -57,7 +57,7 @@ dbDoQuery = function(reg, query, flags="ro", max.retries=200L, sleep=function(r)
     if (! is.error(res))
       return(res)
     res = as.character(res)
-    if(grepl("lock", res, ignore.case=TRUE, fixed=TRUE)) {
+    if(grepl("lock", tolower(res), fixed=TRUE)) {
       Sys.sleep(runif(1L, min=1, max=sleep(i)))
     } else {
       print(res)
