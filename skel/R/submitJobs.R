@@ -60,7 +60,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
       if(any(is.na(unlist(ids))))
         stop("Chunks must not contain NAs!")
     } else if(is.numeric(ids)) {
-      ids = convertInteger(ids)
+      ids = convertIntegers(ids)
       checkArg(ids, "integer", na.ok=FALSE)
     } else {
       stop("ids must be a integer vector of job ids or a list of chunked job ids (list of integer vectors)!")
