@@ -7,6 +7,13 @@ test_that("submitJobs", {
   submitJobs(reg)
   y = loadResult(reg, 1L)
   expect_equal(y, 123)
+
+  # check conversion
+  reg = makeTestRegistry()
+  batchMap(reg, identity, 1:2)
+  submitJobs(reg)
+  submitJobs(reg, 1:2)
+  submitJobs(reg, c(1,2))
 })
 
 test_that("submitJobs works with empty id vector", {
