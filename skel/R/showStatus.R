@@ -42,17 +42,17 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
       return("")
     if(n == 0L)
       return("(0.0%)")
-    return(sprintf("(%.1f%%)", x / n * 100))
+    return(sprintf("(%6.2f%%)", x / n * 100))
   }
 
   with(stats, {
     catf("Status for jobs: %i", n)
-    catf("Submitted: %i %s", submitted, procent(submitted, n))
-    catf("Started: %i %s", started, procent(started, n))
-    catf("Errors: %i %s", error, procent(error, n))
-    catf("Running: %i %s", running, procent(running, n))
-    catf("Expired: %i %s", expired, procent(expired, n))
-    catf("Done: %i %s", done, procent(done, n))
+    catf("Submitted: %4i %s", submitted, procent(submitted, n))
+    catf("Started:   %4i %s", started, procent(started, n))
+    catf("Running:   %4i %s", running, procent(running, n))
+    catf("Done:      %4i %s", done, procent(done, n))
+    catf("Errors:    %4i %s", error, procent(error, n))
+    catf("Expired:   %4i %s", expired, procent(expired, n))
     catf("Time: min=%.2fs avg=%.2fs max=%.2fs", t_min, t_avg, t_max)
   })
 

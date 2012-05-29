@@ -22,6 +22,7 @@
 #'   Path to a brew template file that is used for the PBS job file.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
+#  FIXME document what variables are avial. in brew templ. 
 makeClusterFunctionsTorque = function(template.file) {
   checkArg(template.file, "character", len=1L, na.ok=FALSE)
   ## Read in template
