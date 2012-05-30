@@ -58,9 +58,11 @@ testJob = function(reg, id) {
   # execute
   rhome = Sys.getenv("R_HOME")
   cmd = sprintf("%s/bin/Rscript %s", rhome, getRScriptFilePath(reg, id))
-  message("### Output of new R process starts now ###")
+  stime = Sys.time()
+  message("### Output of new R process starts here ###")
   system(cmd, wait=TRUE)
   message("### Output of new R process ends here ###")
+  messagef("### Approximate running time: %.2f seconds", as.numeric(Sys.time() - stime))
   res = try(loadResult(reg, id, check.id=FALSE))
   if (is.error(res))
     return(NULL)
