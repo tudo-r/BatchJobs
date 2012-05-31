@@ -1,6 +1,5 @@
-# FIXME 
-BatchJobs_1.0-???: 
-- very minor bug fixes
+BatchJobs_1.0-524: 
+- very minor bug fixes for argument conversion and checks
 
 BatchJobs_1.0-485: 
 - First submit to CRAN.
