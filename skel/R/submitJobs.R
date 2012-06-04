@@ -37,6 +37,8 @@
 #'   the ith job.
 #'   The default is no delay for less than 100 jobs and otherwise
 #'   \code{runif(1, 0.1*n, 0.2*n)}.
+#'   Disabled for interactive cluster functions. You can turn delaying completely off by
+#'   setting \code{job.delay = FALSE}.
 #' @return Vector of submitted job ids.
 #' @export
 #' @examples
@@ -45,6 +47,8 @@
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
 submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.delay) {
+  conf = getBatchJobsConf()
+  cf = getClusterFunctions(conf)
 
   checkArg(reg, cl="Registry")
   if (missing(ids)) {
@@ -82,10 +86,16 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   }
 
   if (missing(job.delay)) {
-    job.delay = function(n, i)
-      if (n > 100L) runif(1L, n*0.1, n*0.2) else 0
+    if (cf$name == "Interactive")
+      job.delay = function(n, i) 0
+    else
+      job.delay = function(n, i)
+        if (n > 100L) runif(1L, n*0.1, n*0.2) else 0
   } else {
-    checkArg(job.delay, formals=c("n", "i"))
+    if (identical(job.delay, FALSE))
+      job.delay = function(n, i) 0
+    else
+      checkArg(job.delay, formals=c("n", "i"))
   }
 
   if (!is.null(getListJobs())) {
@@ -98,8 +108,6 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   saveConf(reg)
 
   is.chunks = is.list(ids)
-  conf = getBatchJobsConf()
-  cf = getClusterFunctions(conf)
   messagef("Submitting %i chunks / %i jobs.",
     length(ids), if(is.chunks) sum(vapply(ids, length, integer(1L))) else length(ids))
   messagef("Cluster functions: %s.", cf$name)
