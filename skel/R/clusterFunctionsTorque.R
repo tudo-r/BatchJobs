@@ -25,6 +25,9 @@
 #  FIXME document what variables are avial. in brew templ. 
 makeClusterFunctionsTorque = function(template.file) {
   checkArg(template.file, "character", len=1L, na.ok=FALSE)
+  # FIXME why dont we pass the file directly to brew? to save time? 
+  # maybe encapsulate this in function
+  # also LSF and SGE
   ## Read in template
   fd = file(template.file, "r")
   template = paste(readLines(fd), collapse="\n")
@@ -38,8 +41,15 @@ makeClusterFunctionsTorque = function(template.file) {
       outfile = tempfile()
     }
     brewWithStop(text=template, output=outfile)
+    
     res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
-
+    # FIXME this is faulty: qsub can return multiple lines, e.g. in adelaide this happens.
+    # maybe we should have an option to concatenate the lines
+    # (otherwise the first if goes already wrong)
+    # also how to extract the job id in a best way?
+    # also LSF and SGE
+    
+    
     max.jobs.msg = "Maximum number of jobs already in queue"
     if (grepl(max.jobs.msg, res$output, fixed=TRUE)) {
       makeSubmitJobResult(status=1L, batch.job.id=NA_character_, msg=max.jobs.msg)
