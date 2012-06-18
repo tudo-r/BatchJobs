@@ -24,12 +24,7 @@ makeClusterFunctionsLSF = function(template.file) {
   template = readBrewTemplate(template.file)
   
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    if (conf$debug) {
-      # if not temp, use jobs dir
-      outfile = sub("\\.R$", ".job", rscript)
-    } else {
-      outfile = tempfile()
-    }
+    outfile = brewWithStop(conf, template, rscript)
     brewWithStop(text=template, output=outfile)
     # returns: "Job <128952> is submitted to default queue <s_amd>."
     res = system3("bsub", stdin=outfile)
@@ -45,21 +40,7 @@ makeClusterFunctionsLSF = function(template.file) {
   }
 
   killJob = function(conf, reg, batch.job.id) {
-    tries = 0L
-    while(TRUE) {
-      # qdel sends SIGTERM, delay, SIGKILL
-      res = runOSCommandLinux("bkill", batch.job.id, stop.on.exit.code=FALSE)
-      if (res$exit.code == 0L) {
-        return()
-      } else {
-        tries = tries + 1L
-        if (tries > 3L) {
-          stopf("Really tried to kill job, but could not do it. batch job id is %s.\nMessage: %s",
-                batch.job.id, res$output)
-        }
-        Sys.sleep(1)
-      }
-    }
+    killBatchJob("bkill", batch.job.id)
   }
 
   listJobs = function(conf, reg) {
