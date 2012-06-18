@@ -25,7 +25,6 @@ makeClusterFunctionsSGE = function(template.file) {
   
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     outfile = brewWithStop(conf, template, rscript)
-    brewWithStop(text=template, output=outfile)
     # returns: "Your job 240933 (\"sleep 60\") has been submitted"
     res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
     # FIXME filled queues

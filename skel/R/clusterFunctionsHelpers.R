@@ -17,7 +17,7 @@ brewWithStop = function(conf, template, rscript) {
   pf = parent.frame()
   old = getOption("show.error.messages")
   options(show.error.messages=FALSE)
-  z = suppressAll(brew(..., envir=pf))
+  z = suppressAll(brew(text=template, envir=pf))
   options(show.error.messages=old)
   if (is.error(z))
     stop(z)

@@ -25,7 +25,6 @@ makeClusterFunctionsLSF = function(template.file) {
   
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     outfile = brewWithStop(conf, template, rscript)
-    brewWithStop(text=template, output=outfile)
     # returns: "Job <128952> is submitted to default queue <s_amd>."
     res = system3("bsub", stdin=outfile)
     # FIXME filled queues
