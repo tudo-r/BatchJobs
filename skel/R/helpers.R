@@ -113,6 +113,14 @@ strextract = function(string, pattern, global=TRUE) {
 
 }
 
+readBrewTemplate = function(template.file) {
+  checkArg(template.file, "character", len=1L, na.ok=FALSE)
+  fd = file(template.file, "r")
+  template = paste(readLines(fd), collapse="\n")
+  close(fd)
+  return(template)
+}
+
 brewWithStop = function(...) {
   pf = parent.frame()
   old = getOption("show.error.messages")

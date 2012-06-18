@@ -21,12 +21,8 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
 makeClusterFunctionsSGE = function(template.file) {
-  checkArg(template.file, "character", len=1L, na.ok=FALSE)
-  ## Read in template
-  fd = file(template.file, "r")
-  template = paste(readLines(fd), collapse="\n")
-  close(fd)
-
+  template = readBrewTemplate(template.file)
+  
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     if (conf$debug) {
       # if not temp, use jobs dir

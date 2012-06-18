@@ -24,14 +24,7 @@
 #' @export
 #  FIXME document what variables are avial. in brew templ. 
 makeClusterFunctionsTorque = function(template.file) {
-  checkArg(template.file, "character", len=1L, na.ok=FALSE)
-  # FIXME why dont we pass the file directly to brew? to save time? 
-  # maybe encapsulate this in function
-  # also LSF and SGE
-  ## Read in template
-  fd = file(template.file, "r")
-  template = paste(readLines(fd), collapse="\n")
-  close(fd)
+  template = readBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     if (conf$debug) {
