@@ -26,7 +26,7 @@ cfBrewTemplate = function(conf, template, rscript) {
 
 cfHandleUnkownSubmitError = function(cmd, res) {
   msg = sprintf("%s produced exit code %i; output %s", 
-    cmd, res$exit.code, res$output)
+    cmd, res$exit.code, collapse(res$output, sep="\n"))
   makeSubmitJobResult(status=101L, batch.job.id=NA_character_, msg=msg)
 }
 
@@ -41,7 +41,7 @@ cfKillBatchJob = function(cmd, batch.job.id, max.tries=3L) {
       tries = tries + 1L
       if (tries > max.tries) {
         stopf("Really tried to kill job, but could not do it. batch job id is %s.\nMessage: %s",
-          batch.job.id, paste(res$output, "\n"))
+          batch.job.id, collapse(res$output, sep="\n"))
       }
       Sys.sleep(1)
     }

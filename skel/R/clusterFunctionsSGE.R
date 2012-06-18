@@ -31,8 +31,8 @@ makeClusterFunctionsSGE = function(template.file) {
     if (res$exit.code > 0L) {
       cfHandleUnkownSubmitError("qsub", res)
     } else {
-      # first number in string is batch.job.id
-      batch.job.id = strextract(res$output, "\\d+", global=FALSE)
+      # collapse output strings and first number in string is batch.job.id
+      batch.job.id = strextract(collapse(res$output, sep=" "), "\\d+", global=FALSE)
       makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
     }
   }

@@ -36,12 +36,15 @@ makeClusterFunctionsTorque = function(template.file) {
     # also LSF and SGE
     
     max.jobs.msg = "Maximum number of jobs already in queue"
-    if (grepl(max.jobs.msg, res$output, fixed=TRUE)) {
+    # collapse multiple lines just in case
+    if (grepl(max.jobs.msg, collapse(res$output, sep=" "), fixed=TRUE)) {
       makeSubmitJobResult(status=1L, batch.job.id=NA_character_, msg=max.jobs.msg)
     } else if (res$exit.code > 0L) {
       cfHandleUnkownSubmitError("qsub", res)
     } else  {
-      makeSubmitJobResult(status=0L, batch.job.id=res$output)
+      # FIXME: we should trim the string here
+      batch.job.id = collapse(res$output, sep="")
+      makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
     }
   }
 
