@@ -24,10 +24,10 @@
 #' @export
 #  FIXME document what variables are avial. in brew templ. 
 makeClusterFunctionsTorque = function(template.file) {
-  template = readBrewTemplate(template.file)
+  template = cfReadBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    outfile = brewWithStop(conf, template, rscript)
+    outfile = cfBrewTemplate(conf, template, rscript)
     res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
     # FIXME this is faulty: qsub can return multiple lines, e.g. in adelaide this happens.
     # maybe we should have an option to concatenate the lines
@@ -35,20 +35,18 @@ makeClusterFunctionsTorque = function(template.file) {
     # also how to extract the job id in a best way?
     # also LSF and SGE
     
-    
     max.jobs.msg = "Maximum number of jobs already in queue"
     if (grepl(max.jobs.msg, res$output, fixed=TRUE)) {
       makeSubmitJobResult(status=1L, batch.job.id=NA_character_, msg=max.jobs.msg)
     } else if (res$exit.code > 0L) {
-      msg = sprintf("qsub produced exit code %i; output %s", res$exit.code, res$output)
-      makeSubmitJobResult(status=101L, msg=msg)
+      cfHandleUnkownSubmitError("qsub", res)
     } else  {
       makeSubmitJobResult(status=0L, batch.job.id=res$output)
     }
   }
 
   killJob = function(conf, reg, batch.job.id) {
-    killBatchJob("qdel", batch.job.id)
+    cfKillBatchJob("qdel", batch.job.id)
   }
 
   listJobs = function(conf, reg) {

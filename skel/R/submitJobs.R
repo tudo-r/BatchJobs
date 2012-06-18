@@ -182,11 +182,9 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
           next
         }
 
+        # fatal error, abort at once
         if (batch.result$status > 100L && batch.result$status <= 200L) {
-          # fatal error, abort at once
-          message("Fatal error occured: ", batch.result$status)
-          message("Fatal error msg: ", batch.result$msg)
-          stop("Fatal error occured: ", batch.result$status)
+          stopf("Fatal error occured: %i. %s", batch.result$status, batch.result$msg)
         }
 
         stopf("Illegal status code %s returned from cluster functions!", batch.result$status)

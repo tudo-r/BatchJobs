@@ -21,16 +21,15 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
 makeClusterFunctionsLSF = function(template.file) {
-  template = readBrewTemplate(template.file)
+  template = cfReadBrewTemplate(template.file)
   
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    outfile = brewWithStop(conf, template, rscript)
+    outfile = cfBrewTemplate(conf, template, rscript)
     # returns: "Job <128952> is submitted to default queue <s_amd>."
     res = system3("bsub", stdin=outfile)
     # FIXME filled queues
     if (res$exit.code > 0L) {
-      msg = sprintf("bsub produced exit code %i; output %s", res$exit.code, res$output)
-      makeSubmitJobResult(status=101L, msg=msg)
+      cfHandleUnkownSubmitError("bsub", res)
     } else {
       # first number in string is batch.job.id
       batch.job.id = strextract(res$output, "\\d+", global=FALSE)
@@ -39,7 +38,7 @@ makeClusterFunctionsLSF = function(template.file) {
   }
 
   killJob = function(conf, reg, batch.job.id) {
-    killBatchJob("bkill", batch.job.id)
+    cfKillBatchJob("bkill", batch.job.id)
   }
 
   listJobs = function(conf, reg) {

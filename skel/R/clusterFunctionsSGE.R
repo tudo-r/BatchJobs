@@ -21,16 +21,15 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
 makeClusterFunctionsSGE = function(template.file) {
-  template = readBrewTemplate(template.file)
+  template = cfReadBrewTemplate(template.file)
   
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    outfile = brewWithStop(conf, template, rscript)
+    outfile = cfBrewTemplate(conf, template, rscript)
     # returns: "Your job 240933 (\"sleep 60\") has been submitted"
     res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
     # FIXME filled queues
     if (res$exit.code > 0L) {
-      msg = sprintf("qsub produced exit code %i; output %s", res$exit.code, res$output)
-      makeSubmitJobResult(status=101L, msg=msg)
+      cfHandleUnkownSubmitError("qsub", res)
     } else {
       # first number in string is batch.job.id
       batch.job.id = strextract(res$output, "\\d+", global=FALSE)
@@ -39,7 +38,7 @@ makeClusterFunctionsSGE = function(template.file) {
   }
 
   killJob = function(conf, reg, batch.job.id) {
-    killBatchJob("qdel", batch.job.id)
+    cfKillBatchJob("qdel", batch.job.id)
   }
 
   listJobs = function(conf, reg) {
