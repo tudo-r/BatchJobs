@@ -104,12 +104,17 @@ getOperatingSystem = function() {
   Sys.info()["sysname"]
 }
 
-
 strextract = function(string, pattern, global=TRUE) {
   if (global)
     regmatches(string, gregexpr(pattern, string))[[1L]]
   else
     regmatches(string, regexpr(pattern, string))[[1L]]
-
 }
 
+trim = function(x, ltrim=TRUE, rtrim=TRUE) {
+  if (ltrim)
+    x = sub("^[[:space:]]+", "", x)
+  if (rtrim)
+    x = sub("[[:space:]]+$", "", x)
+  return(x)
+}

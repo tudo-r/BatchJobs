@@ -22,7 +22,7 @@
 #'   Path to a brew template file that is used for the PBS job file.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
-#  FIXME document what variables are avial. in brew templ. 
+#  FIXME document what variables are avial. in brew templ.
 makeClusterFunctionsTorque = function(template.file) {
   template = cfReadBrewTemplate(template.file)
 
@@ -34,17 +34,16 @@ makeClusterFunctionsTorque = function(template.file) {
     # (otherwise the first if goes already wrong)
     # also how to extract the job id in a best way?
     # also LSF and SGE
-    
+    # ML: Output always collapsed and trim on result. Unsure if this is sufficient.
+
     max.jobs.msg = "Maximum number of jobs already in queue"
-    # collapse multiple lines just in case
-    if (grepl(max.jobs.msg, collapse(res$output, sep=" "), fixed=TRUE)) {
+    output = collapse(res$output, sep="\n")
+    if (grepl(max.jobs.msg, output, fixed=TRUE)) {
       makeSubmitJobResult(status=1L, batch.job.id=NA_character_, msg=max.jobs.msg)
     } else if (res$exit.code > 0L) {
       cfHandleUnkownSubmitError("qsub", res)
-    } else  {
-      # FIXME: we should trim the string here
-      batch.job.id = collapse(res$output, sep="")
-      makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
+    } else {
+      makeSubmitJobResult(status=0L, batch.job.id=trim(output))
     }
   }
 
