@@ -22,11 +22,16 @@
 #' @export
 makeClusterFunctionsLSF = function(template.file) {
   template = cfReadBrewTemplate(template.file)
+  # When LSB_BJOBS_CONSISTENT_EXIT_CODE=Y, the bjobs command exits with 0 only 
+  # when unfinished jobs are found, and 255 when no jobs are found,
+  # or a non-existent job ID is entered.
+  Sys.setenv(LSB_BJOBS_CONSISTENT_EXIT_CODE="Y")
   
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     outfile = cfBrewTemplate(conf, template, rscript)
+    # FIXME: why dont we use runOSCommandLinux here 
     # returns: "Job <128952> is submitted to default queue <s_amd>."
-    res = system3("bsub", stdin=outfile)
+    res = system3("bsub", stdin=outfile, stdout=TRUE)  
     # FIXME filled queues
     if (res$exit.code > 0L) {
       cfHandleUnkownSubmitError("bsub", res)
