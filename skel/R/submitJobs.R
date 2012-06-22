@@ -28,17 +28,15 @@
 #'   (like filled queues). Each time \code{wait} is called to wait a certain
 #'   number of seconds.
 #'   Default is 10 times.
-#' @param job.delay [\code{function(n, i)}]\cr
+#' @param job.delay [\code{function(n, i)} or \code{logical(1)}]\cr
 #'   Function that defines how many seconds a job should be delayed before it starts.
-#'   This is an expert option and only necessary to change, when you want submit
+#'   This is an expert option and only necessary to change when you want submit
 #'   extremely many jobs. We then delay the jobs a bit to write the submit messages as
 #'   early as possible to avoid writer starvation.
-#'   \code{n} is the number of jobs and \code{i} the number of
-#'   the ith job.
-#'   The default is no delay for less than 100 jobs and otherwise
-#'   \code{runif(1, 0.1*n, 0.2*n)}.
-#'   Disabled for interactive cluster functions. You can turn delaying completely off by
-#'   setting \code{job.delay = FALSE}.
+#'   \code{n} is the number of jobs and \code{i} the number of the ith job.
+#'   The default function used with \code{job.delay} set to \code{TRUE} is no delay for
+#'   100 jobs or less and otherwise \code{runif(1, 0.1*n, 0.2*n)}.
+#'   If set to \code{FALSE} (the default) delaying jobs is disabled.
 #' @return Vector of submitted job ids.
 #' @export
 #' @examples
@@ -46,7 +44,7 @@
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
-submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.delay) {
+submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.delay=FALSE) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)
 
@@ -85,17 +83,16 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
     checkArg(max.retries, "integer", len=1L, na.ok=FALSE)
   }
 
-  if (missing(job.delay)) {
-    if (cf$name == "Interactive")
-      job.delay = function(n, i) 0
-    else
-      job.delay = function(n, i)
-        if (n > 100L) runif(1L, n*0.1, n*0.2) else 0
+  if (is.logical(job.delay)) {
+    n = length(ids)
+    if (job.delay && n > 100L && cf$name %nin% c("Interactive", "Multicore", "SSH")) {
+      delays = runif(n, n*0.1, n*0.2)
+    } else {
+      delays = rep(0, n)
+    }
   } else {
-    if (identical(job.delay, FALSE))
-      job.delay = function(n, i) 0
-    else
-      checkArg(job.delay, formals=c("n", "i"))
+    checkArg(job.delay, formals=c("n", "i"))
+    delays = vapply(seq_along(ids), job.delay, numeric(1L), n=length(ids))
   }
 
   if (!is.null(getListJobs())) {
@@ -133,7 +130,6 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
 
   # write R scripts before so we save some time in the important loop
   messagef("Writing %i R scripts...", length(ids))
-  delays = vapply(seq_along(ids), job.delay, numeric(1L), n=length(ids))
   writeRscripts(reg, ids, disable.mail=FALSE, delays=delays,
                interactive.test = !is.null(conf$interactive))
 
