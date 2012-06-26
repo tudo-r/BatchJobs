@@ -22,16 +22,15 @@
 #' @export
 makeClusterFunctionsLSF = function(template.file) {
   template = cfReadBrewTemplate(template.file)
-  # When LSB_BJOBS_CONSISTENT_EXIT_CODE=Y, the bjobs command exits with 0 only 
+  # When LSB_BJOBS_CONSISTENT_EXIT_CODE=Y, the bjobs command exits with 0 only
   # when unfinished jobs are found, and 255 when no jobs are found,
   # or a non-existent job ID is entered.
   Sys.setenv(LSB_BJOBS_CONSISTENT_EXIT_CODE="Y")
-  
+
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     outfile = cfBrewTemplate(conf, template, rscript)
-    # FIXME: why dont we use runOSCommandLinux here 
     # returns: "Job <128952> is submitted to default queue <s_amd>."
-    res = system3("bsub", stdin=outfile, stdout=TRUE)  
+    res = runOSCommandLinux("bsub", outfile, stop.on.exit.code=FALSE)
     # FIXME filled queues
     if (res$exit.code > 0L) {
       cfHandleUnkownSubmitError("bsub", res)
@@ -54,11 +53,11 @@ makeClusterFunctionsLSF = function(template.file) {
       return(character(0L))
     if (res$exit.code > 0L)
       stopf("bjobs produced exit code %i; output %s", res$exit.code, res$output)
-    res = res$output
-    # drop first header line
-    res = res[-1L]
+
+    # drop first header line of output
+    out = tail(res$output, -1L)
     # first number in strings are batch.job.ids
-    strextract(res, "\\d+")
+    strextract(out, "\\d+")
   }
 
   makeClusterFunctions(name="LSF", submitJob=submitJob, killJob=killJob, listJobs=listJobs)

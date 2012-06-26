@@ -22,7 +22,7 @@
 #' @export
 makeClusterFunctionsSGE = function(template.file) {
   template = cfReadBrewTemplate(template.file)
-  
+
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     outfile = cfBrewTemplate(conf, template, rscript)
     # returns: "Your job 240933 (\"sleep 60\") has been submitted"
@@ -47,10 +47,13 @@ makeClusterFunctionsSGE = function(template.file) {
     #-----------------------------------------------------------------------------------------------------------------
     #  240935 0.00000 sleep 60   matthias     qw    04/03/2012 15:45:54                                    1
     res = runOSCommandLinux("qstat", "-u $USER")$output
+    if (res$exit.code > 0L)
+      stopf("qstat produced exit code %i; output %s", res$exit.code, res$output)
+
     # drop first 2 header lines
-    res = res[-(1:2)]
+    out = tail(res$output, -2L)
     # first number in strings are batch.job.ids
-    strextract(res, "\\d+", global=FALSE)
+    strextract(out, "\\d+")
   }
 
   makeClusterFunctions(name="SGE", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
