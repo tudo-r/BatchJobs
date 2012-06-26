@@ -46,7 +46,7 @@ makeClusterFunctionsSGE = function(template.file) {
     # job-ID  prior   name       user         state submit/start at     queue                          slots ja-task-ID
     #-----------------------------------------------------------------------------------------------------------------
     #  240935 0.00000 sleep 60   matthias     qw    04/03/2012 15:45:54                                    1
-    res = runOSCommandLinux("qstat", "-u $USER")$output
+    res = runOSCommandLinux("qstat", "-u $USER")
     if (res$exit.code > 0L)
       stopf("qstat produced exit code %i; output %s", res$exit.code, res$output)
 
