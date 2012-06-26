@@ -71,12 +71,10 @@ runOSCommandLinux = function(cmd, args=character(0L), stop.on.exit.code=TRUE, ss
   if (conf$debug) {
     catf("OS cmd: %s %s", sys.cmd, collapse(sys.args, " "))
     res = try(system3(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE, wait=TRUE, stop.on.exit.code=stop.on.exit.code))
-  } else {
-    res = system3(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE, wait=TRUE, stop.on.exit.code=stop.on.exit.code)
-  }
-  if (conf$debug) {
     catf("OS result:")
     print(res)
+  } else {
+    res = system3(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE, wait=TRUE, stop.on.exit.code=stop.on.exit.code)
   }
   if(is.error(res))
     stopf("Error in runLinuxOSCommand: %s (cmd: %s || args: %s)", as.character(res), sys.cmd, collapse(sys.args))
