@@ -104,12 +104,8 @@ getOperatingSystem = function() {
   Sys.info()["sysname"]
 }
 
-strextract = function(x, pattern, global=TRUE) {
-  m = if (global) {
-    regmatches(x, gregexpr(pattern, x))
-  } else {
-    regmatches(x, regexpr(pattern, x))
-  }
+strextract = function(x, pattern) {
+  m = regmatches(x, regexpr(pattern, x))
 
   if (length(m) == 0L)
     character(0L)

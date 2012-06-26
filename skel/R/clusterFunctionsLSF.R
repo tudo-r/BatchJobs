@@ -36,7 +36,7 @@ makeClusterFunctionsLSF = function(template.file) {
       cfHandleUnkownSubmitError("bsub", res)
     } else {
       # collapse output strings and first number in string is batch.job.id
-      batch.job.id = strextract(collapse(res$output, sep=" "), "\\d+", global=FALSE)
+      batch.job.id = strextract(collapse(res$output, sep=" "), "\\d+")
       makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
     }
   }
@@ -57,7 +57,7 @@ makeClusterFunctionsLSF = function(template.file) {
     # drop first header line of output
     out = tail(res$output, -1L)
     # first number in strings are batch.job.ids
-    strextract(out, "\\d+", global=FALSE)
+    strextract(out, "\\d+")
   }
 
   makeClusterFunctions(name="LSF", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
