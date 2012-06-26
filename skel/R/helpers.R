@@ -105,12 +105,7 @@ getOperatingSystem = function() {
 }
 
 strextract = function(x, pattern) {
-  m = regmatches(x, regexpr(pattern, x))
-
-  if (length(m) == 0L)
-    character(0L)
-  else
-    unname(vapply(m, head, character(1L), 1L))
+  regmatches(x, regexpr(pattern, x))
 }
 
 trim = function(x, ltrim=TRUE, rtrim=TRUE) {
