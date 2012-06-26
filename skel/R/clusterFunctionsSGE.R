@@ -53,7 +53,7 @@ makeClusterFunctionsSGE = function(template.file) {
     # drop first 2 header lines
     out = tail(res$output, -2L)
     # first number in strings are batch.job.ids
-    strextract(out, "\\d+")
+    strextract(out, "\\d+", global=FALSE)
   }
 
   makeClusterFunctions(name="SGE", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
