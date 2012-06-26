@@ -57,7 +57,7 @@ makeClusterFunctionsLSF = function(template.file) {
     # drop first header line of output
     out = tail(res$output, -1L)
     # first number in strings are batch.job.ids
-    strextract(out, "\\d+")
+    strextract(out, "\\d+", global=FALSE)
   }
 
   makeClusterFunctions(name="LSF", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
