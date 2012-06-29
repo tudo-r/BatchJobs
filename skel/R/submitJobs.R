@@ -18,7 +18,18 @@
 #'   sequentially as a single job for the scheduler.
 #'   Default is all jobs which were not yet submitted to the batch system.
 #' @param resources [\code{list}]\cr
-#'   Required resources for all batch jobs.
+#'   Required resources for all batch jobs. Elements of list:\cr
+#'   \code{nodes} [\code{integer(1)}]: Number of nodes if you want further parallelize one job, e.g. via MPI.
+#'   Default is taken from \code{default.nodes} in config file. 
+#'   If this is not defined it will default to 1.\cr
+#'   \code{walltime} [\code{integer(1)}]: Walltime for job in seconds.
+#'   NA is a possible value if you don't want to specify this.
+#'   Default is taken from \code{default.walltime} in config file. 
+#'   If this is not defined it will default to 3600 secs.\cr
+#'   \code{memory} [\code{integer(1)}]: Memory for job in MB.
+#'   Default is taken from \code{default.walltime} in config file. 
+#'   If this is not defined it will default to 500 MB.\cr
+#'   Further resources can be passed as named list elements and can be used in the job file template.
 #'   Default is empty list.
 #' @param wait [\code{function(retries)}]\cr
 #'   Function that defines how many seconds should be waited in case of a temporary error.
@@ -70,8 +81,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
     checkIdsPresent(reg, unlist(ids))
   }
   checkArg(resources, "list")
-  if(!isProperlyNamed(resources))
-    stop("'resources' must be all be uniquely named!")
+  resources = do.call(resrc, resources)         
 
   if (missing(wait))
     wait = function(retries) 10 * 2^retries # ^ always converts to double
@@ -120,7 +130,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
     # we need the second case for errors in brew (e.g. resources)
     if(interrupted && exists("batch.result", inherits=FALSE)) {
       submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
-        batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL))
+        batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL,
+        resources.timestamp=resources.timestamp))
     }
     # if we have remaining messages send them now
     messagef("Sending %i submit messages...\nMight take some time, do not interrupt this!",
@@ -130,7 +141,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
 
   # write R scripts before so we save some time in the important loop
   messagef("Writing %i R scripts...", length(ids))
-  writeRscripts(reg, ids, disable.mail=FALSE, delays=delays,
+  resources.timestamp = saveResources(reg, resources)
+  writeRscripts(reg, ids, resources.timestamp, disable.mail=FALSE, delays=delays,
                interactive.test = !is.null(conf$interactive))
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
@@ -155,7 +167,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
         # validate status returned from cluster functions
         if (batch.result$status == 0L) {
           submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
-            batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL))
+            batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL,
+            resources.timestamp=resources.timestamp))
           interrupted = FALSE
           bar$inc(1L)
           break

@@ -4,20 +4,19 @@ library("testthat")
 
 if (interactive()) {
   load_all("skel")
+  assignConfDefaults()
   cf = makeClusterFunctionsUnitTests()
   conf = getBatchJobsConf()
   conf$interactive = TRUE
 } else {
   library("BatchJobs")
+  BatchJobs:::assignConfDefaults()
   cf = BatchJobs:::makeClusterFunctionsUnitTests()
   conf = BatchJobs:::getBatchJobsConf()
   
 }
 
 conf$cluster.functions = cf
-conf$mail.start = "none"
-conf$mail.done = "none"
-conf$mail.error = "none"
 
 source("skel/inst/tests/helpers.R")
 

@@ -86,3 +86,9 @@ getResultFilePath = function(reg, id, part=NA_character_) {
   s = if (is.na(part)) "result" else paste("result", part, sep="-")
   getFilePaths(reg, id, s, "RData")
 }
+
+getResourcesDir = function(file.dir)
+  file.path(file.dir, "resources")
+
+getResourcesFilePath = function(reg, timestamp)
+  file.path(getResourcesDir(reg$file.dir), sprintf("resources_%i.RData", timestamp))

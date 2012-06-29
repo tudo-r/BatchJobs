@@ -95,9 +95,11 @@ isOnSlave = function() {
   getOption("BatchJobs.on.slave", default=FALSE)
 }
 
-setOnSlave = function(x) {
+setOnSlave = function(x, resources.path=as.character(NA)) {
   checkArg(x, "logical", len=1L, na.ok=FALSE)
+  checkArg(resources.path, "character", len=1L, na.ok=TRUE)
   options(BatchJobs.on.slave=x)
+  options(BatchJobs.resources.path=resources.path)
 }
 
 getOperatingSystem = function() {

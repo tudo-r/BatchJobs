@@ -51,6 +51,7 @@ assignConfDefaults = function() {
   conf$mail.error = "none"
   conf$db.driver = "SQLite"
   conf$db.options = list()
+  conf$default.resources = list()
   conf$debug = FALSE
 }
 
@@ -81,7 +82,8 @@ saveConf = function(reg) {
 checkConf = function(conf) {
   ns = ls(conf)
   ns2 = c("cluster.functions", "mail.start", "mail.done", "mail.error",
-    "mail.from", "mail.to", "mail.control", "db.driver", "db.options", "debug")
+    "mail.from", "mail.to", "mail.control", "db.driver", "db.options", 
+    "default.resources", "debug")
   if (any(ns %nin% ns2))
     stopf("You are only allowed to define the following R variables in your config file:\n%s",
       collapse(ns2, sep=", "))
@@ -89,7 +91,7 @@ checkConf = function(conf) {
 
 checkConfElements = function(cluster.functions, mail.to, mail.from,
   mail.start, mail.done, mail.error, mail.control,
-  db.driver, db.options, debug) {
+  db.driver, db.options, default.resources, debug) {
 
   if (!missing(cluster.functions))
     checkArg(cluster.functions, cl = "ClusterFunctions")
@@ -113,6 +115,8 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
     checkArg(db.driver, cl = "character", len = 1L, na.ok = FALSE)
   if (!missing(db.options))
     checkArg(db.options, cl = "list")
+  if (!missing(default.resources))
+    checkArg(default.resources, cl = "list")
   if (!missing(debug))
     checkArg(debug, cl = "logical", len = 1L, na.ok = FALSE)
 }
@@ -134,5 +138,6 @@ showConf = function() {
   catf("  mail.start: %s", f(x$mail.start))
   catf("  mail.done: %s", f(x$mail.done))
   catf("  mail.error: %s", f(x$mail.error))
+  catf("  default.resources: %s", listToShortString(x$default.resources))
   catf("  debug: %s", f(x$debug))
 }

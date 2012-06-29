@@ -9,7 +9,7 @@ test_that("makeRegistry", {
   expect_output(print(reg), "Job registry")
   if (interactive()) {
     df = dbGetJobStatusTable(reg)
-    expect_true(is.data.frame(df) && nrow(df) == 0 && ncol(df) == 11)
+    expect_true(is.data.frame(df) && nrow(df) == 0 && ncol(df) == 12)
   }
 })
 
@@ -26,4 +26,12 @@ test_that("makeRegistry checks packs", {
     "Please install the following packages: foo")
 })
 
-  
+test_that("loadRegistry works", {  
+  reg1 = makeTestRegistry()
+  reg2 = loadRegistry(reg1$file.dir)
+  expect_is(reg2, "Registry")
+  reg2 = loadRegistry(reg1$file.dir, save=TRUE)
+  expect_is(reg2, "Registry")
+})
+
+

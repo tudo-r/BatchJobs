@@ -7,7 +7,7 @@ test_that("doJob", {
   id = 1L
   batchMap(reg, identity, 123)
   df = dbGetJobStatusTable(reg)
-  expect_true(is.data.frame(df) && nrow(df) == 1 && ncol(df) == 11)
+  expect_true(is.data.frame(df) && nrow(df) == 1 && ncol(df) == 12)
   ids = findMissingResults(reg)
   expect_equal(ids, id)
   saveConf(reg)

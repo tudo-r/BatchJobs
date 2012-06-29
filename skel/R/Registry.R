@@ -28,6 +28,8 @@ makeRegistryInternal = function(id, file.dir, sharding,
   checkDir(job.dir, create=TRUE, check.empty=TRUE)
   fun.dir = getFunDir(file.dir)
   checkDir(fun.dir, create=TRUE, check.empty=TRUE)
+  resources.dir = getResourcesDir(file.dir)
+  checkDir(resources.dir, create=TRUE, check.empty=TRUE)
   checkDir(work.dir, check.posix=TRUE)
   work.dir = makePathAbsolute(work.dir)
 
@@ -124,10 +126,29 @@ loadRegistry = function(file.dir, save=FALSE) {
   fn = getRegistryFilePath(file.dir)
   message("Loading registry: ", fn)
   reg = load2(fn, "reg")
+  
+  update = reg$packages$BatchJobs$version < "1.0.527"
+  # FIXME version nr
+  if (update) {
+    message("Updating registry and DB to newer version. Will be saved now.")
+    # updates for newer versions
+    # create new resources dir
+    resources.dir = getResourcesDir(file.dir)
+    checkDir(resources.dir, create=TRUE, check.empty=TRUE)
+    query = sprintf("ALTER TABLE %s_job_status ADD COLUMN resources_timestamp INTEGER", reg$id)
+    dbDoQuery(reg, query, flags="rwc")
+    # save dummy resources
+    query = sprintf("UPDATE %s_job_status SET resources_timestamp=0 WHERE submitted IS NOT NULL", reg$id)
+    dbDoQuery(reg, query, flags="rwc")
+    saveResources(reg, resources=list(), timestamp=0L)
+    reg$packages$BatchJobs$version = packageVersion("BatchJobs")
+  }
+  
   if(save) {
     reg$file.dir = makePathAbsolute(file.dir)
-    saveRegistry(reg)
   }
+  if (save || update)
+    saveRegistry(reg)
   reg
 }
 

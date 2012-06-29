@@ -122,7 +122,7 @@ dbCreateJobStatusTable = function(reg, extra.cols="", constraints="") {
   #message("Initializing job status table...")
 
   query = sprintf(paste("CREATE TABLE %s_job_status (job_id INTEGER PRIMARY KEY, job_def_id INTEGER,",
-                   "first_job_in_chunk_id INTEGER, seed INTEGER, submitted INTEGER,",
+                   "first_job_in_chunk_id INTEGER, seed INTEGER, resources_timestamp INTEGER, submitted INTEGER,",
                    "started INTEGER, batch_job_id TEXT, node TEXT, r_pid INTEGER,",
                    "done INTEGER, error TEXT %s %s)"), reg$id, extra.cols, constraints)
   dbDoQuery(reg, query, flags="rwc")
@@ -355,11 +355,11 @@ dbSendMessage = function(reg, msg) {
 }
 
 dbMakeMessageSubmitted = function(reg, job.ids, time=as.integer(Sys.time()),
-                                  batch.job.id, first.job.in.chunk.id=NULL) {
+                                  batch.job.id, first.job.in.chunk.id=NULL, resources.timestamp) {
   if(is.null(first.job.in.chunk.id))
     first.job.in.chunk.id = "NULL"
-  updates = sprintf("first_job_in_chunk_id=%s, submitted=%i, batch_job_id='%s'",
-                    first.job.in.chunk.id, time, batch.job.id)
+  updates = sprintf("first_job_in_chunk_id=%s, submitted=%i, batch_job_id='%s', resources_timestamp=%i",
+                    first.job.in.chunk.id, time, batch.job.id, resources.timestamp)
   sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
 }
 
@@ -381,7 +381,7 @@ dbMakeMessageDone = function(reg, job.ids, time=as.integer(Sys.time())) {
 }
 
 dbMakeMessageKilled = function(reg, job.ids) {
-  updates = "submitted=NULL, started=NULL, batch_job_id=NULL, node=NULL, r_pid=NULL, done=NULL, error=NULL"
+  updates = "resources_timestamp=NULL, submitted=NULL, started=NULL, batch_job_id=NULL, node=NULL, r_pid=NULL, done=NULL, error=NULL"
   sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
 }
 

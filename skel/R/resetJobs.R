@@ -4,12 +4,14 @@
 #' Either to re-submit them because of changes in e.g. external
 #' data or to resolve rare issues when jobs are killed in an unfortunate state
 #' and therefore blocking your registry.
+#' 
+#' The function internally lists all jobs on the batch system and 
+#' if those include some of the jobs you want to reset, it informs you to kill them first by raising
+#' an exception. 
+#' If you really know what you are doing, you may set \code{force} to \code{TRUE} to omit this sanity check.
 #' Note that this is a dangerous operation to perform which may harm
-#' the database integrity. You HAVE to externally make sure that none of the jobs
+#' the database integrity. In this case you HAVE to make externally sure that none of the jobs
 #' you want to reset are still running.
-#' If you really know what you are
-#' doing, you may set \code{force} to \code{TRUE} to omit sanity checks
-#' on running jobs.
 #'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
@@ -17,7 +19,8 @@
 #'   Ids of jobs to kill.
 #'   Default is none.
 #' @param force [\code{logical(1)}]\cr
-#'   Also reset jobs which seem to be still running.
+#'   Reset jobs without checking whether they are currently running.
+#'   READ THE DETAILS SECTION!
 #'   Default is \code{FALSE}.
 #' @return Vector of reseted job ids.
 #' @export
@@ -33,14 +36,12 @@ resetJobs = function(reg, ids, force=FALSE) {
       stop("Listing or killing of jobs not supported by your cluster functions\n",
            "You need to set force=TRUE to reset jobs, but note the warning in ?resetJobs")
     }
-    running = findRunning(reg, ids)
+    running = findOnSystem(reg, ids)
     if (length(running) > 0L)
-      stopf("Can't reset jobs which are still running. You have to kill them first.\nRunning: %s",
+      stopf("Can't reset jobs which are live on system running. You have to kill them first!\nIds: %s",
             collapse(running))
   }
 
-  messagef("For safety reasons waiting 3secs...")
-  Sys.sleep(3)
   messagef("Resetting %i jobs in DB.", length(ids))
   dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
   invisible(ids)

@@ -1,4 +1,5 @@
 #' @import BBmisc
+#' @importFrom plyr rbind.fill
 
 .BatchJobs.conf <- new.env()
 

@@ -7,6 +7,10 @@
 #' @param id [\code{integer(1)}]\cr
 #'   Id of job to test.
 #'   Default is first job id of registry.
+#' @param resources [\code{list}]\cr
+#'   Usually not needed, unless you call the function \code{\link{getResources}} in your job.
+#'   See  \code{\link{submitJobs}}.
+#'   Default is empty list.
 #' @return [any]. Result of job. If the job did not complete because of an error, NULL is returned.
 #' @seealso \code{\link{reduceResults}}
 #' @export
@@ -18,7 +22,7 @@
 #' testJob(reg, 1)
 #' testJob(reg, 2)
 #'}
-testJob = function(reg, id) {
+testJob = function(reg, id, resources=list()) {
   checkArg(reg, cl="Registry")
   if (missing(id)) {
     id = dbGetJobId(reg)
@@ -28,7 +32,9 @@ testJob = function(reg, id) {
   } else {
     id = checkId(reg, id)
   }
-
+  checkArg(resources, "list")
+  resources = do.call(resrc, resources)         
+  
   # we dont want to change anything in the true registry / file dir / DB
   # so we have to copy stuff a little bit
   r = reg
@@ -53,7 +59,8 @@ testJob = function(reg, id) {
   copyRequiredJobFiles(r, reg, id)
 
   # write r script
-  writeRscripts(reg, id, disable.mail=TRUE, delays=0, interactive.test=FALSE)
+  resources.timestamp = saveResources(reg, resources)
+  writeRscripts(reg, id, resources.timestamp, disable.mail=TRUE, delays=0, interactive.test=FALSE)
 
   # execute
   rhome = Sys.getenv("R_HOME")
