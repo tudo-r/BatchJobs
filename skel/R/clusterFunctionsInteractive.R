@@ -19,18 +19,6 @@ makeClusterFunctionsInteractive = function() {
     fn = file(log.file, open="wt")
     on.exit(close(fn))
 
-    # set warn option to not collect warnings but signal them immedeiatly
-    # so they get included in the log file
-    prev.warn = getOption("warn")
-    on.exit(options(warn = prev.warn, add=TRUE))
-    if ("warning.as.error" %in% resources && isTRUE(resources$warning.as.error)) {
-      # convert warnings to errros
-      options(warn = 2L)
-    } else {
-      # immedeiatly output warnings
-      options(warn = 1L)
-    }
-
     # sink both output and message streams
     sink(fn, type="output")
     sink(fn, type="message")
