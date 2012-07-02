@@ -1,34 +1,13 @@
 # FIXME:
 # which standard names
 
-resrc = function(nodes, walltime, memory, ...) {
-  resources = getBatchJobsConf()$default.resources
-  if (!missing(nodes)) {
-    resources$nodes = nodes
-  }
-  if (!missing(walltime)) {
-    resources$walltime = walltime
-  }
-  if (!missing(memory)) {
-    resources$memory = memory
-  }
-  if (!is.null(resources$nodes)) {
-    resources$nodes = convertInteger(resources$nodes)
-    checkArg(resources$nodes, "integer", len=1L, lower=1L, na.ok=FALSE)
-  }
-  if (!is.null(resources$walltime)) {
-    resources$walltime = convertInteger(resources$walltime)
-    checkArg(resources$walltime, "integer", len=1L, lower=1L, na.ok=FALSE)
-  }
-  if (!is.null(resources$memory)) {
-    resources$memory = convertInteger(resources$memory)
-    checkArg(resources$memory, "integer", len=1L, lower=1L, na.ok=FALSE)
-  }
+resrc = function(...) {
+  res1 = getBatchJobsConf()$default.resources
   res2 = list(...)
-  if(!isProperlyNamed(res2))
+  if(!isProperlyNamed(res1) || !isProperlyNamed(res2))
     stop("Resources must be all be uniquely named!")
-  resources = insert(resources, res2)
-  return(resources)
+  res1 = insert(res1, res2)
+  return(res1)
 }
 
 saveResources = function(reg, resources, timestamp = as.integer(Sys.time())) {

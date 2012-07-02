@@ -18,18 +18,9 @@
 #'   sequentially as a single job for the scheduler.
 #'   Default is all jobs which were not yet submitted to the batch system.
 #' @param resources [\code{list}]\cr
-#'   Required resources for all batch jobs. Elements of list:\cr
-#'   \code{nodes} [\code{integer(1)}]: Number of nodes if you want further parallelize one job, e.g. via MPI.
-#'   Default is taken from \code{default.nodes} in config file. 
-#'   If this is not defined it will default to 1.\cr
-#'   \code{walltime} [\code{integer(1)}]: Walltime for job in seconds.
-#'   NA is a possible value if you don't want to specify this.
-#'   Default is taken from \code{default.walltime} in config file. 
-#'   If this is not defined it will default to 3600 secs.\cr
-#'   \code{memory} [\code{integer(1)}]: Memory for job in MB.
-#'   Default is taken from \code{default.walltime} in config file. 
-#'   If this is not defined it will default to 500 MB.\cr
-#'   Further resources can be passed as named list elements and can be used in the job file template.
+#'   Required resources for all batch jobs. The elements of this list
+#'   (e.g. something like \dQuote{walltime} or \dQuote{nodes} are defined by your template job file.
+#'   Defaults can be specified in your config file.  
 #'   Default is empty list.
 #' @param wait [\code{function(retries)}]\cr
 #'   Function that defines how many seconds should be waited in case of a temporary error.
