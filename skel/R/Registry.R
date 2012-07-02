@@ -127,18 +127,18 @@ loadRegistry = function(file.dir, save=FALSE) {
   fn = getRegistryFilePath(file.dir)
   message("Loading registry: ", fn)
   reg = load2(fn, "reg")
-
-  # FIXME version nr
-  current = package_version("1.0.527")
+  
+  # from here on (this version number and smaller) we need to do updates
+  bj.version.upd = package_version("1.0.527")
 
   # Determine BJ package version
   # Should always be present for version 1.0.527 and higher
   if ("BatchJobs" %nin% names(reg$packages))
-    version = package_version("1.0.527")
+    bj.version.reg = package_version("1.0.527")
   else
-    version = reg$packages$BatchJobs$version
+    bj.version.reg = reg$packages$BatchJobs$version
 
-  update = version < current
+  update = bj.version.reg <= bj.version.upd
   if (update) {
     message("Updating registry and DB to newer version. Will be saved now.")
     # updates for newer versions
