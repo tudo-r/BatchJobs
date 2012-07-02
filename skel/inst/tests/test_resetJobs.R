@@ -6,9 +6,6 @@ test_that("resetJobs", {
   ids = getJobIds(reg)
   submitJobs(reg)
   done = findDone(reg)
-  # cf unit tests don't support listing or killing
-  # -> expect an error here
-  expect_error(resetJobs(reg, done[1]))
 
   # test that nothing happens on empty id vector
   resetJobs(reg)

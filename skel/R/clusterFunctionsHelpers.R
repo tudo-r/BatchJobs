@@ -94,7 +94,7 @@ cfHandleUnkownSubmitError = function(cmd, exit.code, output) {
 #' If the command failed in all tries, an exception is generated.
 #' 
 #' @param cmd [\code{character(1)}]\cr
-#'   OS command, e.g. \dQuoate{qdel}.    
+#'   OS command, e.g. \dQuote{qdel}.    
 #' @param batch.job.id [\code{character(1)}]\cr
 #'   Id of the batch job on the batch system.     
 #' @param max.tries [\code{integer(1)}]\cr

@@ -14,7 +14,7 @@ dbGetConnection.SQLiteDriver = function(drv, reg, flags="ro", ...) {
 }
 
 dbConnectToJobsDB = function(reg, flags="ro") {
-  drv = dbDriver(reg$db.driver)
+  drv = do.call(reg$db.driver, list())
   dbGetConnection(drv, reg, flags)
 }
 

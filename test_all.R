@@ -1,4 +1,5 @@
 library("methods")
+library("BBmisc")
 library("devtools")
 library("testthat")
 
