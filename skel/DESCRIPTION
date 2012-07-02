@@ -7,7 +7,8 @@ Author: Bernd Bischl <bernd_bischl@gmx.net>,
 Maintainer: Bernd Bischl <bernd_bischl@gmx.net>
 URL: http://batchjobs.googlecode.com
 License: BSD
-Imports: utils, BBmisc (>= 1.1), digest, DBI, RSQLite, sendmailR, brew, plyr
+Depends: BBmisc (>= 1.1)
+Imports: utils, digest, DBI, RSQLite, sendmailR, brew, plyr
 Suggests: testthat
 LazyData: yes
 ByteCompile: yes
