@@ -19,6 +19,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
     checkArg(seed, cl = "integer", len = 1L, lower = 1L, na.ok = FALSE)
   }
   checkArg(packages, cl = "character", na.ok = FALSE)
+  packages = union(packages, "BatchJobs")
   requirePackages(packages, stop=TRUE, suppress.warnings=TRUE)
 
   # make paths absolute to be sure. otherwise cfSSH wont work for example
@@ -94,7 +95,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
 makeRegistry = function(id, file.dir, sharding=TRUE,
   work.dir, multiple.result.files = FALSE, seed, packages=character(0L)) {
   reg = makeRegistryInternal(id, file.dir, sharding, work.dir,
-                             multiple.result.files, seed, union(packages, "BatchJobs"))
+                             multiple.result.files, seed, packages)
   dbCreateJobStatusTable(reg)
   dbCreateJobDefTable(reg)
   saveRegistry(reg)
@@ -126,9 +127,18 @@ loadRegistry = function(file.dir, save=FALSE) {
   fn = getRegistryFilePath(file.dir)
   message("Loading registry: ", fn)
   reg = load2(fn, "reg")
-  
-  update = reg$packages$BatchJobs$version < "1.0.527"
+
   # FIXME version nr
+  current = package_version("1.0.527")
+
+  # Determine BJ package version
+  # Should always be present for version 1.0.527 and higher
+  if ("BatchJobs" %nin% names(reg$packages))
+    version = package_version("1.0.527")
+  else
+    version = reg$packages$BatchJobs$version
+
+  update = version < current
   if (update) {
     message("Updating registry and DB to newer version. Will be saved now.")
     # updates for newer versions
@@ -143,7 +153,7 @@ loadRegistry = function(file.dir, save=FALSE) {
     saveResources(reg, resources=list(), timestamp=0L)
     reg$packages$BatchJobs$version = packageVersion("BatchJobs")
   }
-  
+
   if(save) {
     reg$file.dir = makePathAbsolute(file.dir)
   }
