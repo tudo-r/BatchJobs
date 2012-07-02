@@ -24,12 +24,12 @@ makeClusterFunctionsSGE = function(template.file) {
   template = cfReadBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    outfile = cfBrewTemplate(conf, template, rscript)
+    outfile = cfBrewTemplate(conf, template, rscript, "job")
     # returns: "Your job 240933 (\"sleep 60\") has been submitted"
     res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
     # FIXME filled queues
     if (res$exit.code > 0L) {
-      cfHandleUnkownSubmitError("qsub", res)
+      cfHandleUnkownSubmitError("qsub", res$exit.code, res$output)
     } else {
       # collapse output strings and first number in string is batch.job.id
       batch.job.id = strextract(collapse(res$output, sep=" "), "\\d+")

@@ -27,7 +27,7 @@ makeClusterFunctionsTorque = function(template.file) {
   template = cfReadBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    outfile = cfBrewTemplate(conf, template, rscript)
+    outfile = cfBrewTemplate(conf, template, rscript, "pbs")
     res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
     # FIXME this is faulty: qsub can return multiple lines, e.g. in adelaide this happens.
     # maybe we should have an option to concatenate the lines
@@ -41,7 +41,7 @@ makeClusterFunctionsTorque = function(template.file) {
     if (grepl(max.jobs.msg, output, fixed=TRUE)) {
       makeSubmitJobResult(status=1L, batch.job.id=NA_character_, msg=max.jobs.msg)
     } else if (res$exit.code > 0L) {
-      cfHandleUnkownSubmitError("qsub", res)
+      cfHandleUnkownSubmitError("qsub", res$exit.code, res$output)
     } else {
       makeSubmitJobResult(status=0L, batch.job.id=trim(output))
     }

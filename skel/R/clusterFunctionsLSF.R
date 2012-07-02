@@ -28,12 +28,12 @@ makeClusterFunctionsLSF = function(template.file) {
   Sys.setenv(LSB_BJOBS_CONSISTENT_EXIT_CODE="Y")
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    outfile = cfBrewTemplate(conf, template, rscript)
+    outfile = cfBrewTemplate(conf, template, rscript, "job")
     # returns: "Job <128952> is submitted to default queue <s_amd>."
     res = runOSCommandLinux("bsub", outfile, stop.on.exit.code=FALSE)
     # FIXME filled queues
     if (res$exit.code > 0L) {
-      cfHandleUnkownSubmitError("bsub", res)
+      cfHandleUnkownSubmitError("bsub", res$exit.code, res$output)
     } else {
       # collapse output strings and first number in string is batch.job.id
       batch.job.id = strextract(collapse(res$output, sep=" "), "\\d+")
