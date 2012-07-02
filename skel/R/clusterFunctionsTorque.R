@@ -8,11 +8,11 @@
 #' appropriate privileges to submit, delete and list jobs on the
 #' cluster (this is usually the case).
 #'
-#' The template file can use any of the resources defined for the job
-#' by accessing the appropriate element of the \code{resources}
-#' list. It is the template file's job to choose a queue for the job
-#' and add any desired resource allocations. A simple example
-#' is provided here
+#' The template file can access all arguments passed to the 
+#' \code{submitJob} function, see here \code{\link{clusterFunctions}}.
+#' It is the template file's job to choose a queue for the job
+#' and handle the desired resource allocations. 
+#' A simple example is provided here
 #' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfTorque/simple.tmpl}
 #' and a more complex one here
 #' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfTorque/lido.tmpl}
@@ -22,19 +22,12 @@
 #'   Path to a brew template file that is used for the PBS job file.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
-#  FIXME document what variables are avial. in brew templ.
 makeClusterFunctionsTorque = function(template.file) {
   template = cfReadBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     outfile = cfBrewTemplate(conf, template, rscript, "pbs")
     res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
-    # FIXME this is faulty: qsub can return multiple lines, e.g. in adelaide this happens.
-    # maybe we should have an option to concatenate the lines
-    # (otherwise the first if goes already wrong)
-    # also how to extract the job id in a best way?
-    # also LSF and SGE
-    # ML: Output always collapsed and trim on result. Unsure if this is sufficient.
 
     max.jobs.msg = "Maximum number of jobs already in queue"
     output = collapse(res$output, sep="\n")

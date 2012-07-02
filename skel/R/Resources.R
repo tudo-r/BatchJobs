@@ -1,6 +1,3 @@
-# FIXME:
-# which standard names
-
 resrc = function(...) {
   res1 = getBatchJobsConf()$default.resources
   res2 = list(...)
@@ -66,5 +63,3 @@ getJobResources = function(reg, ids, as.list=TRUE) {
     res = do.call(rbind.fill, lapply(res, as.data.frame))
   return(res)              
 }
-
-# FIXME: what do we do with the DB if resources were missing (oldversion) and return in tis case?
