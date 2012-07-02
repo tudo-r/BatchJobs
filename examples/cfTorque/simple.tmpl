@@ -3,7 +3,7 @@
 #PBS -j oe
 ## direct streams to our logfile
 #PBS -o <%= log.file %>
-#PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,vmem=<%= memory %>M
+#PBS -l walltime=<%= resources$walltime %>,nodes=<%= resources$nodes %>,vmem=<%= resources$memory %>M
   
 ## Run R:
 ## we merge R output with stdout from PBS, which gets then logged via -o option

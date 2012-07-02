@@ -12,7 +12,7 @@
 # use environment variables
 #$ -V
 # use correct queue 
-#$ -q <%= queue %>
+#$ -q <%= resources$queue %>
 
 # we merge R output with stdout from SGE, which gets then logged via -o option
 R CMD BATCH --no-save --no-restore "<%= rscript %>" /dev/stdout
