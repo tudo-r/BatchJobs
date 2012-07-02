@@ -1,8 +1,3 @@
-<%
-walltime <- coalesce(resources$walltime, 60 * 60) ## default 1 hour
-memory <- coalesce(resources$memory, 1024) ## default 1G
-nodes <- 1 ## currently hard coded.
--%>
 #PBS -N <%= job.name %>
 ## merge standard error and output
 #PBS -j oe

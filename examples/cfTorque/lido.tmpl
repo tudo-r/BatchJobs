@@ -1,7 +1,4 @@
 <%
-walltime = coalesce(resources$walltime, 60 * 60) ## default 1 hour
-memory = coalesce(resources$memory, 1024) ## default 1G
-nodes = coalesce(resources$nodes, 1L) ## default to 1 node
 ## we have two different R versions on LiDO installed, one with GCC
 ## and the other with the Intel compilers. Some packages fail to build
 ## with ICC, but R compiled with ICC is in general faster.

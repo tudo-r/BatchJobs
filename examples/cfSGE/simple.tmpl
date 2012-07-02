@@ -1,7 +1,4 @@
 #!/bin/bash
-<%
-queue <- coalesce(resources$queue, "all.q") ## default queue
--%>
 
 # The name of the job, can be anything, simply used when displaying the list of running jobs
 #$ -N <%= job.name %>

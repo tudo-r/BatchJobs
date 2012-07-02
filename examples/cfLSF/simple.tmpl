@@ -1,8 +1,3 @@
-<%
-queue <- coalesce(resources$queue, "s_amd")             ## default queue
-walltime <- coalesce(resources$walltime, 3600) %/% 60   ## default 1h walltime
-memory <- coalesce(resources$memory, 1024*512)          ## default 0.5 GB memory
--%>
 #BSUB-J <%= job.name %>         # name of the job
 #BSUB-o <%= log.file %>         # output is sent to logfile, stdout + stderr by default
 #BSUB-q <%= queue %>            # Job queue
