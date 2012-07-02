@@ -7,7 +7,10 @@ test_that("resources", {
   submitJobs(reg, resources=list(walltime=1, memory=2))
   res = list(walltime=1, memory=2)
   expect_equal(loadResult(reg, 1), res)
-  expect_equal(testJob(reg, 1, resources=res), res)
+  
+  if (interactive()) {
+    expect_equal(testJob(reg, 1, resources=res), res)
+  }
   
   # query on master
   res1 = getJobResources(reg)

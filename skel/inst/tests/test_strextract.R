@@ -1,4 +1,4 @@
-context("testJob")
+context("strextract")
 
 if (interactive()) {
 
