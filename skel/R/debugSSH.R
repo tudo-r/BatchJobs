@@ -22,7 +22,10 @@
 #'   Default is current working directory.
 #' @return Nothing.
 #' @export
-debugSSH = function(nodename, rhome="", r.options, dir=getwd()) {
+debugSSH = function(nodename, rhome="", 
+  r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), 
+  dir=getwd()) {
+  
   checkArg(nodename, "character", len=1L, na.ok=FALSE)
   checkArg(rhome, "character", len=1L, na.ok=FALSE)
   checkArg(dir, "character", len=1L, na.ok=FALSE)
