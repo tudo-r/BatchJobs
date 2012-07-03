@@ -34,7 +34,7 @@
 #' @return [\code{\link{SSHWorker}}].
 #' @export
 #' @aliases SSHWorker
-makeSSHWorker = function(nodename, rhome="", r.options, ncpus, max.jobs, max.load, 
+makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, 
   r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {
   
   worker = makeWorkerRemoteLinux(nodename, rhome, r.options, script, ncpus, max.jobs, max.load)

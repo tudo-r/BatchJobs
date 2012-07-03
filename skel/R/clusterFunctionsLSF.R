@@ -9,7 +9,7 @@
 #' cluster (this is usually the case).
 #'
 #' The template file can access all arguments passed to the 
-#' \code{submitJob} function, see here \code{\link{clusterFunctions}}.
+#' \code{submitJob} function, see here \code{\link{ClusterFunctions}}.
 #' It is the template file's job to choose a queue for the job
 #' and handle the desired resource allocations. 
 #' A simple example is provided here

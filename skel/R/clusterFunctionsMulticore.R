@@ -25,7 +25,9 @@
 #'   Default means to take it from package directory.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
-makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, r.options, script) {
+makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, 
+  r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {
+  
   worker = makeWorkerLocalLinux(r.options, script, ncpus, max.jobs, max.load)
   workers = list(localhost=worker)
 
