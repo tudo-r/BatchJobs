@@ -106,8 +106,25 @@ getOperatingSystem = function() {
   Sys.info()["sysname"]
 }
 
+# Extract a FIRST match for a pattern from a vector of strings.
+# @param x [\code{character}]\cr
+#   Vector of strings.
+# @param x [\code{character(1)}]\cr
+#   Regexp pattern. Just 1.
+# @return [\code{character}]. Same length as x.
+#   Returns NA if pattern was not found.
 strextract = function(x, pattern) {
-  regmatches(x, regexpr(pattern, x))
+  if (length(x) == 0)
+    return(character(0))
+  starts = regexpr(pattern, x)
+  lens = attr(starts, "match.length")
+  stops = starts + lens - 1
+  mapply(function(x, start, stop) {
+    if (start == -1)
+      as.character(NA)
+    else
+      substr(x, start, stop)
+  }, x, starts, stops, USE.NAMES=FALSE)
 }
 
 trim = function(x, ltrim=TRUE, rtrim=TRUE) {
