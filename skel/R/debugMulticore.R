@@ -4,9 +4,13 @@
 #' Tries different operations of increasing difficulty 
 #' and provides debug output on the console
 #' 
+#' @param r.options [\code{list}]
+#'   Options for R and Rscript, one option per element of the vector, 
+#'   a la \dQuote{--vanilla}.
+#'   Default is \code{c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")}. 
 #' @return Nothing.
 #' @export
-debugMulticore = function() {
+debugMulticore = function(r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")) {
   conf = getBatchJobsConf()
   conf$debug = TRUE
   conf$mail.start = conf$mail.done = conf$mail.error = "none"
@@ -22,12 +26,12 @@ debugMulticore = function() {
   catf("\n") 
     
   messagef("*** Find helper script: ***")
-  script = findHelperScriptLinux(rhome)
+  script = findHelperScriptLinux(rhome=rhome, r.options=r.options)
   messagef("Find helper script result: %s", script)
   catf("\n") 
  
   messagef("*** Auto-detecting ncpus: ***")
-  worker = makeWorkerLocalLinux(script, ncpus=1)
+  worker = makeWorkerLocalLinux(r.options=r.options, script=script, ncpus=1)
   ncpus = runWorkerCommand(worker, "number-of-cpus") 
   messagef("Auto-detecting ncpus result: %s", ncpus)
   catf("\n") 

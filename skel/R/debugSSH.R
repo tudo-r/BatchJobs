@@ -4,29 +4,28 @@
 #' Tries different operations of increasing difficulty
 #' and provides debug output on the console.
 #'
-#' @param nodenames [\code{character}]\cr
-#'   Nodes on which workers should be constructed for the test.
-#' @param rhome [\code{character}]\cr
-#'   Paths to R installation on the workers.
-#'   Must be have same length and order as \code{nodenames}.
-#'   Length 1 is also allowed, which means that the path is the same for all nodes.
+#' @param nodename [\code{character(1)}]\cr
+#'   Node on which worker should be constructed for the test.
+#' @param rhome [\code{character(1)}]\cr
+#'   Path to R installation on the worker.
 #'   \dQuote{} means R installation on the PATH is used,
 #'   of course this implies that it must be on the PATH
 #'   (also for non-interactive shells)!
-#'   Default is \dQuote{}. 
+#'   Default is \dQuote{}.
+#' @param r.options [\code{list}]
+#'   Options for R and Rscript, one option per element of the vector, 
+#'   a la \dQuote{--vanilla}.
+#'   Default is \code{c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")}. 
 #' @param dir [\code{character(1)}]\cr
 #'   Path where internally used test registries can be created.
-#'   Note that this must be shared by all workers.
+#'   Note that this must be shared for the worker.
 #'   Default is current working directory.
 #' @return Nothing.
 #' @export
-debugSSH = function(nodenames, rhome="", dir=getwd()) {
-  checkArg(nodenames, "character", na.ok=FALSE)
-  checkArg(rhome, "character", na.ok=FALSE)
+debugSSH = function(nodename, rhome="", r.options, dir=getwd()) {
+  checkArg(nodename, "character", len=1L, na.ok=FALSE)
+  checkArg(rhome, "character", len=1L, na.ok=FALSE)
   checkArg(dir, "character", len=1L, na.ok=FALSE)
-  n = length(nodenames)
-  if (length(rhome) == 1)
-    rhome = rep(rhome, n)
   conf = getBatchJobsConf()
   conf$debug = TRUE
   conf$mail.start = conf$mail.done = conf$mail.error = "none"
@@ -36,29 +35,28 @@ debugSSH = function(nodenames, rhome="", dir=getwd()) {
   print(Sys.info())
   catf("\n")
 
-  messagef("*** which R on slaves: ***")
-  res = sapply(nodenames, runOSCommandLinux, cmd="which", args="R", ssh=TRUE, stop.on.exit.code=TRUE)
+  messagef("*** which R on slave: ***")
+  res = runOSCommandLinux(cmd="which", args="R", ssh=TRUE, nodename=nodename, stop.on.exit.code=TRUE)
   messagef("which R result:")
   print(res)
   catf("\n")
 
-  messagef("*** Find helper script on slaves: ***")
-  res = Map(findHelperScriptLinux, rhome, nodenames, ssh=TRUE)
-  res = unlist(res); names(res) = nodenames
+  messagef("*** Find helper script on slave: ***")
+  res = findHelperScriptLinux(rhome, r.options, ssh=TRUE, nodename=nodename)
   messagef("Find helper script result:")
   print(res)
   catf("\n")
 
-  messagef("*** Auto-detecting ncpus for slaves: ***")
-  workers = Map(makeWorkerRemoteLinux, nodenames, rhome, ncpus=1)
-  res = lapply(workers, runWorkerCommand, command="number-of-cpus")
+  messagef("*** Auto-detecting ncpus for slave: ***")
+  worker = makeWorkerRemoteLinux(nodename=nodename, rhome=rhome, r.options=r.options, ncpus=1)
+  res = runWorkerCommand(worker=worker, command="number-of-cpus")
   messagef("Auto-detecting ncpus result:")
   print(res)
   catf("\n")
   
   queryWorkerStatus = function() {
     messagef("*** Query worker status: ***")
-    res = lapply(workers, runWorkerCommand, command="status", args="")
+    res = runWorkerCommand(worker=worker, command="status", args="")
     messagef("Query worker status result:")
     message("load n.rprocs n.rprocs.50 n.jobs")
     print(res)
@@ -68,7 +66,7 @@ debugSSH = function(nodenames, rhome="", dir=getwd()) {
   queryWorkerStatus()
 
   messagef("*** Submitting 1 job: ***")
-  ssh.workers = Map(makeSSHWorker, nodenames, rhome)
+  ssh.workers = list(makeSSHWorker(nodename=nodename, rhome=rhome, r.options=r.options))
   conf$cluster.functions = do.call(makeClusterFunctionsSSH, ssh.workers)
   id = "debug_ssh_1"
   reg = makeRegistry(id=id, file.dir=file.path(dir, id), work.dir=wd, sharding=FALSE)

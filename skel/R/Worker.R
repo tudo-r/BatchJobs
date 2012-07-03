@@ -7,6 +7,9 @@
 # @param rhome [\code{character(1)}]\cr
 #  Path to R installation on worker.
 #  \dQuote{} means R installation on the PATH is used.
+# @param r.options [\code{character}]
+#   Options for R and Rscript, one option per element of the vector, 
+#   a la \dQuote{--vanilla}.
 # @param script [\code{character(1)}]\cr
 #   Path to helper script on worker.
 #   Default means to call \code{\link{findHelperScriptLinux}}.
@@ -24,13 +27,16 @@
 #   Extra classes, more specific than dQuote{Worker}.
 #   Will be added to the class attribute of the object.
 # @return [\code{\link{Worker}}].
-makeWorker = function(ssh, nodename, rhome, script, ncpus, max.jobs, max.load, classes) {
+makeWorker = function(ssh, nodename, rhome, r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), 
+  script, ncpus, max.jobs, max.load, classes) {
+  
   checkArg(ssh, "logical", len=1L, na.ok=FALSE)
   checkArg(nodename, "character", len=1L, na.ok=FALSE)
   checkArg(rhome, "character", len=1L, na.ok=FALSE)
+  checkArg(r.options, "character", na.ok=FALSE)
   if (missing(script)) {
     # FIXME dont use linux specific in base class
-    script = findHelperScriptLinux(rhome,ssh, nodename)
+    script = findHelperScriptLinux(rhome, r.options, ssh, nodename)
   } else {
     checkArg(script, "character", len=1L, na.ok=FALSE)
   }
@@ -40,6 +46,7 @@ makeWorker = function(ssh, nodename, rhome, script, ncpus, max.jobs, max.load, c
     ssh = ssh,
     nodename = nodename,
     rhome = rhome,
+    r.options = r.options,
     script = script,
     last.update = -Inf,
     available = "A", # worker is available, we can submit, set in update loop in scheduleWorkerJobs.R
