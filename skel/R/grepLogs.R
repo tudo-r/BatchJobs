@@ -53,12 +53,20 @@ grepLogs = function(reg, ids, pattern="warn", ignore.case=TRUE, verbose=FALSE, r
   for(i in seq_along(fns)) {
     if (!file.exists(fns[i]))
       stopf("File '%s' does not exist.", fns[i])
+    
+    # read lines from log and trim to output of job with id 'ids[i]'
     lines = readLines(fns[i])
+    start = grep(sprintf("^########## Executing jid=%i ##########$", ids[i]), lines)
+    if (length(start) != 1L)
+      stop("The output of the job with id=%i could not be found in file '%s' or was found more than once", ids[i], fns[i])
+    end = head(grep("^########## Executing jid=[0-9]+ ##########$", tail(lines, -start)), 1L)
+    lines = lines[start:min(start+end, length(lines))]
+    
     matches = grep(pattern, lines, ignore.case=ignore.case)
     matched[i] = (length(matches) > 0L)
     if (verbose && matched[i]) {
-      messagef("%s##### Matches for job with id=%i (%s) #####",
-               ifelse(i >= 2L, "\n", ""), ids[i], basename(fns[i]))
+      messagef("\n##### Matches for job with id=%i (%s) #####",
+               ids[i], basename(fns[i]))
       message(collapse(vapply(matches, getLines, character(1L), lines=lines, range=range),
                        "\n---\n"))
     }
