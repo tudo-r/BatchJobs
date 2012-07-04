@@ -6,17 +6,17 @@
 #'   Registry.
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs to grep.
-#'   Default is all done jobs.
-#' @param pattern [\code{character(1L)}]\cr
+#'   Default is all terminated jobs (done + errors).
+#' @param pattern [\code{character(1)}]\cr
 #'   Pattern to search for. See \code{\link{grep}}.
 #'   Default is \code{"warn"}.
-#' @param ignore.case [\code{logical(1L)}]\cr
+#' @param ignore.case [\code{logical(1)}]\cr
 #'   Ignore case. See \code{\link{grep}}.
 #'   Default is \code{TRUE}.
-#' @param verbose [\code{logical(1L)}]\cr
+#' @param verbose [\code{logical(1)}]\cr
 #'   Print matches.
 #'   Default is \code{FALSE}.
-#' @param range [\code{integer(1L)}]\cr
+#' @param range [\code{integer(1)}]\cr
 #'   If \code{verbose} is set to \code{TRUE}, print \code{range}
 #'   leading and trailing lines for contextual information about the warning.
 #'   Default is \code{2}.
@@ -24,15 +24,19 @@
 #' @export
 grepLogs = function(reg, ids, pattern="warn", ignore.case=TRUE, verbose=FALSE, range=2L) {
   checkArg(reg, "Registry")
+  terminated = union(dbGetDone(reg), dbGetErrors(reg))
   if (missing(ids)) {
-    ids = dbGetDone(reg, ids)
+    ids = terminated 
   } else {
     ids = checkIds(reg, ids)
-    if (! all(ids %in% dbGetDone(reg)))
-      stop("Not all jobs with provided ids have finished yet and therefore possess no log file")
+    diff = setdiff(ids, terminated)
+    if (length(diff) > 0L)
+      stopf("Not all jobs with provided ids have finished yet and therefore possess no log file, e.g. id=%i.",
+        diff[1L])
   }
   checkArg(pattern, "character", len=1L, na.ok=FALSE)
   checkArg(ignore.case, "logical", len=1L, na.ok=FALSE)
+  checkArg(verbose, "logical", len=1L, na.ok=FALSE)
   checkArg(range, "integer", len=1L, lower=0L, na.ok=FALSE)
 
   fids = dbGetFirstJobInChunkIds(reg, ids)
