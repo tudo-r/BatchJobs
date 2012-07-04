@@ -13,5 +13,5 @@ getLogFiles = function(reg, ids) {
   else
     ids = checkIds(reg, ids)
   fids = dbGetFirstJobInChunkIds(reg, ids)
-  vapply(ifelse(is.na(fids), ids, fids), getLogFilePath, character(1L), reg=reg)
+  getLogFilePath(reg, ifelse(is.na(fids), ids, fids))
 }
