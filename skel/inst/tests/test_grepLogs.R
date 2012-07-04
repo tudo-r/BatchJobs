@@ -1,3 +1,4 @@
+# FIXME: can we find a way to generate log files in unit tests?
 context("grepLogs")
 
 test_that("grepLogs", {

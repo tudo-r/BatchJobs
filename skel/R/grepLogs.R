@@ -37,6 +37,7 @@ grepLogs = function(reg, ids, pattern="warn", ignore.case=TRUE, verbose=FALSE, r
   checkArg(pattern, "character", len=1L, na.ok=FALSE)
   checkArg(ignore.case, "logical", len=1L, na.ok=FALSE)
   checkArg(verbose, "logical", len=1L, na.ok=FALSE)
+  range = convertInteger(range)
   checkArg(range, "integer", len=1L, lower=0L, na.ok=FALSE)
 
   fids = dbGetFirstJobInChunkIds(reg, ids)
