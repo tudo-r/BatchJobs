@@ -1,4 +1,4 @@
-BatchJobs_1.0-527: 
+BatchJobs_1.0-606: 
 - many dependencies are now imports
 - many fixes and improvements for stability in cluster functions
 - helper functions for your own cluster functions are exported and documented, they all start with cf*
