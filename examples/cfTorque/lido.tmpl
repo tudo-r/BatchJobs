@@ -13,10 +13,10 @@ memory = convertInteger(resources$memory)
 nodes = convertInteger(resources$nodes)
 compiler = resources$compiler
   
-checkArg(resources$walltime, "integer", len=1L, na.ok=FALSE, lower=60, upper=60*60*24*28)
-checkArg(resources$memory, "integer", len=1L, na.ok=FALSE, lower=1, upper=64*1024)
-checkArg(resources$nodes, "integer", len=1L, na.ok=FALSE, lower=1)
-checkArg(resources$compiler, choices=c("gcc", "icc"))
+checkArg(walltime, "integer", len=1L, na.ok=FALSE, lower=60, upper=60*60*24*28)
+checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=1, upper=64*1024)
+checkArg(nodes, "integer", len=1L, na.ok=FALSE, lower=1)
+checkArg(compiler, choices=c("gcc", "icc"))
 
 cmd = "R CMD BATCH --no-save --no-restore"
 if(nodes > 1L) 
