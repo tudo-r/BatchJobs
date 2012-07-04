@@ -1,4 +1,16 @@
 BatchJobs_1.0-527: 
+- many dependencies are now imports
+- many fixes and improvements for stability in cluster functions
+- helper functions for your own cluster functions are exported and documented, they all start with cf*
+- interactive mode now has dummy functions for listing and killing jobs
+- interactive mode now generates log files
+- job resources (from submits) are stored and can be queried on the master and the slaves 
+  (see getResources and getJobResources) 
+- defaults for job resources can be specified in config file, see config part on web page
+- multicore and SSH mode now supports r.options, i.e. options to start Rscript and R CMD BATCH with   
+- function grepLogs to search log files for a pattern
+
+BatchJobs_1.0-527: 
 - very minor bug fixes: for argument conversion and checks
 
 BatchJobs_1.0-485: 
