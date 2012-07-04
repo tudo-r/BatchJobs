@@ -55,8 +55,10 @@ doKillTest = function(dir=getwd(), n=4, long="sleep") {
   }
   if (test.workers) {
     # sleep so processes can update their cpu usage
-    if (long == "expensive")
-      Sys.sleep(3)
+    if (long == "expensive") {
+      message("Waiting and letting processes run for 10 secs...")
+      Sys.sleep(10)
+    }
     status = getStatus()
     print(status)
     if (long == "sleep") {
