@@ -35,7 +35,7 @@ makeClusterFunctionsLSF = function(template.file) {
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     outfile = cfBrewTemplate(conf, template, rscript, "job")
     # returns: "Job <128952> is submitted to default queue <s_amd>."
-    res = runOSCommandLinux("bsub", outfile, stop.on.exit.code=FALSE)
+    res = runOSCommandLinux("bsub", stdin=outfile, stop.on.exit.code=FALSE)
     # FIXME filled queues
     if (res$exit.code > 0L) {
       cfHandleUnkownSubmitError("bsub", res$exit.code, res$output)

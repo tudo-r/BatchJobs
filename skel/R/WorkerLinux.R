@@ -49,6 +49,9 @@ listWorkerJobs.WorkerLinux = function(worker, file.dir) {
 # @param args [\code{character}]
 #   System command arguments.
 #   Default is \code{character(0)}.
+# @param stdin [\code{character(1)}]
+#   See \code{\link{system3}}.
+#   Default is \dQuote{}.
 # @param stop.on.exit.code [\code{character}]
 #   See \code{\link{system3}}.
 #   Default is \code{TRUE}.
@@ -58,7 +61,7 @@ listWorkerJobs.WorkerLinux = function(worker, file.dir) {
 # @param nodename [\code{character(1)}]
 #   Nodename for SSH.
 # @return See \code{\link{system3}}.
-runOSCommandLinux = function(cmd, args=character(0L), stop.on.exit.code=TRUE, ssh=FALSE, nodename) {
+runOSCommandLinux = function(cmd, args=character(0L), stdin="", stop.on.exit.code=TRUE, ssh=FALSE, nodename) {
   conf = getBatchJobsConf()
   if (ssh) {
     sys.cmd = "ssh"
@@ -70,11 +73,11 @@ runOSCommandLinux = function(cmd, args=character(0L), stop.on.exit.code=TRUE, ss
   }
   if (conf$debug) {
     catf("OS cmd: %s %s", sys.cmd, collapse(sys.args, " "))
-    res = try(system3(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE, wait=TRUE, stop.on.exit.code=stop.on.exit.code))
+    res = try(system3(sys.cmd, sys.args, stdin=stdin, stdout=TRUE, stderr=TRUE, wait=TRUE, stop.on.exit.code=stop.on.exit.code))
     catf("OS result:")
     print(res)
   } else {
-    res = system3(sys.cmd, sys.args, stdout=TRUE, stderr=TRUE, wait=TRUE, stop.on.exit.code=stop.on.exit.code)
+    res = system3(sys.cmd, sys.args, stdin=stdin, stdout=TRUE, stderr=TRUE, wait=TRUE, stop.on.exit.code=stop.on.exit.code)
   }
   if(is.error(res))
     stopf("Error in runLinuxOSCommand: %s (cmd: %s || args: %s)", as.character(res), sys.cmd, collapse(sys.args))

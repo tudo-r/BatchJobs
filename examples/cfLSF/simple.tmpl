@@ -1,7 +1,7 @@
 #BSUB-J <%= job.name %>            # name of the job
 #BSUB-o <%= log.file %>            # output is sent to logfile, stdout + stderr by default
 #BSUB-q <%= resources$queue %>     # Job queue
-#BSUB-c <%= resources$walltime %>  # Time limit in minutes
+#BSUB-W <%= resources$walltime %>  # Walltime in minutes
 #BSUB-M <%= resources$memory %>    # Memory requirements in Kbytes
 
 # we merge R output with stdout from LSF, which gets then logged via -o option
