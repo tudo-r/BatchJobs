@@ -5,8 +5,9 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   conf = getBatchJobsConf()
 
   # we need to see all warnings immediatly
-  if (conf$cluster.functions$name != "Testing")
-    options(warning.length=8170L, warn=1L)
+  if (conf$cluster.functions$name != "Testing") {
+      options(warning.length=8170L, warn=1L+conf$raise.warnings)
+  }
 
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)
