@@ -9,27 +9,39 @@
 #' Listing jobs returns an empty vector (as no jobs can be running when you call this)
 #' and \code{killJob} returns at once (for the same reason).
 #'
+#' @param write.logs [\code{logical(1)}]\cr
+#'   Sink the output to log files. Turning logging off can increase the speed of
+#'   calculations but makes it next to impossible to debug.
+#'   Default is \code{TRUE}.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
-makeClusterFunctionsInteractive = function() {
-  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-    # open log file for writing
-    fn = file(log.file, open="wt")
-    sink(fn, type="output")
-    sink(fn, type="message")
-    on.exit({
-      sink(NULL, type="output")
-      sink(NULL, type="message")
-      close(fn)
-    })
+makeClusterFunctionsInteractive = function(write.logs=TRUE) {
+  checkArg(write.logs, "logical", len=1L, na.ok=FALSE)
 
-    # sink both output and message streams
-    try(sys.source(rscript, envir=new.env(), keep.source=FALSE))
+  submitJob = if(write.logs) {
+    function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
+      # open log file for writing
+      fn = file(log.file, open="wt")
+      sink(fn, type="output")
+      sink(fn, type="message")
+      on.exit({
+        sink(NULL, type="output")
+        sink(NULL, type="message")
+        close(fn)
+      })
 
-    # return job result (always successful)
-    makeSubmitJobResult(status=0L, batch.job.id="cfInteractive", msg="")
+      # sink both output and message streams
+      try(sys.source(rscript, envir=new.env(), keep.source=FALSE))
+
+      # return job result (always successful)
+      makeSubmitJobResult(status=0L, batch.job.id="cfInteractive", msg="")
+    }
+  } else {
+    function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
+      suppressAll(try(sys.source(rscript, envir=new.env(), keep.source=FALSE)))
+      makeSubmitJobResult(status=0L, batch.job.id="cfInteractive", msg="")
+    }
   }
-
   killJob = function(conf, reg, batch.job.id) NULL
   listJobs = function(conf, reg) integer(0L)
 
