@@ -36,11 +36,10 @@ readConfs = function() {
   fn.pack = file.path(find.package("BatchJobs"), "etc", ".BatchJobs.R")
   fn.user = path.expand("~/.BatchJobs.R")
   fn.wd = suppressWarnings(normalizePath(".BatchJobs.R"))
-  conffiles = Filter(file.exists, c(fn.pack, fn.user, fn.wd))
+  conffiles = Filter(file.exists, unique(c(fn.pack, fn.user, fn.wd)))
   if (length(conffiles) == 0L)
-    stopf("No configuation found at all. Not in package, not in user.home, not in work dir!")
-  conf = sourceConfFiles(conffiles)
-  assignConf(conf)
+    stop("No configuation found at all. Not in package, not in user.home, not in work dir!")
+  assignConf(sourceConfFiles(conffiles))
 }
 
 assignConfDefaults = function() {
