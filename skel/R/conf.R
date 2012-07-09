@@ -4,7 +4,7 @@ sourceConfFile = function(conffile) {
   if (!file.exists(conffile)) {
     stopf("Configuration file does not exist: '%s'", conffile)
   }
-  message("Sourcing configuration file: ", conffile)
+  packageStartupMessage(sprintf("Sourcing configuration file: '%s'", conffile))
   conf = new.env()
   x = try(sys.source(conffile, envir=conf))
   if (is.error(x))
