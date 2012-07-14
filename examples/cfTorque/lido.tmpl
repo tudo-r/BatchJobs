@@ -1,9 +1,17 @@
+## Job Resource Interface Definition
+##
+## nodes [integer(1)]:        Number of required nodes, 
+##                            Set larger than 1 if you want to further parallelize with e.g. MPI
+## walltime [integer(1)]:     Walltime for this job, in seconds
+## memory   [integer(1)]:     Memory in megabytes for the job. Mapped to vmem on Lido.
+##                            If you use multiple nodes, vmem = memory * nodes.
+##                            Therefore memory is the max mem you want to use in one parallel (MPI) job.
+## compiler [gcc,icc]:        Compiler for R and packages
+##                            We have two different R versions on LiDO installed, one with GCC
+##                            and the other with the Intel compilers. Some packages fail to build
+##                            with ICC, but R compiled with ICC is in general faster.
+
 <%
-
-## we have two different R versions on LiDO installed, one with GCC
-## and the other with the Intel compilers. Some packages fail to build
-## with ICC, but R compiled with ICC is in general faster.
-
 d = setdiff(names(resources), c("walltime", "memory", "nodes", "compiler"))
 if (length(d) > 0)
   stopf("Illegal resources used: %s", collapse(d))
@@ -12,11 +20,14 @@ walltime = convertInteger(resources$walltime)
 memory = convertInteger(resources$memory)
 nodes = convertInteger(resources$nodes)
 compiler = resources$compiler
-  
+    
 checkArg(walltime, "integer", len=1L, na.ok=FALSE, lower=60, upper=60*60*24*28)
 checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=1, upper=64*1024)
 checkArg(nodes, "integer", len=1L, na.ok=FALSE, lower=1)
 checkArg(compiler, choices=c("gcc", "icc"))
+memory = memory * nodes
+if (memory > 64*1024)
+  stop("memory * nodes exceeds 64GB!")
 
 cmd = "R CMD BATCH --no-save --no-restore"
 if(nodes > 1L) 
@@ -68,7 +79,7 @@ if (length(grep("^/data/", log.file)) > 0) {
 #PBS -N <%= job.name %>
 #PBS -j oe
 #PBS -o <%= log.file %>
-#PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,pvmem=<%= memory %>M
+#PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,vmem=<%= memory %>M
 #PBS -q <%= queue %>
 
 ## setup modules
