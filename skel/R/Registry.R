@@ -127,7 +127,7 @@ loadRegistry = function(file.dir, save=FALSE) {
   fn = getRegistryFilePath(file.dir)
   message("Loading registry: ", fn)
   reg = load2(fn, "reg")
-  
+
   # from here on (this version number and smaller) we need to do updates
   bj.version.upd = package_version("1.0.527")
 
@@ -152,6 +152,8 @@ loadRegistry = function(file.dir, save=FALSE) {
     dbDoQuery(reg, query, flags="rwc")
     saveResources(reg, resources=list(), timestamp=0L)
     reg$packages$BatchJobs$version = packageVersion("BatchJobs")
+
+    # FIXME add stash directory
   }
 
   if(save) {
