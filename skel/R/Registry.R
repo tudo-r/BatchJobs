@@ -2,7 +2,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
   work.dir, multiple.result.files, seed, packages) {
   cur.dir = getwd()
   checkArg(id, cl = "character", len = 1L, na.ok = FALSE)
-  checkIdValid(id)
+  checkIdValid(id, allow.minus=FALSE)
   if (missing(file.dir))
     file.dir = file.path(cur.dir, paste(id, "files", sep="-"))
   checkArg(file.dir, cl = "character", len = 1L, na.ok = FALSE)
