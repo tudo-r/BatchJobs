@@ -114,13 +114,13 @@ getOperatingSystem = function() {
 # @return [\code{character}]. Same length as x.
 #   Returns NA if pattern was not found.
 strextract = function(x, pattern) {
-  if (length(x) == 0)
-    return(character(0))
+  if (length(x) == 0L)
+    return(character(0L))
   starts = regexpr(pattern, x)
   lens = attr(starts, "match.length")
-  stops = starts + lens - 1
+  stops = starts + lens - 1L
   mapply(function(x, start, stop) {
-    if (start == -1)
+    if (start == -1L)
       as.character(NA)
     else
       substr(x, start, stop)
