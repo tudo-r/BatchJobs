@@ -27,7 +27,11 @@ updateWorker = function(worker, file.dir, tdiff) {
 }
 
 # find worker via isBusyWorker and update workers while looking
+# workers with a low load are more likely to be selected when there are
+# multiple workers available
+# FIXME: we could implement a prirority attribute for workers
 findWorker = function(workers, file.dir, tdiff) {
   lapply(workers, updateWorker, file.dir=file.dir, tdiff=tdiff)
-  Find(function(w) w$available=="A", workers, nomatch=NULL)
+  loads = vapply(workers, function(w) w$status$load, numeric(1L))
+  Find(function(w) w$available=="A", sample(workers, prob = 1 / (loads + 1)), nomatch=NULL)
 }
