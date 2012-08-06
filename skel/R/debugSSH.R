@@ -13,19 +13,19 @@
 #'   (also for non-interactive shells)!
 #'   Default is \dQuote{}.
 #' @param r.options [\code{list}]
-#'   Options for R and Rscript, one option per element of the vector, 
+#'   Options for R and Rscript, one option per element of the vector,
 #'   a la \dQuote{--vanilla}.
-#'   Default is \code{c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")}. 
+#'   Default is \code{c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")}.
 #' @param dir [\code{character(1)}]\cr
 #'   Path where internally used test registries can be created.
 #'   Note that this must be shared for the worker.
 #'   Default is current working directory.
 #' @return Nothing.
 #' @export
-debugSSH = function(nodename, rhome="", 
-  r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), 
+debugSSH = function(nodename, rhome="",
+  r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
   dir=getwd()) {
-  
+
   checkArg(nodename, "character", len=1L, na.ok=FALSE)
   checkArg(rhome, "character", len=1L, na.ok=FALSE)
   checkArg(dir, "character", len=1L, na.ok=FALSE)
@@ -56,7 +56,7 @@ debugSSH = function(nodename, rhome="",
   messagef("Auto-detecting ncpus result:")
   print(res)
   catf("\n")
-  
+
   queryWorkerStatus = function() {
     messagef("*** Query worker status: ***")
     res = runWorkerCommand(worker=worker, command="status", args="")
@@ -65,7 +65,7 @@ debugSSH = function(nodename, rhome="",
     print(res)
     catf("\n")
   }
-  
+
   queryWorkerStatus()
 
   messagef("*** Submitting 1 job: ***")

@@ -33,8 +33,8 @@ testJob = function(reg, id, resources=list()) {
     id = checkId(reg, id)
   }
   checkArg(resources, "list")
-  resources = do.call(resrc, resources)         
-  
+  resources = do.call(resrc, resources)
+
   # we dont want to change anything in the true registry / file dir / DB
   # so we have to copy stuff a little bit
   r = reg
@@ -70,7 +70,7 @@ testJob = function(reg, id, resources=list()) {
   system(cmd, wait=TRUE)
   message("### Output of new R process ends here ###")
   messagef("### Approximate running time: %.2f seconds", as.numeric(Sys.time() - stime))
-  res = try(loadResult(reg, id, check.id=FALSE))
+  res = try(getResult(reg, id))
   if (is.error(res))
     return(NULL)
   return(res)

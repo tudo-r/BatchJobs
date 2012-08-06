@@ -61,5 +61,5 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.a
 
 batchMapResultsWrapper = function(id, ..., .reg, .fun, .part) {
   .fun(job = getJob(.reg, id, check.id=FALSE),
-    res = loadResult(.reg, id, part=.part, check.id=FALSE), ...)
+    res = getResult(.reg, id, part=.part), ...)
 }

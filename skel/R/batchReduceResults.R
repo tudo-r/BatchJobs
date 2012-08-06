@@ -69,5 +69,5 @@ batchReduceResultsWrapper = function(aggr, x, ..reg, ..fun, ..part) {
   # x is id
   # use lazy evaluation, if fun doesn't access job or res (unlikely)
   ..fun(aggr = aggr, job = getJob(..reg, x, check.id=FALSE),
-    res = loadResult(..reg, x, ..part, check.id=FALSE))
+        res = getResult(..reg, x, ..part))
 }

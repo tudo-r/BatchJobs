@@ -98,7 +98,7 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
   tryCatch({
     if (missing(init)) {
       # fetch first result as init
-      aggr = loadResult(reg, ids[1L], part, check.id=FALSE)
+      aggr = getResult(reg, ids[1L], part)
       ids = tail(ids, -1L)
       bar$inc(1L)
     } else {
@@ -112,7 +112,7 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
       # is not accessed, getJob will not trigger a database query
       aggr = fun(aggr,
                  job = getJob(reg, id, check.id=FALSE),
-                 res = loadResult(reg, id, part, check.id=FALSE),
+                 res = getResult(reg, id, part),
                  ...)
       bar$inc(1L)
     }
@@ -138,7 +138,7 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
   fun2 = function(aggr, job, res) combine(aggr, wrap(fun(job, res)))
   res = reduceResults(reg, ids, part, fun2, init, ...)
   if (use.names)
-    res = name.fun(res, ids, fun(getJob(reg, ids[1L]), loadResult(reg, ids[1L], check.id=FALSE)))
+    res = name.fun(res, ids, fun(getJob(reg, ids[1L]), getResult(reg, ids[1L], part)))
   return(res)
 }
 
