@@ -85,16 +85,18 @@ dbAddData = function(reg, tab, data) {
   as.integer(dbGetQuery(con, "SELECT total_changes()"))
 }
 
-dbSelectWithIds = function(reg, query, ids, where=TRUE, limit=-1L) {
+dbSelectWithIds = function(reg, query, ids, where=TRUE, group.by, limit) {
   if(!missing(ids))
     query = sprintf("%s %s job_id IN (%s)", query, ifelse(where, "WHERE", "AND"), collapse(ids))
-  query = sprintf("%s LIMIT %i", query, limit)
-  res = dbDoQuery(reg, query, flags="ro")
-  if(!missing(ids))
-    # order result same as ids
-    res[na.omit(match(ids, res$job_id)),, drop=FALSE]
-  else
-    res
+  if(!missing(group.by))
+    query = sprintf("%s GROUP BY %s", query, collapse(group.by))
+  if(!missing(limit))
+    query = sprintf("%s LIMIT %i", query, limit)
+  
+  res = dbDoQuery(reg, query)
+  if(missing(ids))
+    return(res)
+  return(res[na.omit(match(ids, res$job_id)),, drop=FALSE]) 
 }
 
 ############################################
