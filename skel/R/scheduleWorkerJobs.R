@@ -32,6 +32,6 @@ updateWorker = function(worker, file.dir, tdiff) {
 # FIXME: we could implement a prirority attribute for workers
 findWorker = function(workers, file.dir, tdiff) {
   lapply(workers, updateWorker, file.dir=file.dir, tdiff=tdiff)
-  loads = vapply(workers, function(w) w$status$load, numeric(1L))
-  Find(function(w) w$available=="A", sample(workers, prob = 1 / (loads + 1)), nomatch=NULL)
+  rload = vapply(workers, function(w) w$status$load / w$ncpus, numeric(1L))
+  Find(function(w) w$available=="A", sample(workers, prob = 1 / (rload + 0.1)), nomatch=NULL)
 }
