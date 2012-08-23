@@ -20,7 +20,7 @@
 #' @param resources [\code{list}]\cr
 #'   Required resources for all batch jobs. The elements of this list
 #'   (e.g. something like \dQuote{walltime} or \dQuote{nodes} are defined by your template job file.
-#'   Defaults can be specified in your config file.  
+#'   Defaults can be specified in your config file.
 #'   Default is empty list.
 #' @param wait [\code{function(retries)}]\cr
 #'   Function that defines how many seconds should be waited in case of a temporary error.
@@ -72,7 +72,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
     checkIdsPresent(reg, unlist(ids))
   }
   checkArg(resources, "list")
-  resources = do.call(resrc, resources)         
+  resources = do.call(resrc, resources)
 
   if (missing(wait))
     wait = function(retries) 10 * 2^retries # ^ always converts to double
@@ -103,11 +103,19 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
         ids.intersect[1L])
     }
   }
+
+  if (length(ids) > 5000L) {
+    warningf(collapse(c("You are about to submit '%i' jobs.",
+                        "Consider chunking them to avoid heavy load on the scheduler.",
+                        "Sleeping 5 seconds for safety reasons."), sep = "\n"), length(ids))
+    Sys.sleep(5)
+  }
+
   saveConf(reg)
 
-  is.chunks = is.list(ids)
+  is.chunked = is.list(ids)
   messagef("Submitting %i chunks / %i jobs.",
-    length(ids), if(is.chunks) sum(vapply(ids, length, integer(1L))) else length(ids))
+    length(ids), if(is.chunked) sum(vapply(ids, length, integer(1L))) else length(ids))
   messagef("Cluster functions: %s.", cf$name)
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)
@@ -121,7 +129,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
     # we need the second case for errors in brew (e.g. resources)
     if(interrupted && exists("batch.result", inherits=FALSE)) {
       submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
-        batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL,
+        batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
         resources.timestamp=resources.timestamp))
     }
     # if we have remaining messages send them now
@@ -158,7 +166,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
         # validate status returned from cluster functions
         if (batch.result$status == 0L) {
           submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
-            batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunks) id1 else NULL,
+            batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
             resources.timestamp=resources.timestamp))
           interrupted = FALSE
           bar$inc(1L)
