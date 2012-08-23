@@ -92,11 +92,11 @@ dbSelectWithIds = function(reg, query, ids, where=TRUE, group.by, limit) {
     query = sprintf("%s GROUP BY %s", query, collapse(group.by))
   if(!missing(limit))
     query = sprintf("%s LIMIT %i", query, limit)
-  
+
   res = dbDoQuery(reg, query)
   if(missing(ids))
     return(res)
-  return(res[na.omit(match(ids, res$job_id)),, drop=FALSE]) 
+  return(res[na.omit(match(ids, res$job_id)),, drop=FALSE])
 }
 
 ############################################
@@ -301,6 +301,12 @@ dbGetJobTimes = function(reg, ids){
   tab
 }
 
+dbGetErrorMsgs = function(reg, ids, filter=FALSE, limit) {
+  query = sprintf("SELECT job_id, error from %s_job_status", reg$id)
+  if (filter)
+    query = sprintf("%s WHERE error IS NOT NULL", query)
+  dbSelectWithIds(reg, query, ids, where=!filter, limit=limit)
+}
 
 dbGetStats = function(reg, ids, running=FALSE, expired=FALSE) {
   q.r = q.e = "NULL"
@@ -388,8 +394,8 @@ dbMakeMessageKilled = function(reg, job.ids) {
 }
 
 dbConvertNumericToPOSIXct = function(x) {
-  now = Sys.time()
   as.POSIXct(x, origin=now - as.integer(now))
+  now = Sys.time()
 }
 
 dbSetJobFunction = function(reg, ids, fun.id) {
