@@ -116,6 +116,9 @@ print.Registry = function(x, ...) {
 #' Load a previously saved registry.
 #' @param file.dir [\code{character(1)}]\cr
 #'   Location of the file.dir to load the registry from.
+#' @param work.dir [\code{character(1)}]\cr
+#'   Location of the work. Unchanged if missing.
+#'   Note that the registry is not safed unless you set \code{save} to \code{TRUE}!
 #' @param save [\code{logical(1)}]\cr
 #'   Set \code{file.dir} in the registry and save.
 #'   Useful if you moved the file dir, because you wanted to continue
@@ -123,7 +126,7 @@ print.Registry = function(x, ...) {
 #'   Default is \code{FALSE}.
 #' @return [\code{\link{Registry}}].
 #' @export
-loadRegistry = function(file.dir, save=FALSE) {
+loadRegistry = function(file.dir, work.dir, save=FALSE) {
   fn = getRegistryFilePath(file.dir)
   message("Loading registry: ", fn)
   reg = load2(fn, "reg")
@@ -156,9 +159,17 @@ loadRegistry = function(file.dir, save=FALSE) {
     # FIXME add stash directory
   }
 
+  if (!missing(work.dir)) {
+    work.dir = makePathAbsolute(work.dir)
+    tryCatch(checkDir(work.dir),
+             error = function(e) stopf("Error: You need to adjust your work directory! (%s)", e))
+    reg$work.dir = work.dir
+  }
+
   if(save) {
     reg$file.dir = makePathAbsolute(file.dir)
   }
+
   if (save || update)
     saveRegistry(reg)
   reg
