@@ -18,14 +18,4 @@ test_that("getJobTimes", {
   expect_true(tt[1] >= 0 && tt[1] <= 3)
   expect_true(tt[3] >= 0 && tt[3] <= 3)
 
-  tt = getJobTimes(reg, use.names=FALSE)
-  expect_equal(names(tt), NULL)
-  expect_equal(as.logical(is.na(tt)), c(FALSE, TRUE, FALSE))
-  expect_true(tt[1] >= 0 && tt[1] <= 3)
-  expect_true(tt[3] >= 0 && tt[3] <= 3)
-
-  expect_true(tt >= 0 && tt <= 3)
-
-  tt = getJobTimes(reg, ids = integer(0L), use.names=FALSE)
-  expect_equal(tt, integer(0L))
 })
