@@ -85,7 +85,7 @@ dbAddData = function(reg, tab, data) {
   as.integer(dbGetQuery(con, "SELECT total_changes()"))
 }
 
-dbSelectWithIds = function(reg, query, ids, where=TRUE, group.by, limit) {
+dbSelectWithIds = function(reg, query, ids, where=TRUE, group.by, limit, reorder=TRUE) {
   if(!missing(ids))
     query = sprintf("%s %s job_id IN (%s)", query, ifelse(where, "WHERE", "AND"), collapse(ids))
   if(!missing(group.by))
@@ -94,8 +94,9 @@ dbSelectWithIds = function(reg, query, ids, where=TRUE, group.by, limit) {
     query = sprintf("%s LIMIT %i", query, limit)
 
   res = dbDoQuery(reg, query)
-  if(missing(ids))
+  if(missing(ids) || !reorder)
     return(res)
+  # NOTE: only reorder if job_id is queried, otherwise an empty df is returned ...
   return(res[na.omit(match(ids, res$job_id)),, drop=FALSE])
 }
 
@@ -394,8 +395,8 @@ dbMakeMessageKilled = function(reg, job.ids) {
 }
 
 dbConvertNumericToPOSIXct = function(x) {
-  as.POSIXct(x, origin=now - as.integer(now))
   now = Sys.time()
+  as.POSIXct(x, origin=now - as.integer(now))
 }
 
 dbSetJobFunction = function(reg, ids, fun.id) {
