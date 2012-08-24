@@ -134,3 +134,16 @@ trim = function(x, ltrim=TRUE, rtrim=TRUE) {
     x = sub("[[:space:]]+$", "", x)
   return(x)
 }
+
+list2df = function(li) {
+  cols = unique(unlist(lapply(li, names)))
+  if (length(cols) == 0L)
+    return(as.data.frame(matrix(nrow = length(li), ncol = 0L)))
+
+  res = namedList(cols)
+  for(col in cols) {
+    tmp = lapply(li, function(it) it[[col]])
+    res[[col]] = simplify2array(replace(tmp, vapply(tmp, is.null, logical(1L)), NA))
+  }
+  as.data.frame(res)
+}
