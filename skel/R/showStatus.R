@@ -52,7 +52,7 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
                       "Expired:   %%%1$ii %%s",
                       "Time: min=%%.2fs avg=%%.2fs max=%%.2fs"), "\n")
 
-  output = sprintf(output, nchar(sprintf("%i", min(4L, stats$n + 1L))))
+  output = sprintf(output, min(4L, nchar(sprintf("%i", stats$n + 1L))))
   with(stats, catf(output, n, submitted, procent(submitted, n), started, procent(started, n),
                    running, procent(running, n), done, procent(done, n), error, procent(error, n),
                    expired, procent(expired, n), t_min, t_avg, t_max))
