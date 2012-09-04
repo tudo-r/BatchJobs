@@ -1,3 +1,6 @@
+## Default resources can be set in your BatchJobs.conf by defining the variable 
+## 'default.resources' as a named list.
+
 #BSUB-J <%= job.name %>            # name of the job
 #BSUB-o <%= log.file %>            # output is sent to logfile, stdout + stderr by default
 #BSUB-q <%= resources$queue %>     # Job queue

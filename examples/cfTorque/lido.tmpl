@@ -10,6 +10,9 @@
 ##                            We have two different R versions on LiDO installed, one with GCC
 ##                            and the other with the Intel compilers. Some packages fail to build
 ##                            with ICC, but R compiled with ICC is in general faster.
+##
+## Default resources can be set in your BatchJobs.conf by defining the variable 
+## 'default.resources' as a named list.
 
 <%
 d = setdiff(names(resources), c("walltime", "memory", "nodes", "compiler"))
