@@ -5,6 +5,7 @@ sourceConfFile = function(conffile) {
     stopf("Configuration file does not exist: '%s'", conffile)
   }
   packageStartupMessage(sprintf("Sourcing configuration file: '%s'", conffile))
+  # FIXME should we set parent env to emptyenv() ?
   conf = new.env()
   x = try(sys.source(conffile, envir=conf))
   if (is.error(x))
@@ -16,6 +17,7 @@ sourceConfFile = function(conffile) {
 
 # sources multiple config files, the later overwrite the first, and returns the envir
 sourceConfFiles = function(conffiles) {
+  # FIXME should we set parent env to emptyenv() ?
   conf = new.env()
   for (cf in conffiles) {
     conf2 = sourceConfFile(cf)
@@ -59,6 +61,7 @@ assignConfDefaults = function() {
 loadConf = function(reg) {
   fn = getConfFilePath(reg)
   message("Loading conf: ", fn)
+  # FIXME should we set parent env to emptyenv() ?
   ee = new.env()
   load(fn, envir=ee)
   ns = ls(ee$conf)

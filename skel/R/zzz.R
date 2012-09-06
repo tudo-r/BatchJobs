@@ -7,6 +7,7 @@
 #' @importFrom sendmailR sendmail
 #' @importFrom plyr rbind.fill
 
+# FIXME should we set parent env to emptyenv() ?
 .BatchJobs.conf <- new.env()
 
 .onAttach = function(libname, pkgname) {
