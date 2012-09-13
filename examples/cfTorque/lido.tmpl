@@ -56,7 +56,7 @@ queue = paste(s1, s2, sep="_")
 ## parallelization (nodes > 1) and compiler
 modules = switch(compiler,
   "icc" = c("openmpi/ge/intel11.1/64/1.4.2", "intel/cce/11.1.075", "intel/fce/11.1.075", "R/2.14.1-icc"),
-  "gcc" = c("openmpi/ge/gcc4.3.5/64/1.4.2", "gcc/4.3.5", "R/2.14.1-gcc"))
+  "gcc" = c("openmpi/ge/gcc4.3.5/64/1.4.2", "gcc/4.3.5", "R/2.15.1-gcc"))
 if(nodes == 1L)
   modules = modules[-1]
 modules = collapse(modules, sep=" ")
