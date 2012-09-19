@@ -15,7 +15,7 @@
 #' @param fun [\code{function}]\cr
 #'   For \code{reduceResults}, a function \code{function(aggr, job, res, ...)} to reduce things,
 #'   for all others, a function \code{function(job, res, ...)} to select stuff.
-#'   Here, \code{job} is the current job descriptor, \code{result} is the current result object and
+#'   Here, \code{job} is the current job descriptor (see \code{\link{Job}}), \code{result} is the current result object and
 #'   \code{aggr} are the so far aggregated results. When using \code{reduceResults},
 #'   your function should add the stuff you want to have from \code{job} and
 #'   \code{result} to \code{aggr} and return that.

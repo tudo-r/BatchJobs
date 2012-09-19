@@ -9,7 +9,7 @@
 #' @param check.id [\code{logical(1)}]\cr
 #'   Check the job id?
 #'   Default is \code{TRUE}.
-#' @return [\code{Job}].
+#' @return [\code{\link{Job}}].
 #' @export
 getJob = function(reg, id, load.fun=FALSE, check.id=TRUE) {
   if (check.id)
