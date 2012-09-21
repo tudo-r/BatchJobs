@@ -1,3 +1,4 @@
+# FIXME: file.dir name pattern wrong documentated
 #' Combination of makeRegistry, batchMap and submitJobs.
 #'
 #' Combination of \code{\link{makeRegistry}}, \code{\link{batchMap}}
@@ -37,12 +38,12 @@ batchMapQuick = function(fun, ..., more.args=list(), packages=character(0L),
   id = basename(tempfile(pattern="bmq_"))
   fd = ifelse(temporary, file.path(tempdir(), id), id)
   reg = makeRegistry(id=id, file.dir=fd, packages=packages)
-  # we want to return the reg in any case 
+  # we want to return the reg in any case
   # otherwise we cannot look at it / do anything with it in case of errors
   try({
     ids = batchMap(reg, fun, ..., more.args=more.args)
     if (!missing(chunk.size))
-      ids = chunk(ids, chunk.size=chunk.size)
+      ids = chunk(ids, chunk.size=chunk.size, shuffle=TRUE)
     if (missing(inds))
       inds = seq_along(ids)
     submitJobs(reg, ids[inds], resources=resources)
