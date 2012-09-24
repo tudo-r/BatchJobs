@@ -1,11 +1,10 @@
-# FIXME: file.dir name pattern wrong documentated
 #' Combination of makeRegistry, batchMap and submitJobs.
 #'
 #' Combination of \code{\link{makeRegistry}}, \code{\link{batchMap}}
 #' and \code{\link{submitJobs}}
 #' for quick computations on the cluster.
 #' Should only be used by skilled users who know what they are doing.
-#' Creates the file.dir in current directory under the name \dQuote{.BatchJobs_bmq},
+#' Creates the file.dir in current directory under the name \dQuote{bmq_[random alphanumerics]},
 #' maps function, potentially chunks jobs and submits them.
 #' @param fun [\code{function}]\cr
 #'   Function to map over \code{...}.

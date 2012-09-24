@@ -31,14 +31,12 @@ makeClusterFunctionsInteractive = function(write.logs=TRUE) {
       })
 
       # sink both output and message streams
-      # FIXME should we set parent env to emptyenv() ?
       try(sys.source(rscript, envir=new.env(), keep.source=FALSE))
 
       # return job result (always successful)
       makeSubmitJobResult(status=0L, batch.job.id="cfInteractive", msg="")
     }
   } else {
-    # FIXME should we set parent env to emptyenv() ?
     function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
       suppressAll(try(sys.source(rscript, envir=new.env(), keep.source=FALSE)))
       makeSubmitJobResult(status=0L, batch.job.id="cfInteractive", msg="")

@@ -37,9 +37,7 @@ createShardedDirs = function(reg, ids) {
 makePathAbsolute = function(path) {
   if(substr(path, 1L, 1L) != "/")
     path = normalizePath(path, mustWork=FALSE)
-  # FIXME:
-  # emulate winslash-behaviour
-  # remove this in a future version
+  # FIXME: emulated winslash-behaviour for R < 2.13.x (?)
   if (grepl("windows", tolower(getOperatingSystem()), fixed=TRUE))
     path = gsub("\\", "/", path, fixed=TRUE)
 
