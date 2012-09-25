@@ -13,7 +13,5 @@ getJobTimes = function(reg, ids) {
     ids = checkIds(reg, ids)
 
   tab = dbGetJobTimes(reg, ids)
-  times = tab$time
-  names(times) = tab$job_id
-  return(times)
+  setNames(tab$time, tab$job_id)
 }

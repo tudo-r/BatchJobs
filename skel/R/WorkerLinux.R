@@ -20,9 +20,8 @@ getWorkerNumberOfCPUs.WorkerLinux = function(worker) {
 #' @S3method getWorkerStatus WorkerLinux
 getWorkerStatus.WorkerLinux = function(worker, file.dir) {
   res = runWorkerCommand(worker, "status", file.dir)
-  res = as.list(as.numeric(strsplit(res, " +")[[1L]]))
-  names(res) = c("load", "n.rprocs", "n.rprocs.50", "n.jobs")
-  return(res)
+  setNames(as.list(as.numeric(strsplit(res, " +")[[1L]])),
+           c("load", "n.rprocs", "n.rprocs.50", "n.jobs"))
 }
 
 #' @S3method startWorkerJob WorkerLinux
@@ -88,7 +87,7 @@ runOSCommandLinux = function(cmd, args=character(0L), stdin="", stop.on.exit.cod
 # @param rhome [\code{character(1)}]
 #   RHOME dir.
 # @param r.options [\code{character}]
-#   Options for R and Rscript, one option per element of the vector, 
+#   Options for R and Rscript, one option per element of the vector,
 #   a la "--vanilla".
 # @param ssh [\code{logical(1)}]
 #   Use SSH?

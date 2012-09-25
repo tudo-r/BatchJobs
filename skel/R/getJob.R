@@ -53,8 +53,7 @@ getJobs.Registry = function(reg, ids, load.fun=FALSE, check.ids=TRUE) {
   fun.dir = getFunDir(reg$file.dir)
   fid = unique(extractSubList(jobs, "fun.id"))
   fn = file.path(fun.dir, sprintf("%s.RData", fid))
-  loaded.stuff = lapply(fn, load2, parts = c("fun", "more.args"))
-  names(loaded.stuff) = fid
+  loaded.stuff = setNames(lapply(fn, load2, parts = c("fun", "more.args")), fid)
   lapply(jobs, function(job) {
     x = loaded.stuff[[job$fun.id]]
     job$fun = x$fun

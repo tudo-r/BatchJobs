@@ -30,8 +30,7 @@ findJobs = function(reg, ids, pars) {
     }
     j = which(is.na(ns) | ns == "")
     ns[j] = paste(".arg", seq_along(j), sep="")
-    names(pars) = ns
-    pars
+    setNames(pars, ns)
   }
 
   ind = vapply(jobs, function(job, pars, ee) eval(pars, rename(job$pars), ee),

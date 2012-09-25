@@ -179,8 +179,9 @@ dbGetExpandedJobsTable = function(reg, ids, columns) {
   query = sprintf("SELECT %s FROM %s_expanded_jobs", columns2, reg$id)
   tab = dbSelectWithIds(reg, query, ids)
   if (missing(columns) || "job_id" %in% columns)
-    rownames(tab) = tab$job_id
-  tab
+    setRowNames(tab, tab$job_id)
+  else
+    tab
 }
 
 dbGetJobStatusTable = function(reg, ids, convert.dates=TRUE) {
@@ -191,8 +192,7 @@ dbGetJobStatusTable = function(reg, ids, convert.dates=TRUE) {
     tab$started = dbConvertNumericToPOSIXct(tab$started)
     tab$done = dbConvertNumericToPOSIXct(tab$done)
   }
-  rownames(tab) = tab$job_id
-  tab
+  setRowNames(tab, tab$job_id)
 }
 
 

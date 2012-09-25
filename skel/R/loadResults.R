@@ -44,9 +44,7 @@ getResults = function(reg, ids, part=NA_character_) {
       if(length(found.parts) == 0L)
         stop("No partial result files found for job with id ", id)
 
-      res = lapply(fns, load2, "result")
-      names(res) = found.parts
-      res
+      setNames(lapply(fns, load2, "result"), found.parts)
     }
 
     dirs = getJobDirs(reg, ids)
