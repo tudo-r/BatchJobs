@@ -138,11 +138,9 @@ executeOneJob = function(reg, job, multiple.result.files) {
 
   if (multiple.result.files) {
     if (!is.list(result)) {
-      result = structure("multiple.result.files is TRUE, but your algorithm did not return a list!",
-        class="try-error")
+      result = setClasses("multiple.result.files is TRUE, but your algorithm did not return a list!", "try-error")
     } else if (!isProperlyNamed(result)) {
-      result = structure("multiple.result.files is TRUE, but some the returned lists is not fully, distinctly named!",
-        class="try-error")
+      result = setClasses("multiple.result.files is TRUE, but some the returned lists is not fully, distinctly named!", "try-error")
     }
   }
   return(result)

@@ -147,3 +147,9 @@ list2df = function(li) {
   }
   as.data.frame(res)
 }
+
+# FIXME: move this to BBmisc
+setClasses = function(x, classes) {
+  class(x) = classes
+  x
+}

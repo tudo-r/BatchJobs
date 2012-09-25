@@ -18,7 +18,7 @@
 #' @aliases Job
 #' @export
 makeJob = function(id=NA_integer_, fun, fun.id=digest(fun), pars, seed) {
-  structure(list(id=id, fun=fun, fun.id=fun.id, pars=pars, seed=seed), class="Job")
+  setClasses(list(id=id, fun=fun, fun.id=fun.id, pars=pars, seed=seed), "Job")
 }
 
 

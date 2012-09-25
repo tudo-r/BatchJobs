@@ -36,7 +36,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
 
   packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
 
-  structure(list(
+  setClasses(list(
     id = id,
     version = R.version,
     RNGkind = RNGkind(),
@@ -48,7 +48,7 @@ makeRegistryInternal = function(id, file.dir, sharding,
     work.dir = work.dir,
     multiple.result.files = multiple.result.files,
     packages = packages[order(names(packages))]
-  ), class = "Registry")
+  ), "Registry")
 }
 
 
