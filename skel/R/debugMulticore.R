@@ -1,13 +1,13 @@
 #' Helper function to debug multicore mode.
 #'
-#' Useful in case of severe errors. 
-#' Tries different operations of increasing difficulty 
+#' Useful in case of severe errors.
+#' Tries different operations of increasing difficulty
 #' and provides debug output on the console
-#' 
+#'
 #' @param r.options [\code{list}]
-#'   Options for R and Rscript, one option per element of the vector, 
+#'   Options for R and Rscript, one option per element of the vector,
 #'   a la \dQuote{--vanilla}.
-#'   Default is \code{c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")}. 
+#'   Default is \code{c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")}.
 #' @return Nothing.
 #' @export
 debugMulticore = function(r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")) {
@@ -15,32 +15,32 @@ debugMulticore = function(r.options=c("--no-save", "--no-restore", "--no-init-fi
   conf$debug = TRUE
   conf$mail.start = conf$mail.done = conf$mail.error = "none"
   rhome = R.home()
-  
+
   messagef("*** System info: ***")
   print(Sys.info())
-  catf("\n") 
-  
+  catf("\n")
+
   messagef("*** which R: ***")
   res = runOSCommandLinux("which", "R")
   messagef("which R result: %s", res$output)
-  catf("\n") 
-    
+  catf("\n")
+
   messagef("*** Find helper script: ***")
   script = findHelperScriptLinux(rhome=rhome, r.options=r.options)
   messagef("Find helper script result: %s", script)
-  catf("\n") 
- 
+  catf("\n")
+
   messagef("*** Auto-detecting ncpus: ***")
   worker = makeWorkerLocalLinux(r.options=r.options, script=script, ncpus=1)
-  ncpus = runWorkerCommand(worker, "number-of-cpus") 
+  ncpus = runWorkerCommand(worker, "number-of-cpus")
   messagef("Auto-detecting ncpus result: %s", ncpus)
-  catf("\n") 
-  
+  catf("\n")
+
   messagef("*** Query worker status: ***")
-  res = runWorkerCommand(worker, "status", args="") 
+  res = runWorkerCommand(worker, "status", args="")
   messagef("Query worker status result: %s", res)
-  catf("\n") 
-  
+  catf("\n")
+
   messagef("*** Submitting 1 job: ***")
   conf$cluster.functions = makeClusterFunctionsMulticore()
   fd = tempfile()
@@ -50,10 +50,10 @@ debugMulticore = function(r.options=c("--no-save", "--no-restore", "--no-init-fi
   Sys.sleep(3)
   messagef("Submitting 1 job result: %i", loadResult(reg, 1))
   messagef("Query worker status:")
-  res = runWorkerCommand(worker, "status", args=reg$file.dir) 
+  res = runWorkerCommand(worker, "status", args=reg$file.dir)
   messagef("Query worker status result: %s", res)
-  catf("\n") 
- 
+  catf("\n")
+
   messagef("*** Killing 2 jobs: ***")
   fd = tempfile()
   reg = makeRegistry(id = "debug_multicore", file.dir=fd, sharding=FALSE)
@@ -64,13 +64,13 @@ debugMulticore = function(r.options=c("--no-save", "--no-restore", "--no-init-fi
   submitJobs(reg)
   Sys.sleep(3)
   messagef("Query worker status:")
-  res = runWorkerCommand(worker, "status", args=reg$file.dir) 
+  res = runWorkerCommand(worker, "status", args=reg$file.dir)
   messagef("Query worker status result: %s", res)
   messagef("Running jobs: %s", collapse(findRunning(reg)))
   killJobs(reg, ids)
   messagef("Query worker status:")
-  res = runWorkerCommand(worker, "status", args=reg$file.dir) 
+  res = runWorkerCommand(worker, "status", args=reg$file.dir)
   messagef("Query worker status result: %s", res)
   messagef("Running jobs: %s", collapse(findRunning(reg)))
-  catf("\n") 
+  catf("\n")
 }
