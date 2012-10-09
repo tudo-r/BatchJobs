@@ -32,7 +32,7 @@
 #' @param resources [\code{list}]\cr
 #'   Required resources for all batch jobs.
 #'   Default is empty list.
-#' @param temporary [\code{logical(1)}]\cr
+#' @param temporary [\code{logical}]\cr
 #'   Create the \code{file.dir} inside R's \code{tempdir}?
 #'   Default is \code{FALSE}.
 #' @return [\code{\link{Registry}}]
