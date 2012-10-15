@@ -149,6 +149,7 @@ loadRegistry = function(file.dir, work.dir, save=FALSE) {
     resources.dir = getResourcesDir(file.dir)
     checkDir(resources.dir, create=TRUE, check.empty=TRUE)
     query = sprintf("ALTER TABLE %s_job_status ADD COLUMN resources_timestamp INTEGER", reg$id)
+    # FIXME Does not work, file and work dir are not yet updated!
     dbDoQuery(reg, query, flags="rwc")
     # save dummy resources
     query = sprintf("UPDATE %s_job_status SET resources_timestamp=0 WHERE submitted IS NOT NULL", reg$id)
