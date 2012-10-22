@@ -1,40 +1,47 @@
 ## Job Resource Interface Definition
 ##
+## R [R-2.14.1-icc-11.1,      R version (and compiler) we want to use. 
+##    R-2.15.1-gcc-4.3.5,     We have different R versions on LiDO installed, some compiled with GCC
+##    R-2.15.1-gcc-4.7.1]     and others with Intel compilers. Some packages fail to build
+##                            with ICC, but R compiled with ICC is in general faster.
+##                            R-2.15.1-gcc-4.7.1 also has gotoblas support and should in general be 
+##                            faster for linear algebra operations.
+## modules [character]:       Extra modules you would like to load on slaves. Please note that the following
+##                            modules are handled automatically by the previous argument "R" and should not be 
+##                            passed manually: R, icc, gcc, binutils, gotoblas, openmpi, torque, maui.
 ## nodes [integer(1)]:        Number of required nodes, 
 ##                            Set larger than 1 if you want to further parallelize with e.g. MPI
 ## walltime [integer(1)]:     Walltime for this job, in seconds
 ## memory   [integer(1)]:     Memory in megabytes for the job. Mapped to vmem on Lido.
 ##                            If you use multiple nodes, vmem = memory * nodes.
 ##                            Therefore memory is the max mem you want to use in one parallel (MPI) job.
-## compiler [gcc,icc]:        Compiler for R and packages
-##                            We have two different R versions on LiDO installed, one with GCC
-##                            and the other with the Intel compilers. Some packages fail to build
-##                            with ICC, but R compiled with ICC is in general faster.
 ##
 ## Default resources can be set in your BatchJobs.conf by defining the variable 
 ## 'default.resources' as a named list.
 
 <%
-d = setdiff(names(resources), c("walltime", "memory", "nodes", "compiler"))
+d = setdiff(names(resources), c("walltime", "memory", "nodes", "R", "modules"))
 if (length(d) > 0)
   stopf("Illegal resources used: %s", collapse(d))
 
 walltime = convertInteger(resources$walltime)
 memory = convertInteger(resources$memory)
 nodes = convertInteger(resources$nodes)
-compiler = resources$compiler
+R = resources$R
+modules = resources$modules
     
 checkArg(walltime, "integer", len=1L, na.ok=FALSE, lower=60, upper=60*60*24*28)
 checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=1, upper=64*1024)
 checkArg(nodes, "integer", len=1L, na.ok=FALSE, lower=1)
-checkArg(compiler, choices=c("gcc", "icc"))
+checkArg(R, choices=c("R-2.14.1-icc-11.1", "R-2.15.1-gcc-4.3.5", "R-2.15.1-gcc-4.7.1"))
+checkArg(modules, "character", na.ok=FALSE)
 memory = memory * nodes
 if (memory > 64*1024)
   stop("memory * nodes exceeds 64GB!")
 
 cmd = "R CMD BATCH --no-save --no-restore"
 if(nodes > 1L) 
-    cmd = paste("mpirun -np 1", cmd)
+  cmd = paste("mpirun -np 1", cmd)
 
 ## choose a suitable queue for job
 s2 = ifelse(memory <= 16*1024, "eth", "quad")
@@ -54,12 +61,15 @@ queue = paste(s1, s2, sep="_")
 
 ## get the right software modules to load depending on
 ## parallelization (nodes > 1) and compiler
-modules = switch(compiler,
-  "icc" = c("openmpi/ge/intel11.1/64/1.4.2", "intel/cce/11.1.075", "intel/fce/11.1.075", "R/2.14.1-icc"),
-  "gcc" = c("openmpi/ge/gcc4.3.5/64/1.4.2", "gcc/4.3.5", "R/2.15.1-gcc"))
+modules2 = switch(R,
+  "R-2.14.1-icc-11.1" = c("openmpi/ge/intel11.1/64/1.4.2", "intel/cce/11.1.075", "intel/fce/11.1.075", "R/2.14.1-icc"),
+  "R-2.15.1-gcc-4.3.5" = c("openmpi/ge/gcc4.3.5/64/1.4.2", "gcc/4.3.5", "R/2.15.1-gcc"),
+  "R-2.15.1-gcc-4.7.1" = c("openmpi/ge/gcc4.7.x/64/1.4.5", "binutils", "gcc/4.7.1", "R/2.15.1-gcc47")
+)
 if(nodes == 1L)
-  modules = modules[-1]
-modules = collapse(modules, sep=" ")
+  modules2 = modules2[-1]
+modules2 = union(modules2, modules)  
+modules2 = collapse(modules2, sep=" ")
 
 ## very ugly hack because we cannot log to data (nobackup) filesystem on lido,
 ## only home fs is available 
@@ -77,6 +87,7 @@ if (length(grep("^/data/", log.file)) > 0) {
     log.file = sprintf("/home/%s/nobackup%s", user, substr(log.file2, i, nchar(log.file2)))
   }
 }
+ 
 -%>
 
 #PBS -N <%= job.name %>
@@ -87,7 +98,7 @@ if (length(grep("^/data/", log.file)) > 0) {
 
 ## setup modules
 source /sysdata/shared/sfw/Modules/default/init/bash
-module add <%= modules %>
+module add <%= modules2 %>
 
 ## create our own temp dir and clean it up later, lido does not do this automatically 
 mkdir /scratch/${USER}-${PBS_JOBID}
@@ -95,3 +106,5 @@ export TMPDIR=/scratch/${USER}-${PBS_JOBID}
 ## run R
 <%= cmd %> "<%= rscript %>" /dev/stdout
 rm -fR /scratch/${USER}-${PBS_JOBID}
+
+
