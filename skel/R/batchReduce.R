@@ -29,7 +29,10 @@
 batchReduce = function(reg, fun, xs, init, block.size, more.args=list()) {
   checkArg(reg, cl="Registry")
   checkArg(fun, formals=c("aggr", "x"))
-  checkArg(xs, cl="vector")
+  if (!is.vector(xs))
+    stop("Argument xs must be a vector")
+  # FIXME: was this working in the past?
+  # checkArg(xs, cl="vector")
   block.size = convertInteger(block.size)
   checkArg(block.size, "integer", len=1L, lower=1L, na.ok=FALSE)
   if (dbGetJobCount(reg) > 0L)
@@ -42,6 +45,6 @@ batchReduce = function(reg, fun, xs, init, block.size, more.args=list()) {
 
 batchReduceWrapper = function(xs.block, .fun, .init, ...) {
   fun = function(aggr, x)
-    .fun(aggr, x, ...)    
+    .fun(aggr, x, ...)
   Reduce(fun, xs.block, init=.init)
-}  
+}
