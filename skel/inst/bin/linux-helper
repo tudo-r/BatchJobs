@@ -13,7 +13,7 @@
 ## number-of-cpus
 ##  Return the number of PEs on worker.
 ##
-## start-job RHOME ROPTIONS RFILE OUTFILE
+## start-job RHOME NICE ROPTIONS RFILE OUTFILE
 ##   Start an R CMD BATCH process running $RFILE and log
 ##   the output in $OUTFILE. 
 ##   RHOME is the path to the R installation.
@@ -35,38 +35,42 @@
 ##  list-jobs FILEDIR
 ##   Return the PPIDs of running R jobs operating on $FILEDIR/jobs.
 
+### efficient [ -n `which [prog]` ]
+command_exists () {
+    hash "$1" 2> /dev/null;
+}
+
 CMD="$1"; shift
-export LC_ALL=C ## Avoid any localization issues.
+export LC_ALL=C ### Avoid any localization issues.
+shopt -s nocasematch ### Case insensitive regular expressions
 
 case $CMD in
     number-of-cpus)
-        if [ `uname` == "Linux" ]; then
+        if [[ `uname` =~ "Linux" ]]; then
           cat /proc/cpuinfo | grep '^processor' | wc -l
         else  
           sysctl -n hw.ncpu ## darwin
         fi  
         ;;
     start-job)
-        RHOME="$1"
-        if [ -n "$RHOME" ]; then
-            RCMD="$RHOME/bin/R"
-        else
-            RCMD="R"
+        RCMD="R"
+        if [ -n "$1" ]; then
+            RCMD="${1}/bin/R"
         fi
-        # eat up RHOME in args, so we have $@ = ROPTIONS RFILE OUTFILE
-        shift
-        # only use setsid on linux not on darwin, not available there
- 		if [ `uname` == "Linux" ]; then
-          SETSID="setsid "
-        else  
-          SETSID=""
+        # only use setsid on linux, not on darwin (not available there)
+ 		if [[ `uname` =~ "Linux" ]] && command_exists setsid; then
+            RCMD="setsid $RCMD"
         fi          
+        if [ -n "$2" ] && command_exists nice; then
+            RCMD="nice -n ${2} $RCMD"
+        fi
+        shift 2
         # nothing should be on all 3 streams except maybe a segfault. throw away. 
         # see comment also in cfLocal
         # we use setsid to start the process in a different session. other ctrl+C in the master
         # session leads to killing of child processes in multicore mode as the SIGINT is passed down
         # $@ 
-        ${SETSID}"$RCMD" CMD BATCH $@ \
+        ${RCMD} CMD BATCH $@ \
             > /dev/null 2> /dev/null < /dev/null &
         echo $!
         ;;

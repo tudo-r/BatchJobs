@@ -15,7 +15,7 @@ doExternalTest(whitespace=FALSE)
 doKillTest()
 
 conf$cluster.functions = makeClusterFunctionsSSH(
-  makeSSHWorker("lang"))
+  makeSSHWorker("lang", nice=9))
 doExternalTest(whitespace=FALSE)
 doKillTest()
 
@@ -25,7 +25,7 @@ doExternalTest(whitespace=FALSE)
 doKillTest()
 
 conf$cluster.functions = makeClusterFunctionsSSH(
-  makeSSHWorker("lang", ncpus=1), 
+  makeSSHWorker("lang", ncpus=1),
   makeSSHWorker("rao", rhome="/opt/R/R-current"))
 reg = doExternalTest(dir = "/home/lang/store", whitespace=FALSE)
 doKillTest(dir = "/home/lang/store/")
