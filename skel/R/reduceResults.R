@@ -33,7 +33,7 @@
 #'   Should the return values be named?
 #'   Default is \code{TRUE}.
 #' @param rows [\code{logical(1)}]\cr
-#'   Should the selected vectors be usedd as rows (or columns) in the result matrix?
+#'   Should the selected vectors be used as rows (or columns) in the result matrix?
 #'   Default is \code{TRUE}.
 #' @param strings.as.factors [\code{logical(1)}]
 #'   Should all character columns in result be converted to factors?
