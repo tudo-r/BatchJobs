@@ -356,42 +356,89 @@ dbRemoveJobs = function(reg, ids) {
   return(invisible(TRUE))
 }
 
-############################################
-### UPDATE
-############################################
-dbSendMessage = function(reg, msg) {
-  dbDoQuery(reg, msg, flags="rw")
+
+dbSendMessage = function(reg, msg, staged = FALSE) {
+  if (staged) {
+    fn = getSQLFileName(reg, msg$type, msg$ids[1L], getOrderCharacters()[msg$type])
+    writeSQLFile(msg$msg, fn)
+  } else {
+    dbDoQuery(reg, msg$msg, flags="rw")
+  }
 }
 
-dbMakeMessageSubmitted = function(reg, job.ids, time=as.integer(Sys.time()),
+dbSendMessages = function(reg, msgs, max.retries=200L, sleep=function(r) 1.025^r, staged = FALSE) {
+  if (length(msgs) == 0L)
+    return(TRUE)
+
+  if (staged) {
+    chars = getOrderCharacters()
+
+    # reorder messages in sublist
+    msgs = split(msgs, extractSubList(msgs, "type"))
+    msgs = msgs[order(match(names(msgs), names(chars)))]
+
+    for (cur in msgs) {
+      first = cur[[1L]]
+      fn = getSQLFileName(reg, first$type, first$ids[1L], chars[first$type])
+      writeSQLFile(extractSubList(cur, "msg"), fn)
+    }
+  } else {
+    ok = try(dbDoQueries(reg, extractSubList(msgs, "msg"), flags="rw", max.retries, sleep))
+    if (is.error(ok)) {
+      ok = as.character(ok)
+      if (ok == "dbDoQueries: max retries reached, database is still locked!") {
+        return(FALSE)
+      } else {
+        #throw exception again
+        stopf("Error in dbSendMessages: %s", ok)
+      }
+    }
+  }
+
+  return(TRUE)
+}
+
+
+dbMakeMessageSubmitted = function(reg, job.ids, time=now(),
                                   batch.job.id, first.job.in.chunk.id=NULL, resources.timestamp) {
   if(is.null(first.job.in.chunk.id))
     first.job.in.chunk.id = "NULL"
   updates = sprintf("first_job_in_chunk_id=%s, submitted=%i, batch_job_id='%s', resources_timestamp=%i",
                     first.job.in.chunk.id, time, batch.job.id, resources.timestamp)
-  sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
+  list(msg = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
+       ids = job.ids,
+       type = "submitted")
 }
 
-dbMakeMessageStarted = function(reg, job.ids, time=as.integer(Sys.time())) {
-  node = gsub("'", "''", Sys.info()["nodename"], fixed=TRUE)
+dbMakeMessageStarted = function(reg, job.ids, time=now()) {
+  node = gsub("'", "\\'", Sys.info()["nodename"], fixed=TRUE)
   updates = sprintf("started=%i, node='%s', r_pid=%i, error=NULL, done=NULL", time, node, Sys.getpid())
-  sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
+  list(msg = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
+       ids = job.ids,
+       type = "started")
 }
 
 dbMakeMessageError = function(reg, job.ids, err.msg) {
-  err.msg = gsub("'", "''", err.msg, fixed=TRUE)
+  err.msg = gsub("'", "\\'", err.msg, fixed=TRUE)
+  err.msg = gsub("[^[:print:]]", " ", err.msg)
   updates = sprintf("error='%s', done=NULL", err.msg)
-  sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
+  list(msg = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
+       ids = job.ids,
+       type = "error")
 }
 
-dbMakeMessageDone = function(reg, job.ids, time=as.integer(Sys.time())) {
+dbMakeMessageDone = function(reg, job.ids, time=now()) {
   updates = sprintf("done=%i, error=NULL", time)
-  sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
+  list(msg = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
+       ids = job.ids,
+       type = "done")
 }
 
 dbMakeMessageKilled = function(reg, job.ids) {
   updates = "resources_timestamp=NULL, submitted=NULL, started=NULL, batch_job_id=NULL, node=NULL, r_pid=NULL, done=NULL, error=NULL"
-  sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids))
+  list(msgs = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
+       ids = job.ids,
+       type = "killed")
 }
 
 dbConvertNumericToPOSIXct = function(x) {
@@ -420,19 +467,4 @@ dbAddJobs = function(reg, jobs, ...) {
   list(job.ids=job.ids, job.def.ids=job.def.ids)
 }
 
-
-# flushes messages en block.
-dbFlushMessages = function(reg, msgs, max.retries=200L, sleep=function(r) 1.025^r) {
-  ok = try(dbDoQueries(reg, msgs, flags="rw", max.retries, sleep))
-  if (is.error(ok)) {
-    ok = as.character(ok)
-    if (ok == "dbDoQueries: max retries reached, database is still locked!") {
-      return(FALSE)
-    } else {
-      #throw exception again
-      stopf("Error in dbFlushMessages: %s", ok)
-    }
-  }
-  return(TRUE)
-}
 
