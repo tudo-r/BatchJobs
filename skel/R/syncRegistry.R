@@ -26,7 +26,7 @@ syncRegistry = function(reg) { # FIXME option to use external sync
 readSQLFile = function(con) {
   x = readLines(con)
   n = length(x)
-  if (n <= 1L || x[n] != "--EOF--")
+  if (x[n] != "--EOF--")
     return(FALSE)
   x = x[-n]
   substr(x, 1L, nchar(x) - 1L)
@@ -41,6 +41,5 @@ useStagedQueries = function() {
 }
 
 getOrderCharacters = function() {
-  setNames(c("a", "b", "c", "d", "e"),
-           c("submitted", "started", "done", "error", "killed"))
+  setNames(letters[1L:5L], c("submitted", "started", "done", "error", "killed"))
 }

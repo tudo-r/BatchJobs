@@ -8,18 +8,18 @@
 #' appropriate privileges to submit, delete and list jobs on the
 #' cluster (this is usually the case).
 #'
-#' The template file can access all arguments passed to the 
+#' The template file can access all arguments passed to the
 #' \code{submitJob} function, see here \code{\link{ClusterFunctions}}.
 #' It is the template file's job to choose a queue for the job
-#' and handle the desired resource allocations. 
+#' and handle the desired resource allocations.
 #' A simple example is provided here
 #' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfLSF/simple.tmpl}
 #' in the package repository on its homepage.
-#' 
+#'
 #' The following variables are accessible in the template file:
-#' a) all argu 
-#' 
-#' 
+#' a) all argu
+#'
+#'
 #'
 #' @param template.file [\code{character(1)}]\cr
 #'   Path to a brew template file that is used for the job file.

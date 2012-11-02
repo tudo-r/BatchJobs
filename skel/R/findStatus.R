@@ -77,9 +77,7 @@ findOnSystem = function(reg, ids) {
   syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
-  fun = getListJobs("Cannot find jobs on system")
-  batch.job.ids = fun(getBatchJobsConf(), reg)
-  dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids)
+  dbFindOnSystem(reg, ids)
 }
 
 
@@ -96,12 +94,7 @@ findRunning = function(reg, ids) {
   syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
-  # FIXME rewrite dbGetJobIdsFromBatchJobIds so we don't accidentally sync
-  fun = getListJobs("Cannot find running jobs")
-  batch.job.ids = fun(getBatchJobsConf(), reg)
-  # running jobs are running on batch system in general and must have started for this reg
-  # also not terminated
-  dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids, "started IS NOT NULL AND done is NULL AND error is NULL")
+  dbFindRunning(reg, ids)
 }
 
 #' Find jobs where walltime was probably hit.

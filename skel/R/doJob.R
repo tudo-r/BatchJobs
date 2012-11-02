@@ -42,7 +42,6 @@ doSingleJob = function(reg, conf, id, multiple.result.files, disable.mail, first
     dbSendMessage(reg, dbMakeMessageDone(reg, id), staged = staged)
     result.str = calcResultString(result)
   }
-  # FIXME rewrite sendMail to use messages
   sendMail(reg, job, result.str, "", disable.mail, condition=ifelse(error, "error", "done"), first, last)
   return(result)
 }
@@ -59,7 +58,7 @@ doChunk = function(reg, conf, ids, multiple.result.files, disable.mail, first, l
   last.flush = now()
 
   # send started message
-  dbSendMessage(reg, BatchJobs:::dbMakeMessageStarted(reg, ids), staged = staged)
+  dbSendMessage(reg, dbMakeMessageStarted(reg, ids), staged = staged)
 
   # notify status
   messagef("%s: Waiting %i secs between msg flushes.", Sys.time(), wait.flush)

@@ -255,18 +255,29 @@ dbGetStarted = function(reg, ids) {
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbGetJobIdsFromBatchJobIds = function(reg, batch.job.ids, ids, clause="") {
+dbFindOnSystem = function(reg, ids) {
+  fun = getListJobs("Cannot find jobs on system")
+  batch.job.ids = fun(getBatchJobsConf(), reg)
+  dbGetJobIdsFromBatchJobIds(reg, batch.job.ids, ids)
   query = sprintf("SELECT job_id FROM %s_job_status WHERE batch_job_id IN ('%s')",
-                  reg$id, collapse(batch.job.ids, sep="','"), clause)
-  if (clause != "")
-    query = sprintf("%s AND %s", query, clause)
+                  reg$id, collapse(batch.job.ids, sep="','"))
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
+}
+
+dbFindRunning = function(reg, ids) {
+  fun = getListJobs("Cannot find running jobs")
+  batch.job.ids = fun(getBatchJobsConf(), reg)
+  # running jobs are running on batch system in general and must have started for this reg
+  # also not terminated
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE batch_job_id IN ('%s') AND started IS NOT NULL AND done IS NULL AND error IS NULL",
+                  reg$id, collapse(batch.job.ids, sep="','"))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
 dbGetExpiredJobs = function(reg, batch.job.ids, ids) {
   # started, not terminated, not running
   query = sprintf("SELECT job_id FROM %s_job_status WHERE started IS NOT NULL AND done IS NULL AND error is NULL AND
-      batch_job_id NOT IN ('%s')", reg$id, collapse(batch.job.ids, sep="','"))
+                  batch_job_id NOT IN ('%s')", reg$id, collapse(batch.job.ids, sep="','"))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
@@ -355,6 +366,8 @@ dbRemoveJobs = function(reg, ids) {
   dbDoQuery(reg, query, flags="rw")
   return(invisible(TRUE))
 }
+
+
 
 
 dbSendMessage = function(reg, msg, staged = FALSE) {

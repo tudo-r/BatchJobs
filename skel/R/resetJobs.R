@@ -37,7 +37,7 @@ resetJobs = function(reg, ids, force=FALSE) {
       stop("Listing or killing of jobs not supported by your cluster functions\n",
            "You need to set force=TRUE to reset jobs, but note the warning in ?resetJobs")
     }
-    running = findOnSystem(reg, ids)
+    running = dbFindOnSystem(reg, ids)
     if (length(running) > 0L)
       stopf("Can't reset jobs which are live on system running. You have to kill them first!\nIds: %s",
             collapse(running))
