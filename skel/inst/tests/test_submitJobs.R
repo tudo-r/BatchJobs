@@ -44,8 +44,10 @@ test_that("submitJobs works with chunking", {
   reg = makeTestRegistry()
   batchMap(reg, identity, 1:5)
   ch = chunk(getJobIds(reg), chunk.size=2)
+  submitJobs(reg, ids=ch[1:2])
+  expect_equal(findDone(reg), 1:4)
   submitJobs(reg, ids=ch)
   expect_equal(findDone(reg), 1:5)
   expect_equal(loadResults(reg, simplify=TRUE, use.names=FALSE), 1:5)
 })
- 
+
