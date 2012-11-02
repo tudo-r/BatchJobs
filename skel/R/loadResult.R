@@ -10,7 +10,8 @@
 #' @seealso \code{\link{reduceResults}}
 #' @export
 loadResult = function(reg, id, part=NA_character_) {
-  checkArg(reg, cl="Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   id = checkId(reg, id)
   checkPart(reg, part)
 

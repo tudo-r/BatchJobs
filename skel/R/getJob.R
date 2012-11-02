@@ -32,12 +32,12 @@ getJob = function(reg, id, load.fun=FALSE, check.id=TRUE) {
 #' @return [list of \code{\link{Job}}].
 #' @export
 getJobs = function(reg, ids, load.fun=FALSE, check.ids=TRUE) {
-  checkArg(reg, "Registry")
+  checkRegistry(reg)
+  # syncRegistry(reg) NOT!
   checkArg(load.fun, "logical", len=1L, na.ok=FALSE)
   checkArg(check.ids, "logical", len=1L, na.ok=FALSE)
   UseMethod("getJobs")
 }
-
 
 #' @method getJobs Registry
 #' @S3method getJobs Registry

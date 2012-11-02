@@ -11,7 +11,8 @@
 #'   \code{NA} if job has terminated successfully.
 #' @export
 getErrors = function(reg, ids, print=TRUE) {
-  checkArg(reg, cl = "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
   checkArg(print, "logical", len=1L, na.ok=FALSE)

@@ -15,7 +15,8 @@
 #' @return [\code{character(1)}]. Invisibly returns path to log file.
 #' @export
 showLog = function(reg, id) {
-  checkArg(reg, "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (missing(id)) {
     id = dbGetJobId(reg)
     if (length(id) == 0L)

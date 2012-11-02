@@ -23,7 +23,8 @@
 #' testJob(reg, 2)
 #'}
 testJob = function(reg, id, resources=list()) {
-  checkArg(reg, cl="Registry")
+  checkRegistry(reg)
+  #syncRegistry(reg)
   if (missing(id)) {
     id = dbGetJobId(reg)
     if (length(id) == 0L)

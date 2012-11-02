@@ -27,7 +27,8 @@
 #' showStatus(reg)
 #' # should show 10 submitted jobs, which are all done.
 showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
-  checkArg(reg, "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
 

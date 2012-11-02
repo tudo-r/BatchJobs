@@ -17,7 +17,8 @@
 #' @seealso \code{\link{reduceResults}}
 #' @export
 loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=TRUE) {
-  checkArg(reg, "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (missing(ids)) {
     ids = dbGetDone(reg)
   } else {

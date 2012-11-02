@@ -15,7 +15,8 @@ showClusterStatus = function(reg) {
   if (missing(reg)) {
     file.dir = ""
   } else {
-    checkArg(reg, "Registry")
+    checkRegistry(reg)
+    syncRegistry(reg)
     file.dir = reg$file.dir
   }
   conf = getBatchJobsConf()

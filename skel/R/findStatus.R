@@ -7,7 +7,8 @@
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
 findDone = function(reg, ids) {
-  checkArg(reg, cl = "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
   dbGetDone(reg, ids)
@@ -22,7 +23,8 @@ findDone = function(reg, ids) {
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
 findMissingResults = function(reg, ids) {
-  checkArg(reg, cl = "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
   dbGetMissingResults(reg, ids)
@@ -37,7 +39,8 @@ findMissingResults = function(reg, ids) {
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
 findErrors = function(reg, ids) {
-  checkArg(reg, cl = "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
   dbGetErrors(reg, ids)
@@ -52,7 +55,8 @@ findErrors = function(reg, ids) {
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
 findSubmitted = function(reg, ids) {
-  checkArg(reg, cl = "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
   dbGetSubmitted(reg, ids)
@@ -69,7 +73,8 @@ findSubmitted = function(reg, ids) {
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
 findOnSystem = function(reg, ids) {
-  checkArg(reg, cl = "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
   fun = getListJobs("Cannot find jobs on system")
@@ -87,9 +92,11 @@ findOnSystem = function(reg, ids) {
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
 findRunning = function(reg, ids) {
-  checkArg(reg, cl = "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
+  # FIXME rewrite dbGetJobIdsFromBatchJobIds so we don't accidentally sync
   fun = getListJobs("Cannot find running jobs")
   batch.job.ids = fun(getBatchJobsConf(), reg)
   # running jobs are running on batch system in general and must have started for this reg
@@ -110,9 +117,11 @@ findRunning = function(reg, ids) {
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
 findExpired = function(reg, ids) {
-  checkArg(reg, cl = "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
+  # FIXME rewrite dbGetJobIdsFromBatchJobIds so we don't accidentally sync
   fun = getListJobs("Cannot find expired jobs")
   batch.job.ids = fun(getBatchJobsConf(), reg)
   dbGetExpiredJobs(reg, batch.job.ids, ids)

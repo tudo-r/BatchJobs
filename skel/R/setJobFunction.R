@@ -26,7 +26,8 @@
 #' @return Nothing.
 #' @export
 setJobFunction = function(reg, ids, fun, more.args=list(), reset=TRUE, force=FALSE) {
-  checkArg(reg, cl="Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   checkArg(fun, cl="function")
   checkMoreArgs(more.args)
   checkArg(reset, cl="logical", len=1L, na.ok=FALSE)

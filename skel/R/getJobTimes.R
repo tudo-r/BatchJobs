@@ -13,7 +13,8 @@
 #'   \code{NA} if job has not terminated successfully.
 #' @export
 getJobTimes = function(reg, ids, unit = "seconds") {
-  checkArg(reg, cl = "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (missing(ids))
     ids = dbGetJobIds(reg)
   else

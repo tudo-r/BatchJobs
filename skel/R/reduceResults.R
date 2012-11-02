@@ -73,7 +73,8 @@
 #' # reduce results to a sum
 #' reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
 reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
-  checkArg(reg, "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   done = dbGetDone(reg)
   if (missing(ids)) {
     ids = done
@@ -121,7 +122,8 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
 }
 
 reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names, name.fun, ..., init, empty) {
-  checkArg(reg, "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (missing(ids))
     ids = dbGetDone(reg)
   if (missing(fun)){

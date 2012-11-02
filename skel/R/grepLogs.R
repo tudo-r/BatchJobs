@@ -23,10 +23,11 @@
 #' @return [\code{integer}]. Ids of jobs where pattern was found in the log file.
 #' @export
 grepLogs = function(reg, ids, pattern="warn", ignore.case=TRUE, verbose=FALSE, range=2L) {
-  checkArg(reg, "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   terminated = union(dbGetDone(reg), dbGetErrors(reg))
   if (missing(ids)) {
-    ids = terminated 
+    ids = terminated
   } else {
     ids = checkIds(reg, ids)
     diff = setdiff(ids, terminated)
@@ -53,7 +54,7 @@ grepLogs = function(reg, ids, pattern="warn", ignore.case=TRUE, verbose=FALSE, r
   for(i in seq_along(fns)) {
     if (!file.exists(fns[i]))
       stopf("File '%s' does not exist.", fns[i])
-    
+
     # read lines from log and trim to output of job with id 'ids[i]'
     lines = readLines(fns[i])
     start = grep(sprintf("^########## Executing jid=%i ##########$", ids[i]), lines)
@@ -61,7 +62,7 @@ grepLogs = function(reg, ids, pattern="warn", ignore.case=TRUE, verbose=FALSE, r
       stop("The output of the job with id=%i could not be found in file '%s' or was found more than once", ids[i], fns[i])
     end = head(grep("^########## Executing jid=[0-9]+ ##########$", tail(lines, -start)), 1L)
     lines = lines[start:min(start+end, length(lines))]
-    
+
     matches = grep(pattern, lines, ignore.case=ignore.case)
     matched[i] = (length(matches) > 0L)
     if (verbose && matched[i]) {

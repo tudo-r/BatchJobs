@@ -7,7 +7,8 @@
 #' @return [\code{character}]. Vector of file paths to log files.
 #' @export
 getLogFiles = function(reg, ids) {
-  checkArg(reg, "Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (missing(ids))
     ids = getJobIds(reg)
   else

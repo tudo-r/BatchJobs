@@ -18,7 +18,7 @@ getWorkerSchedulerStatus = function(worker) {
 
 # update status of worker IN PLACE
 updateWorker = function(worker, file.dir, tdiff) {
-  time = as.integer(Sys.time())
+  time = now()
   if (worker$available == "A" || time - worker$last.update >= tdiff) {
     worker$last.update = time
     worker$status = getWorkerStatus(worker, file.dir)
