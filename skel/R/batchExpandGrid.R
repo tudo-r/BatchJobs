@@ -1,7 +1,7 @@
 #' Map function over all combinations.
-#' 
+#'
 #' Maps an n-ary-function over a list of all combinations which are given by some vectors.
-#' Internally \code{\link{expand.grid}} is used to compute the combinations, then 
+#' Internally \code{\link{expand.grid}} is used to compute the combinations, then
 #' \code{\link{batchMap}} is called.
 #'
 #' @param reg [\code{\link{Registry}}]\cr
@@ -9,7 +9,7 @@
 #' @param fun [\code{function}]\cr
 #'   Function to map over the combinations.
 #' @param ... [any]\cr
-#'   Vectors that are used to compute all combinations. 
+#'   Vectors that are used to compute all combinations.
 #'   If the arguments are named, these names are used to bind to arguments of \code{fun}.
 #' @param more.args [\code{list}]\cr
 #'   A list of other arguments passed to \code{fun}.
@@ -23,7 +23,7 @@
 #' reduceResultsMatrix(reg, fun=function(job, res) cbind(job$pars, res))
 #' @export
 batchExpandGrid = function(reg, fun, ..., more.args=list()) {
-  checkArg(reg, cl="Registry")
+  checkRegistry(reg)
   checkArg(fun, cl="function")
   args = list(...)
   ns = names(args)

@@ -27,12 +27,11 @@
 #' # now reduce one final time on master
 #' reduceResults(reg, fun=function(aggr,job,res) f(aggr, res))
 batchReduce = function(reg, fun, xs, init, block.size, more.args=list()) {
-  checkArg(reg, cl="Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   checkArg(fun, formals=c("aggr", "x"))
   if (!is.vector(xs))
     stop("Argument xs must be a vector")
-  # FIXME: was this working in the past?
-  # checkArg(xs, cl="vector")
   block.size = convertInteger(block.size)
   checkArg(block.size, "integer", len=1L, lower=1L, na.ok=FALSE)
   if (dbGetJobCount(reg) > 0L)

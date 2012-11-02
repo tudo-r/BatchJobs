@@ -38,8 +38,10 @@
 #' # check results
 #' reduceResults(reg2, fun=function(aggr,job,res) c(aggr, res))
 batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.args=list()) {
-  checkArg(reg, cl="Registry")
-  checkArg(reg2, cl="Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
+  checkRegistry(reg2)
+  syncRegistry(reg2)
   checkArg(fun, formals=c("job", "res"))
   if (missing(ids)) {
     ids = dbGetJobIdsIfAllDone(reg)

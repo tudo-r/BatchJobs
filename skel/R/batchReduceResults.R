@@ -40,8 +40,10 @@
 #' # now reduce one final time on master
 #' reduceResults(reg2, fun=myreduce)
 batchReduceResults = function(reg, reg2, fun, ids, part=NA_character_, init, block.size, more.args=list()) {
-  checkArg(reg, cl="Registry")
-  checkArg(reg2, cl="Registry")
+  checkRegistry(reg)
+  checkRegistry(reg2)
+  syncRegistry(reg)
+  syncRegistry(reg2)
   checkArg(fun, formals=c("aggr", "job", "res"))
   if (missing(ids)) {
     ids = dbGetJobIdsIfAllDone(reg)
