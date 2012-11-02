@@ -90,3 +90,10 @@ getResourcesDir = function(file.dir)
 
 getResourcesFilePath = function(reg, timestamp)
   file.path(getResourcesDir(reg$file.dir), sprintf("resources_%i.RData", timestamp))
+
+getPendingDir = function(file.dir)
+  file.path(file.dir, "pending")
+
+getSQLFileName = function(reg, type, id, char = getOrderCharacters()[type]) {
+  file.path(getPendingDir(reg$file.dir), sprintf("pending_%s_%s_%i.sql", char, type, id))
+}
