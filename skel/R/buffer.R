@@ -1,7 +1,5 @@
 # a simple preallocated stack.
-# if buffer reaches its capacity, fun is called on all elements in the buffer
-# this also happens for manual clear() calls
-buffer = function(type, capacity, fun=print, ...) {
+buffer = function(type, capacity, value=identity, ...) {
   st = vector(type, capacity)
   n = 0L
 
@@ -10,10 +8,11 @@ buffer = function(type, capacity, fun=print, ...) {
   }
 
   push = function(x) {
+    force(x)
+    if (n == capacity)
+      clear()
     n <<- n + 1L
     st[[n]] <<- x
-    if (full())
-      clear()
   }
 
   pop = function() {
@@ -21,18 +20,21 @@ buffer = function(type, capacity, fun=print, ...) {
   }
 
   top = function() {
-    if (empty())
+    if (n == 0L)
       return(vector(type, 0L))
     st[[n]]
   }
 
   clear = function() {
-    if (!empty())
-      fun(get(), ...)
+    if (is.function(value))
+      ret = value(get(), ...)
+    else
+      ret = value
     n <<- 0L
+    ret
   }
 
-  size = function() {
+  pos = function() {
     n
   }
 
@@ -44,5 +46,5 @@ buffer = function(type, capacity, fun=print, ...) {
     n == capacity
   }
 
-  list(get=get, push=push, pop=pop, top=top, clear=clear, size=size, empty=empty, full=full)
+  list(get=get, push=push, pop=pop, top=top, clear=clear, pos=pos, empty=empty, full=full)
 }
