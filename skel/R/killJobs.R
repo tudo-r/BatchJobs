@@ -22,7 +22,8 @@
 #' @return Vector of type \code{integer} with ids of killed jobs.
 #' @export
 killJobs = function(reg, ids) {
-  checkArg(reg, cl="Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (missing(ids))
     return(invisible(integer(0L)))
   else
@@ -105,6 +106,6 @@ killJobs = function(reg, ids) {
   }
 
   messagef("Resetting %i jobs in DB.", length(ids.job))
-  dbSendMessage(reg, dbMakeMessageKilled(reg, ids.job))
+  dbSendMessage(reg, dbMakeMessageKilled(reg, ids.job), staged = useStagedQueries())
   invisible(ids.job)
 }

@@ -4,10 +4,10 @@
 #' Either to re-submit them because of changes in e.g. external
 #' data or to resolve rare issues when jobs are killed in an unfortunate state
 #' and therefore blocking your registry.
-#' 
-#' The function internally lists all jobs on the batch system and 
+#'
+#' The function internally lists all jobs on the batch system and
 #' if those include some of the jobs you want to reset, it informs you to kill them first by raising
-#' an exception. 
+#' an exception.
 #' If you really know what you are doing, you may set \code{force} to \code{TRUE} to omit this sanity check.
 #' Note that this is a dangerous operation to perform which may harm
 #' the database integrity. In this case you HAVE to make externally sure that none of the jobs
@@ -25,7 +25,8 @@
 #' @return Vector of reseted job ids.
 #' @export
 resetJobs = function(reg, ids, force=FALSE) {
-  checkArg(reg, cl="Registry")
+  checkRegistry(reg)
+  syncRegistry(reg)
   if (missing(ids) || length(ids) == 0L)
     return(integer(0L))
   ids = checkIds(reg, ids)
@@ -43,6 +44,6 @@ resetJobs = function(reg, ids, force=FALSE) {
   }
 
   messagef("Resetting %i jobs in DB.", length(ids))
-  dbSendMessage(reg, dbMakeMessageKilled(reg, ids))
+  dbSendMessage(reg, dbMakeMessageKilled(reg, ids), staged = FALSE)
   invisible(ids)
 }
