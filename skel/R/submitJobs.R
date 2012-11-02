@@ -51,6 +51,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   cf = getClusterFunctions(conf)
 
   checkArg(reg, cl="Registry")
+  syncRegistry(reg)
   if (missing(ids)) {
     ids = dbGetNotSubmitted(reg)
     if (length(ids) == 0L) {
@@ -79,7 +80,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   else
     checkArg(wait, formals="retries")
 
-  if(!is.infinite(max.retries)) {
+  if (!is.infinite(max.retries)) {
     max.retries = convertInteger(max.retries)
     checkArg(max.retries, "integer", len=1L, na.ok=FALSE)
   }
@@ -103,6 +104,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
         ids.intersect[1L])
     }
   }
+  # FIXME else intersect with jobs which could to be running and throw at least a warning
+  # FIXME this is kind of dangerous with offline messaging
 
   if (length(ids) > 5000L) {
     warningf(collapse(c("You are about to submit '%i' jobs.",
@@ -114,15 +117,14 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   saveConf(reg)
 
   is.chunked = is.list(ids)
-  messagef("Submitting %i chunks / %i jobs.",
-    length(ids), if(is.chunked) sum(vapply(ids, length, integer(1L))) else length(ids))
+  messagef("Submitting %i chunks / %i jobs.", length(ids), if(is.chunked) sum(vapply(ids, length, integer(1L))) else length(ids))
   messagef("Cluster functions: %s.", cf$name)
-  messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
-    conf$mail.start, conf$mail.done, conf$mail.error)
+  messagef("Auto-mailer settings: start=%s, done=%s, error=%s.", conf$mail.start, conf$mail.done, conf$mail.error)
 
   interrupted = FALSE
-  submit.msgs = buffer("list", 1000L, dbFlushMessages,
-                       reg=reg, max.retries=10000L, sleep=function(r) 5)
+  submit.msgs = buffer("list", 1000L, dbSendMessages,
+                       reg=reg, max.retries=10000L, sleep=function(r) 5,
+                       staged=useStagedQueries())
 
   # set on exit handler to avoid inconsistencies caused by user interrupts
   on.exit({
@@ -133,8 +135,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
         resources.timestamp=resources.timestamp))
     }
     # if we have remaining messages send them now
-    messagef("Sending %i submit messages...\nMight take some time, do not interrupt this!",
-      submit.msgs$size())
+    messagef("Sending %i submit messages...\nMight take some time, do not interrupt this!", submit.msgs$pos())
     submit.msgs$clear()
   })
 
@@ -150,11 +151,11 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   tryCatch({
     for (id in ids) {
       id1 = id[1L]
-      # we use no for loop here to allow infinite retries
       retries = 0L
+      # we use no for loop here to allow infinite retries
       repeat {
         # try to submit the job
-        submit.time = as.integer(Sys.time())
+        submit.time = now()
         interrupted = TRUE
         batch.result = cf$submitJob(conf=conf, reg=reg,
                                     job.name=sprintf("%s-%i", reg$id, id1),
@@ -163,39 +164,37 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
                                     job.dir=getJobDirs(reg, id1),
                                     resources=resources)
 
+
         # validate status returned from cluster functions
         if (batch.result$status == 0L) {
           submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
-            batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
-            resources.timestamp=resources.timestamp))
+                                                  batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
+                                                  resources.timestamp=resources.timestamp))
           interrupted = FALSE
           bar$inc(1L)
           break
+        } else {
+          # submitJob was not successful, therefore we don't care for interrupts any more
+          interrupted = FALSE
+
+          if (batch.result$status > 0L && batch.result$status <= 100L) {
+            # temp error, wait and increase retries, then submit again in next iteration
+            sleep.secs = wait(retries)
+
+            retries = retries + 1L
+            if (retries > max.retries)
+              stopf("Retried already %i times to submit. Aborting.", retries)
+
+            bar$inc(msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
+            Sys.sleep(sleep.secs)
+          } else if (batch.result$status > 100L && batch.result$status <= 200L) {
+            # fatal error, abort at once
+            stopf("Fatal error occured: %i. %s", batch.result$status, batch.result$msg)
+          } else {
+            # illeagal status code
+            stopf("Illegal status code %s returned from cluster functions!", batch.result$status)
+          }
         }
-
-        # submitJob was not successful, therefore we don't care for interrupts any more
-        interrupted = FALSE
-
-        if (batch.result$status > 0L && batch.result$status <= 100L) {
-          # if temp error, wait and increase retries, then submit again
-          sleep.secs = wait(retries)
-
-          retries = retries + 1L
-          if (retries > max.retries)
-            stopf("Retried already %i times to submit. Aborting.", retries)
-
-          bar$inc(msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
-          #warningf("Id: %i. Temporary error: %s. Retries: %i. Sleep: %.1fs.", id1, batch.result$msg, retries, sleep.secs)
-          Sys.sleep(sleep.secs)
-          next
-        }
-
-        # fatal error, abort at once
-        if (batch.result$status > 100L && batch.result$status <= 200L) {
-          stopf("Fatal error occured: %i. %s", batch.result$status, batch.result$msg)
-        }
-
-        stopf("Illegal status code %s returned from cluster functions!", batch.result$status)
       }
     }
   }, error=bar$error)
