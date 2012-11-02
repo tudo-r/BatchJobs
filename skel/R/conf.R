@@ -39,6 +39,7 @@ readConfs = function() {
   conffiles = Filter(file.exists, unique(c(fn.pack, fn.user, fn.wd)))
   if (length(conffiles) == 0L)
     stop("No configuation found at all. Not in package, not in user.home, not in work dir!")
+
   assignConf(sourceConfFiles(conffiles))
 }
 
@@ -53,6 +54,7 @@ assignConfDefaults = function() {
   conf$default.resources = list()
   conf$debug = FALSE
   conf$raise.warnings = FALSE
+  conf$staged.queries = FALSE
 }
 
 # loads conf into namespace on slave
@@ -83,7 +85,7 @@ checkConf = function(conf) {
   ns = ls(conf)
   ns2 = c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options",
-    "default.resources", "debug", "raise.warnings")
+    "default.resources", "debug", "raise.warnings", "staged.queries")
   if (any(ns %nin% ns2))
     stopf("You are only allowed to define the following R variables in your config file:\n%s",
       collapse(ns2, sep=", "))
@@ -91,7 +93,7 @@ checkConf = function(conf) {
 
 checkConfElements = function(cluster.functions, mail.to, mail.from,
   mail.start, mail.done, mail.error, mail.control,
-  db.driver, db.options, default.resources, debug, raise.warnings) {
+  db.driver, db.options, default.resources, debug, raise.warnings, staged.queries) {
 
   if (!missing(cluster.functions))
     checkArg(cluster.functions, cl = "ClusterFunctions")
@@ -121,6 +123,8 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
     checkArg(debug, cl = "logical", len = 1L, na.ok = FALSE)
   if (!missing(raise.warnings))
     checkArg(raise.warnings, cl = "logical", len = 1L, na.ok = FALSE)
+  if (!missing(staged.queries))
+    checkArg(staged.queries, cl = "logical", len = 1L, na.ok = FALSE)
 }
 
 getClusterFunctions = function(conf) {
@@ -143,4 +147,5 @@ showConf = function() {
   catf("  default.resources: %s", listToShortString(x$default.resources))
   catf("  debug: %s", f(x$debug))
   catf("  raise.warnings: %s", f(x$raise.warnings))
+  catf("  staged.queries: %s", f(x$staged.queries))
 }
