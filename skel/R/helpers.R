@@ -1,3 +1,7 @@
+checkRegistry = function(reg, ids) {
+  checkArg(reg, cl = "Registry")
+}
+
 checkIds = function(reg, ids) {
   ids = convertIntegers(ids)
   checkArg(ids, cl="integer", na.ok=FALSE)
@@ -127,6 +131,14 @@ strextract = function(x, pattern) {
   }, x, starts, stops, USE.NAMES=FALSE)
 }
 
+now = function() {
+  as.integer(Sys.time())
+}
+
+##########################################################################################
+# FIXME: move stuff below to BBmisc
+##########################################################################################
+
 trim = function(x, ltrim=TRUE, rtrim=TRUE) {
   if (ltrim)
     x = sub("^[[:space:]]+", "", x)
@@ -148,12 +160,6 @@ list2df = function(li) {
   as.data.frame(res)
 }
 
-# FIXME: move this to BBmisc
-setClasses = function(x, classes) {
-  class(x) = classes
-  x
-}
-
 setRowNames = function(obj, nm) {
   rownames(obj) = nm
   obj
@@ -163,3 +169,27 @@ setColNames = function(obj, nm) {
   colnames(obj) = nm
   obj
 }
+
+setClasses = function(x, classes) {
+  class(x) = classes
+  x
+}
+
+addClasses = function(x, classes) {
+  class(x) = c(class(x), classes)
+  x
+}
+
+isFALSE = function(x) {
+  identical(x, FALSE)
+}
+
+lsort = function(...) {
+  cur = Sys.getlocale("LC_COLLATE")
+  if (cur != "C") {
+    Sys.setlocale("LC_COLLATE", "C")
+    on.exit(Sys.setlocale("LC_COLLATE", cur))
+  }
+  sort(...)
+}
+
