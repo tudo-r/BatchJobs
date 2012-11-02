@@ -29,8 +29,8 @@ makeRegistryInternal = function(id, file.dir, sharding,
   checkDir(job.dir, create=TRUE, check.empty=TRUE)
   fun.dir = getFunDir(file.dir)
   checkDir(fun.dir, create=TRUE, check.empty=TRUE)
-  resources.dir = getResourcesDir(file.dir)
-  checkDir(resources.dir, create=TRUE, check.empty=TRUE)
+  checkDir(getResourcesDir(file.dir), create=TRUE, check.empty=TRUE)
+  checkDir(getPendingDir(file.dir), create=TRUE, check.empty=TRUE)
   checkDir(work.dir, check.posix=TRUE)
   work.dir = makePathAbsolute(work.dir)
 
@@ -130,63 +130,70 @@ loadRegistry = function(file.dir, work.dir, save=FALSE) {
   fn = getRegistryFilePath(file.dir)
   message("Loading registry: ", fn)
   reg = load2(fn, "reg")
-  do.save = FALSE
 
-  # Fix for missing package version (package versions < 1.0.527)
-  if ("BatchJobs" %nin% names(reg$packages)) {
-    reg$packages$BatchJobs = list(version = package_version("1.0.527"))
-    do.save = TRUE
-  }
+  if (!isOnSlave()) {
+    do.save = FALSE
 
-  # get registry and package versions
-  bj.version.reg = reg$packages$BatchJobs$version
-  bj.version.pkg = packageVersion("BatchJobs")
+    # FIXME check that no jobs are running, if possible, before updating
 
-  # adjust file dir if necessary
-  file.dir = makePathAbsolute(file.dir)
-  if (reg$file.dir != file.dir) {
-    reg$file.dir = file.dir
-    do.save = TRUE
-  }
-
-  # adjust work dir if necessary
-  if (!missing(work.dir)) {
-    work.dir = makePathAbsolute(work.dir)
-    tryCatch(checkDir(work.dir),
-             error = function(e) stopf("Error: You need to adjust your work directory! (%s)", e))
-    reg$work.dir = work.dir
-    do.save = TRUE
-  }
-
-  if (bj.version.reg < bj.version.pkg) {
-    message("Updating registry and DB to newer version. Will be saved now.")
-    if (bj.version.reg < package.version("1.0.606")) {
-      # create new resources dir
-      resources.dir = getResourcesDir(file.dir)
-      checkDir(resources.dir, create=TRUE, check.empty=TRUE)
-      query = sprintf("ALTER TABLE %s_job_status ADD COLUMN resources_timestamp INTEGER", reg$id)
-      dbDoQuery(reg, query, flags="rwc")
-
-      # save dummy resources
-      query = sprintf("UPDATE %s_job_status SET resources_timestamp=0 WHERE submitted IS NOT NULL", reg$id)
-      dbDoQuery(reg, query, flags="rwc")
-      saveResources(reg, resources=list(), timestamp=0L)
-      reg$packages$BatchJobs$version = packageVersion("BatchJobs")
-
+    # Fix for missing package version (package versions < 1.0.527)
+    if ("BatchJobs" %nin% names(reg$packages)) {
+      reg$packages$BatchJobs = list(version = package_version("1.0.527"))
+      do.save = TRUE
     }
 
-    if (bj.version.reg < package.version("1.0.700")) { # FIXME insert correct version number on release
-      # FIXME add stash directory
+    # get registry and package versions
+    bj.version.reg = reg$packages$BatchJobs$version
+    bj.version.pkg = packageVersion("BatchJobs")
+
+    # adjust file dir if necessary
+    file.dir = makePathAbsolute(file.dir)
+    if (reg$file.dir != file.dir) {
+      reg$file.dir = file.dir
+      do.save = TRUE
     }
 
-    reg$packages$BatchJobs$version = bj.version.pkg
-    do.save = TRUE
-  } else if (bj.version.reg > bj.version.pkg) {
-    warningf("The registry has been used with BatchJobs version %s, installed is version %s. You should update BatchJobs on this machine.",
-             bj.version.reg, bj.version.pkg)
-  }
+    # adjust work dir if necessary
+    if (!missing(work.dir)) {
+      work.dir = makePathAbsolute(work.dir)
+      tryCatch(checkDir(work.dir),
+               error = function(e) stopf("Error: You need to adjust your work directory! (%s)", e))
+      reg$work.dir = work.dir
+      do.save = TRUE
+    }
 
-  if (do.save) saveRegistry(reg)
+    if (bj.version.reg < bj.version.pkg) {
+      message("Updating registry and DB to newer version. Will be saved now.")
+      if (bj.version.reg < package.version("1.0.606")) {
+        # create new resources dir
+        resources.dir = getResourcesDir(file.dir)
+        checkDir(resources.dir, create=TRUE, check.empty=TRUE)
+        query = sprintf("ALTER TABLE %s_job_status ADD COLUMN resources_timestamp INTEGER", reg$id)
+        dbDoQuery(reg, query, flags="rwc")
+
+        # save dummy resources
+        query = sprintf("UPDATE %s_job_status SET resources_timestamp=0 WHERE submitted IS NOT NULL", reg$id)
+        dbDoQuery(reg, query, flags="rwc")
+        saveResources(reg, resources=list(), timestamp=0L)
+        reg$packages$BatchJobs$version = packageVersion("BatchJobs")
+
+      }
+
+      if (bj.version.reg < package.version("1.0.700")) { # FIXME insert correct version number on release
+        # FIXME add stash directory
+        # FIXME add pending directory
+      }
+
+      reg$packages$BatchJobs$version = bj.version.pkg
+      do.save = TRUE
+    } else if (bj.version.reg > bj.version.pkg) {
+      warningf("The registry has been used with BatchJobs version %s, installed is version %s. You should update BatchJobs on this machine.",
+               bj.version.reg, bj.version.pkg)
+    }
+
+    if (do.save)
+      saveRegistry(reg)
+  }
   return(reg)
 }
 
