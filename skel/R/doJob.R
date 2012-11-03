@@ -12,15 +12,17 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)
   wd = mySetWd(reg)
+  on.exit({
+    myResetWd(wd)
+    messagef("Memory usage according to gc:")
+    print(gc())
+  })
   if (length(ids) == 1L) {
     res = doSingleJob(reg, conf, ids, multiple.result.files, disable.mail, first, last)
   } else {
     res = doChunk(reg, conf, ids, multiple.result.files, disable.mail, first, last)
   }
-  myResetWd(wd)
   messagef("%s: Job on slave is finished.", Sys.time())
-  messagef("Memory usage according to gc:")
-  print(gc())
   return(res)
 }
 
