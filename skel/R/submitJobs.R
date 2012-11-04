@@ -98,7 +98,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   }
 
   if (!is.null(getListJobs())) {
-    ids.intersect = intersect(unlist(ids), dbFindOnSystem(reg, ids))
+    ids.intersect = intersect(unlist(ids), dbFindOnSystem(reg, unlist(ids)))
     if (length(ids.intersect) > 0L) {
       stopf("Some of the jobs you submitted are already present on the batch system! E.g. id=%i.",
         ids.intersect[1L])

@@ -1,6 +1,7 @@
 syncRegistry = function(reg) { # FIXME option to use external sync
   if (useStagedQueries()) {
-    stopifnot(isOnSlave == FALSE)
+    # FIXME: DEBUG THIS !
+    # stopifnot(isOnSlave() == FALSE)
     path = getPendingDir(reg$file.dir)
     fns = file.path(path, lsort(list.files(path)))
     if (length(fns) == 0L)

@@ -11,9 +11,9 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
 
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.",
     conf$mail.start, conf$mail.done, conf$mail.error)
-  wd = mySetWd(reg)
+  wd = switchWd(reg)
   on.exit({
-    myResetWd(wd)
+    wd$reset()
     messagef("Memory usage according to gc:")
     print(gc())
   })
@@ -58,6 +58,7 @@ doChunk = function(reg, conf, ids, multiple.result.files, disable.mail, first, l
   msg.buf = buffer("list", 2L * length(jobs) + 1L, TRUE)
   wait.flush = round(runif(1L, 300, 600))
   last.flush = now()
+  mail.extra.msg = ""
 
   # send started message
   dbSendMessage(reg, dbMakeMessageStarted(reg, ids), staged = staged)
@@ -91,9 +92,11 @@ doChunk = function(reg, conf, ids, multiple.result.files, disable.mail, first, l
   }
 
   # try to flush the remaining msgs at the end
-  tries = 0L
-  while (!(dbSendMessages(reg, msg.buf$get(), staged = staged) && msg.buf$clear()) && tries < 10L) {
-    tries = tries + 1L
+  for (i in seq_len(10L)) {
+    if (dbSendMessages(reg, msg.buf$get(), staged = staged)) {
+      msg.buf$clear()
+      break
+    }
     wait.flush = round(runif(1L, 60, 2*60))
     messagef("%s: Waiting to flush msgs in final loop: %i secs.", Sys.time(), wait.flush)
     Sys.sleep(wait.flush)
@@ -101,14 +104,11 @@ doChunk = function(reg, conf, ids, multiple.result.files, disable.mail, first, l
 
   # check if there are still remaining messages
   if (!msg.buf$empty()) {
-    flush.warn = paste("Some DB messages could not be flushed.",
-                       "This indicates some DB problem or too much communication with the DB.",
-                       "Everything should still be ok, you only might have to resubmit some jobs as they are not recorded as 'done'.",
-                       sep = "\n")
-    warningf(flush.warn)
-    mail.extra.msg = flush.warn
-  } else {
-    mail.extra.msg = ""
+    mail.extra.msg = paste("Some DB messages could not be flushed.",
+                           "This indicates some DB problem or too much communication with the DB.",
+                           "Everything should still be ok, you only might have to resubmit some jobs as they are not recorded as 'done'.",
+                           sep = "\n")
+    warningf(mail.extra.msg)
   }
 
   # send mail for whole chunk
@@ -158,17 +158,6 @@ saveSingleResult = function(reg, job, result, multiple.result.files) {
   }
 }
 
-mySetWd = function(reg) {
-  wd = getwd()
-  message("Setting work dir: ", reg$work.dir)
-  setwd(reg$work.dir)
-  wd
-}
-
-myResetWd = function(wd) {
-  message("Setting work back to: ", wd)
-  setwd(wd)
-}
 
 calcResultString = function(result) {
   paste(capture.output(str(result)), collapse = "\n")

@@ -83,12 +83,22 @@ seeder = function(reg, seed) {
   prev.kind = RNGkind()
   set.seed(seed, kind = reg$RNGkind[1L], normal.kind=reg$RNGkind[2L])
 
-  reset = function() {
-    RNGkind(kind = prev.kind[1L], normal.kind = prev.kind[2L])
-    assign(".Random.seed", prev.seed, envir=.GlobalEnv)
-  }
+  return(list(
+    reset = function() {
+      RNGkind(kind = prev.kind[1L], normal.kind = prev.kind[2L])
+      assign(".Random.seed", prev.seed, envir=.GlobalEnv)
+    }))
+}
 
-  return(list(reset = reset))
+switchWd = function(reg) {
+  cur = getwd()
+  message("Setting work dir: ", reg$work.dir)
+  setwd(reg$work.dir)
+
+  return(list(reset = function() {
+    message("Setting work back to: ", cur)
+    setwd(cur)
+  }))
 }
 
 addIntModulo = function(x, y, mod = .Machine$integer.max) {
