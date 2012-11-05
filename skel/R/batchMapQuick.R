@@ -54,5 +54,6 @@ batchMapQuick = function(fun, ..., more.args=list(), packages=character(0L),
       ids = ids[inds]
     submitJobs(reg, ids, resources=resources)
   }, silent=FALSE)
+
   return(reg)
 }

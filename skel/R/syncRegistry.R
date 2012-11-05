@@ -1,9 +1,10 @@
 syncRegistry = function(reg) { # FIXME option to use external sync
   if (useStagedQueries()) {
-    # FIXME: DEBUG THIS !
-    # stopifnot(isOnSlave() == FALSE)
-    path = getPendingDir(reg$file.dir)
-    fns = file.path(path, lsort(list.files(path)))
+
+    # FIXME: DEBUG CODE
+    stopifnot(isOnSlave() == FALSE)
+
+    fns = lsort(list.files(getPendingDir(reg$file.dir), full.names = TRUE))
     if (length(fns) == 0L)
       return(invisible(TRUE))
 
@@ -11,11 +12,10 @@ syncRegistry = function(reg) { # FIXME option to use external sync
 
     queries = lapply(fns, readSQLFile)
     ok = !vapply(queries, isFALSE, TRUE)
-    fns = fns[ok]
-
     tryCatch(dbDoQueries(reg, unlist(queries[ok]), "rw"),
              error = function(e) stopf("Error syncing registry (%s)", e))
 
+    fns = fns[ok]
     ok = file.remove(fns)
     if (!all(ok))
       warningf("Some pending result sets could not be removed, e.g. '%s'", head(fns[ok], 1L))
