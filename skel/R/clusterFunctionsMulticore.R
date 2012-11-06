@@ -27,7 +27,12 @@
 #'   \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/skel/inst/bin/linux-helper}
 #'   Default means to take it from package directory.
 #' @return [\code{\link{ClusterFunctions}}].
+#' @examples
+#' \dontrun{
+#' cluster.functions = makeClusterFunctionsMulticore(4)
+#' }
 #' @export
+#' @seealso \link{ClusterFunctions}
 makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, nice,
   r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {
 

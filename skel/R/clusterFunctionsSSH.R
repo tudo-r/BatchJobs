@@ -70,12 +70,13 @@ makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, nice,
 #' # Then a call to 'makeClusterFunctionsSSH'
 #' # might look like this:
 #'
-#' cf = makeClusterFunctionsSSH(
+#' cluster.functions = makeClusterFunctionsSSH(
 #'   makeSSHWorker(nodename="larry", rhome="/usr/local/R", max.jobs=2),
 #'   makeSSHWorker(nodename="curley", rhome="/opt/R/R-current"),
 #'   makeSSHWorker(nodename="moe", rhome="/opt/R/R-current"))
 #' }
 #' @export
+#' @seealso \link{ClusterFunctions} \code{\link{makeSSHWorker}}
 makeClusterFunctionsSSH = function(..., workers) {
   args = list(...)
   if (!xor(length(args) > 0L, !missing(workers)))

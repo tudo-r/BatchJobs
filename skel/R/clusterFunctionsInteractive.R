@@ -14,7 +14,12 @@
 #'   calculations but makes it next to impossible to debug.
 #'   Default is \code{TRUE}.
 #' @return [\code{\link{ClusterFunctions}}].
+#' @examples
+#' \dontrun{
+#' cluster.functions = makeClusterFunctionsInteractive()
+#' }
 #' @export
+#' @seealso \link{ClusterFunctions}
 makeClusterFunctionsInteractive = function(write.logs=TRUE) {
   checkArg(write.logs, "logical", len=1L, na.ok=FALSE)
 
