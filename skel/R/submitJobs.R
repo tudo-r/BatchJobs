@@ -104,8 +104,6 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
         ids.intersect[1L])
     }
   }
-  # FIXME else intersect with jobs which could to be running and throw at least a warning
-  # FIXME this is kind of dangerous with offline messaging
 
   if (length(ids) > 5000L) {
     warningf(collapse(c("You are about to submit '%i' jobs.",
@@ -144,6 +142,11 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   resources.timestamp = saveResources(reg, resources)
   writeRscripts(reg, ids, resources.timestamp, disable.mail=FALSE, delays=delays,
                interactive.test = !is.null(conf$interactive))
+
+
+  # reset status of jobs: delete errors, done, ...
+  dbSendMessage(dbMakeMessageKilled(reg, unlist(ids)), staged=FALSE)
+
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")
   bar$set()
