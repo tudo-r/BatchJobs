@@ -1,6 +1,5 @@
 doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
   messagef("%s: Starting job on slave.", Sys.time())
-  reqJobPacks(reg)
   loadConf(reg)
   conf = getBatchJobsConf()
 
@@ -163,11 +162,4 @@ calcResultString = function(result) {
   paste(capture.output(str(result)), collapse = "\n")
 }
 
-reqJobPacks = function(reg) {
-  messagef("Requiring packages: [%s]", collapse(names(reg$packages)))
-  for (p in names(reg$packages)) {
-    if (!require(p, character.only = TRUE))
-      stopf("Could not load required package '%s' on node '%s'!", p, Sys.info()["nodename"])
-  }
-}
 
