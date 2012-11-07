@@ -145,7 +145,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
 
 
   # reset status of jobs: delete errors, done, ...
-  dbSendMessage(dbMakeMessageKilled(reg, unlist(ids)), staged=FALSE)
+  dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids)), staged=FALSE)
 
 
   bar = makeProgressBar(max=length(ids), label="submitJobs               ")

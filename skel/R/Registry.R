@@ -119,81 +119,29 @@ print.Registry = function(x, ...) {
 #' @param work.dir [\code{character(1)}]\cr
 #'   Location of the work. Unchanged if missing.
 #'   Note that the registry is not safed unless you set \code{save} to \code{TRUE}!
-#' @param save [\code{logical(1)}]\cr
-#'   Set \code{file.dir} in the registry and save.
-#'   Useful if you moved the file dir, because you wanted to continue
-#'   working somewhere else.
-#'   Default is \code{FALSE}.
 #' @return [\code{\link{Registry}}].
 #' @export
-loadRegistry = function(file.dir, work.dir, save=FALSE) {
+loadRegistry = function(file.dir, work.dir) {
   fn = getRegistryFilePath(file.dir)
   message("Loading registry: ", fn)
   reg = load2(fn, "reg")
 
+  # FIXME check that no jobs are running, if possible, before updating
+
   if (!isOnSlave()) {
-    do.save = FALSE
+    adjusted = adjustRegistryPaths(reg, file.dir, work.dir)
+    if (!isFALSE(adjusted))
+      reg = adjusted
 
-    # FIXME check that no jobs are running, if possible, before updating
-
-    # Fix for missing package version (package versions < 1.0.527)
-    if ("BatchJobs" %nin% names(reg$packages)) {
-      reg$packages$BatchJobs = list(version = package_version("1.0.527"))
-      do.save = TRUE
+    updated = updateRegistry(reg)
+    if (!isFALSE(updated)) {
+      reg = updated
     }
 
-    # get registry and package versions
-    bj.version.reg = reg$packages$BatchJobs$version
-    bj.version.pkg = packageVersion("BatchJobs")
-
-    # adjust file dir if necessary
-    file.dir = makePathAbsolute(file.dir)
-    if (reg$file.dir != file.dir) {
-      reg$file.dir = file.dir
-      do.save = TRUE
-    }
-
-    # adjust work dir if necessary
-    if (!missing(work.dir)) {
-      work.dir = makePathAbsolute(work.dir)
-      tryCatch(checkDir(work.dir),
-               error = function(e) stopf("Error: You need to adjust your work directory! (%s)", e))
-      reg$work.dir = work.dir
-      do.save = TRUE
-    }
-
-    if (bj.version.reg < bj.version.pkg) {
-      message("Updating registry and DB to newer version. Will be saved now.")
-      if (bj.version.reg < package.version("1.0.606")) {
-        # create new resources dir
-        resources.dir = getResourcesDir(file.dir)
-        checkDir(resources.dir, create=TRUE, check.empty=TRUE)
-        query = sprintf("ALTER TABLE %s_job_status ADD COLUMN resources_timestamp INTEGER", reg$id)
-        dbDoQuery(reg, query, flags="rwc")
-
-        # save dummy resources
-        query = sprintf("UPDATE %s_job_status SET resources_timestamp=0 WHERE submitted IS NOT NULL", reg$id)
-        dbDoQuery(reg, query, flags="rwc")
-        saveResources(reg, resources=list(), timestamp=0L)
-        reg$packages$BatchJobs$version = packageVersion("BatchJobs")
-
-      }
-
-      if (bj.version.reg < package.version("1.0.700")) { # FIXME insert correct version number on release
-        # FIXME add stash directory
-        # FIXME add pending directory
-      }
-
-      reg$packages$BatchJobs$version = bj.version.pkg
-      do.save = TRUE
-    } else if (bj.version.reg > bj.version.pkg) {
-      warningf("The registry has been used with BatchJobs version %s, installed is version %s. You should update BatchJobs on this machine.",
-               bj.version.reg, bj.version.pkg)
-    }
-
-    if (do.save)
+    if (!isFALSE(adjusted) || !isFALSE(updated))
       saveRegistry(reg)
   }
+
   return(reg)
 }
 
@@ -201,25 +149,5 @@ saveRegistry = function(reg) {
   fn = getRegistryFilePath(reg$file.dir)
   message("Saving registry: ", fn)
   save(file=fn, reg)
-}
-
-#' Get number of jobs in registry.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
-#' @return [\code{integer(1)}].
-#' @export
-getJobNr = function(reg) {
-  checkArg(reg, "Registry")
-  dbGetJobCount(reg)
-}
-
-#' Get ids of jobs in registry.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
-#' @return [\code{character}].
-#' @export
-getJobIds = function(reg) {
-  checkArg(reg, "Registry")
-  dbGetJobIds(reg)
 }
 

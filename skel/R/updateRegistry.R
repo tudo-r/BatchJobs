@@ -1,0 +1,75 @@
+#' ONLY FOR INTERNAL USAGE.
+#' @param reg [\code{\link{Registry}}]\cr
+#'   Registry.
+#' @return [any]. Updated \code{\link{Registry}} or \code{FALSE} if no updates were performed.
+#' @export
+updateRegistry = function(reg) {
+    UseMethod("updateRegistry")
+}
+
+
+#' @method updateRegistry Registry
+#' @S3method updateRegistry Registry
+updateRegistry.Registry = function(reg) {
+  # Fix for missing package version (package versions < 1.0.527)
+  if ("BatchJobs" %nin% names(reg$packages)) {
+    reg$packages$BatchJobs = list(version = package_version("1.0.527"))
+  }
+
+  version.reg = reg$packages$BatchJobs$version
+  version.pkg = packageVersion("BatchJobs")
+
+  if (version.reg == version.pkg) {
+    return(FALSE)
+  }
+  if (version.reg > version.pkg) {
+      warningf("The registry has been used with BatchJobs version %s, installed is version %s. You should update BatchJobs on this machine.",
+               version.reg, version.pkg)
+    return(FALSE)
+  }
+
+  # update registry
+  message("Updating Registry and DB to newer version.")
+  if (version.reg < package.version("1.0.606")) {
+    # create new resources dir
+    resources.dir = getResourcesDir(file.dir)
+    checkDir(resources.dir, create=TRUE, check.empty=TRUE)
+    query = sprintf("ALTER TABLE %s_job_status ADD COLUMN resources_timestamp INTEGER", reg$id)
+    dbDoQuery(reg, query, flags="rwc")
+
+    # save dummy resources
+    query = sprintf("UPDATE %s_job_status SET resources_timestamp=0 WHERE submitted IS NOT NULL", reg$id)
+    dbDoQuery(reg, query, flags="rwc")
+    saveResources(reg, resources=list(), timestamp=0L)
+    reg$packages$BatchJobs$version = packageVersion("BatchJobs")
+  }
+
+  if (version.reg < package.version("1.0.723")) {
+    checkDir(getPendingDir(reg$file.dir), create=TRUE)
+  }
+
+  reg$packages$BatchJobs$version = version.pkg
+  reg
+}
+
+adjustRegistryPaths = function(reg, file.dir, work.dir) {
+  adjusted = FALSE
+
+  # adjust file dir if necessary
+  file.dir = makePathAbsolute(file.dir)
+  if (reg$file.dir != file.dir) {
+    reg$file.dir = file.dir
+    adjusted = TRUE
+  }
+
+  # adjust work dir if necessary
+  if (!missing(work.dir)) {
+    work.dir = makePathAbsolute(work.dir)
+    tryCatch(checkDir(work.dir),
+             error = function(e) stopf("Error: You need to adjust your work directory! (%s)", e))
+    reg$work.dir = work.dir
+    adjusted = TRUE
+  }
+
+  if (adjusted) reg else FALSE
+}

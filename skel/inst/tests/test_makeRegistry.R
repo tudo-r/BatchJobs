@@ -1,6 +1,6 @@
 context("makeRegistry")
 
-test_that("makeRegistry", {  
+test_that("makeRegistry", {
   reg = makeTestRegistry()
   expect_true(is(reg, "Registry"))
   expect_true(is.list(reg))
@@ -14,24 +14,21 @@ test_that("makeRegistry", {
 })
 
 
-test_that("makeRegistry checks id", {  
+test_that("makeRegistry checks id", {
   expect_error(makeRegistry(id="runit-files"),  "comply with")
   expect_error(makeRegistry(id="-files"),  "comply with")
 })
 
 
-test_that("makeRegistry checks packs", {  
+test_that("makeRegistry checks packs", {
   makeTestRegistry(packages="base")
-  expect_error(makeTestRegistry(packages="foo"),  
+  expect_error(makeTestRegistry(packages="foo"),
     "Please install the following packages: foo")
 })
 
-test_that("loadRegistry works", {  
+test_that("loadRegistry works", {
   reg1 = makeTestRegistry()
   reg2 = loadRegistry(reg1$file.dir)
   expect_is(reg2, "Registry")
-  reg2 = loadRegistry(reg1$file.dir, save=TRUE)
-  expect_is(reg2, "Registry")
 })
-
 

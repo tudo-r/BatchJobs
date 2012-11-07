@@ -21,6 +21,25 @@ makeJob = function(id=NA_integer_, fun, fun.id=digest(fun), pars, seed) {
   setClasses(list(id=id, fun=fun, fun.id=fun.id, pars=pars, seed=seed), "Job")
 }
 
+#' Get number of jobs in registry.
+#' @param reg [\code{\link{Registry}}]\cr
+#'   Registry.
+#' @return [\code{integer(1)}].
+#' @export
+getJobNr = function(reg) {
+  checkArg(reg, "Registry")
+  dbGetJobCount(reg)
+}
+
+#' Get ids of jobs in registry.
+#' @param reg [\code{\link{Registry}}]\cr
+#'   Registry.
+#' @return [\code{character}].
+#' @export
+getJobIds = function(reg) {
+  checkArg(reg, "Registry")
+  dbGetJobIds(reg)
+}
 
 #' @S3method print Job
 print.Job = function(x, ...) {
