@@ -423,7 +423,7 @@ dbMakeMessageSubmitted = function(reg, job.ids, time=now(),
 }
 
 dbMakeMessageStarted = function(reg, job.ids, time=now()) {
-  node = gsub("'", "\\'", Sys.info()["nodename"], fixed=TRUE)
+  node = gsub("'", "\"", Sys.info()["nodename"], fixed=TRUE)
   updates = sprintf("started=%i, node='%s', r_pid=%i, error=NULL, done=NULL", time, node, Sys.getpid())
   list(msg = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
        ids = job.ids,
@@ -431,7 +431,8 @@ dbMakeMessageStarted = function(reg, job.ids, time=now()) {
 }
 
 dbMakeMessageError = function(reg, job.ids, err.msg) {
-  err.msg = gsub("'", "\\'", err.msg, fixed=TRUE)
+  # FIXME how to quote ticks (')? For now just replaced
+  err.msg = gsub("'", "\"", err.msg, fixed=TRUE)
   err.msg = gsub("[^[:print:]]", " ", err.msg)
   updates = sprintf("error='%s', done=NULL", err.msg)
   list(msg = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
