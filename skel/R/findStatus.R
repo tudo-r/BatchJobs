@@ -62,6 +62,22 @@ findSubmitted = function(reg, ids) {
   dbGetSubmitted(reg, ids)
 }
 
+#' Find jobs which have not been submitted in the past.
+#' @param reg [\code{\link{Registry}}]\cr
+#'   Registry.
+#' @param ids [\code{integer}]\cr
+#'   Subset of job ids to restrict the result to.
+#'   Default is all jobs.
+#' @return [\code{integer}]. Ids of jobs.
+#' @export
+findNotSubmitted = function(reg, ids) {
+  checkRegistry(reg)
+  syncRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbGetNotSubmitted(reg, ids)
+}
+
 #' Find jobs which are present on the batch system at the moment.
 #'
 #' Find jobs either queued, running, held, etc.
