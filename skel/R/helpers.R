@@ -120,6 +120,15 @@ getOperatingSystem = function() {
   Sys.info()["sysname"]
 }
 
+
+now = function() {
+  as.integer(Sys.time())
+}
+
+##########################################################################################
+# FIXME: move stuff below to BBmisc?
+##########################################################################################
+
 # Extract a FIRST match for a pattern from a vector of strings.
 # @param x [\code{character}]\cr
 #   Vector of strings.
@@ -141,13 +150,6 @@ strextract = function(x, pattern) {
   }, x, starts, stops, USE.NAMES=FALSE)
 }
 
-now = function() {
-  as.integer(Sys.time())
-}
-
-##########################################################################################
-# FIXME: move stuff below to BBmisc
-##########################################################################################
 
 trim = function(x, ltrim=TRUE, rtrim=TRUE) {
   if (ltrim)
@@ -170,36 +172,4 @@ list2df = function(li) {
   as.data.frame(res)
 }
 
-setRowNames = function(obj, nm) {
-  rownames(obj) = nm
-  obj
-}
-
-setColNames = function(obj, nm) {
-  colnames(obj) = nm
-  obj
-}
-
-setClasses = function(x, classes) {
-  class(x) = classes
-  x
-}
-
-addClasses = function(x, classes) {
-  class(x) = c(class(x), classes)
-  x
-}
-
-isFALSE = function(x) {
-  identical(x, FALSE)
-}
-
-lsort = function(...) {
-  cur = Sys.getlocale("LC_COLLATE")
-  if (cur != "C") {
-    Sys.setlocale("LC_COLLATE", "C")
-    on.exit(Sys.setlocale("LC_COLLATE", cur))
-  }
-  sort(...)
-}
 
