@@ -46,6 +46,10 @@
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
+#'
+#' # Submit the 10 jobs again, now randomized into 2 chunks:
+#' chunked = chunk(getJobIds(reg), n.chunks=2, shuffle=TRUE)
+#' submitJobs(reg, chunked)
 submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.delay=FALSE) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)
@@ -189,6 +193,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
               stopf("Retried already %i times to submit. Aborting.", retries)
 
             bar$inc(msg=sprintf("Status: %i, zzz=%.1fs.", batch.result$status, sleep.secs))
+            # FIXME we could use the sleep here for synchronization
             Sys.sleep(sleep.secs)
           } else if (batch.result$status > 100L && batch.result$status <= 200L) {
             # fatal error, abort at once
