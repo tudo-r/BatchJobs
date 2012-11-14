@@ -125,10 +125,6 @@ now = function() {
   as.integer(Sys.time())
 }
 
-##########################################################################################
-# FIXME: move stuff below to BBmisc?
-##########################################################################################
-
 # Extract a FIRST match for a pattern from a vector of strings.
 # @param x [\code{character}]\cr
 #   Vector of strings.
@@ -150,7 +146,6 @@ strextract = function(x, pattern) {
   }, x, starts, stops, USE.NAMES=FALSE)
 }
 
-
 trim = function(x, ltrim=TRUE, rtrim=TRUE) {
   if (ltrim)
     x = sub("^[[:space:]]+", "", x)
@@ -171,5 +166,3 @@ list2df = function(li) {
   }
   as.data.frame(res)
 }
-
-

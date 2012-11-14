@@ -431,7 +431,7 @@ dbMakeMessageStarted = function(reg, job.ids, time=now()) {
 }
 
 dbMakeMessageError = function(reg, job.ids, err.msg) {
-  # FIXME how to quote ticks (')? For now just replaced
+  # FIXME how to escape ticks (')? Just replaced for the moment
   err.msg = gsub("'", "\"", err.msg, fixed=TRUE)
   err.msg = gsub("[^[:print:]]", " ", err.msg)
   updates = sprintf("error='%s', done=NULL", err.msg)
