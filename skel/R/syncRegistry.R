@@ -1,7 +1,7 @@
 syncRegistry = function(reg) { # FIXME option to use external sync
   conf = getBatchJobsConf()
   if (conf$staged.queries) {
-    if (conf$debug)
+    if (conf$debug && isOnSlave())
       stop("SQL query sent from Worker")
 
     fns = lsort(list.files(getPendingDir(reg$file.dir), full.names = TRUE))
