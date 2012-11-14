@@ -166,3 +166,10 @@ list2df = function(li) {
   }
   as.data.frame(res)
 }
+
+timeconv = function(t, unit) {
+  conv = setNames(c(1L, 60L, 3600L, 86400L, 604800L),
+                  c("seconds", "minutes", "hours", "days", "weeks"))
+  checkArg(unit, choices = names(conv))
+  t / conv[unit]
+}

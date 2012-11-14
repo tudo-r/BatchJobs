@@ -19,8 +19,6 @@ getJobTimes = function(reg, ids, unit = "seconds") {
     ids = dbGetJobIds(reg)
   else
     ids = checkIds(reg, ids)
-  conv = setNames(c(1L, 60L, 3600L, 86400L, 604800L),
-                  c("seconds", "minutes", "hours", "days", "weeks"))
-  checkArg(unit, choices = names(conv))
-  setNames(dbGetJobTimes(reg, ids)$time / conv[unit], ids)
+
+  setNames(timeconv(dbGetJobTimes(reg, ids)$time, unit), ids)
 }

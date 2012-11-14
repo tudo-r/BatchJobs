@@ -184,14 +184,9 @@ dbGetExpandedJobsTable = function(reg, ids, columns) {
     tab
 }
 
-dbGetJobStatusTable = function(reg, ids, convert.dates=TRUE) {
+dbGetJobStatusTable = function(reg, ids) {
   query = sprintf("SELECT * FROM %s_job_status", reg$id)
   tab = dbSelectWithIds(reg, query, ids)
-  if (convert.dates) {
-    tab$submitted = dbConvertNumericToPOSIXct(tab$submitted)
-    tab$started = dbConvertNumericToPOSIXct(tab$started)
-    tab$done = dbConvertNumericToPOSIXct(tab$done)
-  }
   setRowNames(tab, tab$job_id)
 }
 
