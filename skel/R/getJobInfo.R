@@ -20,6 +20,7 @@
 #'   (character), \code{r.pid} (integer), \code{seed} (integer).
 #' @export
 getJobInfo = function(reg, ids, unit = "seconds") {
+  # FIXME we need to set this generic for BatchExperiments
   checkRegistry(reg)
   syncRegistry(reg)
   if (!missing(ids))
