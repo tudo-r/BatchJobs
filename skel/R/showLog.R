@@ -14,6 +14,7 @@
 #'   Default is first id in registry.
 #' @return [\code{character(1)}]. Invisibly returns path to log file.
 #' @export
+#' @seealso \code{\link{grepLogs}}, \code{\link{getErrors}}
 showLog = function(reg, id) {
   checkRegistry(reg)
   syncRegistry(reg)

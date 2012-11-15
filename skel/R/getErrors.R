@@ -10,6 +10,7 @@
 #' @return [\code{character}]. Error messages for jobs as character vector invisibly returned.\cr
 #'   \code{NA} if job has terminated successfully.
 #' @export
+#' @seealso \code{\link{showLog}} for more contextual error informations.
 getErrors = function(reg, ids, print=TRUE) {
   checkRegistry(reg)
   syncRegistry(reg)

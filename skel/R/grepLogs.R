@@ -22,6 +22,7 @@
 #'   Default is \code{2}.
 #' @return [\code{integer}]. Ids of jobs where pattern was found in the log file.
 #' @export
+#' @seealso \code{\link{showLog}}, \code{\link{getErrors}}
 grepLogs = function(reg, ids, pattern="warn", ignore.case=TRUE, verbose=FALSE, range=2L) {
   checkRegistry(reg)
   syncRegistry(reg)
