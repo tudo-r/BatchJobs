@@ -14,10 +14,7 @@
 #'   Possible values: \dQuote{seconds}, \dQuote{minutes}, \dQuote{hours},
 #'   \dQuote{days} and \dQuote{weeks}.
 #'   Default is \dQuote{seconds}.
-#' @return [\code{data.frame}]. Columns are \code{job.id} (integer), \code{time.submitted} (POSIXct),
-#'   \code{time.started} (POSIXct), \code{time.done} (POSIXct), \code{time.running} (double},
-#'   \code{time.queued} (double), \code{error.msg} (character), \code{nodename} (character), \code{batch.id}
-#'   (character), \code{r.pid} (integer), \code{seed} (integer).
+#' @return [\code{data.frame}].
 #' @export
 getJobInfo = function(reg, ids, unit = "seconds") {
   # FIXME we need to set this generic for BatchExperiments
