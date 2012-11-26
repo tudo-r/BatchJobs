@@ -1,7 +1,7 @@
 checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, msg=FALSE) {
   if (create) {
     if (file.exists(path)) {
-      if (!file.info(path)$isdir)
+      if (!isDirectory(path))
         stop("File in place where dir should be created: ", path)
     } else {
       if (msg)
