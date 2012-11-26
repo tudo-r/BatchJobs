@@ -1,9 +1,9 @@
 # sources 1 config file and returns the envir
 sourceConfFile = function(conffile) {
   checkArg(conffile, "character", len=1L, na.ok=FALSE)
-  if (!file.exists(conffile)) {
+  if (!file.exists(conffile))
     stopf("Configuration file does not exist: '%s'", conffile)
-  }
+
   packageStartupMessage(sprintf("Sourcing configuration file: '%s'", conffile))
   conf = new.env()
   x = try(sys.source(conffile, envir=conf))
@@ -148,4 +148,16 @@ showConf = function() {
   catf("  debug: %s", f(x$debug))
   catf("  raise.warnings: %s", f(x$raise.warnings))
   catf("  staged.queries: %s", f(x$staged.queries))
+}
+
+#' Load a specific configuration file.
+#' @param conffile [\code{character(1)}]\cr
+#'   Location of the configuration file to load.
+#' @return Nothing.
+#' @export
+loadConfig = function(conffile=".BatchJobs.R") {
+  # checks are done in sourceConfFile
+  conf = sourceConfFile(conffile)
+  assignConf(conf)
+  showConf()
 }

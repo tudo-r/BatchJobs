@@ -158,4 +158,3 @@ saveRegistry = function(reg) {
   message("Saving registry: ", fn)
   save(file=fn, reg)
 }
-
