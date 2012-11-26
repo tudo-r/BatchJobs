@@ -154,8 +154,23 @@ trim = function(x, ltrim=TRUE, rtrim=TRUE) {
   return(x)
 }
 
-list2df = function(li) {
+names2 = function(x, missing.val="") {
+  n = names(x)
+  if (is.null(n))
+    return(rep(missing.val, length(x)))
+  replace(n, is.na(n) | n == "", missing.val)
+}
+
+list2df = function(li, force.names=FALSE) {
+  if (length(li) == 0L)
+    return(as.data.frame(matrix(nrow = 0L, ncol = 0L)))
+
+  if (force.names) {
+    li = lapply(li, function(x) setNames(x, make.names(names2(x), unique=TRUE)))
+  }
+
   cols = unique(unlist(lapply(li, names)))
+
   if (length(cols) == 0L)
     return(as.data.frame(matrix(nrow = length(li), ncol = 0L)))
 
