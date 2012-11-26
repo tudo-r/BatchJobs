@@ -136,7 +136,6 @@ dbCreateJobStatusTable = function(reg, extra.cols="", constraints="") {
   return(invisible(TRUE))
 }
 
-
 dbCreateExpandedJobsView = function(reg) {
   query = sprintf("CREATE VIEW %1$s_expanded_jobs AS SELECT * FROM %1$s_job_status LEFT JOIN %1$s_job_def USING(job_def_id)", reg$id)
   dbDoQuery(reg, query, flags="rw")
@@ -275,36 +274,10 @@ dbGetExpiredJobs = function(reg, batch.job.ids, ids) {
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbGetSubmittedAndNotTerminatedJobs = function(reg, ids) {
-  # we cannot check if job is running in DB, do this later
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE submitted IS NOT NULL AND done IS NULL AND error is NULL", reg$id)
-  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
-}
-
-dbGetMaxOfColumn = function(reg, tab, column, default) {
-  query = sprintf("SELECT MAX(%s) AS x FROM %s_%s", column, reg$id, tab)
-  res = dbDoQuery(reg, query)$x
-  if(is.na(res))
-    return(default)
-  return(res)
-}
-
-dbGetMaxSeed = function(reg, default) {
-  dbGetMaxOfColumn(reg, "job_status", "seed", default)
-}
 
 dbGetFirstJobInChunkIds = function(reg, ids){
   query = sprintf("SELECT job_id, first_job_in_chunk_id FROM %s_job_status", reg$id)
   dbSelectWithIds(reg, query, ids)$first_job_in_chunk_id
-}
-
-dbGetJobTimes = function(reg, ids){
-  query = sprintf("SELECT job_id, done-started AS time FROM %s_job_status", reg$id)
-  # incorrect type for empty id vec possible
-  tab = dbSelectWithIds(reg, query, ids)
-  if (!is.integer(tab$time))
-    tab$time = as.integer(tab$time)
-  tab
 }
 
 dbGetErrorMsgs = function(reg, ids, filter=FALSE, limit) {
@@ -346,8 +319,11 @@ dbGetStats = function(reg, ids, running=FALSE, expired=FALSE) {
   df = dbDoQuery(reg, query)
 
   # Convert to correct type. Null has no type and casts don't work properly with RSQLite
-  doubles = c("t_min", "t_avg", "t_max")
-  lapply(df, function(x) if(x %in% doubles) as.double(x) else as.integer(x))
+  x = c("n", "submitted", "started", "done", "error", "running", "expired")
+  df[x] = lapply(df[x], as.integer)
+  x = c("t_min", "t_avg", "t_max")
+  df[x] = lapply(df[x], as.double)
+  df
 }
 
 ############################################
@@ -362,8 +338,9 @@ dbRemoveJobs = function(reg, ids) {
 }
 
 
-
-
+############################################
+### Messages
+############################################
 dbSendMessage = function(reg, msg, staged = FALSE) {
   if (staged) {
     fn = getSQLFileName(reg, msg$type, msg$ids[1L], getOrderCharacters()[msg$type])
@@ -406,8 +383,7 @@ dbSendMessages = function(reg, msgs, max.retries=200L, sleep=function(r) 1.025^r
 }
 
 
-dbMakeMessageSubmitted = function(reg, job.ids, time=now(),
-                                  batch.job.id, first.job.in.chunk.id=NULL, resources.timestamp) {
+dbMakeMessageSubmitted = function(reg, job.ids, time=now(), batch.job.id, first.job.in.chunk.id=NULL, resources.timestamp) {
   if(is.null(first.job.in.chunk.id))
     first.job.in.chunk.id = "NULL"
   updates = sprintf("first_job_in_chunk_id=%s, submitted=%i, batch_job_id='%s', resources_timestamp=%i",
@@ -426,7 +402,7 @@ dbMakeMessageStarted = function(reg, job.ids, time=now()) {
 }
 
 dbMakeMessageError = function(reg, job.ids, err.msg) {
-  # FIXME how to escape ticks (')? Just replaced for the moment
+  # FIXME how to escape ticks (')? Just replaced with double quotes for the moment
   err.msg = gsub("'", "\"", err.msg, fixed=TRUE)
   err.msg = gsub("[^[:print:]]", " ", err.msg)
   updates = sprintf("error='%s', done=NULL", err.msg)
@@ -458,21 +434,3 @@ dbSetJobFunction = function(reg, ids, fun.id) {
   query = sprintf("UPDATE %1$s_job_def SET fun_id = '%2$s' WHERE job_def_id IN (SELECT job_def_id FROM %1$s_job_status WHERE job_id IN (%3$s))", reg$id, fun.id, collapse(ids))
   dbDoQuery(reg, query, flags="rw")
 }
-
-############################################
-### INSERT
-############################################
-dbAddJobs = function(reg, jobs, ...) {
-  fun.ids = extractSubList(jobs, "fun.id")
-  seeds = extractSubList(jobs, "seed")
-  pars = vapply(jobs, function(j) rawToChar(serialize(j$pars, connection=NULL, ascii=TRUE)), character(1L))
-
-  n = dbAddData(reg, "job_def", data = data.frame(fun_id=fun.ids, pars=pars))
-  job.def.ids = dbGetLastAddedIds(reg, "job_def", "job_def_id", n)
-  n = dbAddData(reg, "job_status", data=data.frame(job_def_id=job.def.ids, seed=seeds))
-  job.ids = dbGetLastAddedIds(reg, "job_status", "job_id", n)
-
-  list(job.ids=job.ids, job.def.ids=job.def.ids)
-}
-
-
