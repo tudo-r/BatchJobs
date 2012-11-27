@@ -30,7 +30,7 @@ updateRegistry.Registry = function(reg) {
 
   # update registry
   message("Updating Registry and DB to newer version.")
-  if (version.reg < package.version("1.0.606")) {
+  if (version.reg < package_version("1.0.606")) {
     # create new resources dir
     resources.dir = getResourcesDir(file.dir)
     checkDir(resources.dir, create=TRUE, check.empty=TRUE)
@@ -44,7 +44,7 @@ updateRegistry.Registry = function(reg) {
     reg$packages$BatchJobs$version = packageVersion("BatchJobs")
   }
 
-  if (version.reg < package.version("1.0.723")) {
+  if (version.reg < package_version("1.0.723")) {
     checkDir(getPendingDir(reg$file.dir), create=TRUE)
   }
 
