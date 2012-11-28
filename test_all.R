@@ -5,6 +5,8 @@ library("testthat")
 
 if (interactive()) {
   load_all("skel")
+  library(RSQLite)
+  library(digest)
   assignConfDefaults()
   cf = makeClusterFunctionsUnitTests()
   conf = getBatchJobsConf()
