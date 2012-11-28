@@ -137,7 +137,7 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
     message("Reducing ", n, " results...")
     return(empty)
   }
-  fun2 = function(aggr, job, res) combine(aggr, wrap(fun(job, res)))
+  fun2 = function(aggr, job, res, ...) combine(aggr, wrap(fun(job, res, ...)))
   res = reduceResults(reg, ids, part, fun2, init, ...)
   if (use.names)
     res = name.fun(res, ids, fun(getJob(reg, ids[1L]), getResult(reg, ids[1L], part)))
