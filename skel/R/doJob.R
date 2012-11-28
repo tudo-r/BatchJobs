@@ -1,8 +1,7 @@
 doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
-  messagef("%s: Starting job on slave.", Sys.time())
+  messagef("%s: Starting job on node %s.", Sys.time(), Sys.info()["nodename"])
   loadConf(reg)
   conf = getBatchJobsConf()
-
   # we need to see all warnings immediatly
   if (conf$cluster.functions$name != "Testing") {
       options(warning.length=8170L, warn=1L+conf$raise.warnings)
