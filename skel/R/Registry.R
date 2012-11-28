@@ -123,6 +123,8 @@ print.Registry = function(x, ...) {
 #' @export
 loadRegistry = function(file.dir, work.dir) {
   fn = getRegistryFilePath(file.dir)
+  if (!file.exists(fn))
+    stopf("No registry found in '%s'", file.dir)
   message("Loading registry: ", fn)
   reg = load2(fn, "reg")
 

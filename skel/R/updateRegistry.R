@@ -32,7 +32,7 @@ updateRegistry.Registry = function(reg) {
   message("Updating Registry and DB to newer version.")
   if (version.reg < package_version("1.0.606")) {
     # create new resources dir
-    resources.dir = getResourcesDir(file.dir)
+    resources.dir = getResourcesDir(reg$file.dir)
     checkDir(resources.dir, create=TRUE, check.empty=TRUE)
     query = sprintf("ALTER TABLE %s_job_status ADD COLUMN resources_timestamp INTEGER", reg$id)
     dbDoQuery(reg, query, flags="rwc")
