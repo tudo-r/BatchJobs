@@ -23,8 +23,8 @@ updateRegistry.Registry = function(reg) {
     return(FALSE)
   }
   if (version.reg > version.pkg) {
-      warningf("The registry has been used with BatchJobs version %s, installed is version %s. You should update BatchJobs on this machine.",
-               version.reg, version.pkg)
+    warningf("The registry has been used with BatchJobs version %s, installed is version %s. You should update BatchJobs on this machine.",
+             version.reg, version.pkg)
     return(FALSE)
   }
 
