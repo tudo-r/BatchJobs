@@ -47,17 +47,13 @@ test_that("doJob", {
   reg$packages = list(foo="foo")
   saveRegistry(reg)
   batchMap(reg, identity, 1)
-  saveConf(reg)
-  expect_error(suppressAll(doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)), 
-    "Could not load required package 'foo' on node")  
+  expect_error(submitJobs(reg), "please install the following packages: foo")
   expect_equal(findMissingResults(reg), id)
+
   reg = makeTestRegistry(packages=c("randomForest"))
   f = function(i) randomForest(Species~., data=iris)
   batchMap(reg, f, 1)
-  saveConf(reg)
-  expect_output({ 
-    y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)
-  }, "BatchJobs job")
+  submitJobs(reg)
   expect_equal(length(findMissingResults(reg)), 0)
 })
 
