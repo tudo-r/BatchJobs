@@ -41,7 +41,6 @@ updateRegistry.Registry = function(reg) {
     query = sprintf("UPDATE %s_job_status SET resources_timestamp=0 WHERE submitted IS NOT NULL", reg$id)
     dbDoQuery(reg, query, flags="rwc")
     saveResources(reg, resources=list(), timestamp=0L)
-    reg$packages$BatchJobs$version = packageVersion("BatchJobs")
   }
 
   if (version.reg < package_version("1.0.723")) {
