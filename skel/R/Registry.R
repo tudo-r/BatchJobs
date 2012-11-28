@@ -128,14 +128,7 @@ loadRegistry = function(file.dir, work.dir) {
   message("Loading registry: ", fn)
   reg = load2(fn, "reg")
 
-  load.packs = setdiff(names(reg$packages), "BatchJobs")
-  if (length(load.packs) > 0L) {
-    messagef("Requiring packages: [%s]", collapse(names(reg$packages)))
-    for (p in load.packs) {
-      if (!require(p, character.only = TRUE))
-        stopf("Could not load required package '%s' on node '%s'!", p, Sys.info()["nodename"])
-    }
-  }
+  requirePackages(names(reg$packages), why=sprintf("registry %s", reg$id))
 
   if (!isOnSlave()) {
     # FIXME check that no jobs are running, if possible, before updating
