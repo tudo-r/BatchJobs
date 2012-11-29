@@ -19,9 +19,9 @@
 #'   so that no job can be submitted.
 #'   Default is \code{ncpus-1}.
 #' @param nice [\code{integer(1)}]\cr
-#'   Load average (of the last 5 min) at which the worker is considered occupied,
-#'   so that no job can be submitted.
-#'   Default is \code{ncpus-1}.
+#'   Process priority to run R with set via nice. Integers between -20 and 19 are allowed.
+#'   If missing, processes are not nice'd and the system default applies (usually 0).
+#'   Default is no niceing.
 #' @param r.options [\code{character}]
 #'   Options for R and Rscript, one option per element of the vector,
 #'   a la \dQuote{--vanilla}.
