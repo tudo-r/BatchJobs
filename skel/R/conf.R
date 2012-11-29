@@ -33,7 +33,7 @@ assignConf = function(conf) {
 # reads package conf, userhome conf, working dir conf
 # then assigns them to namespace
 readConfs = function() {
-  fn.pack = file.path(find.package("BatchJobs"), "etc", ".BatchJobs.R")
+  fn.pack = file.path(find.package("BatchJobs"), "etc", "BatchJobs_global_config.R")
   fn.user = path.expand("~/.BatchJobs.R")
   fn.wd = suppressWarnings(normalizePath(".BatchJobs.R"))
   conffiles = Filter(file.exists, unique(c(fn.pack, fn.user, fn.wd)))
