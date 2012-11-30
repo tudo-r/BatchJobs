@@ -3,23 +3,26 @@
 #' Installation is done via \code{\link{callFunctionOnSSHWorkers}}
 #' and \code{\link{install.packages}}. 
 #'
+#' Note that as usual the function tries to install
+#' the packages into the first path of \code{.libPaths()}
+#' of each each worker. 
+#'
 #' @param nodenames [\code{character}]\cr
 #'   Nodenames of workers.
 #' @param pkgs [\code{character}]\cr
 #'   See \code{\link{install.packages}}. 
 #' @param repos [\code{character}]\cr
 #'   See \code{\link{install.packages}}. 
+#'   If the user must be queried this is of course done on the master.
 #' @param consecutive [\code{logical(1)}]\cr
-#'   Do calls consecutively and always wait till each worker is done.
+#'   See \code{\link{callFunctionOnSSHWorkers}}.
 #'   Default is \code{TRUE}.
 #' @param show.output [\code{logical(1)}]\cr
-#'   Show output of workers on master during installation.
-#'   Can be useful to see what is happening.
-#'   Con only be used in consecutive mode.
+#'   See \code{\link{callFunctionOnSSHWorkers}}.
 #'   Default is \code{consecutive}.
 #' @param ... [any]\cr
 #'   Passed to \code{\link{install.packages}}.
-#' @return [\code{list}]. Results of function calls, named by nodenames.
+#' @return Nothing.
 #' @export
 #' @seealso \code{\link{callFunctionOnSSHWorkers}}
 installPackagesOnSSHWorkers = function(nodenames, pkgs, 
@@ -30,4 +33,5 @@ installPackagesOnSSHWorkers = function(nodenames, pkgs,
     repos = chooseCRANmirror()
   callFunctionOnSSHWorkers(nodenames, fun=install.packages, 
     pkgs=pkgs, repos=repos, consecutive=consecutive, show.output=show.output, ...)    
+  invisible(NULL)  
 }

@@ -37,7 +37,7 @@ print.SubmitJobResult = function(x, ...) {
   cat("Job submission result:\n")
   catf("  ID     : '%s'", x$batch.job.id)
   catf("  Status : %i", x$status)
-  catf("  Msg    : %i", x$msg)
+  catf("  Msg    : %s", x$msg)
 }
 
 #' Create a ClusterFuntions object.

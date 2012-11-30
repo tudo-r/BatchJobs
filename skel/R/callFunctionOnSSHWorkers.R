@@ -1,8 +1,8 @@
 #' Call an arbitrary function on specified SSH workers.
 #' 
 #' Calls can be made in parallel or consecutively, 
-#' the function waits till all calls have finished and
-#' returns call results as a list. 
+#' the function waits until all calls have finished and
+#' returns call results. 
 #' In consecutive mode the output on the workers can also be shown on the master
 #' during computation.
 #'
@@ -25,12 +25,12 @@
 #' @param ... [any]\cr
 #'   Arguments for \code{fun}.
 #' @param consecutive [\code{logical(1)}]\cr
-#'   Do calls consecutively and always wait till each worker is done.
+#'   Do calls consecutively and always wait until each worker is done.
 #'   Default is \code{FALSE}.
 #' @param show.output [\code{logical(1)}]\cr
 #'   Show output of workers on master during call.
 #'   Can be useful to see what is happening.
-#'   Con only be used in consecutive mode.
+#'   Can only be used in consecutive mode.
 #'   Default is \code{consecutive}.
 #' @param simplify [\code{logical(1)}]\cr
 #'    Should the result be simplified? See \code{\link{sapply}}. 
@@ -44,7 +44,7 @@
 #'   This has to be somewhere on the shared
 #'   filesystem. The created subdirectory will be cleaned up on exit.
 #'   Default is current working directory.
-#' @return [\code{list}]. Results of function calls.
+#' @return Results of function calls, either a list or simplified.
 #' @export
 callFunctionOnSSHWorkers = function(nodenames, fun, ..., 
   consecutive=FALSE, show.output=consecutive, 

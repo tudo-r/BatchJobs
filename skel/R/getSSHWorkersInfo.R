@@ -1,8 +1,14 @@
-#' Print and return R version and configuration information for SSH workers.
+#' Print and return R installation and other information for SSH workers.
+#'
+#' Workers are queried in parallel via \code{\link{callFunctionOnSSHWorkers}}.
+#'
+#' The function will display a warning if the first lib path on the worker
+#' is not writeable as this indicates protential problems in the configuaration
+#' and \code{\link{installPackagesOnSSHWorkers}} will not work.
 #'
 #' @param nodenames [\code{character}]\cr
 #'   Nodenames of workers.
-#' @return [\code{list}]. Results of function calls, named by nodenames.
+#' @return [\code{list}]. Displayed information as a list named by nodenames.
 #' @export
 #' @seealso \code{\link{callFunctionOnSSHWorkers}}
 getSSHWorkersInfo = function(nodenames) {
@@ -16,7 +22,7 @@ getSSHWorkersInfo = function(nodenames) {
     )
   }
   res = callFunctionOnSSHWorkers(nodenames, fun=fun, 
-    consecutive=FALSE, show.output=FALSE, use.names=TRUE)
+    consecutive=FALSE, show.output=FALSE, use.names=TRUE, simplify=FALSE)
   for (nn in nodenames) {  
     r = res[[nn]]
     messagef("Node: %s", nn)
