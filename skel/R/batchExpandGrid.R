@@ -14,7 +14,7 @@
 #' @param more.args [\code{list}]\cr
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is empty list.
-#' @return Vector of type \code{integer} with job ids.
+#' @return [\code{data.frame}]. Expanded grid of combinations produced by \code{\link{expand.grid}}.
 #' @examples
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x, y, z) x * y  + z
@@ -43,4 +43,5 @@ batchExpandGrid = function(reg, fun, ..., more.args=list()) {
   args = as.list(grid)
   args = c(args, list(reg=reg, fun=fun, more.args=more.args))
   do.call(batchMap, args)
+  return(grid)
 }
