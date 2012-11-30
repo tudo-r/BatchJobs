@@ -4,7 +4,7 @@ writeRscripts = function(reg, ids, resources.timestamp, disable.mail, delays, in
       "Sys.sleep(%%f)",
       "options(BatchJobs.on.slave=TRUE, BatchJobs.resources.path='%s')",
       "library(BatchJobs)",
-      "BatchJobs:::doJob(",
+      "res = BatchJobs:::doJob(",
       "\treg=loadRegistry('%s'),",
       "\tids=c(%%s),",
       "\tmultiple.result.files=%s,",
@@ -18,7 +18,7 @@ writeRscripts = function(reg, ids, resources.timestamp, disable.mail, delays, in
     template = paste(
       "ignore = %%f",
       "setOnSlave(TRUE, resources.path='%s')",
-      "doJob(",
+      "res = doJob(",
       "\treg=loadRegistry('%s'),",
       "\tids=c(%%s),",
       "\tmultiple.result.files=%s,",
