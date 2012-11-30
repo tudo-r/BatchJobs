@@ -70,21 +70,10 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
   # we will change mailing and cluster funs, reset them on exit
   # also kill all still running jobs and remove reg dir 
   on.exit({
-    if (length(findOnSystem(reg)) > 0)
-      killJobs(reg, getJobIds(reg))
-    # reset load settings  
-    print(old.worker.settings)
-    if (exists("old.worker.settings") && length(old.worker.settings) > 0) 
-      for (wn in names(old.worker.settings)) {
-        for (ws in wsettings) 
-          workers[[wn]][[ws]] = old.worker.settings[[wn]][[ws]]
-      }
     conf$cluster.functions = cf
     conf$mail.start = mail.old[1]
     conf$mail.done = mail.old[2]
     conf$mail.error = mail.old[3]
-    if (file.exists(regdir))
-      unlink(regdir, recursive=TRUE)
   })
   # no mails during for the following jobs, also get the nodenames ssh workers
   conf$mail.start = conf$mail.done = conf$mail.error = "none"
@@ -102,6 +91,13 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
     old.worker.settings[[wn]] = mget(wsettings, w)
     for (ws in wsettings) w[[ws]] = Inf
   }
+  on.exit({
+    # reset load settings  
+    for (wn in names(old.worker.settings)) {
+      for (ws in wsettings) 
+        workers[[wn]][[ws]] = old.worker.settings[[wn]][[ws]]
+    }
+  }, add=TRUE)
   
   args = if (consecutive)
     args = list(fun)
@@ -117,7 +113,12 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
       res
     }, args, more.args = more.args)
   })
-  
+  on.exit({
+    if (length(findOnSystem(reg)) > 0)
+      killJobs(reg, getJobIds(reg))
+    if (file.exists(regdir))
+      unlink(regdir, recursive=TRUE)
+  }, add=TRUE)
   # read log as char string, get part between stamps and print only new chars
   printLog = function(log.old) {
     log.fn = getLogFiles(reg, 1L)
