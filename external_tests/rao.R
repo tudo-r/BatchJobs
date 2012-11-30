@@ -26,9 +26,16 @@ doExternalTest(whitespace=FALSE)
 
 conf$cluster.functions = makeClusterFunctionsSSH(
   makeSSHWorker("rao"), 
-  makeSSHWorker("compute1"))
+  makeSSHWorker("compute2"))
 doExternalTest(whitespace=FALSE)
 doKillTest()
 
+nodes = c("compute2", "rao")
 
+info = getSSHWorkersInfo(nodes)
+expect_true(is.list(info) && length(info) == 2)
 
+y = callFunctionOnSSHWorkers(nodes, sqrt, 9, use.names=FALSE)
+expect_equal(y, rep(3, length(nodes)))
+
+installPackagesOnSSHWorkers(nodes, "BBmisc")
