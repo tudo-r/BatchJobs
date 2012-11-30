@@ -95,7 +95,9 @@ makeClusterFunctionsSSH = function(..., workers) {
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     worker = findWorker(workers, reg$file.dir, tdiff=5L)
     if (is.null(worker)) {
-      makeSubmitJobResult(status=1L, batch.job.id=NULL, msg="SSH busy, no worker available!")
+      states = collapse(extractSubList(workers, "available", simplify=TRUE), sep="")
+      makeSubmitJobResult(status=1L, batch.job.id=NULL, 
+        msg=sprintf("Workers busy: %s", states))
     } else {
       pid = try(startWorkerJob(worker, rscript, log.file))
       if (is.error(pid))
