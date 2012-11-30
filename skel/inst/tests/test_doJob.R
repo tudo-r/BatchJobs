@@ -8,7 +8,7 @@ test_that("doJob", {
   batchMap(reg, identity, 123)
   df = dbGetJobStatusTable(reg)
   expect_true(is.data.frame(df) && nrow(df) == 1 && ncol(df) == 12)
-  ids = findMissingResults(reg)
+  ids = findNotDone(reg)
   expect_equal(ids, id)
   saveConf(reg)
   expect_output({ 
@@ -19,7 +19,7 @@ test_that("doJob", {
   expect_true(!is.na(df$started) && !is.na(df$done) && is.na(df$error))
   y = loadResult(reg, id)
   expect_equal(y, 123)
-  ids = findMissingResults(reg)
+  ids = findNotDone(reg)
   expect_equal(length(ids), 0)
   
   # test working directory
@@ -48,13 +48,13 @@ test_that("doJob", {
   saveRegistry(reg)
   batchMap(reg, identity, 1)
   expect_error(submitJobs(reg), "please install the following packages: foo")
-  expect_equal(findMissingResults(reg), id)
+  expect_equal(findNotDone(reg), id)
 
   reg = makeTestRegistry(packages=c("randomForest"))
   f = function(i) randomForest(Species~., data=iris)
   batchMap(reg, f, 1)
   submitJobs(reg)
-  expect_equal(length(findMissingResults(reg)), 0)
+  expect_equal(length(findNotDone(reg)), 0)
 })
 
 }

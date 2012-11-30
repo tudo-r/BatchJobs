@@ -75,7 +75,7 @@
 reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
   checkRegistry(reg)
   syncRegistry(reg)
-  done = dbGetDone(reg)
+  done = findDone(reg)
   if (missing(ids)) {
     ids = done
   } else {
@@ -125,7 +125,7 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids))
-    ids = dbGetDone(reg)
+    ids = findDone(reg)
   if (missing(fun)){
     fun = function(job, res) res
   } else {

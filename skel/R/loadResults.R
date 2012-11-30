@@ -20,7 +20,7 @@ loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=T
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
-    ids = dbGetDone(reg)
+    ids = findDone(reg)
   } else {
     ids = checkIds(reg, ids)
   }

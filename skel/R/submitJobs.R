@@ -57,7 +57,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   checkArg(reg, cl="Registry")
   syncRegistry(reg)
   if (missing(ids)) {
-    ids = dbGetNotSubmitted(reg)
+    ids = findNotSubmitted(reg)
     if (length(ids) == 0L) {
       message("All jobs submitted, nothing to do!")
       return(invisible(NULL))

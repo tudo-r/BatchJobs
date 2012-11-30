@@ -219,32 +219,27 @@ dbGetLastAddedIds = function(reg, tab, id.col, n) {
   rev(dbDoQuery(reg, query)$id_col)
 }
 
-dbGetDone = function(reg, ids) {
+dbFindDone = function(reg, ids) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE done IS NOT NULL", reg$id)
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbGetMissingResults = function(reg, ids) {
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE done IS NULL", reg$id)
-  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
-}
-
-dbGetErrors = function(reg, ids) {
+dbFindErrors = function(reg, ids) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE error IS NOT NULL", reg$id)
   dbSelectWithIds(reg, query, where=FALSE)$job_id
 }
 
-dbGetSubmitted = function(reg, ids) {
+dbFindTerminated = function(reg, ids) {
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE done IS NOT NULL OR error IS NOT NULL", reg$id)
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
+}
+
+dbFindSubmitted = function(reg, ids) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE submitted IS NOT NULL", reg$id)
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbGetNotSubmitted = function(reg, ids) {
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE submitted IS NULL", reg$id)
-  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
-}
-
-dbGetStarted = function(reg, ids) {
+dbFindStarted = function(reg, ids) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE started IS NOT NULL", reg$id)
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
@@ -267,7 +262,7 @@ dbFindRunning = function(reg, ids) {
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbGetExpiredJobs = function(reg, batch.job.ids, ids) {
+dbFindExpiredJobs = function(reg, batch.job.ids, ids) {
   # started, not terminated, not running
   query = sprintf("SELECT job_id FROM %s_job_status WHERE started IS NOT NULL AND done IS NULL AND error is NULL AND
                   batch_job_id NOT IN ('%s')", reg$id, collapse(batch.job.ids, sep="','"))

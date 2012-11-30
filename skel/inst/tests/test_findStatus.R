@@ -13,6 +13,6 @@ test_that("findStatus", {
   expect_equal(j, ids[-2])
   j = findErrors(reg)
   expect_equal(j, ids[2])
-  j = findMissingResults(reg)
+  j = findNotDone(reg)
   expect_equal(j, ids[2])
 })

@@ -8,7 +8,7 @@ test_that("testJob", {
   batchMap(reg, identity, 1)
   res = testJob(reg, id)
   expect_equal(res, 1)
-  ids = findMissingResults(reg)
+  ids = findNotDone(reg)
   expect_equal(ids, id)
   expect_output({
     st = showStatus(reg)
@@ -23,7 +23,7 @@ test_that("testJob", {
   batchMap(reg, f, 1)
   res = testJob(reg, id)
   expect_true(is.null(res))
-  ids = findMissingResults(reg)
+  ids = findNotDone(reg)
   expect_equal(ids, id)
   expect_output({
     df = showStatus(reg)

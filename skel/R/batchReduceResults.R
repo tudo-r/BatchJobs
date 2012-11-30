@@ -49,7 +49,7 @@ batchReduceResults = function(reg, reg2, fun, ids, part=NA_character_, init, blo
     ids = dbGetJobIdsIfAllDone(reg)
   } else {
     ids = checkIds(reg, ids)
-    if (any(ids %nin% dbGetDone(reg)))
+    if (any(ids %nin% findDone(reg)))
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
   block.size = convertInteger(block.size)

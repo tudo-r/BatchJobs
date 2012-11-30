@@ -26,7 +26,7 @@
 grepLogs = function(reg, ids, pattern="warn", ignore.case=TRUE, verbose=FALSE, range=2L) {
   checkRegistry(reg)
   syncRegistry(reg)
-  terminated = union(dbGetDone(reg), dbGetErrors(reg))
+  terminated = findTerminated(reg)
   if (missing(ids)) {
     ids = terminated
   } else {

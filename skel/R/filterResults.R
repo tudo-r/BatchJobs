@@ -23,7 +23,7 @@ filterResults = function(reg, ids, fun, ...) {
   syncRegistry(reg)
   checkArg(fun, formals=c("job", "res"))
   if (missing(ids))
-    ids = dbGetDone(reg)
+    ids = findDone(reg)
   else
     ids = checkIds(reg, ids)
 
