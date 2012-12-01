@@ -47,10 +47,10 @@ getJobResources = function(reg, ids, as.list=TRUE) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
-    ids = findSubmitted(reg)
+    ids = dbFindSubmitted(reg)
   } else {
     ids = checkIds(reg, ids)
-    nsub = ids[ids %nin% findSubmitted(reg)]
+    nsub = dbFindSubmitted(reg, ids, negate=TRUE)
     if (length(nsub > 0))
       stopf("Some of your jobs have not been submitted, so no resources are available, e.g. for id=%i", nsub[1])
   }

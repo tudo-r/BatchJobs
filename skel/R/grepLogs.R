@@ -26,15 +26,15 @@
 grepLogs = function(reg, ids, pattern="warn", ignore.case=TRUE, verbose=FALSE, range=2L) {
   checkRegistry(reg)
   syncRegistry(reg)
-  terminated = findTerminated(reg)
+  terminated = dbFindTerminated(reg)
   if (missing(ids)) {
-    ids = terminated
+    ids = dbFindTerminated(reg)
   } else {
     ids = checkIds(reg, ids)
-    diff = setdiff(ids, terminated)
-    if (length(diff) > 0L)
+    not.terminated = dbFindTerminated(reg, ids, negate=TRUE)
+    if (length(not.terminated) > 0L)
       stopf("Not all jobs with provided ids have finished yet and therefore possess no log file, e.g. id=%i.",
-        diff[1L])
+        not.terminated[1L])
   }
   checkArg(pattern, "character", len=1L, na.ok=FALSE)
   checkArg(ignore.case, "logical", len=1L, na.ok=FALSE)

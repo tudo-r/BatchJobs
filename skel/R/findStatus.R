@@ -1,21 +1,3 @@
-findPos = function(reg, ids, fun) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  fun(reg, ids)
-}
-
-findNeg = function(reg, ids, fun) {
-  checkRegistry(reg)
-  if (!missing(ids)) {
-    ids2 = checkIds(reg, ids)
-  } else  {
-    ids2 = getJobIds(reg)
-  }
-  setdiff(ids2, fun(reg, ids))
-}
-
-
 #' Find jobs depending on computional state.
 #'
 #' \code{findDone}: Find jobs which succesfully terminated.
@@ -27,56 +9,80 @@ findNeg = function(reg, ids, fun) {
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
 findDone = function(reg, ids) {
-  findPos(reg, ids, dbFindDone)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindDone(reg, ids)
 }
 
 #' \code{findNotDone}: Find jobs for which results are still missing.
 #' @export
 #' @rdname findDone
 findNotDone = function(reg, ids) {
-  findNeg(reg, ids, dbFindDone)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindDone(reg, ids, negate=TRUE)
 }
 
 #' \code{findErrors}: Find jobs where errors occured.
 #' @export
 #' @rdname findDone
 findErrors = function(reg, ids) {
-  findPos(reg, ids, dbFindErrors)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindErrors(reg, ids)
 }
 
 #' \code{findNotErrors}: Find jobs where no errors occured.
 #' @export
 #' @rdname findDone
 findNotErrors = function(reg, ids) {
-  findNeg(reg, ids, dbFindErrors)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindErrors(reg, ids, negate=TRUE)
 }
 
 #' \code{findTerminated}: Find jobs which have terminated (done / error).
 #' @export
 #' @rdname findDone
 findTerminated = function(reg, ids) {
-  findPos(reg, ids, dbFindTerminated)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindTerminated(reg, ids)
 }
 
 #' \code{findNotTerminated}: Find jobs which have not terminated (not done / no error).
 #' @export
 #' @rdname findDone
 findNotTerminated = function(reg, ids) {
-  findNeg(reg, ids, dbFindTerminated)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindTerminated(reg, ids, negate=TRUE)
 }
 
 #' \code{findSubmitted}: Find jobs which have been submitted.
 #' @export
 #' @rdname findDone
 findSubmitted = function(reg, ids) {
-  findPos(reg, ids, dbFindSubmitted)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindSubmitted(reg, ids)
 }
 
 #' \code{findNotSubmitted}: Find jobs which have not been submitted.
 #' @export
 #' @rdname findDone
 findNotSubmitted = function(reg, ids) {
-  findNeg(reg, ids, findSubmitted)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindSubmitted(reg, ids, negate=TRUE)
 }
 
 
@@ -84,28 +90,40 @@ findNotSubmitted = function(reg, ids) {
 #' @export
 #' @rdname findDone
 findOnSystem = function(reg, ids) {
-  findPos(reg, ids, dbFindOnSystem)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindOnSystem(reg, ids)
 }
 
 #' \code{findNotOnSystem}: Find jobs which are not present on the batch system at the moment.
 #' @export
 #' @rdname findDone
 findNotOnSystem = function(reg, ids) {
-  findNeg(reg, ids, findOnSystem)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindOnSystem(reg, ids, negate=TRUE)
 }
 
 #' \code{findRunning}: Find jobs which are running.
 #' @export
 #' @rdname findDone
 findRunning = function(reg, ids) {
-  findPos(reg, ids, dbFindRunning)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindRunning(reg, ids)
 }
 
 #' \code{findNotRunning}: Find jobs which are not running.
 #' @export
 #' @rdname findDone
 findNotRunning = function(reg, ids) {
-  findNeg(reg, ids, findRunning)
+  checkRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  dbFindRunning(reg, ids, negate=TRUE)
 }
 
 #' \code{findExpired}: Find jobs where walltime was probably hit.

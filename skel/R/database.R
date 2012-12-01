@@ -205,6 +205,12 @@ dbGetJobIds = function(reg) {
   dbDoQuery(reg, query)$job_id
 }
 
+dbCheckJobIds = function(reg, ids) {
+  not.found = setdiff(ids, BatchJobs:::dbGetJobIds(reg))
+  if (length(not.found) > 0L)
+    stopf("Ids not present in registry: %s", collapse(not.found))
+}
+
 dbGetJobIdsIfAllDone = function(reg) {
   query = sprintf("SELECT job_id, done FROM %s_job_status", reg$id)
   res = dbDoQuery(reg, query)
@@ -219,56 +225,55 @@ dbGetLastAddedIds = function(reg, tab, id.col, n) {
   rev(dbDoQuery(reg, query)$id_col)
 }
 
-dbFindDone = function(reg, ids) {
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE done IS NOT NULL", reg$id)
+dbFindDone = function(reg, ids, negate=FALSE) {
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (done IS NOT NULL)", reg$id, if(negate) "NOT" else "")
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbFindErrors = function(reg, ids) {
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE error IS NOT NULL", reg$id)
+dbFindErrors = function(reg, ids, negate=FALSE) {
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (error IS NOT NULL)", reg$id, if(negate) "NOT" else "")
   dbSelectWithIds(reg, query, where=FALSE)$job_id
 }
 
-dbFindTerminated = function(reg, ids) {
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE done IS NOT NULL OR error IS NOT NULL", reg$id)
+dbFindTerminated = function(reg, ids, negate=FALSE) {
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (done IS NOT NULL OR error IS NOT NULL)", reg$id, if(negate) "NOT" else "")
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbFindSubmitted = function(reg, ids) {
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE submitted IS NOT NULL", reg$id)
+dbFindSubmitted = function(reg, ids, negate=FALSE) {
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (submitted IS NOT NULL)", reg$id, if (negate) "NOT" else "")
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbFindStarted = function(reg, ids) {
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE started IS NOT NULL", reg$id)
+dbFindStarted = function(reg, ids, negate=FALSE) {
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (started IS NOT NULL)", reg$id, if (negate) "NOT" else "")
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbFindOnSystem = function(reg, ids) {
+dbFindOnSystem = function(reg, ids, negate=FALSE) {
   fun = getListJobs("Cannot find jobs on system")
   batch.job.ids = fun(getBatchJobsConf(), reg)
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE batch_job_id IN ('%s')",
-                  reg$id, collapse(batch.job.ids, sep="','"))
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN ('%s'))",
+                  reg$id, if (negate) "NOT" else "", collapse(batch.job.ids, sep="','"))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbFindRunning = function(reg, ids) {
+dbFindRunning = function(reg, ids, negate=FALSE) {
   fun = getListJobs("Cannot find running jobs")
   batch.job.ids = fun(getBatchJobsConf(), reg)
   # running jobs are running on batch system in general and must have started for this reg
   # also not terminated
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE batch_job_id IN ('%s') AND started IS NOT NULL AND done IS NULL AND error IS NULL",
-                  reg$id, collapse(batch.job.ids, sep="','"))
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN ('%s') AND started IS NOT NULL AND done IS NULL AND error IS NULL)",
+                  reg$id, if (negate) "NOT" else "", collapse(batch.job.ids, sep="','"))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbFindExpiredJobs = function(reg, batch.job.ids, ids) {
+dbFindExpiredJobs = function(reg, batch.job.ids, ids, negate=FALSE) {
   # started, not terminated, not running
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE started IS NOT NULL AND done IS NULL AND error is NULL AND
-                  batch_job_id NOT IN ('%s')", reg$id, collapse(batch.job.ids, sep="','"))
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (started IS NOT NULL AND done IS NULL AND error is NULL AND
+                  batch_job_id NOT IN ('%s'))", reg$id, if (negate) "NOT" else "", collapse(batch.job.ids, sep="','"))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
-
 
 dbGetFirstJobInChunkIds = function(reg, ids){
   query = sprintf("SELECT job_id, first_job_in_chunk_id FROM %s_job_status", reg$id)

@@ -47,7 +47,7 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.a
     ids = dbGetJobIdsIfAllDone(reg)
   } else {
     ids = checkIds(reg, ids)
-    if (any(ids %nin% findDone(reg)))
+    if (length(dbFindDone(reg, ids, negate=TRUE)) > 0L)
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
   checkMoreArgs(more.args, reserved=c(".reg", ".fun", ".part"))

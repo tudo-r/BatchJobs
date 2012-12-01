@@ -57,24 +57,20 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   checkArg(reg, cl="Registry")
   syncRegistry(reg)
   if (missing(ids)) {
-    ids = findNotSubmitted(reg)
+    ids = dbFindSubmitted(reg, negate=TRUE)
     if (length(ids) == 0L) {
       message("All jobs submitted, nothing to do!")
       return(invisible(NULL))
     }
   } else {
     if (is.list(ids)) {
-      ids = lapply(ids, convertIntegers)
-      checkListElementClass(ids, "integer")
-      if(any(is.na(unlist(ids))))
-        stop("Chunks must not contain NAs!")
+      ids = lapply(ids, checkIds, reg=reg, check.present=FALSE)
+      dbCheckJobIds(reg, unlist(ids))
     } else if(is.numeric(ids)) {
-      ids = convertIntegers(ids)
-      checkArg(ids, "integer", na.ok=FALSE)
+      ids = checkIds(reg, ids)
     } else {
-      stop("ids must be a integer vector of job ids or a list of chunked job ids (list of integer vectors)!")
+      stop("Parameter 'ids' must be a integer vector of job ids or a list of chunked job ids (list of integer vectors)!")
     }
-    checkIdsPresent(reg, unlist(ids))
   }
   checkArg(resources, "list")
   resources = do.call(resrc, resources)
@@ -192,14 +188,14 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
             if (retries > max.retries)
               stopf("Retried already %i times to submit. Aborting.", retries)
 
-            
+
             # FIXME we could use the sleep here for synchronization
             bar$inc(msg=sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
             # FIXME: the next lines are an ugly hack and should be moved to bbmisc
             Sys.sleep(sleep.secs/2)
             pbw = getOption("BBmisc.ProgressBar.width", getOption("width"))
             labw = environment(bar$set)$label.width
-            lab = sprintf(sprintf("%%%is", labw), 
+            lab = sprintf(sprintf("%%%is", labw),
               sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
             cat(paste(rep("\b \b", pbw-2), collapse=""))
             bmrmsg = batch.result$msg

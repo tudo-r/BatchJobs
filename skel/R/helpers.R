@@ -2,28 +2,24 @@ checkRegistry = function(reg, ids) {
   checkArg(reg, cl = "Registry")
 }
 
-checkIds = function(reg, ids) {
+checkIds = function(reg, ids, check.present=TRUE) {
   ids = convertIntegers(ids)
   checkArg(ids, cl="integer", na.ok=FALSE)
   if (anyDuplicated(ids) > 0L) {
     dup = ids[duplicated(ids)]
     stopf("You have duplicated entries in your id vector: %s", collapse(dup))
   }
-  checkIdsPresent(reg, ids)
+  if (check.present)
+    dbCheckJobIds(reg, ids)
   return(ids)
 }
 
-checkId = function(reg, id) {
+checkId = function(reg, id, check.present=TRUE) {
   id = convertInteger(id)
   checkArg(id, cl="integer", na.ok=FALSE, len=1L)
-  checkIdsPresent(reg, id)
+  if (check.present)
+    dbCheckJobIds(reg, id)
   return(id)
-}
-
-checkIdsPresent = function(reg, ids) {
-  faulty = setdiff(ids, dbGetJobIds(reg))
-  if (length(faulty) > 0L)
-    stopf("Ids not present in registry: %s", collapse(faulty))
 }
 
 checkMoreArgs = function(more.args, reserved) {
