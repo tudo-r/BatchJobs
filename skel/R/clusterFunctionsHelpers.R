@@ -12,10 +12,7 @@
 #' @export
 cfReadBrewTemplate = function(template.file) {
   checkArg(template.file, "character", len=1L, na.ok=FALSE)
-  fd = file(template.file, "r")
-  template = paste(readLines(fd), collapse="\n")
-  close(fd)
-  return(template)
+  collapse(readLines(template.file), "\n")
 }
 
 #' Cluster functions helper: Brew your template into a job description file.
@@ -47,13 +44,13 @@ cfBrewTemplate = function(conf, template, rscript, extension) {
     # if debug, place in jobs dir
     outfile = sub("\\.R$", sprintf(".%s", extension), rscript)
   } else {
-    outfile = tempfile()
+    outfile = tempfile("template")
   }
   pf = parent.frame()
   old = getOption("show.error.messages")
+  on.exit(options(show.error.messages=old))
   options(show.error.messages=FALSE)
   z = suppressAll(brew(text=template, output=outfile, envir=pf))
-  options(show.error.messages=old)
   if (is.error(z))
     stop(z)
   return(outfile)
