@@ -50,9 +50,9 @@ cfBrewTemplate = function(conf, template, rscript, extension) {
   old = getOption("show.error.messages")
   on.exit(options(show.error.messages=old))
   options(show.error.messages=FALSE)
-  z = suppressAll(brew(text=template, output=outfile, envir=pf))
+  z = suppressAll(try(brew(text=template, output=outfile, envir=pf), silent=TRUE))
   if (is.error(z))
-    stop(z)
+    stopf("Error brewing template: %s", as.character(z))
   return(outfile)
 }
 
@@ -104,6 +104,7 @@ cfKillBatchJob = function(cmd, batch.job.id, max.tries=3L) {
   checkArg(batch.job.id, "character", len=1L, na.ok=FALSE)
   max.tries = convertInteger(max.tries)
   checkArg(max.tries, "integer", len=1L, na.ok=FALSE)
+
   tries = 0L
   while(TRUE) {
     res = runOSCommandLinux(cmd, batch.job.id, stop.on.exit.code=FALSE)
@@ -111,11 +112,12 @@ cfKillBatchJob = function(cmd, batch.job.id, max.tries=3L) {
       return()
     }
 
-    tries = tries + 1L
-    if (tries > max.tries) {
+    if (tries == max.tries) {
       stopf("Really tried to kill job, but could not do it. batch job id is %s.\nMessage: %s",
             batch.job.id, collapse(res$output, sep="\n"))
     }
+
+    tries = tries + 1L
     Sys.sleep(1)
   }
 }
