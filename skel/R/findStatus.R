@@ -137,7 +137,5 @@ findExpired = function(reg, ids) {
   syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
-  fun = getListJobs("Cannot find expired jobs")
-  batch.job.ids = fun(getBatchJobsConf(), reg)
-  dbFindExpiredJobs(reg, batch.job.ids, ids)
+  dbFindExpiredJobs(reg, ids)
 }

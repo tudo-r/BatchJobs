@@ -52,9 +52,8 @@ getListJobs = function(msg=NULL) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)
   fun = cf$listJobs
-  if (is.null(fun))
-    if (!is.null(msg))
-      stopf("%s because %s cluster functions do not support listing of jobs!", msg, cf$name)
+  if (is.null(fun) && !is.null(msg))
+    stopf("%s because %s cluster functions do not support listing of jobs!", msg, cf$name)
   return(fun)
 }
 
@@ -62,9 +61,8 @@ getKillJob = function(msg=NULL) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)
   fun = cf$killJob
-  if (is.null(fun))
-    if (!is.null(msg))
-      stopf("%s because %s cluster functions do not support killing of jobs!", msg, cf$name)
+  if (is.null(fun) && !is.null(msg))
+    stopf("%s because %s cluster functions do not support killing of jobs!", msg, cf$name)
   return(fun)
 }
 

@@ -96,7 +96,9 @@ dbSelectWithIds = function(reg, query, ids, where=TRUE, group.by, limit, reorder
   res = dbDoQuery(reg, query)
   if(missing(ids) || !reorder)
     return(res)
-  # NOTE: only reorder if job_id is queried, otherwise an empty df is returned ...
+  # FIXME remove check on release
+  if ("job_id" %nin% names(res))
+    stop("Internal error: job_id not found")
   return(res[na.omit(match(ids, res$job_id)),, drop=FALSE])
 }
 
@@ -268,12 +270,15 @@ dbFindRunning = function(reg, ids, negate=FALSE) {
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbFindExpiredJobs = function(reg, batch.job.ids, ids, negate=FALSE) {
+dbFindExpiredJobs = function(reg, ids, negate=FALSE) {
   # started, not terminated, not running
+  fun = getListJobs("Cannot find expired jobs")
+  batch.job.ids = fun(getBatchJobsConf(), reg)
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (started IS NOT NULL AND done IS NULL AND error is NULL AND
                   batch_job_id NOT IN ('%s'))", reg$id, if (negate) "NOT" else "", collapse(batch.job.ids, sep="','"))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
+
 
 dbGetFirstJobInChunkIds = function(reg, ids){
   query = sprintf("SELECT job_id, first_job_in_chunk_id FROM %s_job_status", reg$id)
@@ -313,10 +318,7 @@ dbGetStats = function(reg, ids, running=FALSE, expired=FALSE) {
     "MAX(done - started) AS t_max",
     "FROM %s_job_status"), q.r, q.e, reg$id)
 
-  if(!missing(ids))
-    query = sprintf("%s WHERE job_id IN (%s)", query, collapse(ids))
-
-  df = dbDoQuery(reg, query)
+  df = dbSelectWithIds(reg, query, ids, reorder=FALSE)
 
   # Convert to correct type. Null has no type and casts don't work properly with RSQLite
   x = c("n", "submitted", "started", "done", "error", "running", "expired")

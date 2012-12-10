@@ -75,14 +75,13 @@
 reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
   checkRegistry(reg)
   syncRegistry(reg)
-  done = dbFindDone(reg)
   if (missing(ids)) {
     ids = dbFindDone(reg)
   } else {
     ids = checkIds(reg, ids)
-    not.done = dbFindDone(reg, ids, negate=TRUE)
-    if (length(not.done) > 0L)
-      stopf("No results available for jobs with ids: %s", collapse(not.done))
+    ndone = dbFindDone(reg, ids, negate=TRUE)
+    if (length(ndone) > 0L)
+      stopf("No results available for jobs with ids: %s", collapse(ndone))
   }
   checkArg(fun, formals=c("aggr", "job", "res"))
 
