@@ -1,7 +1,11 @@
 #' Wait for termination of jobs on the batch system.
 #'
 #' Waits for termination of jobs while displaying a progress bar
-#' containing summarizing informations.
+#' containing summarizing informations of the jobs.
+#' The following abbrevations are used in the progress bar:
+#' \dQuote{S} for number of jobs on system, \dQuote{R} for number of jobs running
+#' \dQuote{D} for number of jobs successfully terminated and \dQuote{E} for number of
+#' jobs terminated with an R exception.
 #'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
