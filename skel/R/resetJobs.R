@@ -35,7 +35,7 @@ resetJobs = function(reg, ids, force=FALSE) {
   if (!force) {
     if(is.null(getListJobs()) || is.null(getKillJob())) {
       stop("Listing or killing of jobs not supported by your cluster functions\n",
-           "You need to set force=TRUE to reset jobs, but note the warning in ?resetJobs")
+           "You need to set force=TRUE to reset jobs, but see the warning in ?resetJobs")
     }
     running = dbFindOnSystem(reg, ids)
     if (length(running) > 0L)

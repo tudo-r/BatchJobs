@@ -252,30 +252,30 @@ dbFindStarted = function(reg, ids, negate=FALSE) {
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbFindOnSystem = function(reg, ids, negate=FALSE) {
-  fun = getListJobs("Cannot find jobs on system")
-  batch.job.ids = fun(getBatchJobsConf(), reg)
+dbFindOnSystem = function(reg, ids, negate=FALSE, batch.ids) {
+  if (missing(batch.ids))
+    batch.ids = getBatchIds(reg, "Cannot find jobs on system")
+
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN ('%s'))",
-                  reg$id, if (negate) "NOT" else "", collapse(batch.job.ids, sep="','"))
+                  reg$id, if (negate) "NOT" else "", collapse(batch.ids, sep="','"))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbFindRunning = function(reg, ids, negate=FALSE) {
-  fun = getListJobs("Cannot find running jobs")
-  batch.job.ids = fun(getBatchJobsConf(), reg)
-  # running jobs are running on batch system in general and must have started for this reg
-  # also not terminated
+dbFindRunning = function(reg, ids, negate=FALSE, batch.ids) {
+  if (missing(batch.ids))
+    batch.ids = getBatchIds(reg, "Cannot find jobs on system")
+
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN ('%s') AND started IS NOT NULL AND done IS NULL AND error IS NULL)",
-                  reg$id, if (negate) "NOT" else "", collapse(batch.job.ids, sep="','"))
+                  reg$id, if (negate) "NOT" else "", collapse(batch.ids, sep="','"))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-dbFindExpiredJobs = function(reg, ids, negate=FALSE) {
+dbFindExpiredJobs = function(reg, ids, negate=FALSE, batch.ids) {
+  if (missing(batch.ids))
+    batch.ids = getBatchIds(reg, "Cannot find jobs on system")
   # started, not terminated, not running
-  fun = getListJobs("Cannot find expired jobs")
-  batch.job.ids = fun(getBatchJobsConf(), reg)
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (started IS NOT NULL AND done IS NULL AND error is NULL AND
-                  batch_job_id NOT IN ('%s'))", reg$id, if (negate) "NOT" else "", collapse(batch.job.ids, sep="','"))
+                  batch_job_id NOT IN ('%s'))", reg$id, if (negate) "NOT" else "", collapse(batch.ids, sep="','"))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
@@ -292,35 +292,31 @@ dbGetErrorMsgs = function(reg, ids, filter=FALSE, limit) {
   dbSelectWithIds(reg, query, ids, where=!filter, limit=limit)
 }
 
-dbGetStats = function(reg, ids, running=FALSE, expired=FALSE) {
-  q.r = q.e = "NULL"
+dbGetStats = function(reg, ids, running=FALSE, expired=FALSE, times=FALSE, batch.ids) {
+  cols = c(n         = "COUNT(job_id)",
+           submitted = "COUNT(submitted)",
+           started   = "COUNT(started)",
+           done      = "COUNT(done)",
+           error     = "COUNT(error)",
+           running   = "NULL",
+           expired   = "NULL",
+           t_min     = "NULL",
+           t_avg     = "NULL",
+           t_max     = "NULL")
 
-  if(running || expired) {
-    fun = getListJobs("Cannot find running or expired jobs")
-    batch.job.ids = fun(getBatchJobsConf(), reg)
+  if (missing(batch.ids) && (expired || running))
+    batch.ids = getBatchIds(reg, "Cannot find jobs on system")
+  if(running)
+    cols["running"] = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id IN ('%s'))", collapse(batch.ids, sep="','"))
+  if(expired)
+    cols["expired"] = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id NOT IN ('%s'))", collapse(batch.ids, sep="','"))
+  if (times)
+    cols[c("t_min", "t_avg", "t_max")] = c("MIN(done - started)", "AVG(done - started)", "MAX(done - started)")
 
-    if(running)
-      q.r = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id IN ('%s'))", collapse(batch.job.ids, sep="','"))
-    if(expired)
-      q.e = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id NOT IN ('%s'))", collapse(batch.job.ids, sep="','"))
-  }
-
-  query = sprintf(paste(
-    "SELECT COUNT(job_id) AS n,",
-    "COUNT(submitted) AS submitted,",
-    "COUNT(started) AS started,",
-    "COUNT(done) AS done,",
-    "COUNT(error) AS error,",
-    "%s AS running,",
-    "%s AS expired,",
-    "MIN(done - started) AS t_min,",
-    "AVG(done - started) AS t_avg,",
-    "MAX(done - started) AS t_max",
-    "FROM %s_job_status"), q.r, q.e, reg$id)
-
+  query = sprintf("SELECT %s FROM %s_job_status", collapse(paste(cols, "AS", names(cols)), sep = ", "), reg$id)
   df = dbSelectWithIds(reg, query, ids, reorder=FALSE)
 
-  # Convert to correct type. Null has no type and casts don't work properly with RSQLite
+  # Convert to correct type. Null has no type and casts tend to not work properly with RSQLite
   x = c("n", "submitted", "started", "done", "error", "running", "expired")
   df[x] = lapply(df[x], as.integer)
   x = c("t_min", "t_avg", "t_max")

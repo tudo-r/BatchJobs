@@ -36,7 +36,7 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
   checkArg(errors, "integer", na.ok=FALSE, len=1L)
 
   run.and.exp = run.and.exp && !is.null(getListJobs())
-  stats = dbGetStats(reg, ids, running = run.and.exp, expired = run.and.exp)
+  stats = dbGetStats(reg, ids, running=run.and.exp, expired=run.and.exp, times=TRUE)
 
   procent = function(x, n) {
     if(is.na(x))

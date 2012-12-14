@@ -106,7 +106,7 @@ cfKillBatchJob = function(cmd, batch.job.id, max.tries=3L) {
   checkArg(max.tries, "integer", len=1L, na.ok=FALSE)
 
   tries = 0L
-  while(TRUE) {
+  repeat {
     res = runOSCommandLinux(cmd, batch.job.id, stop.on.exit.code=FALSE)
     if (res$exit.code == 0L) {
       return()

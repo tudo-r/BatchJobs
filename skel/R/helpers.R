@@ -48,6 +48,7 @@ checkPart = function(reg, part) {
   }
 }
 
+
 getListJobs = function(msg=NULL) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)
@@ -64,6 +65,11 @@ getKillJob = function(msg=NULL) {
   if (is.null(fun) && !is.null(msg))
     stopf("%s because %s cluster functions do not support killing of jobs!", msg, cf$name)
   return(fun)
+}
+
+getBatchIds = function(reg, msg=NULL) {
+  fun = getListJobs(msg)
+  fun(getBatchJobsConf(), reg)
 }
 
 getRandomSeed = function(n = 1L) {
