@@ -8,6 +8,7 @@
 #'   Default is all jobs.
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
+#' @rdname findState
 findDone = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -17,7 +18,7 @@ findDone = function(reg, ids) {
 
 #' \code{findNotDone}: Find jobs for which results are still missing.
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findNotDone = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -27,14 +28,14 @@ findNotDone = function(reg, ids) {
 
 #' \code{findMissingResults}: Deprecated. Alias for findNotDone.
 #' @export
-#' @rdname findMissingResults
+#' @rdname findState
 findMissingResults = function(reg, ids) {
   findNotDone(reg, ids)
 }
 
 #' \code{findErrors}: Find jobs where errors occured.
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findErrors = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -44,7 +45,7 @@ findErrors = function(reg, ids) {
 
 #' \code{findNotErrors}: Find jobs where no errors occured.
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findNotErrors = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -54,7 +55,7 @@ findNotErrors = function(reg, ids) {
 
 #' \code{findTerminated}: Find jobs which have terminated (done / error).
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findTerminated = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -64,7 +65,7 @@ findTerminated = function(reg, ids) {
 
 #' \code{findNotTerminated}: Find jobs which have not terminated (not done / no error).
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findNotTerminated = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -74,7 +75,7 @@ findNotTerminated = function(reg, ids) {
 
 #' \code{findSubmitted}: Find jobs which have been submitted.
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findSubmitted = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -84,7 +85,7 @@ findSubmitted = function(reg, ids) {
 
 #' \code{findNotSubmitted}: Find jobs which have not been submitted.
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findNotSubmitted = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -95,7 +96,7 @@ findNotSubmitted = function(reg, ids) {
 
 #' \code{findOnSystem}: Find jobs which are present on the batch system at the moment.
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findOnSystem = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -105,7 +106,7 @@ findOnSystem = function(reg, ids) {
 
 #' \code{findNotOnSystem}: Find jobs which are not present on the batch system at the moment.
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findNotOnSystem = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -115,7 +116,7 @@ findNotOnSystem = function(reg, ids) {
 
 #' \code{findRunning}: Find jobs which are running.
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findRunning = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -125,7 +126,7 @@ findRunning = function(reg, ids) {
 
 #' \code{findNotRunning}: Find jobs which are not running.
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findNotRunning = function(reg, ids) {
   checkRegistry(reg)
   if (!missing(ids))
@@ -138,7 +139,7 @@ findNotRunning = function(reg, ids) {
 #' Find all jobs that have submitted, did not abort with an error,
 #' did not complete with a result and are not submitted or running anymore.
 #' @export
-#' @rdname findDone
+#' @rdname findState
 findExpired = function(reg, ids) {
   checkRegistry(reg)
   syncRegistry(reg)
