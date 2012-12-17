@@ -42,10 +42,9 @@ batchMapQuick = function(fun, ..., more.args=list(), packages=character(0L),
   checkArg(temporary, cl="logical", len=1L, na.ok=FALSE)
   id = basename(tempfile(pattern="bmq_"))
   fd = ifelse(temporary, file.path(tempdir(), id), id)
-  on.exit(messagef("Interrupted. You can find your registry in %s.", df))
-
   reg = makeRegistry(id=id, file.dir=fd, packages=packages)
-
+  on.exit(messagef("Interrupted. You can find your registry in %s.", reg$file.dir))
+  
   # we want to return the reg in any case
   # otherwise we cannot look at it / do anything with it in case of errors
   try({
