@@ -25,6 +25,13 @@ findNotDone = function(reg, ids) {
   dbFindDone(reg, ids, negate=TRUE)
 }
 
+#' \code{findMissingResults}: Deprecated. Alias for findNotDone.
+#' @export
+#' @rdname findMissingResults
+findMissingResults = function(reg, ids) {
+  findNotDone(reg, ids)
+}
+
 #' \code{findErrors}: Find jobs where errors occured.
 #' @export
 #' @rdname findDone
