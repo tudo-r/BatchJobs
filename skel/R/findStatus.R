@@ -1,3 +1,11 @@
+findState = function(reg, ids, fun, negate) {
+  checkRegistry(reg)
+  syncRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  fun(reg, ids, negate)
+}
+
 #' Find jobs depending on computional state.
 #'
 #' \code{findDone}: Find jobs which succesfully terminated.
@@ -10,20 +18,14 @@
 #' @export
 #' @rdname findState
 findDone = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindDone(reg, ids)
+  findState(reg, ids, dbFindDone, FALSE)
 }
 
 #' \code{findNotDone}: Find jobs for which results are still missing.
 #' @export
 #' @rdname findState
 findNotDone = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindDone(reg, ids, negate=TRUE)
+  findState(reg, ids, dbFindDone, TRUE)
 }
 
 #' \code{findMissingResults}: Deprecated. Alias for findNotDone.
@@ -37,60 +39,42 @@ findMissingResults = function(reg, ids) {
 #' @export
 #' @rdname findState
 findErrors = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindErrors(reg, ids)
+  findState(reg, ids, dbFindErrors, FALSE)
 }
 
 #' \code{findNotErrors}: Find jobs where no errors occured.
 #' @export
 #' @rdname findState
 findNotErrors = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindErrors(reg, ids, negate=TRUE)
+  findState(reg, ids, dbFindErrors, TRUE)
 }
 
 #' \code{findTerminated}: Find jobs which have terminated (done / error).
 #' @export
 #' @rdname findState
 findTerminated = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindTerminated(reg, ids)
+  findState(reg, ids, dbFindTerminated, FALSE)
 }
 
 #' \code{findNotTerminated}: Find jobs which have not terminated (not done / no error).
 #' @export
 #' @rdname findState
 findNotTerminated = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindTerminated(reg, ids, negate=TRUE)
+  findState(reg, ids, dbFindTerminated, TRUE)
 }
 
 #' \code{findSubmitted}: Find jobs which have been submitted.
 #' @export
 #' @rdname findState
 findSubmitted = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindSubmitted(reg, ids)
+  findState(reg, ids, dbFindSubmitted, FALSE)
 }
 
 #' \code{findNotSubmitted}: Find jobs which have not been submitted.
 #' @export
 #' @rdname findState
 findNotSubmitted = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindSubmitted(reg, ids, negate=TRUE)
+  findState(reg, ids, dbFindSubmitted, TRUE)
 }
 
 
@@ -98,40 +82,28 @@ findNotSubmitted = function(reg, ids) {
 #' @export
 #' @rdname findState
 findOnSystem = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindOnSystem(reg, ids)
+  findState(reg, ids, dbFindOnSystem, FALSE)
 }
 
 #' \code{findNotOnSystem}: Find jobs which are not present on the batch system at the moment.
 #' @export
 #' @rdname findState
 findNotOnSystem = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindOnSystem(reg, ids, negate=TRUE)
+  findState(reg, ids, dbFindOnSystem, TRUE)
 }
 
 #' \code{findRunning}: Find jobs which are running.
 #' @export
 #' @rdname findState
 findRunning = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindRunning(reg, ids)
+  findState(reg, ids, dbFindRunning, FALSE)
 }
 
 #' \code{findNotRunning}: Find jobs which are not running.
 #' @export
 #' @rdname findState
 findNotRunning = function(reg, ids) {
-  checkRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindRunning(reg, ids, negate=TRUE)
+  findState(reg, ids, dbFindRunning, TRUE)
 }
 
 #' \code{findExpired}: Find jobs where walltime was probably hit.
@@ -141,9 +113,5 @@ findNotRunning = function(reg, ids) {
 #' @export
 #' @rdname findState
 findExpired = function(reg, ids) {
-  checkRegistry(reg)
-  syncRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  dbFindExpiredJobs(reg, ids)
+  findState(reg, ids, dbFindExpiredJobs, FALSE)
 }
