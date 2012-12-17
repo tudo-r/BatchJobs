@@ -77,7 +77,7 @@ getJobInfo = function(reg, ids, pars=FALSE, prefix.pars=FALSE, select, unit="sec
 
 #' @method getJobInfo Registry
 #' @S3method getJobInfo Registry
-getJobInfo.Registry = function(reg, ids, pars=FALSE, prefix.pars=FALSE, select, unit = "seconds") {
+getJobInfo.Registry = function(reg, ids, pars=FALSE, prefix.pars=FALSE, select, unit="seconds") {
   syncRegistry(reg)
   checkArg(pars, "logical", len=1L, na.ok=FALSE)
   columns = c(job.id="job_id")

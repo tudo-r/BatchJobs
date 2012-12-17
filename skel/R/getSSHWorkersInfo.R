@@ -3,7 +3,7 @@
 #' Workers are queried in parallel via \code{\link{callFunctionOnSSHWorkers}}.
 #'
 #' The function will display a warning if the first lib path on the worker
-#' is not writeable as this indicates protential problems in the configuaration
+#' is not writable as this indicates potential problems in the configuration
 #' and \code{\link{installPackagesOnSSHWorkers}} will not work.
 #'
 #' @param nodenames [\code{character}]\cr
