@@ -9,7 +9,7 @@ URL: http://batchjobs.googlecode.com
 BugReports: http://code.google.com/p/batchjobs/issues/list
 MailingList: batchjobs@googlegroups.com
 License: BSD
-Depends: BBmisc (>= 1.1-162)
+Depends: BBmisc (>= 1.1-166)
 Imports: utils, digest, DBI, RSQLite, sendmailR, brew, plyr
 Suggests: testthat
 LazyData: yes
