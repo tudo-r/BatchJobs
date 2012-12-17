@@ -1,3 +1,14 @@
+#' BatchJobs configuration.
+#'
+#' In order to understand how the package should be configured 
+#' please read: 
+#' \url{https://code.google.com/p/batchjobs/wiki/Configuration}
+#'
+#' @name configuration
+#' @rdname configuration
+#' @aliases .BatchJobs.R
+NULL
+
 # sources 1 config file and returns the envir
 sourceConfFile = function(conffile) {
   checkArg(conffile, "character", len=1L, na.ok=FALSE)
@@ -132,6 +143,7 @@ getClusterFunctions = function(conf) {
 }
 
 #' Display BatchJobs configuration.
+#'
 #' @return Nothing.
 #' @export
 showConf = function() {
@@ -151,6 +163,7 @@ showConf = function() {
 }
 
 #' Load a specific configuration file.
+#'
 #' @param conffile [\code{character(1)}]\cr
 #'   Location of the configuration file to load.
 #' @return Nothing.
