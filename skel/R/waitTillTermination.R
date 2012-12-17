@@ -21,7 +21,7 @@
 #'   Default is \code{604800} (one week).
 #' @return Returns \code{TRUE} on success, \code{FALSE} if the timeout is reached.
 #' @export
-batchWait = function(reg, ids, sleep = 10, timeout = 604800) {
+waitTillTermination = function(reg, ids, sleep = 10, timeout = 604800) {
   checkRegistry(reg)
   syncRegistry(reg)
 

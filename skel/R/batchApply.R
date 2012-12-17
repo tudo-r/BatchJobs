@@ -1,6 +1,6 @@
 #' A simple wrapper to batchMap to define jobs as an application of a function.
+#' on margins of matrices.
 #'
-#' on margins of matricies.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Empty Registry that will store jobs for the mapping.
 #' @param X [\code{\link{matrix}}]\cr
@@ -31,26 +31,22 @@
 #' reduceResultsVector(reg, use.names=FALSE) == rowSums(X)
 #' @export
 batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ...) {
-  checkArg(X, cl="matrix")
-  checkArg(fun, cl="function")
+  if (!is.matrix(X) && !is.array(X))
+    stopf("Argument X must be of class matrix or array, not %s", class(X))
+  dX = dim(X)
   margin = convertInteger(margin)
-  checkArg(margin, "integer", len=1L, lower=1L, upper=2L, na.ok=FALSE)
+  checkArg(margin, "integer", len=1L, lower=1L, upper=length(dX), na.ok=FALSE)
+  checkArg(fun, cl="function")
 
-  if (margin == 1L) {
-    inds = seq_len(nrow(X))
-    wrapper = function(.X, .inds, .user.fun, ...) {
-      apply(.X[.inds,, drop=FALSE], 1L, .user.fun, ...)
-    }
-  } else {
-    inds = seq_len(ncol(X))
-    wrapper = function(.X, .inds, .user.fun, ...) {
-      apply(.X[,.inds, drop=FALSE], 2L, .user.fun, ...)
-    }
-  }
-
+  # move MARGIN dim to first position
+  X = aperm(X, c(MARGIN, setdiff(seq_along(dX), MARGIN)))
   if (missing(chunk.size) && missing(n.chunks))
     chunk.size = 1L
 
-  inds = chunk(inds, chunk.size=chunk.size, n.chunks=n.chunks, shuffle=FALSE)
+  inds = seq_len(dX[1L])
+  inds = chunk(seq_len(dX[1L]), chunk.size=chunk.size, n.chunks=n.chunks, shuffle=FALSE)
+  wrapper = function(.X, .inds, .user.fun, ...) {
+    apply(.X[.inds,, drop=FALSE], 1L, .user.fun, ...)
+  }
   batchMap(reg, wrapper, .inds = inds, more.args = list(..., .X = X, .user.fun = fun))
 }
