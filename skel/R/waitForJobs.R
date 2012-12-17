@@ -19,9 +19,12 @@
 #'   This argument may be required on some systems where, e.g., expired jobs or jobs on hold
 #'   are problematic to detect. If you don't want a timeout, set this to \code{Inf}.
 #'   Default is \code{604800} (one week).
-#' @return Returns \code{TRUE} on success, \code{FALSE} if the timeout is reached.
+#' @param stop.on.error [\code{logical(1)}]\cr
+#'   Stop if a job terminates with an error? Default is \code{FALSE}.
+#' @return Returns \code{TRUE} on success and \code{FALSE} if either
+#'   \code{stop.on.error} is \code{TRUE} and an error occured or the timeout is reached.
 #' @export
-waitForJobs = function(reg, ids, sleep = 10, timeout = 604800) {
+waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE) {
   checkRegistry(reg)
   syncRegistry(reg)
 
@@ -36,6 +39,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800) {
   if (is.infinite(sleep))
     stop("Argument 'sleep' must be finite")
   checkArg(timeout, "numeric", len=1L, lower=sleep, na.ok=FALSE)
+  checkArg(stop.on.error, "logical", len=1L, na.ok=FALSE)
 
   n = length(ids)
   if (n > 0L) {
@@ -43,9 +47,16 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800) {
     bar = makeProgressBar(min=0L, max=n, label="Waiting                  ")
 
     repeat {
+      # FIXME overhead in query
       on.sys = length(dbFindOnSystem(reg, ids, batch.ids = batch.ids))
       stats = dbGetStats(reg, ids, running=TRUE, expired=FALSE, times=FALSE, batch.ids = batch.ids)
       bar$set(n - on.sys, msg = sprintf("Waiting [S:%i R:%i D:%i E:%i]", on.sys, stats$running, stats$done, stats$error))
+
+      if (stop.on.error && stats$error > 0L) {
+        err = dbGetErrorMsgs(reg, ids, filter=TRUE, limit=1L)
+        messagef("Job $i terminated with an error: %s", err$job_id, err$error)
+        return(FALSE)
+      }
 
       if (on.sys == 0L || is.finite(timeout) && now() > timeout)
         break
