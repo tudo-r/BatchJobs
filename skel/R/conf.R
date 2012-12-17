@@ -82,7 +82,7 @@ saveConf = function(reg) {
 }
 
 checkConf = function(conf) {
-  ns = ls(conf)
+  ns = ls(conf, all.names=TRUE)
   ns2 = c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options",
     "default.resources", "debug", "raise.warnings", "staged.queries")
