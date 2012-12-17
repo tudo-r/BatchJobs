@@ -21,30 +21,29 @@
 #'   Default is \code{604800} (one week).
 #' @return Returns \code{TRUE} on success, \code{FALSE} if the timeout is reached.
 #' @export
-waitTillTermination = function(reg, ids, sleep = 10, timeout = 604800) {
+waitForJobs = function(reg, ids, sleep = 10, timeout = 604800) {
   checkRegistry(reg)
   syncRegistry(reg)
 
   batch.ids = getBatchIds(reg, "Cannot find jobs on system")
 
-  if (missing(ids)) {
-    ids = on.sys = dbFindOnSystem(reg, ids, batch.ids = batch.ids)
-  } else {
+  if (missing(ids))
+    ids = dbFindOnSystem(reg, ids, batch.ids = batch.ids)
+  else
     ids = checkIds(reg, ids)
-    on.sys = dbFindOnSystem(reg, ids, batch.ids=batch.ids)
-  }
 
   checkArg(sleep, "numeric", len=1L, lower=1, na.ok=FALSE)
   if (is.infinite(sleep))
     stop("Argument 'sleep' must be finite")
   checkArg(timeout, "numeric", len=1L, lower=sleep, na.ok=FALSE)
 
-  if (on.sys > 0L) {
-    n = length(ids)
+  n = length(ids)
+  if (n > 0L) {
     timeout = now() + timeout
     bar = makeProgressBar(min=0L, max=n, label="Waiting                  ")
 
     repeat {
+      on.sys = length(dbFindOnSystem(reg, ids, batch.ids = batch.ids))
       stats = dbGetStats(reg, ids, running=TRUE, expired=FALSE, times=FALSE, batch.ids = batch.ids)
       bar$set(n - on.sys, msg = sprintf("Waiting [S:%i R:%i D:%i E:%i]", on.sys, stats$running, stats$done, stats$error))
 
@@ -54,8 +53,6 @@ waitTillTermination = function(reg, ids, sleep = 10, timeout = 604800) {
       Sys.sleep(sleep)
       suppressMessages(syncRegistry(reg))
       batch.ids = getBatchIds(reg, "Cannot find jobs on system")
-      ids = dbFindOnSystem(reg, ids, batch.ids = batch.ids)
-      on.sys = length(ids)
     }
 
     bar$kill()
@@ -65,7 +62,6 @@ waitTillTermination = function(reg, ids, sleep = 10, timeout = 604800) {
       return(FALSE)
     }
   }
-
   message("All jobs terminated.")
   return(TRUE)
 }
