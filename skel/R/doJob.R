@@ -129,6 +129,7 @@ executeOneJob = function(reg, job, multiple.result.files) {
   on.exit(seed$reset())
 
   result = try(applyJobFunction(reg, job), silent=TRUE)
+  catf("Result:")
   print(str(result, max.level=1L, list.len=5L))
 
   if (multiple.result.files) {
