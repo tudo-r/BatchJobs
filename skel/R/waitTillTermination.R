@@ -27,23 +27,24 @@ waitTillTermination = function(reg, ids, sleep = 10, timeout = 604800) {
 
   batch.ids = getBatchIds(reg, "Cannot find jobs on system")
 
-  if (missing(ids))
-    ids = dbFindOnSystem(reg, ids, batch.ids = batch.ids)
-  else
+  if (missing(ids)) {
+    ids = on.sys = dbFindOnSystem(reg, ids, batch.ids = batch.ids)
+  } else {
     ids = checkIds(reg, ids)
+    on.sys = dbFindOnSystem(reg, ids, batch.ids=batch.ids)
+  }
 
   checkArg(sleep, "numeric", len=1L, lower=1, na.ok=FALSE)
   if (is.infinite(sleep))
     stop("Argument 'sleep' must be finite")
   checkArg(timeout, "numeric", len=1L, lower=sleep, na.ok=FALSE)
 
-  n = length(ids)
-  if (n > 0L) {
+  if (on.sys > 0L) {
+    n = length(ids)
     timeout = now() + timeout
     bar = makeProgressBar(min=0L, max=n, label="Waiting                  ")
 
     repeat {
-      on.sys = length(dbFindOnSystem(reg, ids, batch.ids = batch.ids))
       stats = dbGetStats(reg, ids, running=TRUE, expired=FALSE, times=FALSE, batch.ids = batch.ids)
       bar$set(n - on.sys, msg = sprintf("Waiting [S:%i R:%i D:%i E:%i]", on.sys, stats$running, stats$done, stats$error))
 
@@ -53,6 +54,8 @@ waitTillTermination = function(reg, ids, sleep = 10, timeout = 604800) {
       Sys.sleep(sleep)
       suppressMessages(syncRegistry(reg))
       batch.ids = getBatchIds(reg, "Cannot find jobs on system")
+      ids = dbFindOnSystem(reg, ids, batch.ids = batch.ids)
+      on.sys = length(ids)
     }
 
     bar$kill()
@@ -62,6 +65,7 @@ waitTillTermination = function(reg, ids, sleep = 10, timeout = 604800) {
       return(FALSE)
     }
   }
+
   message("All jobs terminated.")
   return(TRUE)
 }

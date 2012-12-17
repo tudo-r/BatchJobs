@@ -38,8 +38,8 @@ batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ...) {
   checkArg(margin, "integer", len=1L, lower=1L, upper=length(dX), na.ok=FALSE)
   checkArg(fun, cl="function")
 
-  # move MARGIN dim to first position
-  X = aperm(X, c(MARGIN, setdiff(seq_along(dX), MARGIN)))
+  # move margin dim to first position
+  X = aperm(X, c(margin, setdiff(seq_along(dX), margin)))
   if (missing(chunk.size) && missing(n.chunks))
     chunk.size = 1L
 
