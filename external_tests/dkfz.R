@@ -10,6 +10,7 @@ doExternalTest(whitespace=FALSE)
 conf$cluster.functions = makeClusterFunctionsLocal()
 doExternalTest(whitespace=FALSE)
 
-conf$cluster.functions = makeClusterFunctionsTorque("~/batchjobs/examples/cfLSF/simple.tmpl")
+conf$cluster.functions = makeClusterFunctionsLSF("~bischl/batchjobs/BatchJobs/examples/cfLSF/simple.tmpl")
 doExternalTest(whitespace=FALSE, sleep.master=15)
 doKillTest()
+
