@@ -13,3 +13,4 @@ Suggests: testthat
 LazyData: yes
 ByteCompile: yes
 Version: 1.0
+Encoding: utf-8
