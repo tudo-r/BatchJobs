@@ -89,9 +89,9 @@ debugSSH = function(nodename, rhome="",
   submitJobs(reg)
   Sys.sleep(3)
   queryWorkerStatus()
-  messagef("Running jobs: %s", collapse(dbFindRunning(reg)))
+  messagef("Running jobs: %s", collapse(findRunning(reg)))
   killJobs(reg, ids)
   queryWorkerStatus()
-  messagef("Running jobs: %s", collapse(dbFindRunning(reg)))
+  messagef("Running jobs: %s", collapse(findRunning(reg)))
   catf("\n")
 }

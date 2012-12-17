@@ -114,7 +114,7 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
     }, args, more.args = more.args)
   })
   on.exit({
-    if (length(dbFindOnSystem(reg)) > 0)
+    if (length(findOnSystem(reg)) > 0)
       killJobs(reg, getJobIds(reg))
     if (file.exists(regdir))
       unlink(regdir, recursive=TRUE)
@@ -150,7 +150,7 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
   # while job not done, sleep and maybe print log
   waitTillJobsDone = function(reg) {
     log.old = ""
-    while(length(dbFindOnSystem(reg) > 0L)) {
+    while(length(findOnSystem(reg) > 0L)) {
       if (show.output)
         log.old = printLog(log.old)
       Sys.sleep(1)
@@ -163,7 +163,7 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
 
   # if error, throw it on master
   checkJobErrors = function(reg, nodenames) {
-    errids = dbFindErrors(reg)
+    errids = findErrors(reg)
     if (length(errids) > 0) {
       j = errids[1L]
       stopf("Error on %s: %s", nodenames[j], getErrors(reg, j))

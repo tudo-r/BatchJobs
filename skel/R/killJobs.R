@@ -31,8 +31,8 @@ killJobs = function(reg, ids) {
 
   printInfo = function() {
     messagef("Trying to kill %i jobs.", length(ids))
-    ids.onsys = dbFindOnSystem(reg, ids)
-    data = dbGetJobStatusTable(reg, ids.onsys)
+    ids.onsys = findOnSystem(reg, ids)
+    data = getJobStatusTable(reg, ids.onsys)
     n.unsubm = sum(is.na(data$submitted))
     n.nobji = sum(is.na(data$batch_job_id))
     n.term = sum(!is.na(data$done) | !is.na(data$error))
@@ -74,8 +74,8 @@ killJobs = function(reg, ids) {
 
   conf = getBatchJobsConf()
   killfun = getKillJob("Cannot kill jobs")
-  ids.onsys = dbFindOnSystem(reg, ids)
-  data = dbGetJobStatusTable(reg, ids.onsys)
+  ids.onsys = findOnSystem(reg, ids)
+  data = getJobStatusTable(reg, ids.onsys)
   # must be submitted, be not done, no error, has bji
   data.subset = subset(data, !is.na(data$submitted) & is.na(data$done)
     & is.na(data$error) & !is.na(data$batch_job_id))

@@ -66,11 +66,11 @@ debugMulticore = function(r.options=c("--no-save", "--no-restore", "--no-init-fi
   messagef("Query worker status:")
   res = runWorkerCommand(worker, "status", args=reg$file.dir)
   messagef("Query worker status result: %s", res)
-  messagef("Running jobs: %s", collapse(dbFindRunning(reg)))
+  messagef("Running jobs: %s", collapse(findRunning(reg)))
   killJobs(reg, ids)
   messagef("Query worker status:")
   res = runWorkerCommand(worker, "status", args=reg$file.dir)
   messagef("Query worker status result: %s", res)
-  messagef("Running jobs: %s", collapse(dbFindRunning(reg)))
+  messagef("Running jobs: %s", collapse(findRunning(reg)))
   catf("\n")
 }
