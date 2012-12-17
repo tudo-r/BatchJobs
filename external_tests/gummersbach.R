@@ -1,10 +1,10 @@
 library(BatchJobs)
 source("helpers.R")
 
-runTests = function(staged.queries) {
-    
+runTests = function(staged.queries) {   
   conf = BatchJobs:::getBatchJobsConf()
   conf$mail.start = conf$mail.done = conf$mail.error = "none"
+  conf$staged.queries = staged.queries
   
   conf$cluster.functions = makeClusterFunctionsInteractive()
   doExternalTest(whitespace=FALSE)
