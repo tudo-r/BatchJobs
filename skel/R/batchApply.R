@@ -37,16 +37,13 @@ batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ...) {
   margin = convertInteger(margin)
   checkArg(margin, "integer", len=1L, lower=1L, upper=length(dX), na.ok=FALSE)
   checkArg(fun, cl="function")
-
-  # move margin dim to first position
-  X = aperm(X, c(margin, setdiff(seq_along(dX), margin)))
   if (missing(chunk.size) && missing(n.chunks))
     chunk.size = 1L
 
-  inds = seq_len(dX[1L])
-  inds = chunk(seq_len(dX[1L]), chunk.size=chunk.size, n.chunks=n.chunks, shuffle=FALSE)
+  inds = chunk(seq_len(dX[margin]), chunk.size=chunk.size, n.chunks=n.chunks, shuffle=FALSE)
   wrapper = function(.X, .inds, .user.fun, ...) {
     apply(.X[.inds,, drop=FALSE], 1L, .user.fun, ...)
   }
-  batchMap(reg, wrapper, .inds = inds, more.args = list(..., .X = X, .user.fun = fun))
+  batchMap(reg, wrapper, .inds = inds,
+           more.args = list(..., .X = aperm(X, c(margin, seq_along(dX)[-margin])), .user.fun=fun))
 }
