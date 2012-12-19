@@ -171,26 +171,19 @@ dbGetJobs.Registry = function(reg, ids) {
   })
 }
 
-dbGetExpandedJobsTable = function(reg, ids, columns) {
-  if (missing(columns))
-    columns2 = "*"
-  else
-    columns2 = collapse(columns)
-
-  query = sprintf("SELECT %s FROM %s_expanded_jobs", columns2, reg$id)
-  tab = dbSelectWithIds(reg, query, ids)
-  if (missing(columns) || "job_id" %in% columns)
-    setRowNames(tab, tab$job_id)
-  else
-    tab
-}
-
-dbGetJobStatusTable = function(reg, ids) {
-  query = sprintf("SELECT * FROM %s_job_status", reg$id)
+dbGetExpandedJobsTable = function(reg, ids, cols="*") {
+  # Note: job_id must be in cols!
+  query = sprintf("SELECT %s FROM %s_expanded_jobs", collapse(cols), reg$id)
   tab = dbSelectWithIds(reg, query, ids)
   setRowNames(tab, tab$job_id)
 }
 
+dbGetJobStatusTable = function(reg, ids, cols="*") {
+  # Note: job_id must be in cols!
+  query = sprintf("SELECT %s FROM %s_job_status", collapse(cols), reg$id)
+  tab = dbSelectWithIds(reg, query, ids)
+  setRowNames(tab, tab$job_id)
+}
 
 dbGetJobCount = function(reg) {
   query = sprintf("SELECT COUNT(*) AS count FROM %s_job_status", reg$id)
