@@ -182,10 +182,10 @@ list2df = function(li, force.names=FALSE) {
   as.data.frame(res)
 }
 
-shortenString = function(x, len) {
+shortenString = function(x, len, str.short="...") {
   if (is.na(x))
     return(NA_character_)
   if (nchar(x) > len)
-    return(paste(substr(x, 1L, len - 3L), "...", sep=""))
-  x
+    return(paste(substr(x, 1L, len - nchar(str.short)), str.short, sep=""))
+  return(x)
 }
