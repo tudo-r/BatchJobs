@@ -1,7 +1,7 @@
 #' BatchJobs configuration.
 #'
-#' In order to understand how the package should be configured 
-#' please read: 
+#' In order to understand how the package should be configured
+#' please read:
 #' \url{https://code.google.com/p/batchjobs/wiki/Configuration}
 #'
 #' @name configuration
@@ -146,10 +146,10 @@ getClusterFunctions = function(conf) {
 
 #' Display BatchJobs configuration.
 #'
-#' @return Nothing.
+#' @return Invisibly returns a named list with configuration settings.
 #' @export
 showConf = function() {
-  x = getBatchJobsConf()
+  x = as.list(getBatchJobsConf())
   f = function(y) if(is.null(y)) "" else y
   catf("BatchJobs configuration:")
   catf("  cluster functions: %s", f(x$cluster.functions$name))
@@ -162,6 +162,7 @@ showConf = function() {
   catf("  debug: %s", f(x$debug))
   catf("  raise.warnings: %s", f(x$raise.warnings))
   catf("  staged.queries: %s", f(x$staged.queries))
+  invisible(x)
 }
 
 #' Load a specific configuration file.
