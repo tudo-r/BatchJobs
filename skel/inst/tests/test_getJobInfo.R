@@ -31,7 +31,8 @@ test_that("getJobInfo", {
   expect_equal(tab$i, rep(2, 3))
 
   tab = getJobInfo(reg, select = "time.running")
-  expect_true(ncol(tab) == 2) # job.id always selected
+  expect_true(ncol(tab) == 2) # id always selected
+  expect_true(names(tab)[1] == "id")
   tab = getJobInfo(reg, select = c("id", "time.running"))
   expect_true(ncol(tab) == 2)
 
