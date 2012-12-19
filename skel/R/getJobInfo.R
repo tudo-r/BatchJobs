@@ -3,19 +3,17 @@ getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
     ids = checkIds(reg, ids)
   checkArg(unit, choices=c("seconds", "minutes", "hours", "days", "weeks"))
 
-  columns = c(columns, 
-    setNames(c("submitted", "started", "done", "done - started AS time_running", "started - submitted AS time_queued", "error", "node", "batch_job_id", "r_pid", "seed"),
-             c("time.submitted", "time.started", "time.done", "time.running", "time.queued", "error.msg", "nodename", "batch.id", "r.pid", "seed"))
-   )
-  
+  columns = c(columns,
+              setNames(c("submitted", "started", "done", "done - started AS time_running", "started - submitted AS time_queued", "error", "node", "batch_job_id", "r_pid", "seed"),
+                       c("time.submitted", "time.started", "time.done", "time.running", "time.queued", "error.msg", "nodename", "batch.id", "r.pid", "seed")))
+
   if (!missing(select)) {
     checkArg(select, "character", na.ok=FALSE)
-    columns = columns[names(columns) %in% c("job.id", select)]
+    columns = columns[names(columns) %in% c("id", select)]
   }
 
   tab = setNames(dbGetExpandedJobsTable(reg, ids, columns), names(columns))
-  colnames(tab)[1] = "id"
-  
+
   if (nrow(tab) == 0L)
     return(tab)
 
@@ -37,7 +35,7 @@ getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
     tab$time.running = as.numeric(tab$time.running) / div
   if (!is.null(tab$time.queued))
     tab$time.queued = as.numeric(tab$time.queued) / div
-  
+
   return(tab)
 }
 
@@ -62,7 +60,7 @@ getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
 #'   Select only a subset of columns.
 #'   Usually this is not required and you can subset yourself,
 #'   but in some rare cases it may be advantageous to not query all information.
-#'   Note that the column \dQuote{job.id} is always selected.
+#'   Note that the column \dQuote{id} (job id) is always selected.
 #'   If not provided, all columns are queried and returned.
 #' @param unit [\code{character(1)}]\cr
 #'   Unit to convert execution and queing times to.
@@ -80,9 +78,10 @@ getJobInfo = function(reg, ids, pars=FALSE, prefix.pars=FALSE, select, unit="sec
 getJobInfo.Registry = function(reg, ids, pars=FALSE, prefix.pars=FALSE, select, unit="seconds") {
   syncRegistry(reg)
   checkArg(pars, "logical", len=1L, na.ok=FALSE)
-  columns = c(job.id="job_id")
+  columns = c(id="job_id")
   if (pars)
     columns = c(columns, c(pars="pars"))
+
   tab = getJobInfoInternal(reg, ids, pars, select, unit, columns)
 
   # unserialize parameters
