@@ -2,10 +2,10 @@ BatchJobs_1.0-xxx:
 - new option to raise warnings to errors on the slaves 
 - option to set process priority via nice in clusterFunctionsMulticore and 
   clusterFunctionsSSH
-- new helper functions: getErrors, getJobInfo, loadConfig, callFunctionOnSSHWorkers, 
-  waitForJobs, several more find* functions
+- new helper functions: getErrors, getJobInfo, loadConfig, callFunctionOnSSHWorkers, getSSHWorkersInfo,
+  installPackagesOnSSHWorkers, waitForJobs, several more find* functions
 - removed helper getJobTimes -> this is included in getJobInfo
-- experimental file-based caching mechanism for queries send on computational nodes
+- experimental file-based caching mechanism to speed up the processing of queries generated on computational nodes
 - various smaller fixes
 - documentation fixes
 
