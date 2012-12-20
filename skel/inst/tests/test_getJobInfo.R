@@ -36,7 +36,9 @@ test_that("getJobInfo", {
   tab = getJobInfo(reg, select = c("id", "time.running"))
   expect_true(ncol(tab) == 2)
 
-  tab = getJobInfo(reg, select = "fooo")
-  expect_true(ncol(tab) == 1 && nrow(tab) == 3)
+  expect_error(
+    getJobInfo(reg, select = "fooo"),
+    "must be subset of"
+  )
 })
 
