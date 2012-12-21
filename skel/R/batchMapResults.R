@@ -21,33 +21,31 @@
 #'   Default is empty list.
 #' @return Vector of type \code{integer} with job ids.
 #' @export
-#' @examples
-#' # run this example only in interactive mode (to ensure a shared temporary directory)
-#' if (showConf()$cluster.functions$name == "Interactive") {
-#'   reg1 <- makeRegistry(id="BatchJobsExample1", file.dir=tempfile(), seed=123)
-#'   # square some numbers
-#'   f <- function(x) x^2
-#'   batchMap(reg1, f, 1:10)
+#' @examples \dontrun{
+#' reg1 <- makeRegistry(id="BatchJobsExample1", file.dir=tempfile(), seed=123)
+#' # square some numbers
+#' f <- function(x) x^2
+#' batchMap(reg1, f, 1:10)
 #'
-#'   # submit jobs and wait for the jobs to finish
-#'   submitJobs(reg1)
-#'   waitForJobs(reg1)
+#' # submit jobs and wait for the jobs to finish
+#' submitJobs(reg1)
+#' waitForJobs(reg1)
 #'
-#'   # look at results
-#'   reduceResults(reg1, fun=function(aggr,job,res) c(aggr, res))
+#' # look at results
+#' reduceResults(reg1, fun=function(aggr,job,res) c(aggr, res))
 #'
-#'   reg2 <- makeRegistry(id="BatchJobsExample2", file.dir=tempfile(), seed=123)
+#' reg2 <- makeRegistry(id="BatchJobsExample2", file.dir=tempfile(), seed=123)
 #'
-#'   # define function to tranform results, we simply do the inverse of the squaring
-#'   g <- function(job, res) sqrt(res)
-#'   batchMapResults(reg1, reg2, fun=g)
+#' # define function to tranform results, we simply do the inverse of the squaring
+#' g <- function(job, res) sqrt(res)
+#' batchMapResults(reg1, reg2, fun=g)
 #'
-#'   # submit jobs and wait for the jobs to finish
-#'   submitJobs(reg2)
-#'   waitForJobs(reg2)
+#' # submit jobs and wait for the jobs to finish
+#' submitJobs(reg2)
+#' waitForJobs(reg2)
 #'
-#'   # check results
-#'   reduceResults(reg2, fun=function(aggr,job,res) c(aggr, res))
+#' # check results
+#' reduceResults(reg2, fun=function(aggr,job,res) c(aggr, res))
 #' }
 batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.args=list()) {
   checkRegistry(reg)
