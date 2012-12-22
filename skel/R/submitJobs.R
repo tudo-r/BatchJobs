@@ -73,7 +73,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
     }
   }
   checkArg(resources, "list")
-  resources = do.call(resrc, resources)
+  resources = resrc(resources)
 
   if (missing(wait))
     wait = function(retries) 10 * 2^retries # ^ always converts to double

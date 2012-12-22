@@ -34,7 +34,7 @@ testJob = function(reg, id, resources=list()) {
     id = checkId(reg, id)
   }
   checkArg(resources, "list")
-  resources = do.call(resrc, resources)
+  resources = resrc(resources)
 
   # we dont want to change anything in the true registry / file dir / DB
   # so we have to copy stuff a little bit

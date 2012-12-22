@@ -1,10 +1,8 @@
-resrc = function(...) {
-  res1 = getBatchJobsConf()$default.resources
-  res2 = list(...)
-  if(!isProperlyNamed(res1) || !isProperlyNamed(res2))
+resrc = function(res.new) {
+  res.old = getBatchJobsConf()$default.resources
+  if(!isProperlyNamed(res.new) || !isProperlyNamed(res.old))
     stop("Resources must be all be uniquely named!")
-  res1 = insert(res1, res2)
-  return(res1)
+  insert(res.old, res.new)
 }
 
 saveResources = function(reg, resources, timestamp = now()) {
