@@ -21,12 +21,12 @@
 #' @aliases SubmitJobResult
 makeSubmitJobResult = function(status, batch.job.id, msg,  ...) {
   if (missing(msg)) {
-    if (status == 0L)
-      msg = "OK"
-    if (1L <= status && status <= 100L)
-      msg = "TEMPERR"
+    msg = if (status == 0L)
+      "OK"
+    else if (status <= 100L)
+      "TEMPERR"
     else
-      msg = "ERROR"
+      "ERROR"
   }
   setClasses(list(status=status, batch.job.id=batch.job.id, msg=msg), "SubmitJobResult")
 }
@@ -88,8 +88,7 @@ print.SubmitJobResult = function(x, ...) {
 #' @seealso \code{\link{makeClusterFunctionsInteractive}}, \code{\link{makeClusterFunctionsLocal}}, \code{\link{makeClusterFunctionsMulticore}},  \code{\link{makeClusterFunctionsSSH}}, \code{\link{makeClusterFunctionsTorque}}, \code{\link{makeClusterFunctionsSGE}}
 makeClusterFunctions = function(name, submitJob, killJob, listJobs, class = NULL, ...) {
   checkArg(name, "character", len=1L)
-  checkArg(submitJob, "function", formals=c("conf", "reg", "job.name", "rscript",
-    "log.file", "job.dir", "resources"))
+  checkArg(submitJob, "function", formals=c("conf", "reg", "job.name", "rscript", "log.file", "job.dir", "resources"))
   if (!is.null(killJob))
     checkArg(killJob, "function", formals=c("conf", "reg", "batch.job.id"))
   if (!is.null(listJobs))

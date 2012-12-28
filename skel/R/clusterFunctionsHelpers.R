@@ -105,19 +105,12 @@ cfKillBatchJob = function(cmd, batch.job.id, max.tries=3L) {
   max.tries = convertInteger(max.tries)
   checkArg(max.tries, "integer", len=1L, na.ok=FALSE)
 
-  tries = 0L
-  repeat {
+  for (t in seq_len(tries)) {
     res = runOSCommandLinux(cmd, batch.job.id, stop.on.exit.code=FALSE)
-    if (res$exit.code == 0L) {
+    if (res$exit.code == 0L)
       return()
-    }
-
-    if (tries == max.tries) {
-      stopf("Really tried to kill job, but could not do it. batch job id is %s.\nMessage: %s",
-            batch.job.id, collapse(res$output, sep="\n"))
-    }
-
-    tries = tries + 1L
     Sys.sleep(1)
   }
+  stopf("Really tried to kill job, but could not do it. batch job id is %s.\nMessage: %s",
+        batch.job.id, collapse(res$output, sep="\n"))
 }
