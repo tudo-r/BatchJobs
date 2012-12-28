@@ -18,8 +18,8 @@
 #' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfTorque/lido.tmpl}
 #' in the package repository on its homepage.
 #'
-#' @param template.file [\code{character(1)}]\cr
 #'   Path to a brew template file that is used for the PBS job file.
+#' @param template.file [\code{character(1)}]\cr
 #' @return [\code{\link{ClusterFunctions}}].
 #' @examples
 #' \dontrun{

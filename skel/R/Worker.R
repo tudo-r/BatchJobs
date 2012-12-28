@@ -84,7 +84,6 @@ makeWorker = function(ssh, nodename, rhome, r.options=c("--no-save", "--no-resto
     checkArg(nice, "integer", len=1L, na.ok=FALSE, lower=-20, upper=19)
   }
 
-
   w$ncpus = ncpus
   w$max.jobs = max.jobs
   w$max.load = max.load

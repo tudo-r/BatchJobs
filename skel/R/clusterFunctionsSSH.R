@@ -89,14 +89,15 @@ makeClusterFunctionsSSH = function(..., workers) {
   nodenames = extractSubList(workers, "nodename")
   dup = duplicated(nodenames)
   if (any(dup))
-    stopf("Multiple definitions for worker nodenames: %s!", nodenames[dup])
+    stopf("Multiple definitions for worker nodenames: %s!", collapse(nodenames[dup]))
   names(workers) = nodenames
+  rm(nodenames, dup)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     worker = findWorker(workers, reg$file.dir, tdiff=5L)
     if (is.null(worker)) {
       states = collapse(extractSubList(workers, "available", simplify=TRUE), sep="")
-      makeSubmitJobResult(status=1L, batch.job.id=NULL, 
+      makeSubmitJobResult(status=1L, batch.job.id=NULL,
         msg=sprintf("Workers busy: %s", states))
     } else {
       pid = try(startWorkerJob(worker, rscript, log.file))
