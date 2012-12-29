@@ -51,9 +51,28 @@
 #' chunked = chunk(getJobIds(reg), n.chunks=2, shuffle=TRUE)
 #' submitJobs(reg, chunked)
 submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.delay=FALSE) {
-  conf = getBatchJobsConf()
-  cf = getClusterFunctions(conf)
+  ### helper functions
+  getDelays = function(cf, job.delay, n) {
+    if (is.logical(job.delay)) {
+      if (job.delay && n > 100L && cf$name %nin% c("Interactive", "Multicore", "SSH")) {
+        return(runif(n, n*0.1, n*0.2))
+      }
+      return(delays = rep(0, n))
+    }
 
+    checkArg(job.delay, formals=c("n", "i"))
+    vapply(seq_along(ids), job.delay, numeric(1L), n=n)
+  }
+
+  checkRunning = function(reg, ids) {
+    ids.intersect = intersect(unlist(ids), dbFindOnSystem(reg, unlist(ids)))
+    if (length(ids.intersect) > 0L) {
+      stopf("Some of the jobs you submitted are already present on the batch system! E.g. id=%i.",
+            ids.intersect[1L])
+    }
+  }
+
+  ### argument checks on registry and ids
   checkArg(reg, cl="Registry")
   syncRegistry(reg)
   if (missing(ids)) {
@@ -72,50 +91,46 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
       stop("Parameter 'ids' must be a integer vector of job ids or a list of chunked job ids (list of integer vectors)!")
     }
   }
+
+  ### initialization of some helping vars
+  conf = getBatchJobsConf()
+  cf = getClusterFunctions(conf)
+  limit.concurrent.jobs = is.finite(conf$max.concurrent.jobs)
+  n = length(ids)
+
+  ### argument checks for other parameters
   checkArg(resources, "list")
   resources = resrc(resources)
 
   if (missing(wait))
-    wait = function(retries) 10 * 2^retries # ^ always converts to double
+    wait = function(retries) 10 * 2^retries
   else
     checkArg(wait, formals="retries")
 
-  if (!is.infinite(max.retries)) {
+  if (is.finite(max.retries)) {
     max.retries = convertInteger(max.retries)
     checkArg(max.retries, "integer", len=1L, na.ok=FALSE)
   }
 
-  if (is.logical(job.delay)) {
-    n = length(ids)
-    if (job.delay && n > 100L && cf$name %nin% c("Interactive", "Multicore", "SSH")) {
-      delays = runif(n, n*0.1, n*0.2)
-    } else {
-      delays = rep(0, n)
-    }
-  } else {
-    checkArg(job.delay, formals=c("n", "i"))
-    delays = vapply(seq_along(ids), job.delay, numeric(1L), n=length(ids))
+  if (!is.null(cf$listJobs)) {
+    checkRunning(reg, ids)
+  } else if (limit.concurrent.jobs) {
+    stop("Option 'max.concurrent.jobs' is enabled, but your cluster functions implementation does not support listing of jobs")
   }
 
-  if (!is.null(getListJobs())) {
-    ids.intersect = intersect(unlist(ids), dbFindOnSystem(reg, unlist(ids)))
-    if (length(ids.intersect) > 0L) {
-      stopf("Some of the jobs you submitted are already present on the batch system! E.g. id=%i.",
-        ids.intersect[1L])
-    }
-  }
-
-  if (length(ids) > 5000L) {
+  ### quick sanity check
+  if (n > 5000L) {
     warningf(collapse(c("You are about to submit '%i' jobs.",
                         "Consider chunking them to avoid heavy load on the scheduler.",
-                        "Sleeping 5 seconds for safety reasons."), sep = "\n"), length(ids))
+                        "Sleeping 5 seconds for safety reasons."), sep = "\n"), n)
     Sys.sleep(5)
   }
 
-  saveConf(reg)
 
+  ### save config, start the work
+  saveConf(reg)
   is.chunked = is.list(ids)
-  messagef("Submitting %i chunks / %i jobs.", length(ids), if(is.chunked) sum(vapply(ids, length, integer(1L))) else length(ids))
+  messagef("Submitting %i chunks / %i jobs.", n, if(is.chunked) sum(vapply(ids, length, integer(1L))) else n)
   messagef("Cluster functions: %s.", cf$name)
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.", conf$mail.start, conf$mail.done, conf$mail.error)
 
@@ -124,95 +139,102 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
                        reg=reg, max.retries=10000L, sleep=function(r) 5,
                        staged=useStagedQueries())
 
-  # set on exit handler to avoid inconsistencies caused by user interrupts
+  ### set on exit handler to avoid inconsistencies caused by user interrupts
   on.exit({
     # we need the second case for errors in brew (e.g. resources)
     if(interrupted && exists("batch.result", inherits=FALSE)) {
-      submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
+      submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=now(),
         batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
         resources.timestamp=resources.timestamp))
     }
-    # if we have remaining messages send them now
+    # send remaining msgs now
     messagef("Sending %i submit messages...\nMight take some time, do not interrupt this!", submit.msgs$pos())
     submit.msgs$clear()
   })
 
-  # write R scripts before so we save some time in the important loop
-  messagef("Writing %i R scripts...", length(ids))
+  ### write R scripts
+  messagef("Writing %i R scripts...", n)
   resources.timestamp = saveResources(reg, resources)
-  writeRscripts(reg, ids, resources.timestamp, disable.mail=FALSE, delays=delays,
+  writeRscripts(reg, ids, resources.timestamp, disable.mail=FALSE, delays=getDelays(cf, job.delay, n),
                interactive.test = !is.null(conf$interactive))
 
-
-  # reset status of jobs: delete errors, done, ...
+  ### reset status of jobs: delete errors, done, ...
   dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids)), staged=FALSE)
 
 
-  bar = makeProgressBar(max=length(ids), label="submitJobs               ")
+  ### initialize progress bar
+  bar = makeProgressBar(max=n, label="submitJobs               ")
   bar$set()
 
   tryCatch({
     for (id in ids) {
       id1 = id[1L]
       retries = 0L
-      # we use no for loop here to allow infinite retries
-      repeat {
-        # try to submit the job
-        submit.time = now()
-        interrupted = TRUE
-        batch.result = cf$submitJob(conf=conf, reg=reg,
-                                    job.name=sprintf("%s-%i", reg$id, id1),
-                                    rscript=getRScriptFilePath(reg, id1),
-                                    log.file=getLogFilePath(reg, id1),
-                                    job.dir=getJobDirs(reg, id1),
-                                    resources=resources)
 
+      repeat { # max.retires max be Inf
+        # FIXME different behaviour depending on the cf implementation:
+        #       cfSSH returns job ids for the currently used registry, cfTorque for all jobs of the user
+        if (limit.concurrent.jobs && length(cf$listJobs(conf, reg)) >= conf$max.concurrent.jobs) {
+          # emulate a temporary erroneous batch result
+          batch.result = makeSubmitJobResult(status=10L, batch.job.id=NA_character_, "Max concurrent jobs exhausted")
+        } else {
+          # try to submit the job
+          interrupted = TRUE
+          batch.result = cf$submitJob(conf=conf, reg=reg,
+                                      job.name=sprintf("%s-%i", reg$id, id1),
+                                      rscript=getRScriptFilePath(reg, id1),
+                                      log.file=getLogFilePath(reg, id1),
+                                      job.dir=getJobDirs(reg, id1),
+                                      resources=resources)
+        }
 
-        # validate status returned from cluster functions
+        ### validate status returned from cluster functions
         if (batch.result$status == 0L) {
-          submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
+          submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=now(),
                                                   batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
                                                   resources.timestamp=resources.timestamp))
           interrupted = FALSE
           bar$inc(1L)
           break
+        }
+
+        ### submitJob was not successful, handle the return status
+        interrupted = FALSE
+
+        if (batch.result$status > 0L && batch.result$status <= 100L) {
+          # temp error, wait and increase retries, then submit again in next iteration
+          sleep.secs = wait(retries)
+
+          retries = retries + 1L
+          if (retries > max.retries)
+            stopf("Retried already %i times to submit. Aborting.", retries)
+
+
+          # FIXME we could use the sleep here for synchronization
+          bar$inc(msg=sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
+          # FIXME: the next lines are an ugly hack and should be moved to bbmisc
+          Sys.sleep(sleep.secs/2)
+          pbw = getOption("BBmisc.ProgressBar.width", getOption("width"))
+          labw = environment(bar$set)$label.width
+          lab = sprintf(sprintf("%%%is", labw),
+            sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
+          cat(paste(rep("\b \b", pbw-5), collapse=""))
+          bmrmsg = batch.result$msg
+          msgline = sprintf("%s msg=%s", lab, bmrmsg)
+          cat(msgline)
+          Sys.sleep(sleep.secs/2)
+          cat(paste(rep("\b \b", nchar(msgline)), collapse=""))
+        } else if (batch.result$status > 100L && batch.result$status <= 200L) {
+          # fatal error, abort at once
+          stopf("Fatal error occured: %i. %s", batch.result$status, batch.result$msg)
         } else {
-          # submitJob was not successful, therefore we don't care for interrupts any more
-          interrupted = FALSE
-
-          if (batch.result$status > 0L && batch.result$status <= 100L) {
-            # temp error, wait and increase retries, then submit again in next iteration
-            sleep.secs = wait(retries)
-
-            retries = retries + 1L
-            if (retries > max.retries)
-              stopf("Retried already %i times to submit. Aborting.", retries)
-
-
-            # FIXME we could use the sleep here for synchronization
-            bar$inc(msg=sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
-            # FIXME: the next lines are an ugly hack and should be moved to bbmisc
-            Sys.sleep(sleep.secs/2)
-            pbw = getOption("BBmisc.ProgressBar.width", getOption("width"))
-            labw = environment(bar$set)$label.width
-            lab = sprintf(sprintf("%%%is", labw),
-              sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
-            cat(paste(rep("\b \b", pbw-5), collapse=""))
-            bmrmsg = batch.result$msg
-            msgline = sprintf("%s msg=%s", lab, bmrmsg)
-            cat(msgline)
-            Sys.sleep(sleep.secs/2)
-            cat(paste(rep("\b \b", nchar(msgline)), collapse=""))
-          } else if (batch.result$status > 100L && batch.result$status <= 200L) {
-            # fatal error, abort at once
-            stopf("Fatal error occured: %i. %s", batch.result$status, batch.result$msg)
-          } else {
-            # illeagal status code
-            stopf("Illegal status code %s returned from cluster functions!", batch.result$status)
-          }
+          # illeagal status code
+          stopf("Illegal status code %s returned from cluster functions!", batch.result$status)
         }
       }
     }
   }, error=bar$error)
+
+  ### return ids (on.exit handler kicks now in to submit the remaining messages)
   return(invisible(ids))
 }

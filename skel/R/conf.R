@@ -68,6 +68,7 @@ assignConfDefaults = function() {
   conf$debug = FALSE
   conf$raise.warnings = FALSE
   conf$staged.queries = FALSE
+  conf$max.concurrent.jobs = Inf
 }
 
 # loads conf into namespace on slave
@@ -98,15 +99,15 @@ checkConf = function(conf) {
   ns = ls(conf, all.names=TRUE)
   ns2 = c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options",
-    "default.resources", "debug", "raise.warnings", "staged.queries")
+    "default.resources", "debug", "raise.warnings", "staged.queries", "max.concurrent.jobs")
   if (any(ns %nin% ns2))
     stopf("You are only allowed to define the following R variables in your config file:\n%s",
       collapse(ns2, sep=", "))
 }
 
 checkConfElements = function(cluster.functions, mail.to, mail.from,
-  mail.start, mail.done, mail.error, mail.control,
-  db.driver, db.options, default.resources, debug, raise.warnings, staged.queries) {
+  mail.start, mail.done, mail.error, mail.control, db.driver, db.options, default.resources, debug,
+  raise.warnings, staged.queries, max.concurrent.jobs) {
 
   if (!missing(cluster.functions))
     checkArg(cluster.functions, cl = "ClusterFunctions")
@@ -138,6 +139,8 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
     checkArg(raise.warnings, cl = "logical", len = 1L, na.ok = FALSE)
   if (!missing(staged.queries))
     checkArg(staged.queries, cl = "logical", len = 1L, na.ok = FALSE)
+  if (!missing(max.concurrent.jobs))
+    checkArg(max.concurrent.jobs, cl = "numeric", len = 1L, na.ok = FALSE)
 }
 
 getClusterFunctions = function(conf) {
@@ -162,6 +165,7 @@ showConf = function() {
   catf("  debug: %s", f(x$debug))
   catf("  raise.warnings: %s", f(x$raise.warnings))
   catf("  staged.queries: %s", f(x$staged.queries))
+  catf("  max.concurrent.jobs: %s", f(x$max.concurrent.jobs))
   invisible(x)
 }
 
