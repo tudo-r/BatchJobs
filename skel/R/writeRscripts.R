@@ -29,6 +29,10 @@ writeRscripts = function(reg, ids, resources.timestamp, disable.mail, delays, in
       sep="\n")
   }
 
+
+  # be sure to first calculate delays so we don't run into errors while writing R scripts
+  force(delays)
+
   fids = vapply(ids, head, integer(1L), 1L) # first job id in chunk
   first = head(fids, 1L)
   last = tail(fids, 1L)
