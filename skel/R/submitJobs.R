@@ -51,25 +51,18 @@
 #' chunked = chunk(getJobIds(reg), n.chunks=2, shuffle=TRUE)
 #' submitJobs(reg, chunked)
 submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.delay=FALSE) {
-  ### helper functions
+  ### helper function to calculate the delay
   getDelays = function(cf, job.delay, n) {
     if (is.logical(job.delay)) {
-      if (job.delay && n > 100L && cf$name %nin% c("Interactive", "Multicore", "SSH")) {
+      if (isTRUE(job.delay) && n > 100L && cf$name %nin% c("Interactive", "Multicore", "SSH")) {
         return(runif(n, n*0.1, n*0.2))
       }
       return(delays = rep(0, n))
     }
 
+    # if not logical, it has to be a function
     checkArg(job.delay, formals=c("n", "i"))
     vapply(seq_along(ids), job.delay, numeric(1L), n=n)
-  }
-
-  checkRunning = function(reg, ids) {
-    ids.intersect = intersect(unlist(ids), dbFindOnSystem(reg, unlist(ids)))
-    if (length(ids.intersect) > 0L) {
-      stopf("Some of the jobs you submitted are already present on the batch system! E.g. id=%i.",
-            ids.intersect[1L])
-    }
   }
 
   ### argument checks on registry and ids
@@ -113,7 +106,12 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   }
 
   if (!is.null(cf$listJobs)) {
-    checkRunning(reg, ids)
+    ### check for running jobs
+    ids.intersect = intersect(unlist(ids), dbFindOnSystem(reg, unlist(ids)))
+    if (length(ids.intersect) > 0L) {
+      stopf("Some of the jobs you submitted are already present on the batch system! E.g. id=%i.",
+            ids.intersect[1L])
+    }
   } else if (limit.concurrent.jobs) {
     stop("Option 'max.concurrent.jobs' is enabled, but your cluster functions implementation does not support listing of jobs")
   }
