@@ -54,14 +54,11 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   ### helper function to calculate the delay
   getDelays = function(cf, job.delay, n) {
     if (is.logical(job.delay)) {
-      if (isTRUE(job.delay) && n > 100L && cf$name %nin% c("Interactive", "Multicore", "SSH")) {
+      if (job.delay && n > 100L && cf$name %nin% c("Interactive", "Multicore", "SSH")) {
         return(runif(n, n*0.1, n*0.2))
       }
       return(delays = rep(0, n))
     }
-
-    # if not logical, it has to be a function
-    checkArg(job.delay, formals=c("n", "i"))
     vapply(seq_along(ids), job.delay, numeric(1L), n=n)
   }
 
@@ -100,6 +97,12 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   else
     checkArg(wait, formals="retries")
 
+  if (is.logical(job.delay)) {
+    checkArg(job.delay, "logical", len=1L, na.ok=FALSE)
+  } else {
+    checkArg(job.delay, formals=c("n", "i"))
+  }
+
   if (is.finite(max.retries)) {
     max.retries = convertInteger(max.retries)
     checkArg(max.retries, "integer", len=1L, na.ok=FALSE)
@@ -112,8 +115,13 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
       stopf("Some of the jobs you submitted are already present on the batch system! E.g. id=%i.",
             ids.intersect[1L])
     }
-  } else if (limit.concurrent.jobs) {
-    stop("Option 'max.concurrent.jobs' is enabled, but your cluster functions implementation does not support listing of jobs")
+  }
+
+  if (limit.concurrent.jobs && (cf$name %in% c("Interactive", "Local", "Multicore", "SSH") || is.null(cf$listJobs))) {
+    warning("Option 'max.concurrent.jobs' is enabled, but your cluster functions implementation does not support the listing of system jobs.\n",
+            "Option disabled, sleeping 5 seconds for safety reasons.")
+    limit.concurrent.jobs = FALSE
+    Sys.sleep(5)
   }
 
   ### quick sanity check
@@ -170,8 +178,6 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
       retries = 0L
 
       repeat { # max.retires max be Inf
-        # FIXME different behaviour depending on the cf implementation:
-        #       cfSSH returns job ids for the currently used registry, cfTorque for all jobs of the user
         if (limit.concurrent.jobs && length(cf$listJobs(conf, reg)) >= conf$max.concurrent.jobs) {
           # emulate a temporary erroneous batch result
           batch.result = makeSubmitJobResult(status=10L, batch.job.id=NA_character_, "Max concurrent jobs exhausted")
