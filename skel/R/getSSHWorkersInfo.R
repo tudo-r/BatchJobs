@@ -18,22 +18,22 @@ getSSHWorkersInfo = function(nodenames) {
       r.home = R.home(),
       session.info = sessionInfo(),
       lib.paths = lib.paths,
-      is.lib.path.writeable = (file.access(lib.paths[1], 2) == 0)
+      is.lib.path.writeable = (file.access(head(lib.paths, 1L), 2L) == 0L)
     )
   }
-  res = callFunctionOnSSHWorkers(nodenames, fun=fun, 
+  res = callFunctionOnSSHWorkers(nodenames, fun=fun,
     consecutive=FALSE, show.output=FALSE, use.names=TRUE, simplify=FALSE)
-  for (nn in nodenames) {  
+  for (nn in nodenames) {
     r = res[[nn]]
     messagef("Node: %s", nn)
     messagef(r$session.info$R.version$version.string)
     messagef("Platform: %s", r$session.info$platform)
     messagef("R Home: %s", r$r.home)
-    messagef("First lib path: %s", r$lib.paths[[1]])
+    messagef("First lib path: %s", head(r$lib.paths, 1L))
     messagef("")
   }
   notok = names(Filter(function(r) !r$is.lib.path.writeable, res))
-  if (length(notok) > 0)
+  if (length(notok) > 0L)
     warningf("On the following nodes the first lib path is not writeable: %s",
       collapse(notok))
   invisible(res)
