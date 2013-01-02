@@ -15,13 +15,14 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
     stopf("Directory '%s' does not exists", path)
   }
 
-  if (file.access(path, mode=2L) != 0L)
+  if (!is.writeable(path))
     stopf("Directory '%s' is not writable!", path)
+
 
   if (check.empty && any(list.files(path, all.files=TRUE) %nin% c(".", "..")))
     stopf("Directory '%s' does not seem to be empty!", path)
 
-  if(check.posix) {
+  if (check.posix) {
     path.abs = makePathAbsolute(path)
     if(! grepl("^[[:alnum:]:/_.+-]+$", path.abs))
       stopf("Directory '%s' contains illegal characters! Allowed: a-z A-Z 0-9 : / + . - _", path.abs)
@@ -34,11 +35,25 @@ createShardedDirs = function(reg, ids) {
   }
 }
 
+is.writeable = function(path) {
+  if (grepl("windows", getOperatingSystem(), ignore.case=TRUE)) {
+    # Workaround: No POSIX file system informations available, use a heuristic
+    # Test creation and deletion of (a) a simple file, (b) a directory and (c) a file in a created directory
+    tf1 = file.path(path, "test_access_file")
+    td  = file.path(path, "test_access_dir")
+    tf2 = file.path(td, "test_access_file")
+    return(suppressWarnings(file.create(tf1) && file.remove(tf1) &&
+                            dir.create(td) && file.create(tf2) && unlink(td, recursive=TRUE) == 0L))
+  }
+
+  return(file.access(path, mode=2L) == 0L)
+}
+
 makePathAbsolute = function(path) {
   if(substr(path, 1L, 1L) != "/")
     path = normalizePath(path, mustWork=FALSE)
   # FIXME: emulated winslash-behaviour for R < 2.13.x (?)
-  if (grepl("windows", tolower(getOperatingSystem()), fixed=TRUE))
+  if (grepl("windows", getOperatingSystem(), ignore.case=TRUE))
     path = gsub("\\", "/", path, fixed=TRUE)
 
   return(path)
