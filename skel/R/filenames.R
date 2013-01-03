@@ -15,8 +15,8 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
     stopf("Directory '%s' does not exists", path)
   }
 
-  if (!is.writeable(path))
-    stopf("Directory '%s' is not writable!", path)
+  if (!is.accessible(path))
+    stopf("Directory '%s' is not readable/writable!", path)
 
 
   if (check.empty && any(list.files(path, all.files=TRUE) %nin% c(".", "..")))
@@ -35,10 +35,11 @@ createShardedDirs = function(reg, ids) {
   }
 }
 
-is.writeable = function(path) {
+# tests a file / directory for read and write permissions
+# uses a heuristic for windows
+is.accessible = function(path) {
   if (grepl("windows", getOperatingSystem(), ignore.case=TRUE)) {
     # Workaround: No POSIX file system informations available, use a heuristic
-    # Test creation and deletion of (a) a simple file, (b) a directory and (c) a file in a created directory
     rnd = basename(tempfile(""))
     tf1 = file.path(path, sprintf("test_write_access_file_%s", rnd))
     td1 = file.path(path, sprintf("test_write_access_dir_%s", rnd))
@@ -51,7 +52,7 @@ is.writeable = function(path) {
     # perform the checks
     ok = try({
       file.create(tf1) && identical(readLines(tf1), character(0L)) && file.remove(tf1) &&
-      dir.create(td1) && dir.create(td2) &&
+      dir.create(td1) && dir.create(td2) && length(list.files(td1)) == 1L &&
       file.create(tf2) && identical(readLines(tf2), character(0L)) && file.remove(tf2) &&
       unlink(td1, recursive=TRUE) == 0L
     })
@@ -64,7 +65,7 @@ is.writeable = function(path) {
     return(TRUE)
   }
 
-  return(file.access(path, mode=2L) == 0L)
+  return(file.access(path, mode=c(2L, 4L)) == 0L)
 }
 
 makePathAbsolute = function(path) {
