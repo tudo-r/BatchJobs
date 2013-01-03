@@ -42,8 +42,8 @@ is.writeable = function(path) {
     rnd = basename(tempfile(""))
     tf1 = file.path(path, sprintf("test_write_access_file_%s", rnd))
     td1 = file.path(path, sprintf("test_write_access_dir_%s", rnd))
-    tf2 = file.path(td, "test_write_access_subfile")
-    td2 = file.path(td, "test_write_access_subdir")
+    tf2 = file.path(td1, "test_write_access_subfile")
+    td2 = file.path(td1, "test_write_access_subdir")
 
     # on exit, try to clean up the mess we might have caused
     on.exit(try(unlink(c(td1, td2, tf1, tf2), recursive=TRUE)))
@@ -64,7 +64,7 @@ is.writeable = function(path) {
     return(TRUE)
   }
 
-  file.access(path, mode=2L) == 0L
+  return(file.access(path, mode=2L) == 0L)
 }
 
 makePathAbsolute = function(path) {
