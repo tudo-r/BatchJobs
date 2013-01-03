@@ -39,14 +39,32 @@ is.writeable = function(path) {
   if (grepl("windows", getOperatingSystem(), ignore.case=TRUE)) {
     # Workaround: No POSIX file system informations available, use a heuristic
     # Test creation and deletion of (a) a simple file, (b) a directory and (c) a file in a created directory
-    tf1 = file.path(path, "test_access_file")
-    td  = file.path(path, "test_access_dir")
-    tf2 = file.path(td, "test_access_file")
-    return(suppressWarnings(file.create(tf1) && file.remove(tf1) &&
-                            dir.create(td) && file.create(tf2) && unlink(td, recursive=TRUE) == 0L))
+    rnd = basename(tempfile(""))
+    tf1 = file.path(path, sprintf("test_write_access_file_%s", rnd))
+    td1 = file.path(path, sprintf("test_write_access_dir_%s", rnd))
+    tf2 = file.path(td, "test_write_access_subfile")
+    td2 = file.path(td, "test_write_access_subdir")
+
+    # on exit, try to clean up the mess we might have caused
+    on.exit(try(unlink(c(td1, td2, tf1, tf2), recursive=TRUE)))
+
+    # perform the checks
+    ok = try({
+      file.create(tf1) && identical(readLines(tf1), character(0L)) && file.remove(tf1) &&
+      dir.create(td1) && dir.create(td2) &&
+      file.create(tf2) && identical(readLines(tf2), character(0L)) && file.remove(tf2) &&
+      unlink(td1, recursive=TRUE) == 0L
+    })
+
+    if (is.error(ok) || !isTRUE(ok))
+      return(FALSE)
+
+    # we don't need the on exit handler anymore, everything should be fine
+    on.exit(NULL)
+    return(TRUE)
   }
 
-  return(file.access(path, mode=2L) == 0L)
+  file.access(path, mode=2L) == 0L
 }
 
 makePathAbsolute = function(path) {
