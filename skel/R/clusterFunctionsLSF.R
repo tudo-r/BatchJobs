@@ -60,8 +60,8 @@ makeClusterFunctionsLSF = function(template.file) {
     # 106560  rogon   UNKWN m_amd      hpc84       hpc25       QScript    Mar 19 12:18
     res = runOSCommandLinux("bjobs", c("-u $USER", "-w"), stop.on.exit.code=FALSE)
     if (res$exit.code == 255L && grepl("No unfinished job found", res$output, fixed=TRUE))
-    if (res$exit.code > 0L)
       return(character(0L))
+    if (res$exit.code > 0L)
       stopf("bjobs produced exit code %i; output %s", res$exit.code, res$output)
 
     # drop first header line of output
