@@ -18,7 +18,7 @@ getSSHWorkersInfo = function(nodenames) {
       r.home = R.home(),
       session.info = sessionInfo(),
       lib.paths = lib.paths,
-      is.lib.path.writeable = is.writeable(head(lib.paths, 1L))
+      is.lib.path.writeable = is.accessible(head(lib.paths, 1L))
     )
   }
   res = callFunctionOnSSHWorkers(nodenames, fun=fun,
