@@ -18,6 +18,6 @@
 .onLoad = function(libname, pkgname) {
   if (!isOnSlave()) {
     assignConfDefaults()
-    readConfs()
+    readConfs(libname, pkgname)
   }
 }
