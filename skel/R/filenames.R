@@ -11,13 +11,11 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
     }
   }
 
-  if (! file.exists(path)) {
+  if (!isDirectory(path))
     stopf("Directory '%s' does not exists", path)
-  }
 
   if (!is.accessible(path))
     stopf("Directory '%s' is not readable/writable!", path)
-
 
   if (check.empty && any(list.files(path, all.files=TRUE) %nin% c(".", "..")))
     stopf("Directory '%s' does not seem to be empty!", path)

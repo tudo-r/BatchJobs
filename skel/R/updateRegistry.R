@@ -56,6 +56,8 @@ adjustRegistryPaths = function(reg, file.dir, work.dir) {
 
   # adjust file dir if necessary
   file.dir = makePathAbsolute(file.dir)
+  if (!isDirectory(file.dir))
+    stopf("file.dir does not exist or is not a directory: %s", file.dir)
   if (reg$file.dir != file.dir) {
     reg$file.dir = file.dir
     adjusted = TRUE
@@ -64,8 +66,8 @@ adjustRegistryPaths = function(reg, file.dir, work.dir) {
   # adjust work dir if necessary
   if (!missing(work.dir)) {
     work.dir = makePathAbsolute(work.dir)
-    tryCatch(checkDir(work.dir),
-             error = function(e) stopf("Error: You need to adjust your work directory! (%s)", e))
+    if (!isDirectory(work.dir))
+      stopf("work.dir does not exist or is not a directory: %s", work.dir)
     reg$work.dir = work.dir
     adjusted = TRUE
   }
