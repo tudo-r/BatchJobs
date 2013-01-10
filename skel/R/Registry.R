@@ -137,9 +137,8 @@ loadRegistry = function(file.dir, work.dir) {
       reg = adjusted
 
     updated = updateRegistry(reg)
-    if (!isFALSE(updated)) {
+    if (!isFALSE(updated))
       reg = updated
-    }
 
     if (!isFALSE(adjusted) || !isFALSE(updated))
       saveRegistry(reg)

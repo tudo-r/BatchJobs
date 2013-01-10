@@ -64,7 +64,10 @@ adjustRegistryPaths = function(reg, file.dir, work.dir) {
   }
 
   # adjust work dir if necessary
-  if (!missing(work.dir)) {
+  if (missing(work.dir)) {
+    if (!isDirectory(reg$work.dir))
+      warningf("The currently set work.dir '%s' does not exists. Use option 'work.dir' in loadRegistry to change it.", reg$work.dir)
+  } else {
     work.dir = makePathAbsolute(work.dir)
     if (!isDirectory(work.dir))
       stopf("work.dir does not exist or is not a directory: %s", work.dir)
