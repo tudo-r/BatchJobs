@@ -16,7 +16,7 @@ if (interactive()) {
   BatchJobs:::assignConfDefaults()
   cf = BatchJobs:::makeClusterFunctionsUnitTests()
   conf = BatchJobs:::getBatchJobsConf()
-  
+
 }
 
 conf$cluster.functions = cf

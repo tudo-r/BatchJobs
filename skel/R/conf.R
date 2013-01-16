@@ -43,10 +43,10 @@ assignConf = function(conf) {
 
 # reads package conf, userhome conf, working dir conf
 # then assigns them to namespace
-readConfs = function(libname, pkgname) {
+readConfs = function(path) {
   # if we want to stay compatible with R 2.12 we cannot use
   # public find.package without the dot
-  fn.pack = file.path(libname, pkgname, "etc", "BatchJobs_global_config.R")
+  fn.pack = file.path(path, "etc", "BatchJobs_global_config.R")
   fn.user = path.expand("~/.BatchJobs.R")
   fn.wd = suppressWarnings(normalizePath(".BatchJobs.R"))
   conffiles = Filter(file.exists, unique(c(fn.pack, fn.user, fn.wd)))

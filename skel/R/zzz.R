@@ -18,6 +18,11 @@
 .onLoad = function(libname, pkgname) {
   if (!isOnSlave()) {
     assignConfDefaults()
-    readConfs(libname, pkgname)
+    if (missing(libname) || missing(pkgname)) {
+      # this can happen with testthat while loading from skel/
+      readConfs(.find.package(package = "BatchJobs"))
+    } else {
+      readConfs(file.path(libname, pkgname))
+    }
   }
 }
