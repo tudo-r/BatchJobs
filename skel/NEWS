@@ -1,4 +1,4 @@
-BatchJobs_1.0-xxx:
+BatchJobs_1.0-911:
 - new option to raise warnings to errors on the slaves 
 - option to set process priority via nice in clusterFunctionsMulticore and 
   clusterFunctionsSSH
