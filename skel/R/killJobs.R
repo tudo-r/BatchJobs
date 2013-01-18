@@ -88,8 +88,8 @@ killJobs = function(reg, ids) {
 
   # second try also not successful
   if (length(bjids.notkilled) > 0L) {
-    messagef("Could not kill %i batch jobs, kill them manually!\nTheir ids have been saved in .GlobalEnv under .batch.job.ids", length(bjids.notkilled))
-    assign(".batch.job.ids", bjids.notkilled, envir=.GlobalEnv)
+    messagef("Could not kill %i batch jobs, kill them manually: %s",
+             length(bjids.notkilled), collapse(bjids,notkilled))
   }
 
   # reset killed jobs
