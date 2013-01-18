@@ -88,9 +88,11 @@ killJobs = function(reg, ids) {
 
   # second try also not successful
   if (length(bjids.notkilled) > 0L) {
-    messagef("Could not kill %i batch jobs, kill them manually: %s",
-             length(bjids.notkilled), collapse(bjids,notkilled))
-  }
+		fn = file.path(reg$file.dir, sprintf("killjobs_failed_ids_%i", now()))
+    warningf("Could not kill %i batch jobs, kill them manually!\nTheir ids have been saved in %s.", 
+			length(bjids.notkilled), fn)
+		writeLines(as.character(bjids.notkilled), con=fn)
+  }	
 
   # reset killed jobs
   ids = ids[data$batch_job_id %nin% bjids.notkilled]
