@@ -106,3 +106,11 @@ test_that("reduceResultsReturnValue works with empty results", {
 
 
 
+test_that("reduceResultsReturnValue works with other args", {  
+  reg = makeTestRegistry()
+	xs = 1:3
+	batchMap(reg, identity, xs)
+	submitJobs(reg)
+	z = reduceResultsMatrix(reg, fun = function(job, res, y) (res-y)^2, y = 1, use.names = FALSE)
+  expect_equal(z[,1], (xs-1)^2)
+})
