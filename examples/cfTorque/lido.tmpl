@@ -44,7 +44,8 @@ if(nodes > 1L)
   cmd = paste("mpirun -np 1", cmd)
 
 ## choose a suitable queue for job
-s2 = ifelse(memory <= 16*1024, "eth", "quad")
+# FIXME we should use ppn for memory >= 8*1024 
+s2 = ifelse(memory <= 8*1024, "eth", "quad")
 day = 3600 * 24
 s1 = if (walltime <= 3600) {
   "short"
