@@ -39,11 +39,13 @@ dbDoQueries = function(reg, queries, flags="ro", max.retries=200L, sleep=functio
       ok = as.character(ok)
       dbRollback(con)
       dbDisconnect(con)
-      if(!grepl("lock", tolower(ok), fixed=TRUE)) {
+      # catch known temporary errors:
+      # - database is still locked
+      # - disk I/O error
+      if(!grepl("(lock|i/o)", tolower(ok)))
         stopf("Error in dbDoQueries. Displaying only 1st query. %s (%s)", ok, queries[1L])
-      }
     }
-    # if we reach this here, DB was locked
+    # if we reach this here, DB was locked or temporary I/O error
     Sys.sleep(runif(1L, min=1, max=sleep(i)))
   }
   stopf("dbDoQueries: max retries (%i) reached, database is still locked!", max.retries)
@@ -57,7 +59,7 @@ dbDoQuery = function(reg, query, flags="ro", max.retries=200L, sleep=function(r)
     if (! is.error(res))
       return(res)
     res = as.character(res)
-    if(grepl("lock", tolower(res), fixed=TRUE)) {
+    if(grepl("(lock|i/o)", tolower(res))) {
       Sys.sleep(runif(1L, min=1, max=sleep(i)))
     } else {
       print(res)
