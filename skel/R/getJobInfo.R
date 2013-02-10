@@ -5,7 +5,7 @@ getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
 
   select.db   = c("submitted",      "started",      "done",       "done - started AS time_running", "started - submitted AS time_queued", "error",      "node",     "batch_job_id", "r_pid", "seed")
   select.cns  = c("time.submitted", "time.started", "time.done",  "time.running",                  "time.queued",                        "error.msg",   "nodename", "batch.id",     "r.pid", "seed")
-  columns = c(columns, setNames(select.db, select.cns)) 
+  columns = c(columns, setNames(select.db, select.cns))
 
   if (!missing(select)) {
     checkArg(select, subset=c("id", select.cns))
