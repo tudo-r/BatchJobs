@@ -161,7 +161,7 @@ names2 = function(x, missing.val="") {
   replace(n, is.na(n) | n == "", missing.val)
 }
 
-list2df = function(li, force.names=FALSE) {
+list2df = function(li, force.names=FALSE, strings.as.factors = default.stringsAsFactors()) {
   if (length(li) == 0L)
     return(as.data.frame(matrix(nrow = 0L, ncol = 0L)))
 
@@ -179,7 +179,7 @@ list2df = function(li, force.names=FALSE) {
     tmp = lapply(li, function(it) it[[col]])
     res[[col]] = simplify2array(replace(tmp, vapply(tmp, is.null, logical(1L)), NA))
   }
-  as.data.frame(res)
+  as.data.frame(res, stringsAsFactors = strings.as.factors)
 }
 
 shortenString = function(x, len, str.short="...") {

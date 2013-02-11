@@ -22,7 +22,7 @@ findJobs = function(reg, ids, pars) {
   syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
-  jobs = getJobs(reg, ids, check.ids=FALSE)
+  jobs = dbGetJobs(reg, ids)
 
   rename = function(pars) {
     ns = names(pars)

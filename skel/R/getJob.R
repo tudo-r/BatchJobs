@@ -1,3 +1,5 @@
+#FIXME this is somewhat ugly ... use internal functions, remove check arguments
+
 #' Get job from registry by id.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.

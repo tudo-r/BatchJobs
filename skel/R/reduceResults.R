@@ -72,6 +72,7 @@
 #' print(str(reduceResultsDataFrame(reg)))
 #' # reduce results to a sum
 #' reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
+# FIXME we need more documentation for reduceResultsReturnValue ...
 reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
   checkRegistry(reg)
   syncRegistry(reg)
@@ -107,12 +108,9 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
     }
 
     for (id in ids) {
-      # use lazy evaluation:
-      # If fun doesn't access job or res (unlikely), the
-      # following statement is not executed. So, if the job variable
-      # is not accessed, getJob will not trigger a database query
+      # use lazy evaluation
       aggr = fun(aggr,
-                 job = getJob(reg, id, check.id=FALSE),
+                 job = dbGetJobs(reg, id)[[1L]],
                  res = getResult(reg, id, part),
                  ...)
       bar$inc(1L)
@@ -121,26 +119,44 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
   return(aggr)
 }
 
-reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names, name.fun, ..., init, empty) {
+#' @export
+#' @rdname reduceResults
+reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names = TRUE) {
   checkRegistry(reg)
   syncRegistry(reg)
-  if (missing(ids))
+  if (missing(ids)) {
     ids = dbFindDone(reg)
-  if (missing(fun)){
-    fun = function(job, res) res
   } else {
-    force(fun)
+    ids = checkIds(reg, ids)
+    ndone = dbFindDone(reg, ids, negate=TRUE)
+    if (length(ndone) > 0L)
+      stopf("No results available for jobs with ids: %s", collapse(ndone))
+  }
+  if (missing(fun))
+    fun = function(job, res) res
+  else
     checkArg(fun, formals=c("job", "res"))
-  }
+  checkArg(use.names, "logical", len=1L, na.ok=FALSE)
+
   n = length(ids)
-  if (n == 0L) {
-    message("Reducing ", n, " results...")
-    return(empty)
-  }
-  fun2 = function(aggr, job, res, ...) combine(aggr, wrap(fun(job, res, ...)))
-  res = reduceResults(reg, ids, part, fun2, init, ...)
+  message("Reducing ", n, " results...")
+  if (n == 0L)
+    return(list())
+  res = vector("list", n)
+
+  bar = makeProgressBar(max=n, label="reduceResults")
+  bar$set()
+  tryCatch({
+    for (i in seq_along(ids)) {
+      # use lazy evaluation!
+      res[[i]] = fun(job = dbGetJobs(reg, ids[i])[[1L]],
+                     res = getResult(reg, ids[i], part), ...)
+      bar$inc(1L)
+    }
+  }, error=bar$error)
+
   if (use.names)
-    res = name.fun(res, ids, fun(getJob(reg, ids[1L]), getResult(reg, ids[1L], part), ...))
+    names(res) = ids
   return(res)
 }
 
@@ -148,40 +164,37 @@ reduceResultsReturnVal = function(reg, ids, part, fun, wrap, combine, use.names,
 #' @export
 #' @rdname reduceResults
 reduceResultsVector = function(reg, ids, part=NA_character_, fun, ..., use.names=TRUE) {
-  nf = function(res, ids, x1) {names(res) = ids; res}
-  reduceResultsReturnVal(reg, ids, part, fun, identity, c, use.names, nf, ..., init=c(), empty=c())
-}
-
-#' @export
-#' @rdname reduceResults
-reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names=TRUE) {
-  nf = function(res, ids, x1) {names(res) = ids; res}
-  reduceResultsReturnVal(reg, ids, part, fun, list, c, use.names, nf, ..., init=list(), empty=list())
+  unlist(reduceResultsList(reg, ids, part, fun, ..., use.names = use.names))
 }
 
 #' @export
 #' @rdname reduceResults
 reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE, use.names=TRUE) {
-  combine = if (rows) rbind else cbind
+  checkArg(rows, "logical", len=1L, na.ok=FALSE)
+  res = reduceResultsList(reg, ids, part, fun, ..., use.names = use.names)
+
+  if (length(res) == 0L)
+    return(matrix(0, nrow = 0L, ncol = 0L))
+
+  n = length(res)
+  dn = if (use.names) list(names(res), names(res[[1L]])) else NULL
+  res = unlist(res, use.names = FALSE)
+
   if (rows)
-    nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
+    matrix(res, nrow = n, byrow = TRUE, dimnames = dn)
   else
-    nf = function(res, ids, x1) {colnames(res) = ids; rownames(res) = names(x1); res}
-  res = reduceResultsReturnVal(reg, ids, part, fun, unlist, combine, use.names, nf, ..., init=c(), empty=matrix(0,0L,0L))
-  if (!use.names)
-    dimnames(res) = NULL
-  return(res)
+    matrix(res, ncol = n, byrow = FALSE, dimnames = rev(dn))
 }
 
 #' @export
 #' @rdname reduceResults
-reduceResultsDataFrame = function(reg, ids, part=NA_character_, fun, ...,
+reduceResultsDataFrame = function(reg, ids, part=NA_character_, fun, ..., use.names=TRUE,
   strings.as.factors=default.stringsAsFactors()) {
+  checkArg(strings.as.factors, "logical", len=1L, na.ok=FALSE)
 
-  nf = function(res, ids, x1) {rownames(res) = ids; colnames(res) = names(x1); res}
-  wrap = function(x) as.data.frame(x, stringsAsFactors=FALSE)
-  res = reduceResultsReturnVal(reg, ids, part, fun, wrap, rbind, TRUE, nf, ..., init=data.frame(), empty=data.frame())
-  stringsAsFactors(res, strings.as.factors)
+  res = reduceResultsList(reg, ids, part, fun, ..., use.names = use.names)
+  if (length(res) == 0L)
+    return(data.frame())
+
+  list2df(res, force.names=TRUE, strings.as.factors = strings.as.factors)
 }
-
-
