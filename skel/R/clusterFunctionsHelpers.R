@@ -67,15 +67,16 @@ cfBrewTemplate = function(conf, template, rscript, extension) {
 #'   OS command used to submit the job, e.g. qsub.
 #' @param exit.code [\code{integer(1)}]\cr
 #'   Exit code of the OS command, should not be 0.
-#' @param output [\code{character(1)}]\cr
+#' @param output [\code{character}]\cr
 #'   Output of the OS command, hopefully an informative error message.
+#'   If these are mutiple lines in a vector, they are automatically pasted together. 
 #' @return [\code{\link{SubmitJobResult}}].
 #' @export
 cfHandleUnkownSubmitError = function(cmd, exit.code, output) {
   checkArg(cmd, "character", len=1L, na.ok=FALSE)
   exit.code = convertInteger(exit.code)
   checkArg(exit.code, "integer", len=1L, na.ok=FALSE)
-  checkArg(output, "character", len=1L, na.ok=FALSE)
+  checkArg(output, "character", na.ok=FALSE)
   msg = sprintf("%s produced exit code %i; output %s",
     cmd, exit.code, collapse(output, sep="\n"))
   makeSubmitJobResult(status=101L, batch.job.id=NA_character_, msg=msg)
