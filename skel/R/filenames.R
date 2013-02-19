@@ -129,16 +129,3 @@ getPendingDir = function(file.dir)
 getSQLFileName = function(reg, type, id, char = getOrderCharacters()[type]) {
   file.path(getPendingDir(reg$file.dir), sprintf("pending_%s_%s_%i.sql", char, type, id))
 }
-
-# get path relative to base, or NA if path is not a subdir of base
-subPath = function(path, base, fs = .Platform$file.sep) {
-  p = sprintf("%s+", fs)
-  path = strsplit(makePathAbsolute(path), p)[[1L]]
-  base = strsplit(makePathAbsolute(base), p)[[1L]]
-  if (length(base) > length(path))
-    return(NA_character_)
-
-  if (!all(base == head(path, length(base))))
-    return(NA_character_)
-  collapse(tail(path, -length(base)), fs)
-}
