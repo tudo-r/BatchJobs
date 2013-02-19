@@ -1,9 +1,34 @@
-# Bundles your file.dir into a zip file.
-#
-# Creates a zip archive of your \code{file.dir}.
-# You can choose which files will be included or excluded.
-# Note that only your file.dir will be archived, not your work.dir!
-backupRegistry = function(reg, fn, exclude = c("scripts", "logs", "resouces", "conf")) {
+sweepRegistry = function(reg, sweep = "scripts") {
+  checkRegistry(reg)
+  syncRegistry(reg)
+  if (!length(sweep))
+    return (invisible(TRUE))
+  sweep = match.arg(sweep, choices = c("scripts", "logs", "resources", "conf"), several.ok = TRUE)
+  if (length(dbFindRunning(reg)))
+    stop("Can't sweep registry while jobs are running")
+
+  fd = reg$file.dir
+  files = list.files(fd, pattern = "^killjobs_failed_ids_*")
+  if ("resources" %in% sweep)
+    files = c(files, list.files(file.path(fd, "resources"), full.names = TRUE))
+  if ("conf" %in% sweep)
+    files = c(files, list.files(fd, pattern = "^conf.RData$"), full.names = TRUE)
+  if (all(c("logs", "scripts") %in% sweep)) {
+    files = c(files, list.files(file.path(fd, jobs), pattern = "^[0-9]+\\.[out|R]$", recursive = TRUE, full.names = TRUE))
+  } else {
+    if ("logs" %in% sweep)
+      files = c(files, list.files(file.path(fd, jobs), pattern = "^[0-9]+\\.out$", recursive = TRUE, full.names = TRUE))
+    if ("scripts" %in% sweep)
+      files = c(files, list.files(file.path(fd, jobs), pattern = "^[0-9]+\\.R$", recursive = TRUE, full.names = TRUE))
+  }
+
+  messagef("Removing %i files ...", length(files))
+  file.remove(files)
+  return(invisible(TRUE))
+}
+
+
+backupRegistry = function(reg, fn, exclude = c("scripts")) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (length(exclude))
