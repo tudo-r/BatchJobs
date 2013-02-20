@@ -189,11 +189,3 @@ shortenString = function(x, len, str.short="...") {
     return(paste(substr(x, 1L, len - nchar(str.short)), str.short, sep=""))
   return(x)
 }
-
-# eval expr in a specific directory
-inDirectory = function(dir, expr) {
-  wd = getwd()
-  on.exit(setwd(wd))
-  setwd(dir)
-  eval(expr)
-}
