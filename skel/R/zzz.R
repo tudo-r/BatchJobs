@@ -20,7 +20,7 @@
     assignConfDefaults()
     if (missing(libname) || missing(pkgname)) {
       # this can happen with testthat while loading from skel/
-      readConfs(.find.package(package = "BatchJobs"))
+      readConfs(find.package(package = "BatchJobs"))
     } else {
       readConfs(file.path(libname, pkgname))
     }

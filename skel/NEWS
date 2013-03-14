@@ -1,3 +1,7 @@
+BatchJobs_1.0-xxx:
+- Dropped support for R < 2.13.0
+- speedups in reduceResults[ReturnValue]
+
 BatchJobs_1.0-915:
 - new option to raise warnings to errors on the slaves 
 - option to set process priority via nice in clusterFunctionsMulticore and 

@@ -68,11 +68,7 @@ is.accessible = function(path) {
 
 makePathAbsolute = function(path) {
   if(substr(path, 1L, 1L) != "/")
-    path = normalizePath(path, mustWork=FALSE)
-  # FIXME: emulated winslash-behaviour for R < 2.13.x (?)
-  if (grepl("windows", getOperatingSystem(), ignore.case=TRUE))
-    path = gsub("\\", "/", path, fixed=TRUE)
-
+    return(normalizePath(path, mustWork=FALSE, winslash = "/"))
   return(path)
 }
 
