@@ -177,7 +177,7 @@ reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE
     return(matrix(0, nrow = 0L, ncol = 0L))
 
   n = length(res)
-  dn = if (use.names) list(names(res), names(res[[1L]])) else NULL
+  dn = if (use.names) list(names(res), names2(res[[1L]])) else NULL
   res = unlist(res, use.names = FALSE)
 
   if (rows)

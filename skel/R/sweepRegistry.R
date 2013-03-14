@@ -29,7 +29,7 @@ sweepRegistry = function(reg, sweep = "scripts") {
   jd = file.path(fd, "jobs")
   rd = file.path(fd, "resources")
 
-  # failed kill ids are always obsolete because no jobs is running anymore
+  # failed kill ids are always obsolete because no jobs are running anymore
   files = list.files(fd, pattern = "^killjobs_failed_ids_*", full.names = TRUE)
 
   # sweep configuration
