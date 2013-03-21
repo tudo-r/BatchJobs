@@ -98,9 +98,6 @@ dbSelectWithIds = function(reg, query, ids, where=TRUE, group.by, limit, reorder
   res = dbDoQuery(reg, query)
   if(missing(ids) || !reorder)
     return(res)
-  # FIXME remove check on release
-  if ("job_id" %nin% names(res))
-    stop("Internal error: job_id not found")
   return(res[na.omit(match(ids, res$job_id)),, drop=FALSE])
 }
 
@@ -229,7 +226,7 @@ dbFindDone = function(reg, ids, negate=FALSE) {
 
 dbFindErrors = function(reg, ids, negate=FALSE) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (error IS NOT NULL)", reg$id, if(negate) "NOT" else "")
-  dbSelectWithIds(reg, query, where=FALSE)$job_id
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
 dbFindTerminated = function(reg, ids, negate=FALSE) {
