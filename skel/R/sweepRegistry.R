@@ -1,33 +1,45 @@
+#FIXME: wich addit. files for BE?
+#FIXME: writ tests
+
 #' Sweep obsolete files from the file system
 #'
-#' Removes R scripts, log files, resource informations and configuration files
-#' from the registry's file directory.
+#' Removes R scripts, log files, resource informations andtemporarily stored configuration files
+#' from the registry's file directory. Assuming all your jobs completed successfully, none of these are needed
+#' for further work. This operation potentially releases quite a lot of disk space, depending on the number of your jobs.
+#' 
+#' BUT A HUGE WORD OF WARNING:
+#' IF you later notice something strange and need to determine the reason for it, you are at a huge disadvantage.
+#' Only do this at your own risk and when you are sure that you have succesfully completed a project and only
+#' want to archive your produced experinments and results.
+#' 
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
-#' @param sweep [character]\cr
-#'   Vector with the possible choices \dQuote{scripts}, \dQuote{logs}, \dQuote{resources}
-#'   and \dQuote{conf}, or the string \dQuote{all} as a shortcut for all possible choices.
-#'   Default is \dQuote{scripts} which removes all \code{R} script files.
-#' @return [\code{logical}] Invisibly returns \code{TRUE} on success, \code{FALSE}
+#' @param sweep [\code{character}]\cr
+#'   Possible choices: 
+#'   Temporary R scripts of jobs, 
+#'   really not needed for anything else then execution (\dQuote{scripts}), 
+#'   log file of jobs,
+#'   think about whether you later want to inspect them (\dQuote{logs}), 
+#'   BatchJobs configuration files which are temporarily stored on submit,
+#'   really not needed for anything else then execution (\dQuote{conf}),
+#'   resource lists of \code{\link{submitJobs}} which are temporarily stored on submit, 
+#'   think about whether you later want to inspect them (\dQuote{resources}),
+#'   Default is \code{c("scripts", "conf").
+#' @return [\code{logical}]. Invisibly returns \code{TRUE} on success and \code{FALSE}
 #'   if some files could not be removed.
 #' @export
-sweepRegistry = function(reg, sweep = "scripts") {
+sweepRegistry = function(reg, sweep = c("scripts", "conf")) {
   checkRegistry(reg)
   syncRegistry(reg)
 
-  checkArg(sweep, "character", min.len=1L, na.ok=FALSE)
-  choices = c("scripts", "logs", "resources", "conf")
-  if (length(sweep) == 1L && sweep == "all")
-    sweep = choices
-  else
-    sweep = match.arg(sweep, choices = choices, several.ok = TRUE)
-
-  if (length(dbFindRunning(reg)))
+  checkArg(sweep, subset = c("scripts", "logs", "resources", "conf"))
+  
+  if (length(dbFindRunning(reg)) > 0L)
     stop("Can't sweep registry while jobs are running")
 
   fd = reg$file.dir
-  jd = file.path(fd, "jobs")
-  rd = file.path(fd, "resources")
+  jd = getJobParentDir(fd)
+  rd = getResourcesDir(fd)
 
   # failed kill ids are always obsolete because no jobs are running anymore
   files = list.files(fd, pattern = "^killjobs_failed_ids_*", full.names = TRUE)
