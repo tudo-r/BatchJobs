@@ -27,7 +27,7 @@
 #' # now reduce one final time on master
 #' reduceResults(reg, fun=function(aggr,job,res) f(aggr, res))
 batchReduce = function(reg, fun, xs, init, block.size, more.args=list()) {
-  checkRegistry(reg)
+  checkRegistry(reg, strict=TRUE)
   syncRegistry(reg)
   checkArg(fun, formals=c("aggr", "x"))
   if (!is.vector(xs))

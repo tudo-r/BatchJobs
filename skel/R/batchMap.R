@@ -18,7 +18,7 @@
 #' print(reg)
 #' @export
 batchMap = function(reg, fun, ..., more.args=list()) {
-  checkRegistry(reg)
+  checkRegistry(reg, strict=TRUE)
   checkArg(fun, cl="function")
   args = list(...)
   if (length(args) == 0L)

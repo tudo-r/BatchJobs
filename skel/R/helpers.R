@@ -1,5 +1,13 @@
-checkRegistry = function(reg, ids) {
-  checkArg(reg, cl = "Registry")
+checkRegistry = function(reg, expected = "Registry", strict = FALSE) {
+  cl = class(reg)
+  if (strict) {
+    if (head(cl, 1L) != expected)
+      stopf("Registry must be (strictly) of class '%s', not '%s'", expected, head(cl, 1L))
+  } else {
+    if (expected %nin% cl)
+      stopf("Registry must be of class '%s', not '%s'", expected, head(cl, 1L))
+  }
+  invisible(TRUE)
 }
 
 checkIds = function(reg, ids, check.present=TRUE) {

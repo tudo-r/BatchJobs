@@ -23,7 +23,7 @@
 #' reduceResultsMatrix(reg, fun=function(job, res) cbind(job$pars, res))
 #' @export
 batchExpandGrid = function(reg, fun, ..., more.args=list()) {
-  checkRegistry(reg)
+  checkRegistry(reg, strict=TRUE)
   checkArg(fun, cl="function")
   args = list(...)
   ns = names(args)
