@@ -1,30 +1,28 @@
-#FIXME: wich addit. files for BE?
-#FIXME: writ tests
+#FIXME: write tests
 
 #' Sweep obsolete files from the file system
 #'
-#' Removes R scripts, log files, resource informations andtemporarily stored configuration files
+#' Removes R scripts, log files, resource informations and temporarily stored configuration files
 #' from the registry's file directory. Assuming all your jobs completed successfully, none of these are needed
 #' for further work. This operation potentially releases quite a lot of disk space, depending on the number of your jobs.
-#' 
 #' BUT A HUGE WORD OF WARNING:
 #' IF you later notice something strange and need to determine the reason for it, you are at a huge disadvantage.
-#' Only do this at your own risk and when you are sure that you have succesfully completed a project and only
-#' want to archive your produced experinments and results.
-#' 
+#' Only do this at your own risk and when you are sure that you have successfully completed a project and only
+#' want to archive your produced experiments and results.
+#'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 #' @param sweep [\code{character}]\cr
-#'   Possible choices: 
-#'   Temporary R scripts of jobs, 
-#'   really not needed for anything else then execution (\dQuote{scripts}), 
+#'   Possible choices:
+#'   Temporary R scripts of jobs,
+#'   really not needed for anything else then execution (\dQuote{scripts}),
 #'   log file of jobs,
-#'   think about whether you later want to inspect them (\dQuote{logs}), 
+#'   think about whether you later want to inspect them (\dQuote{logs}),
 #'   BatchJobs configuration files which are temporarily stored on submit,
 #'   really not needed for anything else then execution (\dQuote{conf}),
-#'   resource lists of \code{\link{submitJobs}} which are temporarily stored on submit, 
+#'   resource lists of \code{\link{submitJobs}} which are temporarily stored on submit,
 #'   think about whether you later want to inspect them (\dQuote{resources}),
-#'   Default is \code{c("scripts", "conf").
+#'   Default is \code{c("scripts", "conf")}.
 #' @return [\code{logical}]. Invisibly returns \code{TRUE} on success and \code{FALSE}
 #'   if some files could not be removed.
 #' @export
@@ -33,7 +31,7 @@ sweepRegistry = function(reg, sweep = c("scripts", "conf")) {
   syncRegistry(reg)
 
   checkArg(sweep, subset = c("scripts", "logs", "resources", "conf"))
-  
+
   if (length(dbFindRunning(reg)) > 0L)
     stop("Can't sweep registry while jobs are running")
 
