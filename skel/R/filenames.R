@@ -67,9 +67,11 @@ is.accessible = function(path) {
 }
 
 makePathAbsolute = function(path) {
-  if(substr(path, 1L, 1L) != "/")
-    return(normalizePath(path, mustWork=FALSE, winslash = "/"))
-  return(path)
+  if(substr(path, 1L, 1L) == "/")
+    return(path)
+
+  # FIXME test this on windows
+  normalizePath(path, mustWork=FALSE, winslash = "/")
 }
 
 getJobDirs = function(reg, ids, unique=FALSE) {
