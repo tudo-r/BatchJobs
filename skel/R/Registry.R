@@ -1,14 +1,10 @@
-makeRegistryInternal = function(id, file.dir, sharding,
-  work.dir, multiple.result.files, seed, packages) {
-  cur.dir = getwd()
+makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages) {
   checkArg(id, cl = "character", len = 1L, na.ok = FALSE)
   checkIdValid(id, allow.minus=FALSE)
-  if (missing(file.dir))
-    file.dir = file.path(cur.dir, paste(id, "files", sep="-"))
   checkArg(file.dir, cl = "character", len = 1L, na.ok = FALSE)
   checkArg(sharding, cl = "logical", len = 1L, na.ok = FALSE)
   if (missing(work.dir))
-    work.dir = cur.dir
+    work.dir = getwd()
   checkArg(work.dir, cl = "character", len = 1L, na.ok = FALSE)
   checkArg(multiple.result.files, cl = "logical", len = 1L, na.ok = FALSE)
 
@@ -86,16 +82,25 @@ makeRegistryInternal = function(id, file.dir, sharding,
 #' @param packages [\code{character}]\cr
 #'   Packages that will always be loaded on each node.
 #'   Default is \code{character(0)}.
+#' @param skip [\code{logical(1)}]\cr
+#'   Skip creation of a new registry if a registry is found in \code{file.dir}.
+#'   Defaults to \code{TRUE}.
 #' @return [\code{\link{Registry}}]
 #' @aliases Registry
 #' @export
 #' @examples
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' print(reg)
-makeRegistry = function(id, file.dir, sharding=TRUE,
-  work.dir, multiple.result.files = FALSE, seed, packages=character(0L)) {
-  reg = makeRegistryInternal(id, file.dir, sharding, work.dir,
-                             multiple.result.files, seed, packages)
+makeRegistry = function(id, file.dir, sharding=TRUE, work.dir, multiple.result.files = FALSE,
+                        seed, packages=character(0L), skip = TRUE) {
+  if (missing(file.dir))
+    file.dir = file.path(getwd(), paste(id, "files", sep="-"))
+  checkArg(skip, "logical", len=1L, na.ok=FALSE)
+  if (skip && isRegistryDir(file.dir))
+    return(loadRegistry(file.dir = file.dir))
+
+  reg = makeRegistryInternal(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages)
+
   dbCreateJobStatusTable(reg)
   dbCreateJobDefTable(reg)
   saveRegistry(reg)
@@ -150,4 +155,8 @@ saveRegistry = function(reg) {
   fn = getRegistryFilePath(reg$file.dir)
   message("Saving registry: ", fn)
   save(file=fn, reg)
+}
+
+isRegistryDir = function(dir) {
+  isDirectory(dir) && file.exists(getRegistryFilePath(dir))
 }
