@@ -15,4 +15,6 @@ test_that("findStatus", {
   expect_equal(j, ids[2])
   j = findNotDone(reg)
   expect_equal(j, ids[2])
+  j = findStarted(reg)
+  expect_equal(j, 1:3)
 })

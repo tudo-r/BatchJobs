@@ -5,6 +5,7 @@ BatchJobs_1.0-xxx:
 - fixed a bug in findErrors (argument 'ids' was ignored)
 - New function sweepRegistry: Remove intermediate/temporary/obsolete files
 - Better error handling in case of I/O errors
+- New functions: findStarted() and findNotStarted()
 
 BatchJobs_1.0-915:
 - new option to raise warnings to errors on the slaves 

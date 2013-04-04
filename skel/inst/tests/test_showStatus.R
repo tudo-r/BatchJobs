@@ -14,10 +14,10 @@ test_that("showStatus", {
   submitJobs(reg)
   expect_output({
     showStatus(reg)
-  }, "Status for jobs: 3")
+  }, "Status for 3 jobs")
   expect_output({
     showStatus(reg, getJobIds(reg)[2:3])
-  }, "Status for jobs: 2")
+  }, "Status for 2 jobs")
 })
 
 
@@ -36,5 +36,5 @@ test_that("showStatus works with empty id vector", {
   submitJobs(reg)
   expect_output({
     showStatus(reg, integer(0L))
-  }, "Status for jobs: 0")
+  }, "Status for 0 jobs")
 })

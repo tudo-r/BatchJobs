@@ -106,6 +106,21 @@ findNotRunning = function(reg, ids) {
   findState(reg, ids, dbFindRunning, TRUE)
 }
 
+
+#' \code{findStarted}: Find jobs which have been started on the batch system.
+#' @export
+#' @rdname findState
+findStarted = function(reg, ids) {
+  findState(reg, ids, dbFindStarted, FALSE)
+}
+
+#' \code{findStarted}: Find jobs which have not been started on the batch system.
+#' \code{findNotRunning}: Find jobs which are not running.
+#' @export
+#' @rdname findState
+findNotStarted = function(reg, ids) {
+  findState(reg, ids, dbFindStarted, TRUE)
+}
 #' \code{findExpired}: Find jobs where walltime was probably hit.
 #' Right now the heuristic is as follows:
 #' Find all jobs that have submitted, did not abort with an error,
