@@ -44,7 +44,7 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
     sprintf("(%6.2f%%)", x / n * 100)
   }
 
-  output = collapse(c("Status for jobs: %%i at %%s",
+  output = collapse(c("Status for %%i jobs at %%s",
                       "Submitted: %%%1$ii %%s",
                       "Started:   %%%1$ii %%s",
                       "Running:   %%%1$ii %%s",
