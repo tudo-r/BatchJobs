@@ -27,7 +27,7 @@ findJobs = function(reg, ids, pars) {
   rename = function(pars) {
     ns = names(pars)
     if (is.null(ns)) {
-      ns = rep("", length(pars))
+      ns = rep.int("", length(pars))
     }
     j = which(is.na(ns) | ns == "")
     ns[j] = paste(".arg", seq_along(j), sep="")

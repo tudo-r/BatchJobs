@@ -57,7 +57,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
       if (job.delay && n > 100L && cf$name %nin% c("Interactive", "Multicore", "SSH")) {
         return(runif(n, n*0.1, n*0.2))
       }
-      return(delays = rep(0, n))
+      return(delays = rep.int(0, n))
     }
     vapply(seq_along(ids), job.delay, numeric(1L), n=n)
   }
@@ -222,12 +222,12 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
           labw = environment(bar$set)$label.width
           lab = sprintf(sprintf("%%%is", labw),
             sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
-          cat(paste(rep("\b \b", pbw-5), collapse=""))
+          cat(paste(rep.int("\b \b", pbw-5), collapse=""))
           bmrmsg = batch.result$msg
           msgline = sprintf("%s msg=%s", lab, bmrmsg)
           cat(msgline)
           Sys.sleep(sleep.secs/2)
-          cat(paste(rep("\b \b", nchar(msgline)), collapse=""))
+          cat(paste(rep.int("\b \b", nchar(msgline)), collapse=""))
         } else if (batch.result$status > 100L && batch.result$status <= 200L) {
           # fatal error, abort at once
           stopf("Fatal error occured: %i. %s", batch.result$status, batch.result$msg)

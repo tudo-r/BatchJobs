@@ -166,7 +166,7 @@ trim = function(x, ltrim=TRUE, rtrim=TRUE) {
 names2 = function(x, missing.val="") {
   n = names(x)
   if (is.null(n))
-    return(rep(missing.val, length(x)))
+    return(rep.int(missing.val, length(x)))
   replace(n, is.na(n) | n == "", missing.val)
 }
 

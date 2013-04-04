@@ -73,7 +73,7 @@ dbDoQuery = function(reg, query, flags="ro", max.retries=200L, sleep=function(r)
 
 dbAddData = function(reg, tab, data) {
   query = sprintf("INSERT INTO %s_%s (%s) VALUES(%s)", reg$id, tab,
-                  collapse(colnames(data)), collapse(rep("?", ncol(data))))
+                  collapse(colnames(data)), collapse(rep.int("?", ncol(data))))
   con = dbConnectToJobsDB(reg, flags="rw")
   on.exit(dbDisconnect(con))
   dbBeginTransaction(con)
