@@ -162,6 +162,7 @@ trim = function(x, ltrim=TRUE, rtrim=TRUE) {
   return(x)
 }
 
+### FIXME this is going to BBmisc!
 names2 = function(x, missing.val="") {
   n = names(x)
   if (is.null(n))
