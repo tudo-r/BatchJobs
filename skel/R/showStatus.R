@@ -41,7 +41,8 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
   procent = function(x, n) {
     if(is.na(x))
       return("")
-    sprintf("(%6.2f%%)", x / n * 100)
+    p = ifelse(n == 0L, 0, x / n * 100)
+    sprintf("(%6.2f%%)", p)
   }
 
   output = collapse(c("Status for %%i jobs at %%s",
