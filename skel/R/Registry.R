@@ -160,3 +160,16 @@ saveRegistry = function(reg) {
 isRegistryDir = function(dir) {
   isDirectory(dir) && file.exists(getRegistryFilePath(dir))
 }
+
+checkRegistry = function(reg, strict = FALSE) {
+  cl = class(reg)
+  expected = "Registry"
+  if (strict) {
+    if (head(cl, 1L) != expected)
+      stopf("Registry class mismatch: Expected argument with first class '%s'", expected)
+  } else {
+    if (expected %nin% cl)
+      stopf("Registry class mismatch: Expected argument of class '%s'", expected)
+  }
+  invisible(TRUE)
+}
