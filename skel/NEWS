@@ -1,5 +1,5 @@
-BatchJobs_1.0-xxx:
-- Dropped support for R < 2.13.0 (.find.packages deprecated)
+BatchJobs_1.0-964:
+- Dropped support for R < 2.15.0 (.find.packages deprecated and sendmailR dependency)
 - speedups in reduceResults[ReturnValue]
 - Output of showStatus now contains a time information
 - fixed a bug in findErrors (argument 'ids' was ignored)
