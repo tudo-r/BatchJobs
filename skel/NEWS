@@ -1,4 +1,4 @@
-BatchJobs_1.0-964:
+BatchJobs_1.0-966:
 - Dropped support for R < 2.13.0 (.find.packages deprecated)
 - speedups in reduceResults[ReturnValue]
 - Output of showStatus now contains a time information
