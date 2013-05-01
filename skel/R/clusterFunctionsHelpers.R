@@ -12,7 +12,12 @@
 #' @export
 cfReadBrewTemplate = function(template.file) {
   checkArg(template.file, "character", len=1L, na.ok=FALSE)
-  collapse(readLines(template.file), "\n")
+  if (!file.exists(template.file) || isDirectory(template.file))
+    stopf("Template file '%s' not found", template.file)
+  tmpl = readLines(template.file)
+  if (length(tmpl) == 0L)
+    stopf("Error reading template '%s' or empty template", template.file)
+  collapse(tmpl, "\n")
 }
 
 #' Cluster functions helper: Brew your template into a job description file.
@@ -69,7 +74,7 @@ cfBrewTemplate = function(conf, template, rscript, extension) {
 #'   Exit code of the OS command, should not be 0.
 #' @param output [\code{character}]\cr
 #'   Output of the OS command, hopefully an informative error message.
-#'   If these are mutiple lines in a vector, they are automatically pasted together. 
+#'   If these are mutiple lines in a vector, they are automatically pasted together.
 #' @return [\code{\link{SubmitJobResult}}].
 #' @export
 cfHandleUnkownSubmitError = function(cmd, exit.code, output) {

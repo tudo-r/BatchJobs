@@ -33,7 +33,7 @@ createShardedDirs = function(reg, ids) {
   }
 }
 
-# tests a file / directory for read and write permissions
+# tests a directory for read and write permissions
 # uses a heuristic for windows
 is.accessible = function(path) {
   if (grepl("windows", getOperatingSystem(), ignore.case=TRUE)) {
