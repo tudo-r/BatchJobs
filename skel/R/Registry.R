@@ -123,7 +123,6 @@ print.Registry = function(x, ...) {
 #'   Location of the file.dir to load the registry from.
 #' @param work.dir [\code{character(1)}]\cr
 #'   Location of the work. Unchanged if missing.
-#'   Note that the registry is not safed unless you set \code{save} to \code{TRUE}!
 #' @return [\code{\link{Registry}}].
 #' @export
 loadRegistry = function(file.dir, work.dir) {
