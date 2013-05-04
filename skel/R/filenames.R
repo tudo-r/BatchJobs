@@ -20,7 +20,7 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
   if (check.empty && any(list.files(path, all.files=TRUE) %nin% c(".", "..")))
     stopf("Directory '%s' does not seem to be empty!", path)
 
-  if (check.posix) {
+  if (check.posix && getOption("BatchJobs.check.posix", TRUE)) {
     path.abs = makePathAbsolute(path)
     if(! grepl("^[[:alnum:]:/_.+-]+$", path.abs))
       stopf("Directory '%s' contains illegal characters! Allowed: a-z A-Z 0-9 : / + . - _", path.abs)
