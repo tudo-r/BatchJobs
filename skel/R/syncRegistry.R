@@ -27,7 +27,7 @@ syncRegistry = function(reg) { # FIXME option to use external sync
 readSQLFile = function(con) {
   x = readLines(con)
   n = length(x)
-  if (x[n] != "--EOF--")
+  if (n == 0L || x[n] != "--EOF--")
     return(FALSE)
   x = x[-n]
   substr(x, 1L, nchar(x) - 1L)
