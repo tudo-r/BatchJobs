@@ -132,8 +132,9 @@ getSQLFileName = function(reg, type, id, char = getOrderCharacters()[type]) {
 # FIXME: This is in BBmisc, only a temporary overwrite to fix issues on windows
 # See Issue 11
 isDirectory = function(...) {
+  paths = c(...)
   if (getRversion() < "3.0.2" && grepl("windows", getOperatingSystem(), ignore.case=TRUE))
-    paths = sub("^([[:alpha:]]:)[/\\]*$", "\\1//", c(...))
+    paths = sub("^([[:alpha:]]:)[/\\]*$", "\\1//", paths)
   x = file.info(paths)$isdir
   !is.na(x) & x
 }
