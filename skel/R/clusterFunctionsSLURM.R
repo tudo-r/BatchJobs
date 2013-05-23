@@ -17,16 +17,16 @@
 #' and a more complex one here
 #' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfSLURM/dortmund_fk_statistik.tmpl}
 #' in the package repository on its homepage.
-#'
-#'   Path to a brew template file that is used for the PBS job file.
+#'   
 #' @param template.file [\code{character(1)}]\cr
+#'   Path to a brew template file that is used for the SLURM job file.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @examples
 #' \dontrun{
 #' cluster.functions = makeClusterFunctionsSLURM("~/mytemplate.tmpl")
 #' }
 #' @export
-#' @seealso \link{ClusterFunctions}
+#' @seealso \code{\link{ClusterFunctions}}
 makeClusterFunctionsSLURM = function(template.file) {
   template = cfReadBrewTemplate(template.file)
 
