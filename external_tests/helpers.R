@@ -2,19 +2,20 @@ library("BBmisc")
 library("BatchJobs")
 library("testthat")
 
-doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false", 
+doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false",
   sleep.master=8, sleep.job=300, resources=list()) {
-  
+
   messagef("############################################################")
-  messagef("## BEGIN TEST cf=%s whitespace=%s n=%i long=%s", 
+  messagef("## BEGIN TEST cf=%s whitespace=%s n=%i long=%s",
     BatchJobs:::getBatchJobsConf()$cluster.functions$name, whitespace, n, long)
 
   id = "external_test"
   if (whitespace)
     fd = "external test"
   else
-    fd = "external_test"  
+    fd = "external_test"
   fd = file.path(dir, fd)
+  Sys.sleep(1) # FIXME: We need this for cfSLURM
   ok = unlink(fd, recursive=TRUE)
   if (ok != 0)
     stopf("could not delete file dir: %s", fd)
@@ -31,7 +32,7 @@ doExternalTest = function(dir=getwd(), whitespace=FALSE, n=4, long="false",
     Sys.sleep(sleep.master)
     res = reduceResults(reg, fun=function(aggr,job,res) c(aggr, res))
     expect_equal(res, xs)
-  } 
+  }
   st = showStatus(reg)
   return(reg)
 }
