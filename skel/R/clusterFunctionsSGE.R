@@ -19,12 +19,7 @@
 #' @param template.file [\code{character(1)}]\cr
 #'   Path to a brew template file that is used for the job file.
 #' @return [\code{\link{ClusterFunctions}}].
-#' @examples
-#' \dontrun{
-#' cluster.functions = makeClusterFunctionsSGE("~/mytemplate.tmpl")
-#' }
 #' @export
-#' @seealso \link{ClusterFunctions}
 makeClusterFunctionsSGE = function(template.file) {
   template = cfReadBrewTemplate(template.file)
 

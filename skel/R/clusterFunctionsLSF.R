@@ -16,20 +16,10 @@
 #' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfLSF/simple.tmpl}
 #' in the package repository on its homepage.
 #'
-#' The following variables are accessible in the template file:
-#' a) all argu
-#'
-#'
-#'
 #' @param template.file [\code{character(1)}]\cr
 #'   Path to a brew template file that is used for the job file.
 #' @return [\code{\link{ClusterFunctions}}].
-#' @examples
-#' \dontrun{
-#' cluster.functions = makeClusterFunctionsLSF("~/mytemplate.tmpl")
-#' }
 #' @export
-#' @seealso \link{ClusterFunctions}
 makeClusterFunctionsLSF = function(template.file) {
   template = cfReadBrewTemplate(template.file)
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE=Y, the bjobs command exits with 0 only
