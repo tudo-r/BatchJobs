@@ -178,3 +178,17 @@ shortenString = function(x, len, str.short="...") {
     return(paste(substr(x, 1L, len - nchar(str.short)), str.short, sep=""))
   return(x)
 }
+
+
+
+# FIXME we have a similar function in BBmisc, but it uses NA_character_
+# for missing.val. We should patch it to also have an argument to set missing.val.
+# missing.val == "" is required to not confuse make.names.
+# Or even better, we should provide our own make.names function.
+# R's implementation is kind of unflexible and hard to predict.
+names2 = function(x, missing.val="") {
+  n = names(x)
+  if (is.null(n))
+    return(rep.int(missing.val, length(x)))
+  replace(n, is.na(n) | n == "", missing.val)
+}
