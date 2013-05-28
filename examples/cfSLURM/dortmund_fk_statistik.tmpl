@@ -16,22 +16,25 @@
 ## 'default.resources' as a named list.
 <%
 d = setdiff(names(resources), c("walltime", "memory", "ntasks", "ncpus"))
-if (length(d) > 0)
+if (length(d) > 0L)
   stopf("Illegal resources used: %s", collapse(d))
 
 walltime = convertInteger(resources$walltime)
 memory = convertInteger(resources$memory)
 ntasks = convertInteger(resources$ntasks)
 ncpus = convertInteger(resources$ncpus)
-
-checkArg(walltime, "integer", len=1L, na.ok=FALSE, lower=1, upper=60*60*24*2)
-checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=100, upper=64000)
-checkArg(ntasks, "integer", len=1L, na.ok=FALSE, lower=1)
-checkArg(ncpus, "integer", len=1L, na.ok=FALSE, lower=1)
+checkArg(walltime, "integer", len=1L, na.ok=FALSE, lower=1L, upper=172800L)
+checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=100L, upper=64000L)
+checkArg(ntasks, "integer", len=1L, na.ok=FALSE, lower=1L, upper=65L)
+checkArg(ncpus, "integer", len=1L, na.ok=FALSE, lower=1L, upper=12L)
 
 cmd = "R CMD BATCH --no-save --no-restore"
-if(ntasks > 1L) 
+mincpus = 1L
+
+if(ntasks > 1L){
+  mincpus = 2L
   cmd = paste("mpirun -np 1", cmd)
+}
 
 -%>
 
@@ -40,12 +43,13 @@ if(ntasks > 1L)
 #SBATCH --output=<%= log.file %>
 #SBATCH --error=<%= log.file %>
 ## SLURM wants minutes
-#SBATCH --time=<%= ceiling(resources$walltime / 60)%>
+#SBATCH --time=<%= ceiling(resources$walltime / 60L)%>
 #SBATCH --ntasks=<%= resources$ntasks %>
+#SBATCH --mincpus=<%= mincpus %>
 #SBATCH --cpus-per-task=<%= resources$ncpus %>
 #SBATCH --mem-per-cpu=<%= resources$memory %>
 #SBATCH --partition=all
-  
+
 source /etc/profile
 
 ## Run R:
