@@ -11,12 +11,15 @@
 #'   Should the result be simplified to a vector, matrix or higher dimensional array if possible?
 #'   Default is \code{TRUE}.
 #' @param use.names [\code{logical(1)}]\cr
-#'   Should the returned list be named with the ids?
+#'   Should the returned list be named?
 #'   Default is \code{TRUE}.
+#' @param use.jobnames [\code{logical(1)}]\cr
+#'   If \code{TRUE}, use job names for result names. Else use job ids.
+#'   Default is \code{FALSE}.
 #' @return [\code{list}]. Results of jobs as list, possibly named by ids.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=TRUE) {
+loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=TRUE, use.jobnames=FALSE) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
@@ -29,8 +32,9 @@ loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=T
   checkArg(use.names, "logical", len=1L, na.ok=FALSE)
 
   res = getResults(reg, ids, part)
-  if(use.names)
-    names(res) = ids
+  if(use.names) {
+    names(res) = if (use.jobnames) dbGetJobNames(reg, ids) else ids
+  }
   if(simplify && length(res) > 0L)
     res = simplify2array(res, higher = (simplify=="array"))
 

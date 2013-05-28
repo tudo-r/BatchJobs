@@ -39,7 +39,8 @@ batchReduce = function(reg, fun, xs, init, block.size, more.args=list()) {
   checkMoreArgs(more.args, reserved=c(".fun", ".init"))
   xs.blocks = chunk(xs, chunk.size = block.size, shuffle=FALSE)
   more.args = c(more.args, list(.fun=fun, .init=init))
-  batchMap(reg, batchReduceWrapper, xs.blocks, more.args=more.args)
+  # FIXME jobnames?
+  batchMap(reg, batchReduceWrapper, xs.blocks, more.args=more.args, jobnames=NULL)
 }
 
 batchReduceWrapper = function(xs.block, .fun, .init, ...) {

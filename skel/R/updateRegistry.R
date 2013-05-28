@@ -47,6 +47,11 @@ updateRegistry.Registry = function(reg) {
     checkDir(getPendingDir(reg$file.dir), create=TRUE)
   }
 
+  if (version.reg < package_version("1.0.966")) {
+    query = sprintf("ALTER TABLE %s_job_def ADD COLUMN jobname TEXT", reg$id)
+    dbDoQuery(reg, query, flags="rwc")
+  }
+
   reg$packages$BatchJobs$version = version.pkg
   reg
 }

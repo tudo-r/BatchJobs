@@ -117,7 +117,7 @@ dbCreateJobDefTable = function(reg) {
 dbCreateJobDefTable.Registry = function(reg) {
   #message("Initializing job definition table...")
 
-  query = sprintf("CREATE TABLE %s_job_def (job_def_id INTEGER PRIMARY KEY, fun_id TEXT, pars TEXT)", reg$id)
+  query = sprintf("CREATE TABLE %s_job_def (job_def_id INTEGER PRIMARY KEY, fun_id TEXT, pars TEXT, jobname TEXT)", reg$id)
   dbDoQuery(reg, query, flags="rwc")
   dbCreateExpandedJobsView(reg)
 }
@@ -162,11 +162,15 @@ dbGetJobs = function(reg, ids) {
 #' @method dbGetJobs Registry
 #' @S3method dbGetJobs Registry
 dbGetJobs.Registry = function(reg, ids) {
-  query = sprintf("SELECT job_id, fun_id, pars, seed FROM %s_expanded_jobs", reg$id)
+  query = sprintf("SELECT job_id, fun_id, pars, jobname, seed FROM %s_expanded_jobs", reg$id)
   tab = dbSelectWithIds(reg, query, ids)
   lapply(seq_len(nrow(tab)), function(i) {
-    makeJob(id=tab$job_id[i], fun.id=tab$fun_id[i], fun=NULL,
-            pars=unserialize(charToRaw(tab$pars[i])), seed=tab$seed[i])
+    makeJob(id=tab$job_id[i],
+            fun.id=tab$fun_id[i],
+            fun=NULL,
+            pars=unserialize(charToRaw(tab$pars[i])),
+            jobname=tab$jobname[i],
+            seed=tab$seed[i])
   })
 }
 
@@ -197,6 +201,11 @@ dbGetJobId = function(reg) {
 dbGetJobIds = function(reg) {
   query = sprintf("SELECT job_id FROM %s_job_status", reg$id)
   dbDoQuery(reg, query)$job_id
+}
+
+dbGetJobNames = function(reg, ids) {
+  query = sprintf("SELECT job_id, jobname FROM %s_expanded_jobs", reg$id)
+  dbSelectWithIds(reg, query, ids)$jobname
 }
 
 dbCheckJobIds = function(reg, ids) {
