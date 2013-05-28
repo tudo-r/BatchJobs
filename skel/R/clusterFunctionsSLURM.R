@@ -17,7 +17,7 @@
 #' and a more complex one here
 #' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfSLURM/dortmund_fk_statistik.tmpl}
 #' in the package repository on its homepage.
-#'   
+#'
 #' @param template.file [\code{character(1)}]\cr
 #'   Path to a brew template file that is used for the SLURM job file.
 #' @return [\code{\link{ClusterFunctions}}].
@@ -36,7 +36,7 @@ makeClusterFunctionsSLURM = function(template.file) {
     } else if (res$exit.code > 0L) {
       cfHandleUnkownSubmitError("sbatch", res$exit.code, res$output)
     } else {
-      makeSubmitJobResult(status=0L, batch.job.id=trim(strsplit(output, split=" ")[[1]][4]))
+      makeSubmitJobResult(status=0L, batch.job.id=trim(strsplit(output, split=" ")[[1L]][4L]))
     }
   }
 

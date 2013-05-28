@@ -150,14 +150,6 @@ trim = function(x, ltrim=TRUE, rtrim=TRUE) {
   return(x)
 }
 
-### FIXME this is going to BBmisc!
-names2 = function(x, missing.val="") {
-  n = names(x)
-  if (is.null(n))
-    return(rep.int(missing.val, length(x)))
-  replace(n, is.na(n) | n == "", missing.val)
-}
-
 list2df = function(li, force.names=FALSE, strings.as.factors = default.stringsAsFactors()) {
   if (length(li) == 0L)
     return(as.data.frame(matrix(nrow = 0L, ncol = 0L)))
