@@ -21,6 +21,16 @@
 #'   Default is none.
 #' @return Vector of type \code{integer} with ids of killed jobs.
 #' @export
+#' @examples
+#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+#' f <- function(x) Sys.sleep(x)
+#' batchMap(reg, f, 1:10 + 5)
+#' submitJobs(reg)
+#'
+#' # kill all jobs currently _runnig_
+#' killJobs(reg, findRunning(reg))
+#' # kill all jobs queued or running
+#' killJobs(reg, findNotTerminated(reg))
 killJobs = function(reg, ids) {
   checkRegistry(reg)
   syncRegistry(reg)
@@ -31,8 +41,10 @@ killJobs = function(reg, ids) {
 
   conf = getBatchJobsConf()
   killfun = getKillJob("Cannot kill jobs")
-  data = dbGetJobStatusTable(reg, ids = findOnSystem(reg, ids), # FIXME registry is already checked and sync'd ...
-                             cols = c("job_id", "batch_job_id", "submitted", "done", "error"))
+
+  # TODO select and order (see below) could be done more efficiently in SQLite
+  data = dbGetJobStatusTable(reg, ids = dbFindOnSystem(reg, ids),
+                             cols = c("job_id", "batch_job_id", "submitted", "started", "done", "error"))
 
   # print first summary information on jobs to kill
   messagef("Trying to kill %i jobs.", length(ids))
@@ -40,10 +52,15 @@ killJobs = function(reg, ids) {
   messagef("Of these: %i not submitted, %i with no batch.job.id, %i already terminated",
            sum(is.na(data$submitted)), sum(is.na(data$batch_job_id)), sum(!is.na(data$done) | !is.na(data$error)))
 
+
   # subset data: restrict to jobs submitted, not done, no error, has bji
   # other jobs can be ignored -> overwrite ids
   data = subset(data, !is.na(data$submitted) & is.na(data$done) & is.na(data$error) & !is.na(data$batch_job_id),
-                select = c("job_id", "batch_job_id"))
+                select = c("job_id", "batch_job_id", "started"))
+
+  # kill queued jobs first, otherwise they might get started while killing running jobs
+  data = data[order(data$started, na.last = FALSE),, drop=FALSE]
+
   ids = data$job_id
   bjids = unique(data$batch_job_id)
   messagef("Killing real batch jobs: %i", length(bjids))
@@ -89,14 +106,14 @@ killJobs = function(reg, ids) {
   # second try also not successful
   if (length(bjids.notkilled) > 0L) {
 		fn = file.path(reg$file.dir, sprintf("killjobs_failed_ids_%i", now()))
-    warningf("Could not kill %i batch jobs, kill them manually!\nTheir ids have been saved in %s.", 
+    warningf("Could not kill %i batch jobs, kill them manually!\nTheir ids have been saved in %s.",
 			length(bjids.notkilled), fn)
 		writeLines(as.character(bjids.notkilled), con=fn)
-  }	
+  }
 
   # reset killed jobs
   ids = ids[data$batch_job_id %nin% bjids.notkilled]
   messagef("Resetting %i jobs in DB.", length(ids))
-  dbSendMessage(reg, dbMakeMessageKilled(reg, ids), staged = FALSE)
+  dbSendMessage(reg, dbMakeMessageKilled(reg, ids), staged = useStagedQueries())
   invisible(ids)
 }
