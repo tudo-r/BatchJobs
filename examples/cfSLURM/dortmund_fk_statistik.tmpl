@@ -50,8 +50,13 @@ if(ntasks > 1L){
 #SBATCH --mem-per-cpu=<%= resources$memory %>
 #SBATCH --partition=all
 
+## create our own temp dir and clean it up later
+mkdir /tmp/${USER}-${SLURM_JOBID}
+export TMPDIR=/tmp/${USER}-${SLURM_JOBID}
+
 source /etc/profile
 
 ## Run R:
 ## we merge R output with stdout from SLURM, which gets then logged via --output option
 <%= cmd %> "<%= rscript %>" /dev/stdout
+rm -fR /tmp/${USER}-${SLURM_JOBID}
