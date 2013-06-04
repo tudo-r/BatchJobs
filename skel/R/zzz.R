@@ -16,7 +16,7 @@
 }
 
 .onLoad = function(libname, pkgname) {
-  options(BatchJobs.check.posix = TRUE)
+  options(BatchJobs.check.posix = getOption("BatchJobs.check.posix", default = TRUE))
   if (!isOnSlave()) {
     assignConfDefaults()
     if (missing(libname) || missing(pkgname)) {
