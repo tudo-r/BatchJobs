@@ -20,9 +20,9 @@ getErrors = function(reg, ids, print=TRUE) {
 
   tab = dbGetErrorMsgs(reg, ids, filter=FALSE)
   msgs = setNames(tab$error, tab$job_id)
-  tab = tab[!is.na(tab$error),, drop=FALSE]
 
   if (print) {
+    tab = tab[!is.na(tab$error),, drop=FALSE]
     if (nrow(tab) == 0L) {
       catf("No errors")
     } else {
