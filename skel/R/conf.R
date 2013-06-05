@@ -176,20 +176,22 @@ showConf = function() {
 #' @param conffile [\code{character(1)}]\cr
 #'   Location of the configuration file to load.
 #'   Default is \dQuote{.BatchJobs.conf} in the current working directory.
-#' @return Invisibly returns \code{TRUE} on success.
+#' @return Invisibly returns a list of configuration settings.
+#' @seealso \code{\link{getConfig}}, \code{\link{setConfig}}
 #' @export
 loadConfig = function(conffile=".BatchJobs.R") {
   # checks are done in sourceConfFile
   conf = sourceConfFile(conffile)
   assignConf(conf)
-  invisible(TRUE)
+  invisible(as.list(conf))
 }
 
-#' Set and overwrite config parameters
+#' Set and overwrite configuration settings
 #'
 #' @param ... [\code{ANY}]\cr
 #'   Config parameters provided in a key = value syntax.
-#' @return Invisibly returns \code{TRUE} on success.
+#' @return Invisibly returns a list of configuration settings.
+#' @seealso \code{\link{getConfig}}, \code{\link{loadConfig}}
 #' @export
 setConfig = function(...) {
   overwrites = list(...)
@@ -200,5 +202,19 @@ setConfig = function(...) {
     conf = as.environment(insert(as.list(getBatchJobsConf()), overwrites))
     assignConf(conf)
   }
-  invisible(TRUE)
+  invisible(as.list(conf))
+}
+
+#' Returns a list of BatchJobs configuration settings
+#'
+#' This function is provided for package developers who want to include
+#' support for BatchJobs into their package.
+#' Users should use \code{\link{setConfig}} and \code{\link{loadConfig}}
+#' to set certain configuration options or source different configuration files, respectively.
+#'
+#' @return \code{environment} of current configuration variables.
+#' @seealso \code{\link{loadConfig}}, \code{\link{setConfig}}
+#' @export
+getConfig = function() {
+  as.list(getBatchJobsConf())
 }
