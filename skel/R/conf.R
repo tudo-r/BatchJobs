@@ -50,7 +50,7 @@ readConfs = function(path) {
   conffiles = Filter(file.exists, unique(c(fn.pack, fn.user, fn.wd)))
   if (length(conffiles) == 0L)
     stop("No configuation found at all. Not in package, not in user.home, not in work dir!")
-  
+
   # really do this in 2 steps
   # otherwise weird things might happen due to lazy eval combined with envirs
   # and we might not see the error msg triggered in the checking of the config file
@@ -98,15 +98,13 @@ saveConf = function(reg) {
 }
 
 checkConf = function(conf) {
-  ns = ls(conf, all.names=TRUE)
+  ns = if (is.list(conf)) names(conf) else ls(conf, all.names = TRUE)
   ns2 = c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options",
     "default.resources", "debug", "raise.warnings", "staged.queries", "max.concurrent.jobs")
-  if (any(ns %nin% ns2)) {
-    ns3 = setdiff(ns, ns2)
-    stopf("You are only allowed to define the following R variables in your config file:\n%s\nBut you also had:\n%s",
-      collapse(ns2, sep=", "), collapse(ns3, sep=", "))
-    }
+  if (any(ns %nin% ns2))
+    stopf("You are only allowed to define the following R variables in your config:\n%s\nBut you also had:\n%s",
+          collapse(ns2, sep=", "), collapse(setdiff(ns, ns2), sep=", "))
 }
 
 checkConfElements = function(cluster.functions, mail.to, mail.from,
@@ -177,11 +175,30 @@ showConf = function() {
 #'
 #' @param conffile [\code{character(1)}]\cr
 #'   Location of the configuration file to load.
-#' @return Nothing.
+#'   Default is \dQuote{.BatchJobs.conf} in the current working directory.
+#' @return Invisibly returns \code{TRUE} on success.
 #' @export
 loadConfig = function(conffile=".BatchJobs.R") {
   # checks are done in sourceConfFile
   conf = sourceConfFile(conffile)
   assignConf(conf)
-  showConf()
+  invisible(TRUE)
+}
+
+#' Set and overwrite config parameters
+#'
+#' @param ... [\code{ANY}]\cr
+#'   Config parameters provided in a key = value syntax.
+#' @return Invisibly returns \code{TRUE} on success.
+#' @export
+setConfig = function(...) {
+  overwrites = list(...)
+  if (length(overwrites)) {
+    if(! isProperlyNamed(overwrites))
+      stopf("All configuration arguments in '...' must be properly named")
+    checkConf(overwrites)
+    conf = as.environment(insert(as.list(getBatchJobsConf()), overwrites))
+    assignConf(conf)
+  }
+  invisible(TRUE)
 }
