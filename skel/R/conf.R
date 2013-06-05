@@ -97,11 +97,15 @@ saveConf = function(reg) {
   save(file=fn, conf)
 }
 
-checkConf = function(conf) {
-  ns = if (is.list(conf)) names(conf) else ls(conf, all.names = TRUE)
-  ns2 = c("cluster.functions", "mail.start", "mail.done", "mail.error",
+getConfNames = function() {
+  c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options",
     "default.resources", "debug", "raise.warnings", "staged.queries", "max.concurrent.jobs")
+}
+
+checkConf = function(conf) {
+  ns = if (is.list(conf)) names(conf) else ls(conf, all.names = TRUE)
+  ns2 = getConfNames()
   if (any(ns %nin% ns2))
     stopf("You are only allowed to define the following R variables in your config:\n%s\nBut you also had:\n%s",
           collapse(ns2, sep=", "), collapse(setdiff(ns, ns2), sep=", "))
@@ -149,26 +153,21 @@ getClusterFunctions = function(conf) {
   conf$cluster.functions
 }
 
-#' Display BatchJobs configuration.
-#'
-#' @return Invisibly returns a named list with configuration settings.
-#' @export
-showConf = function() {
-  x = as.list(getBatchJobsConf())
-  f = function(y) if(is.null(y)) "" else y
+#' @S3method print Config
+print.Config = function(x, ...) {
+  x[setdiff(getConfNames(), names(x))] = ""
   catf("BatchJobs configuration:")
-  catf("  cluster functions: %s", f(x$cluster.functions$name))
-  catf("  mail.from: %s", f(x$mail.from))
-  catf("  mail.to: %s", f(x$mail.to))
-  catf("  mail.start: %s", f(x$mail.start))
-  catf("  mail.done: %s", f(x$mail.done))
-  catf("  mail.error: %s", f(x$mail.error))
+  catf("  cluster functions: %s", x$cluster.functions$name)
+  catf("  mail.from: %s", x$mail.from)
+  catf("  mail.to: %s", x$mail.to)
+  catf("  mail.start: %s", x$mail.start)
+  catf("  mail.done: %s", x$mail.done)
+  catf("  mail.error: %s", x$mail.error)
   catf("  default.resources: %s", listToShortString(x$default.resources))
-  catf("  debug: %s", f(x$debug))
-  catf("  raise.warnings: %s", f(x$raise.warnings))
-  catf("  staged.queries: %s", f(x$staged.queries))
-  catf("  max.concurrent.jobs: %s", f(x$max.concurrent.jobs))
-  invisible(x)
+  catf("  debug: %s", x$debug)
+  catf("  raise.warnings: %s", x$raise.warnings)
+  catf("  staged.queries: %s", x$staged.queries)
+  catf("  max.concurrent.jobs: %s", x$max.concurrent.jobs)
 }
 
 #' Load a specific configuration file.
@@ -183,7 +182,7 @@ loadConfig = function(conffile=".BatchJobs.R") {
   # checks are done in sourceConfFile
   conf = sourceConfFile(conffile)
   assignConf(conf)
-  invisible(as.list(conf))
+  invisible(setClasses(as.list(conf), "Config"))
 }
 
 #' Set and overwrite configuration settings
@@ -202,7 +201,7 @@ setConfig = function(...) {
   checkConf(overwrites)
   conf = insert(as.list(getBatchJobsConf()), overwrites)
   assignConf(as.environment(conf))
-  invisible(conf)
+  invisible(setClasses(conf, "Config"))
 }
 
 #' Returns a list of BatchJobs configuration settings
@@ -216,5 +215,5 @@ setConfig = function(...) {
 #' @seealso \code{\link{loadConfig}}, \code{\link{setConfig}}
 #' @export
 getConfig = function() {
-  as.list(getBatchJobsConf())
+  setClasses(as.list(getBatchJobsConf()), "Config")
 }

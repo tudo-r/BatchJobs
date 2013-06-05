@@ -11,7 +11,7 @@
 
 .onAttach = function(libname, pkgname) {
   if (!isOnSlave()) {
-    packageStartupMessage(collapse(capture.output(showConf()), "\n"))
+    packageStartupMessage(collapse(print(getConfig()), "\n"))
   }
 }
 
