@@ -195,14 +195,14 @@ loadConfig = function(conffile=".BatchJobs.R") {
 #' @export
 setConfig = function(...) {
   overwrites = list(...)
-  if (length(overwrites)) {
-    if(! isProperlyNamed(overwrites))
-      stopf("All configuration arguments in '...' must be properly named")
-    checkConf(overwrites)
-    conf = as.environment(insert(as.list(getBatchJobsConf()), overwrites))
-    assignConf(conf)
-  }
-  invisible(as.list(conf))
+  if (!length(overwrites))
+    return(invisible(getConfig()))
+  if(! isProperlyNamed(overwrites))
+    stopf("All configuration arguments in '...' must be properly named")
+  checkConf(overwrites)
+  conf = insert(as.list(getBatchJobsConf()), overwrites)
+  assignConf(as.environment(conf))
+  invisible(conf)
 }
 
 #' Returns a list of BatchJobs configuration settings
