@@ -7,5 +7,8 @@ makeClusterFunctionsUnitTests = function() {
     makeSubmitJobResult(status=0L, batch.job.id="", msg="")
   }
 
-  makeClusterFunctions(name="Testing", submitJob=submitJob, killJob=NULL, listJobs=NULL)
+  killJob = function(conf, reg, batch.job.id) NULL
+  listJobs = function(conf, reg) integer(0L)
+
+  makeClusterFunctions(name="Testing", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
 }
