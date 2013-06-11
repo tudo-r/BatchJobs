@@ -4,7 +4,7 @@ makeClusterFunctionsUnitTests = function() {
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
     ee = new.env(parent=.GlobalEnv)
     suppressAll(sys.source(rscript, envir=ee))
-    makeSubmitJobResult(status=0L, batch.job.id="", msg="")
+    makeSubmitJobResult(status=0L, batch.job.id="cfUnitTests", msg="")
   }
 
   killJob = function(conf, reg, batch.job.id) NULL

@@ -1,6 +1,10 @@
 ############################################
 ### Common database functions
 ############################################
+sqlQuote = function(x) {
+  sprintf("'%s'", x)
+}
+
 dbGetConnection = function(drv, ...) {
   # method dispatch tp support different DBMS
   UseMethod("dbGetConnection")
