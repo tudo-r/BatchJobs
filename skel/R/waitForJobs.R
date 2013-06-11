@@ -21,8 +21,8 @@
 #'   Default is \code{604800} (one week).
 #' @param stop.on.error [\code{logical(1)}]\cr
 #'   Immediatly return if a job terminates with an error? Default is \code{FALSE}.
-#' @return Returns \code{TRUE} if all jobs terminated and \code{FALSE} if either
-#'   \code{stop.on.error} is \code{TRUE} and an error occured or the timeout is reached.
+#' @return Returns \code{TRUE} if all jobs terminated successfully and \code{FALSE} if either
+#'   an error occured or the timeout is reached.
 #' @export
 waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE) {
   checkRegistry(reg)
@@ -42,7 +42,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
   checkArg(stop.on.error, "logical", len=1L, na.ok=FALSE)
 
   n = length(ids)
-  if (n > 0L) {
+  if (n > 0L && length(batch.ids) > 0L) {
     timeout = now() + timeout
     bar = makeProgressBar(min=0L, max=n, label="Waiting                  ")
 
@@ -73,5 +73,5 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
     }
   }
   message("All jobs terminated.")
-  return(!(stop.on.error && dbAnyErrors(reg, ids)))
+  return(!dbAnyErrors(reg, ids))
 }

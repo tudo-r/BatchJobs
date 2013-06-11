@@ -204,3 +204,9 @@ names2 = function(x, missing.val="") {
     return(rep.int(missing.val, length(x)))
   replace(n, is.na(n) | n == "", missing.val)
 }
+
+sqlQuote = function(x) {
+  if(!length(x))
+    return(character(0L))
+  sprintf("'%s'", x)
+}

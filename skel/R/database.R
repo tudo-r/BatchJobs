@@ -258,7 +258,7 @@ dbFindOnSystem = function(reg, ids, negate=FALSE, batch.ids) {
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
 
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN (%s))",
-                  reg$id, if (negate) "NOT" else "", collapse(sQuote(batch.ids)))
+                  reg$id, if (negate) "NOT" else "", collapse(sqlQuote(batch.ids)))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
@@ -267,7 +267,7 @@ dbFindRunning = function(reg, ids, negate=FALSE, batch.ids) {
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
 
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN (%s) AND started IS NOT NULL AND done IS NULL AND error IS NULL)",
-                  reg$id, if (negate) "NOT" else "", collapse(sQuote(batch.ids)))
+                  reg$id, if (negate) "NOT" else "", collapse(sqlQuote(batch.ids)))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
@@ -276,7 +276,7 @@ dbFindExpiredJobs = function(reg, ids, negate=FALSE, batch.ids) {
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
   # started, not terminated, not running
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (started IS NOT NULL AND done IS NULL AND error is NULL AND
-                  batch_job_id NOT IN (%s))", reg$id, if (negate) "NOT" else "", collapse(sQuote(batch.ids)))
+                  batch_job_id NOT IN (%s))", reg$id, if (negate) "NOT" else "", collapse(sqlQuote(batch.ids)))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
@@ -313,9 +313,9 @@ dbGetStats = function(reg, ids, running=FALSE, expired=FALSE, times=FALSE, batch
   if (missing(batch.ids) && (expired || running))
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
   if(running)
-    cols["running"] = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id IN (%s))", collapse(sQuote(batch.ids)))
+    cols["running"] = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id IN (%s))", collapse(sqlQuote(batch.ids)))
   if(expired)
-    cols["expired"] = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id NOT IN (%s))", collapse(sQuote(batch.ids)))
+    cols["expired"] = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id NOT IN (%s))", collapse(sqlQuote(batch.ids)))
   if (times)
     cols[c("t_min", "t_avg", "t_max")] = c("MIN(done - started)", "AVG(done - started)", "MAX(done - started)")
 
