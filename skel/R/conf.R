@@ -178,7 +178,7 @@ print.Config = function(x, ...) {
 #' @return Invisibly returns a list of configuration settings.
 #' @seealso \code{\link{getConfig}}, \code{\link{setConfig}}
 #' @export
-loadConfig = function(conffile=".BatchJobs.R") {
+loadConfig = function(conffile = ".BatchJobs.R") {
   # checks are done in sourceConfFile
   conf = sourceConfFile(conffile)
   assignConf(conf)
@@ -206,12 +206,7 @@ setConfig = function(...) {
 
 #' Returns a list of BatchJobs configuration settings
 #'
-#' This function is provided for package developers who want to include
-#' support for BatchJobs into their package.
-#' Users should use \code{\link{setConfig}} and \code{\link{loadConfig}}
-#' to set certain configuration options or source different configuration files, respectively.
-#'
-#' @return \code{environment} of current configuration variables.
+#' @return \code{list} of current configuration variables with classs \dQuote{Config}.
 #' @seealso \code{\link{loadConfig}}, \code{\link{setConfig}}
 #' @export
 getConfig = function() {
