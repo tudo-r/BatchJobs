@@ -257,8 +257,8 @@ dbFindOnSystem = function(reg, ids, negate=FALSE, batch.ids) {
   if (missing(batch.ids))
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
 
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN ('%s'))",
-                  reg$id, if (negate) "NOT" else "", collapse(batch.ids, sep="','"))
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN (%s))",
+                  reg$id, if (negate) "NOT" else "", collapse(sQuote(batch.ids)))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
@@ -266,8 +266,8 @@ dbFindRunning = function(reg, ids, negate=FALSE, batch.ids) {
   if (missing(batch.ids))
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
 
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN ('%s') AND started IS NOT NULL AND done IS NULL AND error IS NULL)",
-                  reg$id, if (negate) "NOT" else "", collapse(batch.ids, sep="','"))
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN (%s) AND started IS NOT NULL AND done IS NULL AND error IS NULL)",
+                  reg$id, if (negate) "NOT" else "", collapse(sQuote(batch.ids)))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
@@ -276,7 +276,7 @@ dbFindExpiredJobs = function(reg, ids, negate=FALSE, batch.ids) {
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
   # started, not terminated, not running
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (started IS NOT NULL AND done IS NULL AND error is NULL AND
-                  batch_job_id NOT IN ('%s'))", reg$id, if (negate) "NOT" else "", collapse(batch.ids, sep="','"))
+                  batch_job_id NOT IN (%s))", reg$id, if (negate) "NOT" else "", collapse(sQuote(batch.ids)))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
@@ -284,6 +284,11 @@ dbFindExpiredJobs = function(reg, ids, negate=FALSE, batch.ids) {
 dbGetFirstJobInChunkIds = function(reg, ids){
   query = sprintf("SELECT job_id, first_job_in_chunk_id FROM %s_job_status", reg$id)
   dbSelectWithIds(reg, query, ids)$first_job_in_chunk_id
+}
+
+dbAnyErrors = function(reg, ids) {
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE error IS NOT NULL", reg$id)
+  as.logical(nrow(dbSelectWithIds(reg, query, ids, where=FALSE, reorder=FALSE, limit=1L)))
 }
 
 dbGetErrorMsgs = function(reg, ids, filter=FALSE, limit) {
@@ -308,9 +313,9 @@ dbGetStats = function(reg, ids, running=FALSE, expired=FALSE, times=FALSE, batch
   if (missing(batch.ids) && (expired || running))
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
   if(running)
-    cols["running"] = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id IN ('%s'))", collapse(batch.ids, sep="','"))
+    cols["running"] = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id IN (%s))", collapse(sQuote(batch.ids)))
   if(expired)
-    cols["expired"] = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id NOT IN ('%s'))", collapse(batch.ids, sep="','"))
+    cols["expired"] = sprintf("SUM(started IS NOT NULL AND done IS NULL AND error IS NULL AND batch_job_id NOT IN (%s))", collapse(sQuote(batch.ids)))
   if (times)
     cols[c("t_min", "t_avg", "t_max")] = c("MIN(done - started)", "AVG(done - started)", "MAX(done - started)")
 
