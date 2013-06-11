@@ -55,7 +55,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
 
       if (stop.on.error && stats$error > 0L) {
         err = dbGetErrorMsgs(reg, ids, filter=TRUE, limit=1L)
-        messagef("Job $i terminated with an error: %s", err$job_id, err$error)
+        messagef("Job %i terminated with an error: %s", err$job_id, err$error)
         return(FALSE)
       }
 
@@ -73,5 +73,5 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
     }
   }
   message("All jobs terminated.")
-  return(TRUE)
+  return(!(stop.on.error && dbAnyErrors(reg, ids)))
 }
