@@ -215,19 +215,25 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
 
 
           # FIXME we could use the sleep here for synchronization
-          bar$inc(msg=sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
           # FIXME: the next lines are an ugly hack and should be moved to bbmisc
+          if (getOption("BBmisc.ProgressBar.style") != "off") {
+            bar$inc(msg=sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
+          }
           Sys.sleep(sleep.secs/2)
-          pbw = getOption("BBmisc.ProgressBar.width", getOption("width"))
-          labw = environment(bar$set)$label.width
-          lab = sprintf(sprintf("%%%is", labw),
-            sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
-          cat(paste(rep.int("\b \b", pbw-5), collapse=""))
-          bmrmsg = batch.result$msg
-          msgline = sprintf("%s msg=%s", lab, bmrmsg)
-          cat(msgline)
+          if (getOption("BBmisc.ProgressBar.style") != "off") {
+            pbw = getOption("BBmisc.ProgressBar.width", getOption("width"))
+            labw = environment(bar$set)$label.width
+            lab = sprintf(sprintf("%%%is", labw),
+              sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
+            cat(paste(rep.int("\b \b", pbw-5), collapse=""))
+            bmrmsg = batch.result$msg
+            msgline = sprintf("%s msg=%s", lab, bmrmsg)
+            cat(msgline)
+          }
           Sys.sleep(sleep.secs/2)
-          cat(paste(rep.int("\b \b", nchar(msgline)), collapse=""))
+          if (getOption("BBmisc.ProgressBar.style") != "off") {
+            cat(paste(rep.int("\b \b", nchar(msgline)), collapse=""))
+          }
         } else if (batch.result$status > 100L && batch.result$status <= 200L) {
           # fatal error, abort at once
           stopf("Fatal error occured: %i. %s", batch.result$status, batch.result$msg)
