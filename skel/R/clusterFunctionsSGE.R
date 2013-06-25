@@ -29,7 +29,7 @@ makeClusterFunctionsSGE = function(template.file) {
     res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
     # FIXME filled queues
     if (res$exit.code > 0L) {
-      cfHandleUnkownSubmitError("qsub", res$exit.code, res$output)
+      cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
     } else {
       # collapse output strings and first number in string is batch.job.id
       batch.job.id = strextract(collapse(res$output, sep=" "), "\\d+")

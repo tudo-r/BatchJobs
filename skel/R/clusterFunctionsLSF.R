@@ -33,7 +33,7 @@ makeClusterFunctionsLSF = function(template.file) {
     res = runOSCommandLinux("bsub", stdin=outfile, stop.on.exit.code=FALSE)
     # FIXME filled queues
     if (res$exit.code > 0L) {
-      cfHandleUnkownSubmitError("bsub", res$exit.code, res$output)
+      cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)
     } else {
       # collapse output strings and first number in string is batch.job.id
       batch.job.id = strextract(collapse(res$output, sep=" "), "\\d+")

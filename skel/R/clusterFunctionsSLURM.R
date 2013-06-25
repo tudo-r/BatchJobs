@@ -34,7 +34,7 @@ makeClusterFunctionsSLURM = function(template.file) {
     if (grepl(max.jobs.msg, output, fixed=TRUE)) {
       makeSubmitJobResult(status=1L, batch.job.id=NA_character_, msg=max.jobs.msg)
     } else if (res$exit.code > 0L) {
-      cfHandleUnkownSubmitError("sbatch", res$exit.code, res$output)
+      cfHandleUnknownSubmitError("sbatch", res$exit.code, res$output)
     } else {
       makeSubmitJobResult(status=0L, batch.job.id=trim(strsplit(output, split=" ")[[1L]][4L]))
     }

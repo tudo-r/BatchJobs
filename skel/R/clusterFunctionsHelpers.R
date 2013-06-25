@@ -77,7 +77,7 @@ cfBrewTemplate = function(conf, template, rscript, extension) {
 #'   If these are mutiple lines in a vector, they are automatically pasted together.
 #' @return [\code{\link{SubmitJobResult}}].
 #' @export
-cfHandleUnkownSubmitError = function(cmd, exit.code, output) {
+cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
   checkArg(cmd, "character", len=1L, na.ok=FALSE)
   exit.code = convertInteger(exit.code)
   checkArg(exit.code, "integer", len=1L, na.ok=FALSE)
