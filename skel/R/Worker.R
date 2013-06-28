@@ -23,12 +23,12 @@
 #   Load average (of the last 5 min) at which the worker is considered occupied,
 #   so that no job can be submitted.
 #   Default is \code{ncpus-1}.
-# @param classes [\code{character}]\cr
-#   Extra classes, more specific than dQuote{Worker}.
-#   Will be added to the class attribute of the object.
 # @param nice [\code{integer(1)}]\cr
 #   Process priority to run R with set via nice. Integers between -20 and 19 are allowed.
 #   If missing, processes are not nice'd and the system default applies (usually 0).
+# @param classes [\code{character}]\cr
+#   Extra classes, more specific than dQuote{Worker}.
+#   Will be added to the class attribute of the object.
 # @return [\code{\link{Worker}}].
 makeWorker = function(ssh, nodename, rhome, r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
   script, ncpus, max.jobs, max.load, nice, classes) {
