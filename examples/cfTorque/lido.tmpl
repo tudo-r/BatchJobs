@@ -1,22 +1,31 @@
 ## Job Resource Interface Definition
 ##
-## R [R-2.14.1-icc-11.1,      R version (and compiler) we want to use. 
+## R [R-2.14.1-icc-11.1,      R version (and compiler) we want to use.
 ##    R-2.15.1-gcc-4.3.5,     We have different R versions on LiDO installed, some compiled with GCC
-##    R-2.15.1-gcc-4.7.1]     and others with Intel compilers. Some packages fail to build
-##                            with ICC, but R compiled with ICC is in general faster.
-##                            R-2.15.1-gcc-4.7.1 also has gotoblas support and should in general be 
-##                            faster for linear algebra operations.
+##    R-2.15.1-gcc-4.7.1,     and others with Intel compilers. Some packages fail to build
+##    R-2.15.3-gcc-4.7.2,     with ICC, but R compiled with ICC is in general faster.
+##    R-2.15.3-gcc-4.8.0,     From R-2.15.1-gcc-4.7.1 on all R versions should have gotoblas support and should in general be
+##    R-3.0.1-gcc-4.8.0-base] faster for linear algebra operations, otherwise complain!
+##                            
 ## modules [character]:       Extra modules you would like to load on slaves. Please note that the following
-##                            modules are handled automatically by the previous argument "R" and should not be 
+##                            modules are handled automatically by the previous argument "R" and should not be
 ##                            passed manually: R, icc, gcc, binutils, gotoblas, openmpi, torque, maui.
-## nodes [integer(1)]:        Number of required nodes, 
-##                            Set larger than 1 if you want to further parallelize with e.g. MPI
-## walltime [integer(1)]:     Walltime for this job, in seconds
-## memory   [integer(1)]:     Memory in megabytes for the job. Mapped to vmem on Lido.
-##                            If you use multiple nodes, vmem = memory * nodes.
-##                            Therefore memory is the max mem you want to use in one parallel (MPI) job.
+## nodes [integer(1)]:        Number of required nodes,
+##                            Set larger than 1 if you want to further parallelize with MPI within your job
+## walltime [integer(1)]:     Walltime for this job, in seconds.
+##                            Must be at least 60 seconds.
+## memory   [integer(1)]:     Memory in megabytes for each job. Is mapped to vmem on Lido.
+##                            Must be at least 100 (when I tried lower values my jobs did not start at all).
+##                            For jobs with no internal parallelization
+##                            (i.e., nodes = 1) directly mapped to vmem on Lido.
+##                            In this case it is simply the amount of memory required for each R job.
+##                            If you use multiple nodes with MPI, vmem = 4 * memory,
+##                            as at most 4 jobs can potentially be scheduled to the cores of the same node.  
+##                            Here, you set the memory of each MPI job.
 ##
-## Default resources can be set in your .BatchJobs.R by defining the variable 
+## 'walltime' and 'memory' settings automatically determine the correct queue, you don't have to 
+## select the queue yourself.
+## Default resources can be set in your .BatchJobs.R by defining the variable
 ## 'default.resources' as a named list.
 
 <%
@@ -29,24 +38,20 @@ memory = convertInteger(resources$memory)
 nodes = convertInteger(resources$nodes)
 R = resources$R
 modules = resources$modules
-    
+
 checkArg(walltime, "integer", len=1L, na.ok=FALSE, lower=60, upper=60*60*24*28)
-checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=1, upper=64*1024)
+checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=100, upper=64*1024)
 checkArg(nodes, "integer", len=1L, na.ok=FALSE, lower=1)
-checkArg(R, choices=c("R-2.14.1-icc-11.1", "R-2.15.1-gcc-4.3.5", "R-2.15.1-gcc-4.7.1"))
+checkArg(R, choices=c(
+  "R-2.14.1-icc-11.1", "R-2.15.1-gcc-4.3.5", 
+  "R-2.15.1-gcc-4.7.1", "R-2.15.3-gcc-4.7.2", "R-2.15.3-gcc-4.8.0",
+  "R-3.0.1-gcc-4.8.0-base"
+))
 checkArg(modules, "character", na.ok=FALSE)
-memory = memory * nodes
-if (memory > 64*1024)
-  stop("memory * nodes exceeds 64GB!")
 
 cmd = "R CMD BATCH --no-save --no-restore"
-if(nodes > 1L) 
-  cmd = paste("mpirun -np 1", cmd)
 
-## choose a suitable queue for job
-# FIXME we should use ppn for memory >= 8*1024 
-s2 = ifelse(memory <= 8*1024, "eth", "quad")
-day = 3600 * 24
+# first string of queue, selected by walltime
 s1 = if (walltime <= 3600) {
   "short"
 } else if (walltime <= 8 * 3600) {
@@ -56,24 +61,45 @@ s1 = if (walltime <= 3600) {
 } else if (walltime <= 28 * day) {
   "ultralong"
 }
-if (s1 == "ultralong" && s2 == "quad")  
-  stop("No 'ultralong_quad' queue available. Reduce memory or walltime.")
+
+queue.max.mem = c(eth = 15000, quad = 61440)
+
+if (nodes == 1L)  {
+  vmem = memory
+} else {
+  # for MPI jobs at most 4 jobs get scheduled on the cores of one node 
+  vmem = 4 * memory
+  cmd = paste("mpirun -np 1", cmd)
+}
+if (vmem <= queue.max.mem["eth"]) { 
+  s2 = "eth" 
+} else if (vmem <= queue.max.mem["quad"]) { 
+  s2 = "quad" 
+} else {
+  stop("You are requesting too much memory, there is no queue for this!")
+}
+## now put two parts s1/2 for queue selection together
 queue = paste(s1, s2, sep="_")
+if (queue == "ultralon_quad")
+  stop("No 'ultralong_quad' queue available. Reduce memory or walltime.")
 
 ## get the right software modules to load depending on
 ## parallelization (nodes > 1) and compiler
 modules2 = switch(R,
-  "R-2.14.1-icc-11.1" = c("openmpi/ge/intel11.1/64/1.4.2", "intel/cce/11.1.075", "intel/fce/11.1.075", "R/2.14.1-icc"),
+  "R-2.14.1-icc-11.1" =  c("openmpi/ge/intel11.1/64/1.4.2", "intel/cce/11.1.075", "intel/fce/11.1.075", "R/2.14.1-icc"),
   "R-2.15.1-gcc-4.3.5" = c("openmpi/ge/gcc4.3.5/64/1.4.2", "gcc/4.3.5", "R/2.15.1-gcc"),
-  "R-2.15.1-gcc-4.7.1" = c("openmpi/ge/gcc4.7.x/64/1.4.5", "binutils", "gcc/4.7.1", "R/2.15.1-gcc47")
+  "R-2.15.1-gcc-4.7.1" = c("openmpi/ge/gcc4.7.x/64/1.4.5", "binutils", "gcc/4.7.1", "gotoblas/shared/64/1.26", "R/2.15.1-gcc47"),
+  "R-2.15.3-gcc-4.7.2" = c("openmpi/ge/gcc4.7.x/64/1.4.5", "binutils", "gcc/4.7.2", "gotoblas/shared/64/1.26", "R/2.15.3-gcc47"),
+  "R-2.15.3-gcc-4.8.0" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.0", "gotoblas/shared/64/1.26", "R/2.15.3-gcc48"),
+  "R-3.0.1-gcc-4.8.0-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.1", "gotoblas/shared/64/1.26", "R/3.0.1-gcc48-base")
 )
 if(nodes == 1L)
   modules2 = modules2[-1]
-modules2 = union(modules2, modules)  
+modules2 = union(modules2, modules)
 modules2 = collapse(modules2, sep=" ")
 
 ## very ugly hack because we cannot log to data (nobackup) filesystem on lido,
-## only home fs is available 
+## only home fs is available
 ## unfortunately there seems to be no generic solution
 ## does log path start with /data/?
 if (length(grep("^/data/", log.file)) > 0) {
@@ -88,24 +114,22 @@ if (length(grep("^/data/", log.file)) > 0) {
     log.file = sprintf("/home/%s/nobackup%s", user, substr(log.file2, i, nchar(log.file2)))
   }
 }
- 
+
 -%>
 
 #PBS -N <%= job.name %>
 #PBS -j oe
 #PBS -o <%= log.file %>
-#PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,vmem=<%= memory %>M
+#PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,vmem=<%= vmem %>M
 #PBS -q <%= queue %>
 
 ## setup modules
 source /sysdata/shared/sfw/Modules/default/init/bash
 module add <%= modules2 %>
 
-## create our own temp dir and clean it up later, lido does not do this automatically 
+## create our own temp dir and clean it up later, lido does not do this automatically
 mkdir /scratch/${USER}-${PBS_JOBID}
 export TMPDIR=/scratch/${USER}-${PBS_JOBID}
 ## run R
 <%= cmd %> "<%= rscript %>" /dev/stdout
-rm -fR /scratch/${USER}-${PBS_JOBID}
-
-
+rm -fR /scratch/${USER}-${PBS_JOBID} 
