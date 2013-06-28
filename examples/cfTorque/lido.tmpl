@@ -45,7 +45,7 @@ checkArg(nodes, "integer", len=1L, na.ok=FALSE, lower=1)
 checkArg(R, choices=c(
   "R-2.14.1-icc-11.1", "R-2.15.1-gcc-4.3.5", 
   "R-2.15.1-gcc-4.7.1", "R-2.15.3-gcc-4.7.2", "R-2.15.3-gcc-4.8.0",
-  "R-3.0.1-gcc-4.8.0-base"
+  "R-3.0.1-gcc-4.8.1-base"
 ))
 checkArg(modules, "character", na.ok=FALSE)
 
@@ -91,7 +91,7 @@ modules2 = switch(R,
   "R-2.15.1-gcc-4.7.1" = c("openmpi/ge/gcc4.7.x/64/1.4.5", "binutils", "gcc/4.7.1", "gotoblas/shared/64/1.26", "R/2.15.1-gcc47"),
   "R-2.15.3-gcc-4.7.2" = c("openmpi/ge/gcc4.7.x/64/1.4.5", "binutils", "gcc/4.7.2", "gotoblas/shared/64/1.26", "R/2.15.3-gcc47"),
   "R-2.15.3-gcc-4.8.0" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.0", "gotoblas/shared/64/1.26", "R/2.15.3-gcc48"),
-  "R-3.0.1-gcc-4.8.0-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.1", "gotoblas/shared/64/1.26", "R/3.0.1-gcc48-base")
+  "R-3.0.1-gcc-4.8.1-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.1", "gotoblas/shared/64/1.26", "R/3.0.1-gcc48-base")
 )
 if(nodes == 1L)
   modules2 = modules2[-1]
