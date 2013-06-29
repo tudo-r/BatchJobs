@@ -20,7 +20,7 @@
 #'   Otherwise you find information about the correct part in the beginning of the displayed file.
 #' @return [\code{character(1)}]. Invisibly returns path to log file.
 #' @export
-#' @seealso \code{\link{grepLogs}}, \code{\link{getErrors}}
+#' @seealso \code{\link{grepLogs}}, \code{\link{getErrorMessages}}
 showLog = function(reg, id, pager=getOption("pager")) {
   checkRegistry(reg)
   syncRegistry(reg)

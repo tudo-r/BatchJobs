@@ -167,7 +167,7 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
     errids = findErrors(reg)
     if (length(errids) > 0L) {
       j = errids[1L]
-      stopf("Error on %s: %s", nodenames[j], getErrors(reg, j))
+      stopf("Error on %s: %s", nodenames[j], getErrorMessages(reg, j))
     }
   }
 

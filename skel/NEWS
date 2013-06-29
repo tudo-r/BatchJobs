@@ -1,3 +1,17 @@
+BatchJobs_1.1-xxx:
+- Increased minor version number
+- Added support for SLURM schedulers
+- Function getErrors renamed to getErrorMessages due to conflicts with RUnit.
+  Interface change: argument "print" dropped
+- Redefined return value of function "waitForJobs" which should now be much easier to understand.
+- New option "BatchJobs.check.posix" to enable more relaxed checks on file and directory names
+- Helper functions to simplify integration into other packages: getConfig, loadConfig and setConfig.
+  showConf was replaced with a print generic.
+- Improved stability and speed of killJobs
+- Added a workaround to fix file URI handling on windows
+- Many minor bug and documentation fixes
+  
+
 BatchJobs_1.0-966:
 - Dropped support for R < 2.13.0 (.find.packages deprecated)
 - speedups in reduceResults[ReturnValue]
