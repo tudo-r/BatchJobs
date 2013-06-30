@@ -41,8 +41,7 @@ batchExpandGrid = function(reg, fun, ..., more.args=list()) {
   if (is.null(ns))
     colnames(grid) = NULL
   args = as.list(grid)
-  # FIXME jobnames?
-  args = c(args, list(reg=reg, fun=fun, more.args=more.args, jobnames=NULL))
+  args = c(args, list(reg=reg, fun=fun, more.args=more.args))
   do.call(batchMap, args)
   return(grid)
 }

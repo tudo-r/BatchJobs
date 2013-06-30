@@ -46,6 +46,5 @@ batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ...) {
   }
 
   batchMap(reg, wrapper, .inds = inds,
-           more.args = list(..., .X = aperm(X, c(margin, seq_along(dX)[-margin])), .user.fun=fun),
-           jobnames = dimnames(X)[[margin]])
+           more.args = list(..., .X = aperm(X, c(margin, seq_along(dX)[-margin])), .user.fun=fun))
 }

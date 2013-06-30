@@ -17,8 +17,8 @@
 #'   Random seed for job.
 #' @aliases Job
 #' @export
-makeJob = function(id=NA_integer_, fun, fun.id=digest(fun), pars, jobname, seed) {
-  setClasses(list(id=id, fun=fun, fun.id=fun.id, pars=pars, jobname=jobname, seed=seed), "Job")
+makeJob = function(id=NA_integer_, fun, fun.id=digest(fun), pars, seed) {
+  setClasses(list(id=id, fun=fun, fun.id=fun.id, pars=pars, seed=seed), "Job")
 }
 
 #' Get number of jobs in registry.
@@ -48,6 +48,5 @@ print.Job = function(x, ...) {
   catf("  Fun id: %s", x$fun.id)
   catf("  Fun formals: %s", collapse(names(formals(x$fun))))
   catf("  Pars: %s", listToShortString(x$pars))
-  catf("  Name: %s", x$jobname)
   catf("  Seed: %i", x$seed)
 }

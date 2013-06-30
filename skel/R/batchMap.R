@@ -10,9 +10,6 @@
 #' @param more.args [\code{list}]\cr
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is empty list.
-#' @param jobnames [\code{character}]\cr
-#'   Names for arguments. If missing, names are retrieved from the first
-#'   argument in \dQuote{...} (either named or a character vector).
 #' @return Vector of type \code{integer} with job ids.
 #' @examples
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
@@ -20,7 +17,7 @@
 #' batchMap(reg, f, 1:10)
 #' print(reg)
 #' @export
-batchMap = function(reg, fun, ..., more.args=list(), jobnames) {
+batchMap = function(reg, fun, ..., more.args=list()) {
   checkRegistry(reg, strict=TRUE)
   checkArg(fun, cl="function")
   args = list(...)
@@ -34,9 +31,6 @@ batchMap = function(reg, fun, ..., more.args=list(), jobnames) {
   if (n == 0L)
     return(invisible(integer(0L)))
   checkMoreArgs(more.args)
-  jobnames = getArgNames(args, jobnames)
-  if (is.null(jobnames))
-    jobnames = rep(NA_character_, n)
 
   if (dbGetJobCount(reg) > 0L)
     stop("Registry is not empty!")
@@ -53,7 +47,7 @@ batchMap = function(reg, fun, ..., more.args=list(), jobnames) {
   fun.id = saveFunction(reg, fun, more.args)
 
   # add jobs to DB
-  n = dbAddData(reg, "job_def", data = data.frame(fun_id=fun.id, pars=pars, jobname=jobnames))
+  n = dbAddData(reg, "job_def", data = data.frame(fun_id=fun.id, pars=pars))
   job.def.ids = dbGetLastAddedIds(reg, "job_def", "job_def_id", n)
   n = dbAddData(reg, "job_status", data=data.frame(job_def_id=job.def.ids, seed=seeds))
   job.ids = dbGetLastAddedIds(reg, "job_status", "job_id", n)

@@ -67,7 +67,6 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.a
   reg2$packages = insert(reg2$packages, reg$packages)
   saveRegistry(reg2)
 
-  # FIXME pass jobnames
   batchMap(reg2, batchMapResultsWrapper, ids, ..., more.args=c(more.args, list(.reg=reg, .fun=fun, .part=part)))
 }
 

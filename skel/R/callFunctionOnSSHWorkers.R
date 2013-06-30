@@ -111,8 +111,7 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
       res = fun(...)
       print("###logend###")
       res
-    }, args, more.args = more.args, jobnames=NULL)
-    # FIXME jobnames?
+    }, args, more.args = more.args)
   })
   on.exit({
     if (length(findOnSystem(reg)) > 0L)
