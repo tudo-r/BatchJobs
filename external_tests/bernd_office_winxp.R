@@ -11,4 +11,3 @@ doExternalTest(whitespace=FALSE)
 conf$cluster.functions = makeClusterFunctionsLocal()
 doExternalTest(whitespace=FALSE)
 #doExternalTest(whitespace=TRUE)
-
