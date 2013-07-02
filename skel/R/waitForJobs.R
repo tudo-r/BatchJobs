@@ -47,6 +47,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
 
   timeout = now() + timeout
   bar = makeProgressBar(min=0L, max=n, label="Waiting                  ")
+  on.exit(bar$kill())
   on.sys = ids
 
   repeat {
@@ -54,7 +55,6 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
     n.on.sys = length(on.sys)
     stats = dbGetStats(reg, ids, running=TRUE, expired=FALSE, times=FALSE, batch.ids = batch.ids)
     bar$set(n - n.on.sys, msg = sprintf("Waiting [S:%i R:%i D:%i E:%i]", n.on.sys, stats$running, stats$done, stats$error))
-    on.exit(bar$kill())
 
     if (stop.on.error && stats$error > 0L) {
       err = dbGetErrorMsgs(reg, ids, filter=TRUE, limit=1L)
@@ -62,7 +62,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
       return(FALSE)
     }
 
-    if (n.on.sys == 0L || is.finite(timeout) && now() > timeout)
+    if (n.on.sys == 0L || (is.finite(timeout) && now() > timeout))
       break
 
     Sys.sleep(sleep)
