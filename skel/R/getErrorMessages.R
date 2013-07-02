@@ -11,12 +11,10 @@
 getErrorMessages = function(reg, ids) {
   checkRegistry(reg)
   syncRegistry(reg)
-  if (missing(ids)) {
+  if (missing(ids))
     ids = dbFindErrors(reg)
-  } else {
+  else
     ids = checkIds(reg, ids)
-    checkArg(print, "logical", len=1L, na.ok=FALSE)
-  }
 
   tab = dbGetErrorMsgs(reg, ids, filter=FALSE)
   setNames(tab$error, tab$job_id)
