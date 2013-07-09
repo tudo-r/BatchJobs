@@ -5,9 +5,9 @@ library("testthat")
 options(BBmisc.ProgressBar.style = "off")
 
 if (interactive()) {
-  load_all("skel")
   library(RSQLite)
   library(digest)
+  load_all("skel")
   assignConfDefaults()
   cf = makeClusterFunctionsUnitTests()
   conf = getBatchJobsConf()
@@ -17,7 +17,6 @@ if (interactive()) {
   BatchJobs:::assignConfDefaults()
   cf = BatchJobs:::makeClusterFunctionsUnitTests()
   conf = BatchJobs:::getBatchJobsConf()
-
 }
 
 conf$cluster.functions = cf
