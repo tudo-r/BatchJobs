@@ -49,10 +49,8 @@ makeClusterFunctionsSLURM = function(template.file) {
     runOSCommandLinux("squeue", "-h -o %i -u $USER")$output
   }
 
-  getArrayEnvirName = function() {
-    "SLURM_ARRAY_TASK_ID"
-  }
+  getArrayEnvirName = function() "SLURM_ARRAY_TASK_ID"
 
   makeClusterFunctions(name="SLURM", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName())
+                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName)
 }

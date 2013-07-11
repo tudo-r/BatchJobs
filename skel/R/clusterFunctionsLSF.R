@@ -60,10 +60,8 @@ makeClusterFunctionsLSF = function(template.file) {
     strextract(out, "\\d+")
   }
 
-  getArrayEnvirName = function() {
-    "LSB_JOBINDEX"
-  }
+  getArrayEnvirName = function() "LSB_JOBINDEX"
 
   makeClusterFunctions(name="LSF", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName())
+                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName)
 }

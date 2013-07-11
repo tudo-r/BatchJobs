@@ -56,10 +56,8 @@ makeClusterFunctionsSGE = function(template.file) {
     strextract(out, "\\d+")
   }
 
-  getArrayEnvirName = function() {
-    "SGE_TASK_ID"
-  }
+  getArrayEnvirName = function() "SGE_TASK_ID"
 
   makeClusterFunctions(name="SGE", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName())
+                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName)
 }

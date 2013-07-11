@@ -49,10 +49,8 @@ makeClusterFunctionsTorque = function(template.file) {
     runOSCommandLinux("qselect", "-u $USER")$output
   }
 
-  getArrayEnvirName = function() {
-    "PBS_JOBNAME"
-  }
+  getArrayEnvirName = function() "PBS_JOBNAME"
 
   makeClusterFunctions(name="Torque", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName())
+                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName)
 }
