@@ -7,11 +7,12 @@ writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp,
       "library(BatchJobs)",
       "res = BatchJobs:::doJob(",
       "\treg=loadRegistry('%s'),",
-      "\tids=c(%%s)[%s],",
+      "\tids=c(%%s),",
       "\tmultiple.result.files=%s,",
       "\tdisable.mail=%s,",
       "\tfirst=%iL,",
-      "\tlast=%iL)",
+      "\tlast=%iL,",
+      "\tarray.id=%s)",
       "BatchJobs:::setOnSlave(FALSE)",
       sep="\n")
 
@@ -21,11 +22,12 @@ writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp,
       "setOnSlave(TRUE, resources.path='%s')",
       "res = doJob(",
       "\treg=loadRegistry('%s'),",
-      "\tids=c(%%s)[%s],",
+      "\tids=c(%%s),",
       "\tmultiple.result.files=%s,",
       "\tdisable.mail=%s,",
       "\tfirst=%iL,",
-      "\tlast=%iL)",
+      "\tlast=%iL,",
+      "\tarray.id=%s)",
       "setOnSlave(FALSE)",
       sep="\n")
   }
@@ -38,8 +40,8 @@ writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp,
 
   # print the constant arguments (of length 1) into the template
   resources.path = getResourcesFilePath(reg, resources.timestamp)
-  array.str = if (chunks.as.arrayjobs) sprintf("Sys.getenv(%s, NA)", cf$getArrayEnvirName()) else ""
-  template = sprintf(template, resources.path, reg$file.dir, array.str, reg$multiple.result.files, disable.mail, first, last)
+  array.str = if (chunks.as.arrayjobs) sprintf("Sys.getenv(\"%s\", NA_character_)", cf$getArrayEnvirName()) else NA_character_
+  template = sprintf(template, resources.path, reg$file.dir, reg$multiple.result.files, disable.mail, first, last, array.str)
 
   # print delays and ids into template. sprintf will return a string of length length(delays) == length(ids)
   # put this together with file names into an mapply on cat.

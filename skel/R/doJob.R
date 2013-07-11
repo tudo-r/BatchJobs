@@ -1,4 +1,4 @@
-doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
+doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, array.id) {
   messagef("%s: Starting job on node %s.", Sys.time(), Sys.info()["nodename"])
   loadConf(reg)
   conf = getBatchJobsConf()
@@ -15,6 +15,14 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last) {
     messagef("Memory usage according to gc:")
     print(gc())
   })
+
+  if (!is.na(array.id)) {
+    # FIXME better send error to database here, we don't see those errors on the master :(
+    array.id = convertInteger(array.id)
+    checkArg(array.id, "integer", len=1L, lower=1L, upper=length(ids), na.ok=FALSE)
+    ids = ids[array.id]
+  }
+
   if (length(ids) == 1L) {
     res = doSingleJob(reg, conf, ids, multiple.result.files, disable.mail, first, last)
   } else {
@@ -161,5 +169,3 @@ saveSingleResult = function(reg, job, result, multiple.result.files) {
 calcResultString = function(result) {
   paste(capture.output(str(result)), collapse = "\n")
 }
-
-
