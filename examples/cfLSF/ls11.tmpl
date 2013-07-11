@@ -1,4 +1,4 @@
-#BSUB-J <%= job.name %>[1-<%= arrayjobs %>]   # name of the job
+#BSUB-J <%= job.name %>[1-<%= arrayjobs %>]   # name of the job / array jobs
 #BSUB-o <%= log.file %>                       # output is sent to logfile, stdout + stderr by default
 
 # very simple system, no resources....

@@ -4,7 +4,7 @@
 ## direct streams to our logfile
 #PBS -o <%= log.file %>
 #PBS -l walltime=<%= resources$walltime %>,nodes=<%= resources$nodes %>,vmem=<%= resources$memory %>M
-## use array jobs
+## remove this line if your cluster does not support arrayjobs
 #PBS -t 1-<%= arrayjobs %>
   
 ## Run R:
