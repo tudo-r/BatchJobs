@@ -40,7 +40,7 @@ writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp,
 
   # print the constant arguments (of length 1) into the template
   resources.path = getResourcesFilePath(reg, resources.timestamp)
-  array.str = if (chunks.as.arrayjobs) sprintf("Sys.getenv(\"%s\", NA_character_)", cf$getArrayEnvirName()) else NA_character_
+  array.str = if (chunks.as.arrayjobs) sprintf("Sys.getenv(\"%s\", NA_integer_)", cf$getArrayEnvirName()) else NA_character_
   template = sprintf(template, resources.path, reg$file.dir, reg$multiple.result.files, disable.mail, first, last, array.str)
 
   # print delays and ids into template. sprintf will return a string of length length(delays) == length(ids)
