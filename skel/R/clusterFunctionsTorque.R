@@ -25,7 +25,7 @@
 makeClusterFunctionsTorque = function(template.file) {
   template = cfReadBrewTemplate(template.file)
 
-  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     outfile = cfBrewTemplate(conf, template, rscript, "pbs")
     res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
 
@@ -49,5 +49,10 @@ makeClusterFunctionsTorque = function(template.file) {
     runOSCommandLinux("qselect", "-u $USER")$output
   }
 
-  makeClusterFunctions(name="Torque", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
+  getArrayEnvirName = function() {
+    "PBS_JOBNAME"
+  }
+
+  makeClusterFunctions(name="Torque", submitJob=submitJob, killJob=killJob,
+                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName())
 }

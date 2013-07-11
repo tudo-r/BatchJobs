@@ -19,7 +19,7 @@ makeClusterFunctionsInteractive = function(write.logs=TRUE) {
   checkArg(write.logs, "logical", len=1L, na.ok=FALSE)
 
   submitJob = if(write.logs) {
-    function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
+    function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
       # open log file for writing
       fn = file(log.file, open="wt")
       sink(fn, type="output")
@@ -42,10 +42,13 @@ makeClusterFunctionsInteractive = function(write.logs=TRUE) {
       makeSubmitJobResult(status=0L, batch.job.id="cfInteractive", msg="")
     }
   }
-  
+
   killJob = function(conf, reg, batch.job.id) NULL
-  
+
   listJobs = function(conf, reg) integer(0L)
 
-  makeClusterFunctions(name="Interactive", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
+  getArrayEnvirName = function() NA_character_
+
+  makeClusterFunctions(name="Interactive", submitJob=submitJob, killJob=killJob,
+                       listJobs=listJobs, getArrayEnvirName=getArrayEnvirName)
 }

@@ -25,7 +25,7 @@
 makeClusterFunctionsSLURM = function(template.file) {
   template = cfReadBrewTemplate(template.file)
 
-  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     outfile = cfBrewTemplate(conf, template, rscript, "sb")
     res = runOSCommandLinux("sbatch", outfile, stop.on.exit.code=FALSE)
 
@@ -49,5 +49,10 @@ makeClusterFunctionsSLURM = function(template.file) {
     runOSCommandLinux("squeue", "-h -o %i -u $USER")$output
   }
 
-  makeClusterFunctions(name="SLURM", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
+  getArrayEnvirName = function() {
+    "SLURM_ARRAY_TASK_ID"
+  }
+
+  makeClusterFunctions(name="SLURM", submitJob=submitJob, killJob=killJob,
+                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName())
 }

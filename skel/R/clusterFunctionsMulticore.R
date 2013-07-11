@@ -34,7 +34,7 @@ makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, nice,
   worker = makeWorkerLocalLinux(r.options, script, ncpus, max.jobs, max.load, nice)
   workers = list(localhost=worker)
 
-  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     updateWorker(worker, reg$file.dir, tdiff=0L)
     s = worker$available
     if (s != "A") {
@@ -56,5 +56,8 @@ makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, nice,
     listWorkerJobs(worker, reg$file.dir)
   }
 
-  makeClusterFunctions("Multicore", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
+  getArrayEnvirName = function() NA_character_
+
+  makeClusterFunctions(name="Multicore", submitJob=submitJob, killJob=killJob,
+                       listJobs=listJobs, getArrayEnvirName=getArrayEnvirName)
 }

@@ -26,6 +26,9 @@
 #'   Can not be used in combination with \code{chunk.size}.
 #'   Note that the ids will get shuffled to balance out possible run time differences.
 #'   Default is not to use chunking.
+#' @param chunks.as.arrayjobs [\code{logical(1)}]\cr
+#'   Submit chunks as array jobs?
+#'   Default is \code{FALSE}.
 #' @param inds [\code{integer}]\cr
 #'   Indices of ids / chunks to submit.
 #'   Default is all.
@@ -38,13 +41,13 @@
 #' @return [\code{\link{Registry}}]
 #' @export
 batchMapQuick = function(fun, ..., more.args=list(), packages=character(0L),
-  chunk.size, n.chunks, inds, resources=list(), temporary=FALSE) {
+  chunk.size, n.chunks, chunks.as.arrayjobs = FALSE, inds, resources=list(), temporary=FALSE) {
   checkArg(temporary, cl="logical", len=1L, na.ok=FALSE)
   id = basename(tempfile(pattern="bmq_"))
   fd = ifelse(temporary, file.path(tempdir(), id), id)
   reg = makeRegistry(id=id, file.dir=fd, packages=packages)
   on.exit(messagef("Interrupted. You can find your registry in %s.", reg$file.dir))
-  
+
   # we want to return the reg in any case
   # otherwise we cannot look at it / do anything with it in case of errors
   try({

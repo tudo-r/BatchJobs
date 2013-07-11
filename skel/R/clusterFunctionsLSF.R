@@ -27,7 +27,7 @@ makeClusterFunctionsLSF = function(template.file) {
   # or a non-existent job ID is entered.
   Sys.setenv(LSB_BJOBS_CONSISTENT_EXIT_CODE="Y")
 
-  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     outfile = cfBrewTemplate(conf, template, rscript, "job")
     # returns: "Job <128952> is submitted to default queue <s_amd>."
     res = runOSCommandLinux("bsub", stdin=outfile, stop.on.exit.code=FALSE)
@@ -60,5 +60,10 @@ makeClusterFunctionsLSF = function(template.file) {
     strextract(out, "\\d+")
   }
 
-  makeClusterFunctions(name="LSF", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
+  getArrayEnvirName = function() {
+    "LSB_JOBINDEX"
+  }
+
+  makeClusterFunctions(name="LSF", submitJob=submitJob, killJob=killJob,
+                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName())
 }

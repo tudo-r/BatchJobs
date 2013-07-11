@@ -23,7 +23,7 @@
 makeClusterFunctionsSGE = function(template.file) {
   template = cfReadBrewTemplate(template.file)
 
-  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     outfile = cfBrewTemplate(conf, template, rscript, "job")
     # returns: "Your job 240933 (\"sleep 60\") has been submitted"
     res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
@@ -56,5 +56,10 @@ makeClusterFunctionsSGE = function(template.file) {
     strextract(out, "\\d+")
   }
 
-  makeClusterFunctions(name="SGE", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
+  getArrayEnvirName = function() {
+    "SGE_TASK_ID"
+  }
+
+  makeClusterFunctions(name="SGE", submitJob=submitJob, killJob=killJob,
+                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName())
 }

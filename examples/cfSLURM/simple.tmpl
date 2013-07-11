@@ -32,6 +32,7 @@
 #SBATCH --ntasks=<%= resources$ntasks %>
 #SBATCH --cpus-per-task=<%= resources$ncpus %>
 #SBATCH --mem-per-cpu=<%= resources$memory %>
+#SBATCH --array=1-<%= arrayjobs %>
   
 ## Initialize work environment like
 ## source /etc/profile

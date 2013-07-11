@@ -93,7 +93,7 @@ makeClusterFunctionsSSH = function(..., workers) {
   names(workers) = nodenames
   rm(nodenames, dup)
 
-  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     worker = findWorker(workers, reg$file.dir, tdiff=5L)
     if (is.null(worker)) {
       states = collapse(extractSubList(workers, "available", simplify=TRUE), sep="")
@@ -130,5 +130,8 @@ makeClusterFunctionsSSH = function(..., workers) {
     res
   }
 
-  makeClusterFunctions("SSH", submitJob=submitJob, killJob=killJob, listJobs=listJobs)
+  getArrayEnvirName = function() NA_character_
+
+  makeClusterFunctions(name="SSH", submitJob=submitJob, killJob=killJob,
+                       listJobs=listJobs, getArrayEnvirName=getArrayEnvirName)
 }

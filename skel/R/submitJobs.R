@@ -30,6 +30,10 @@
 #'   (like filled queues). Each time \code{wait} is called to wait a certain
 #'   number of seconds.
 #'   Default is 10 times.
+#' @param chunks.as.arrayjobs [\code{logical(1)}]\cr
+#'   If ids are passed as a list of chunked job ids, execute jobs in a chunk
+#'   as array jobs. Note that your scheduler and your template must be adjusted to
+#'   use this option. Default is \code{FALSE}.
 #' @param job.delay [\code{function(n, i)} or \code{logical(1)}]\cr
 #'   Function that defines how many seconds a job should be delayed before it starts.
 #'   This is an expert option and only necessary to change when you want submit
@@ -50,7 +54,7 @@
 #' # Submit the 10 jobs again, now randomized into 2 chunks:
 #' chunked = chunk(getJobIds(reg), n.chunks=2, shuffle=TRUE)
 #' submitJobs(reg, chunked)
-submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.delay=FALSE) {
+submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.as.arrayjobs=FALSE, job.delay=FALSE) {
   ### helper function to calculate the delay
   getDelays = function(cf, job.delay, n) {
     if (is.logical(job.delay)) {
@@ -108,6 +112,12 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
     checkArg(max.retries, "integer", len=1L, na.ok=FALSE)
   }
 
+  checkArg(chunks.as.arrayjobs, "logical", na.ok = FALSE)
+  if (chunks.as.arrayjobs && is.na(cf$getArrayEnvirName())) {
+    warningf("Cluster functions '%s' do not support array jobs, falling back on chunks", cf$name)
+    chunks.as.arrayjobs = FALSE
+  }
+
   if (!is.null(cf$listJobs)) {
     ### check for running jobs
     ids.intersect = intersect(unlist(ids), dbFindOnSystem(reg, unlist(ids)))
@@ -161,8 +171,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
   ### write R scripts
   messagef("Writing %i R scripts...", n)
   resources.timestamp = saveResources(reg, resources)
-  writeRscripts(reg, ids, resources.timestamp, disable.mail=FALSE, delays=getDelays(cf, job.delay, n),
-               interactive.test = !is.null(conf$interactive))
+  writeRscripts(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail=FALSE,
+                delays=getDelays(cf, job.delay, n), interactive.test = !is.null(conf$interactive))
 
   ### reset status of jobs: delete errors, done, ...
   dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids)), staged=FALSE)
@@ -189,7 +199,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.del
                                       rscript=getRScriptFilePath(reg, id1),
                                       log.file=getLogFilePath(reg, id1),
                                       job.dir=getJobDirs(reg, id1),
-                                      resources=resources)
+                                      resources=resources,
+                                      arrayjobs=if(chunks.as.arrayjobs) length(id) else 1L)
         }
 
         ### validate status returned from cluster functions

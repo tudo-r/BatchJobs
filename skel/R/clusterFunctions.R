@@ -76,6 +76,9 @@ print.SubmitJobResult = function(x, ...) {
 #'   conf [\code{environment}]: The user configuration.\cr
 #'   reg [\code{\link{Registry}}]: The registry.\cr
 #'   Set \code{listJobs} to \code{NULL} if listing jobs cannot be supported.
+#' @param getArrayEnvirName [\code{function()}]\cr
+#'   Returns the name of the environment variable specifying the array ID.
+#'   Should return \code{NA} if not supported.
 #' @param class [\code{character(1)}]\cr
 #'   Optional class name for cluster functions object.
 #'   Useful to provide a nice print method
@@ -86,14 +89,16 @@ print.SubmitJobResult = function(x, ...) {
 #' @export
 #' @aliases ClusterFunctions
 #' @seealso \code{\link{makeClusterFunctionsInteractive}}, \code{\link{makeClusterFunctionsLocal}}, \code{\link{makeClusterFunctionsMulticore}}, \code{\link{makeClusterFunctionsSSH}}, \code{\link{makeClusterFunctionsTorque}}, \code{\link{makeClusterFunctionsSGE}}, \code{\link{makeClusterFunctionsSLURM}}
-makeClusterFunctions = function(name, submitJob, killJob, listJobs, class = NULL, ...) {
+makeClusterFunctions = function(name, submitJob, killJob, listJobs, getArrayEnvirName, class = NULL, ...) {
   checkArg(name, "character", len=1L)
   checkArg(submitJob, "function", formals=c("conf", "reg", "job.name", "rscript", "log.file", "job.dir", "resources"))
   if (!is.null(killJob))
     checkArg(killJob, "function", formals=c("conf", "reg", "batch.job.id"))
   if (!is.null(listJobs))
     checkArg(listJobs, "function", formals=c("conf", "reg"))
-  setClasses(list(name=name, submitJob=submitJob, killJob=killJob, listJobs=listJobs),
+  if (!is.null(getArrayEnvirName))
+    checkArg(getArrayEnvirName, "function", formals=character(0L))
+  setClasses(list(name=name, submitJob=submitJob, killJob=killJob, listJobs=listJobs, getArrayEnvirName = getArrayEnvirName),
              c("ClusterFunctions", class))
 }
 
