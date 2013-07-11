@@ -19,6 +19,7 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
   if (!is.na(array.id)) {
     # FIXME better send error to database here, we don't see those errors on the master :(
     array.id = convertInteger(array.id)
+    messagef("Processing array id %s", array.id)
     checkArg(array.id, "integer", len=1L, lower=1L, upper=length(ids), na.ok=FALSE)
     ids = ids[array.id]
   }
