@@ -11,6 +11,12 @@
 
 .onAttach = function(libname, pkgname) {
   if (!isOnSlave()) {
+    if (missing(libname) || missing(pkgname)) {
+      # this can happen with testthat while loading from skel/
+      readConfs(find.package(package = "BatchJobs"))
+    } else {
+      readConfs(file.path(libname, pkgname))
+    }
     packageStartupMessage(collapse(print(getConfig()), "\n"))
   }
 }
@@ -19,11 +25,5 @@
   options(BatchJobs.check.posix = getOption("BatchJobs.check.posix", default = TRUE))
   if (!isOnSlave()) {
     assignConfDefaults()
-    if (missing(libname) || missing(pkgname)) {
-      # this can happen with testthat while loading from skel/
-      readConfs(find.package(package = "BatchJobs"))
-    } else {
-      readConfs(file.path(libname, pkgname))
-    }
   }
 }
