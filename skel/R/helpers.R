@@ -113,9 +113,8 @@ setOnSlave = function(x, resources.path=as.character(NA)) {
 }
 
 getOperatingSystem = function() {
-  Sys.info()["sysname"]
+  .Platform$OS.type
 }
-
 
 now = function() {
   as.integer(Sys.time())
