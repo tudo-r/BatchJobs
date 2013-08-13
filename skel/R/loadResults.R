@@ -61,6 +61,6 @@ getResults = function(reg, ids, part=NA_character_) {
   fns = getResultFilePath(reg, ids, part)
   miss = fns[!file.exists(fns)]
   if(length(miss) > 0L)
-    stop("Job result file does not exist: ", fns)
+    stopf("Some job result files do not exist, showing up to first 10:\n%s", collapse(head(miss, 10L), "\n"))
   return(lapply(fns, load2, "result"))
 }
