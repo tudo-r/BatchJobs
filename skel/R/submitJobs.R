@@ -170,7 +170,8 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
 
     # message the existance of the log file
     if (logger$getSize())
-      messagef("%i temporary submit errors logged to file '%s'", logger$getSize(), logger$getLogfile())
+      messagef("%i temporary submit errors logged to file '%s'.\nFirst message: %s",
+               logger$getSize(), logger$getLogfile(), logger$getMessages(1L))
   })
 
   ### write R scripts
