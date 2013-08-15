@@ -168,7 +168,7 @@ dbGetJobs = function(reg, ids) {
 dbGetJobs.Registry = function(reg, ids) {
   query = sprintf("SELECT job_id, fun_id, pars, seed FROM %s_expanded_jobs", reg$id)
   tab = dbSelectWithIds(reg, query, ids)
-  lapply(seq_len(nrow(tab)), function(i) {
+  lapply(seq_row(tab), function(i) {
     makeJob(id=tab$job_id[i],
             fun.id=tab$fun_id[i],
             fun=NULL,
