@@ -154,6 +154,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   submit.msgs = buffer("list", 1000L, dbSendMessages,
                        reg=reg, max.retries=10000L, sleep=function(r) 5,
                        staged=useStagedQueries())
+  logger = makeSimpleFileLogger(file.path(reg$file.dir, "submit.log"), touch = FALSE, keep = 1L)
 
   ### set on exit handler to avoid inconsistencies caused by user interrupts
   on.exit({
@@ -166,6 +167,10 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
     # send remaining msgs now
     messagef("Sending %i submit messages...\nMight take some time, do not interrupt this!", submit.msgs$pos())
     submit.msgs$clear()
+
+    # message the existance of the log file
+    if (logger$getSize())
+      messagef("%i temporary submit errors logged to file '%s'", logger$getSize(), logger$getLogfile())
   })
 
   ### write R scripts
@@ -220,31 +225,12 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
           # temp error, wait and increase retries, then submit again in next iteration
           sleep.secs = wait(retries)
 
+          # log message to file
+          logger$log(msg)
+
           retries = retries + 1L
           if (retries > max.retries)
             stopf("Retried already %i times to submit. Aborting.", retries)
-
-
-          # FIXME we could use the sleep here for synchronization
-          # FIXME: the next lines are an ugly hack and should be moved to bbmisc
-          if (getOption("BBmisc.ProgressBar.style") != "off") {
-            bar$inc(msg=sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
-          }
-          Sys.sleep(sleep.secs/2)
-          if (getOption("BBmisc.ProgressBar.style") != "off") {
-            pbw = getOption("BBmisc.ProgressBar.width", getOption("width"))
-            labw = environment(bar$set)$label.width
-            lab = sprintf(sprintf("%%%is", labw),
-              sprintf("Status: %i, zzz=%.1fs", batch.result$status, sleep.secs))
-            cat(paste(rep.int("\b \b", pbw-5), collapse=""))
-            bmrmsg = batch.result$msg
-            msgline = sprintf("%s msg=%s", lab, bmrmsg)
-            cat(msgline)
-          }
-          Sys.sleep(sleep.secs/2)
-          if (getOption("BBmisc.ProgressBar.style") != "off") {
-            cat(paste(rep.int("\b \b", nchar(msgline)), collapse=""))
-          }
         } else if (batch.result$status > 100L && batch.result$status <= 200L) {
           # fatal error, abort at once
           stopf("Fatal error occured: %i. %s", batch.result$status, batch.result$msg)
