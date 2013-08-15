@@ -17,7 +17,7 @@
     } else {
       readConfs(file.path(libname, pkgname))
     }
-    packageStartupMessage(collapse(print(getConfig()), "\n"))
+    packageStartupMessage(printableConf(getConfig()))
   }
 }
 

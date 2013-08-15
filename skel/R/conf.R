@@ -153,21 +153,34 @@ getClusterFunctions = function(conf) {
   conf$cluster.functions
 }
 
+# Function which returns a printable string describing the config
+# Used in packageStartupMessage and in print.Config
+printableConf = function(conf) {
+  x = as.list(conf)
+  x[setdiff(getConfNames(), names(x))] = ""
+  fmt = paste(
+    "BatchJobs configuration:",
+    "  cluster functions: %s",
+    "  mail.from: %s",
+    "  mail.to: %s",
+    "  mail.start: %s",
+    "  mail.done: %s",
+    "  mail.error: %s",
+    "  default.resources: %s",
+    "  debug: %s",
+    "  raise.warnings: %s",
+    "  staged.queries: %s",
+    "  max.concurrent.jobs: %s",
+    sep = "\n")
+  sprintf(fmt, x$cluster.functions$name, x$mail.from, x$mail.to, x$mail.start, x$mail.done,
+          x$mail.error, listToShortString(x$default.resources), x$debug, x$raise.warnings,
+          x$staged.queries, x$max.concurrent.jobs)
+}
+
+
 #' @S3method print Config
 print.Config = function(x, ...) {
-  x[setdiff(getConfNames(), names(x))] = ""
-  catf("BatchJobs configuration:")
-  catf("  cluster functions: %s", x$cluster.functions$name)
-  catf("  mail.from: %s", x$mail.from)
-  catf("  mail.to: %s", x$mail.to)
-  catf("  mail.start: %s", x$mail.start)
-  catf("  mail.done: %s", x$mail.done)
-  catf("  mail.error: %s", x$mail.error)
-  catf("  default.resources: %s", listToShortString(x$default.resources))
-  catf("  debug: %s", x$debug)
-  catf("  raise.warnings: %s", x$raise.warnings)
-  catf("  staged.queries: %s", x$staged.queries)
-  catf("  max.concurrent.jobs: %s", x$max.concurrent.jobs)
+  cat(printableConf(x))
 }
 
 #' Load a specific configuration file.
