@@ -56,9 +56,9 @@ s1 = if (walltime <= 3600) {
   "short"
 } else if (walltime <= 8 * 3600) {
   "med"
-} else if (walltime <= 2 * day) {
+} else if (walltime <= 2 * 24 * 3600) {
   "long"
-} else if (walltime <= 28 * day) {
+} else if (walltime <= 28 * 24 * 3600) {
   "ultralong"
 }
 
