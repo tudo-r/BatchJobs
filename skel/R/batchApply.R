@@ -30,6 +30,7 @@
 # submitJobs(reg)
 # reduceResultsVector(reg, use.names=FALSE) == rowSums(X)
 # @export
+# FIXME why is this not exported? test and export
 batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ...) {
   if (!is.matrix(X) && !is.array(X))
     stopf("Argument X must be of class matrix or array, not %s", class(X))

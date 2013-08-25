@@ -10,7 +10,7 @@ BugReports: http://code.google.com/p/batchjobs/issues/list
 MailingList: batchjobs@googlegroups.com
 License: BSD
 Depends: R (>= 2.13.0), BBmisc (>= 1.3-64)
-Imports: utils, digest, DBI, RSQLite, sendmailR, brew, plyr
+Imports: utils, digest, DBI, RSQLite, sendmailR, brew, plyr, fail
 Suggests: testthat
 LazyData: yes
 ByteCompile: yes

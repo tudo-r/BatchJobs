@@ -124,6 +124,10 @@ getResourcesFilePath = function(reg, timestamp)
 getPendingDir = function(file.dir)
   file.path(file.dir, "pending")
 
+getExportDir = function(file.dir)
+  file.path(file.dir, "exports")
+
+
 # FIXME: chnage name
 getSQLFileName = function(reg, type, id, char = getOrderCharacters()[type]) {
   file.path(getPendingDir(reg$file.dir), sprintf("pending_%s_%s_%i.sql", char, type, id))

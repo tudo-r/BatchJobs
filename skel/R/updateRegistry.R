@@ -47,6 +47,9 @@ updateRegistry.Registry = function(reg) {
     checkDir(getPendingDir(reg$file.dir), create=TRUE)
   }
 
+  if (version.reg < package_version("1.0.1071")) {
+    checkDir(getExportDir(reg$file.dir), create=TRUE)
+  }
 
   reg$packages$BatchJobs$version = version.pkg
   reg

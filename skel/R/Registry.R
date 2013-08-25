@@ -27,6 +27,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.resul
   checkDir(fun.dir, create=TRUE, check.empty=TRUE)
   checkDir(getResourcesDir(file.dir), create=TRUE, check.empty=TRUE)
   checkDir(getPendingDir(file.dir), create=TRUE, check.empty=TRUE)
+  checkDir(getExportDir(file.dir), create=TRUE, check.empty=TRUE)
   checkDir(work.dir, check.posix=TRUE)
   work.dir = makePathAbsolute(work.dir)
 
@@ -134,7 +135,8 @@ loadRegistry = function(file.dir, work.dir) {
 
   requirePackages(names(reg$packages), why=sprintf("registry %s", reg$id))
 
-  if (!isOnSlave()) {
+  on.slave = isOnSlave()
+  if (!on.slave) {
     # FIXME check that no jobs are running, if possible, before updating
     adjusted = adjustRegistryPaths(reg, file.dir, work.dir)
     if (!isFALSE(adjusted))
@@ -147,6 +149,10 @@ loadRegistry = function(file.dir, work.dir) {
     if (!isFALSE(adjusted) || !isFALSE(updated))
       saveRegistry(reg)
   }
+
+  triggers = c("both", if(on.slave) "slave" else "master")
+  lapply(file.path(getExportDir(reg$file.dir), triggers),
+         function(fd) fail(fd)$assign(envir = .GlobalEnv))
   return(reg)
 }
 
