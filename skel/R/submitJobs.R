@@ -227,7 +227,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
           sleep.secs = wait(retries)
 
           # log message to file
-          logger$log(msg)
+          logger$log(batch.result$msg)
 
           retries = retries + 1L
           if (retries > max.retries)
