@@ -160,7 +160,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   on.exit({
     # we need the second case for errors in brew (e.g. resources)
     if(interrupted && exists("batch.result", inherits=FALSE)) {
-      submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=now(),
+      submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
         batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
         resources.timestamp=resources.timestamp))
     }
@@ -201,6 +201,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
         } else {
           # try to submit the job
           interrupted = TRUE
+          submit.time = now()
           batch.result = cf$submitJob(conf=conf, reg=reg,
                                       job.name=sprintf("%s-%i", reg$id, id1),
                                       rscript=getRScriptFilePath(reg, id1),
@@ -212,7 +213,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
 
         ### validate status returned from cluster functions
         if (batch.result$status == 0L) {
-          submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=now(),
+          submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
                                                   batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
                                                   resources.timestamp=resources.timestamp))
           interrupted = FALSE
