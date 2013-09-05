@@ -185,9 +185,10 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
 
 
   ### initialize progress bar
-  bar = makeProgressBar(max=n, label="submitJobs               ")
+  bar = makeProgressBar(max=n, label="SubmitJobs")
   bar$set()
 
+  # TODO add a message about where to find log files
   tryCatch({
     for (id in ids) {
       id1 = id[1L]
@@ -224,14 +225,14 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
 
         if (batch.result$status > 0L && batch.result$status <= 100L) {
           # temp error, wait and increase retries, then submit again in next iteration
-          sleep.secs = wait(retries)
+          Sys.sleep(wait(retries))
 
           # log message to file
           logger$log(batch.result$msg)
 
-          retries = retries + 1L
           if (retries > max.retries)
             stopf("Retried already %i times to submit. Aborting.", retries)
+          retries = retries + 1L
         } else if (batch.result$status > 100L && batch.result$status <= 200L) {
           # fatal error, abort at once
           stopf("Fatal error occured: %i. %s", batch.result$status, batch.result$msg)
