@@ -170,7 +170,7 @@ printableConf = function(conf) {
     "  debug: %s",
     "  raise.warnings: %s",
     "  staged.queries: %s",
-    "  max.concurrent.jobs: %s",
+    "  max.concurrent.jobs: %s\n",
     sep = "\n")
   sprintf(fmt, x$cluster.functions$name, x$mail.from, x$mail.to, x$mail.start, x$mail.done,
           x$mail.error, listToShortString(x$default.resources), x$debug, x$raise.warnings,
