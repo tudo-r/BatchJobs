@@ -188,7 +188,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   bar = makeProgressBar(max=n, label="SubmitJobs")
   bar$set()
 
-  # TODO add a message about where to find log files
+  # FIXME add a message about where to find log files
   tryCatch({
     for (id in ids) {
       id1 = id[1L]

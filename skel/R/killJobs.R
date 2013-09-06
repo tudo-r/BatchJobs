@@ -42,7 +42,7 @@ killJobs = function(reg, ids) {
   conf = getBatchJobsConf()
   killfun = getKillJob("Cannot kill jobs")
 
-  # TODO select and order (see below) could be done more efficiently in SQLite
+  # FIXME select and order (see below) could be done more efficiently in SQLite
   data = dbGetJobStatusTable(reg, ids = dbFindOnSystem(reg, ids),
                              cols = c("job_id", "batch_job_id", "submitted", "started", "done", "error"))
 

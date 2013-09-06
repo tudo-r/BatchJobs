@@ -1,7 +1,7 @@
 context("exports")
 
 test_that("exports", {
-  # TODO more tests
+  # FIXME more tests
   reg = makeTestRegistry()
   expect_equal(batchExport(reg, x = 1L, y = 2L), c("x", "y"))
   expect_equal(unname(unlist(batchListExported(reg))), c("x", "y"))
