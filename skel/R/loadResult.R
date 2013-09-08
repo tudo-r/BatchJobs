@@ -6,18 +6,23 @@
 #' @param part [\code{character}]
 #'   Only useful for multiple result files, then defines which result file part(s) should be loaded.
 #'   \code{NA} means all parts are loaded, which is the default.
+#' @param missing.ok [\code{logical(1)}]\cr
+#'   If \code{FALSE} an error is thrown if no result file is found.
+#'   Otherwise \code{NULL} is returned.
+#'   Default is \code{FALSE}.
 #' @return [any]. Result of job.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-loadResult = function(reg, id, part=NA_character_) {
+loadResult = function(reg, id, part=NA_character_, missing.ok=FALSE) {
   checkRegistry(reg)
   syncRegistry(reg)
   id = checkId(reg, id)
   checkPart(reg, part)
+  checkArg(missing.ok, "logical", len=1L, na.ok=FALSE)
 
-  getResult(reg, id, part)
+  getResult(reg, id, part, missing.ok)
 }
 
-getResult = function(reg, id, part=NA_character_) {
-  getResults(reg, id, part)[[1L]]
+getResult = function(reg, id, part=NA_character_, missing.ok=FALSE) {
+  getResults(reg, id, part, missing.ok)[[1L]]
 }

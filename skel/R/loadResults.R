@@ -13,10 +13,14 @@
 #' @param use.names [\code{logical(1)}]\cr
 #'   Should the returned list be named with job ids?
 #'   Default is \code{TRUE}.
+#' @param missing.ok [\code{logical(1)}]\cr
+#'   If \code{FALSE} an error is thrown if the results are not found.
+#'   Otherwise missing results are imputed to \code{NULL}.
+#'   Default is \code{FALSE}.
 #' @return [\code{list}]. Results of jobs as list, possibly named by ids.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=TRUE) {
+loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=TRUE, missing.ok=FALSE) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
@@ -27,8 +31,9 @@ loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=T
   checkPart(reg, part)
   checkArg(simplify, "logical", len=1L, na.ok=FALSE)
   checkArg(use.names, "logical", len=1L, na.ok=FALSE)
+  checkArg(missing.ok, "logical", len=1L, na.ok=FALSE)
 
-  res = getResults(reg, ids, part)
+  res = getResults(reg, ids, part, missing.ok)
   if(use.names)
     names(res) = ids
   if(simplify && length(res) > 0L)
@@ -37,13 +42,16 @@ loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=T
   return(res)
 }
 
-getResults = function(reg, ids, part=NA_character_) {
+getResults = function(reg, ids, part=NA_character_, missing.ok=FALSE) {
   if (reg$multiple.result.files) {
     read.files = function(id, dir, pattern) {
       fns = list.files(dir, pattern, full.names=TRUE)
       found.parts = sub(".+-(.+)\\.RData$", "\\1", basename(fns))
-      if(length(found.parts) == 0L)
+      if(length(found.parts) == 0L) {
+        if (missing.ok)
+         return(list()) 
         stop("No partial result files found for job with id ", id)
+      }
 
       setNames(lapply(fns, load2, "result"), found.parts)
     }
@@ -59,8 +67,11 @@ getResults = function(reg, ids, part=NA_character_) {
   }
 
   fns = getResultFilePath(reg, ids, part)
-  miss = fns[!file.exists(fns)]
-  if(length(miss) > 0L)
-    stopf("Some job result files do not exist, showing up to first 10:\n%s", collapse(head(miss, 10L), "\n"))
+  miss = !file.exists(fns)
+  if (any(miss)) {
+    if (!missing.ok)
+      stopf("Some job result files do not exist, showing up to first 10:\n%s", collapse(head(fns[miss], 10L), "\n"))
+    return(replace(vector("list", length(ids)), !miss, lapply(fns[!miss], load2, "result")))
+  }
   return(lapply(fns, load2, "result"))
 }
