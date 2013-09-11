@@ -200,13 +200,17 @@ loadConfig = function(conffile = ".BatchJobs.R") {
 
 #' Set and overwrite configuration settings
 #'
+#' @param conf [\code{Config} or \code{list}]\cr
+#'   List of configuration parameters as returned by \code{\link{loadConfig}} or \code{\link{getConfig}}.
 #' @param ... [\code{ANY}]\cr
-#'   Config parameters provided in a key = value syntax.
+#'   Named configuration parameters. Overwrites parameters in \code{conf}, if provided.
 #' @return Invisibly returns a list of configuration settings.
 #' @seealso \code{\link{getConfig}}, \code{\link{loadConfig}}
 #' @export
-setConfig = function(...) {
-  overwrites = list(...)
+setConfig = function(conf = list(), ...) {
+  if (!is.list(conf) && !is(conf, "Config"))
+    stopf("Argument 'conf' must be of class 'list' or 'Config', not %s", head(class(conf, 1L)))
+  overwrites = insert(conf, list(...))
   if (!length(overwrites))
     return(invisible(getConfig()))
   if(! isProperlyNamed(overwrites))
