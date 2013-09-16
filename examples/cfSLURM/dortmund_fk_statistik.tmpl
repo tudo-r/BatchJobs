@@ -55,11 +55,11 @@ if(ntasks > 1L){
 #SBATCH --output=<%= log.file %>
 #SBATCH --error=<%= log.file %>
 ## SLURM wants minutes
-#SBATCH --time=<%= ceiling(resources$walltime / 60L)%>
-#SBATCH --ntasks=<%= resources$ntasks %>
+#SBATCH --time=<%= ceiling(walltime / 60L)%>
+#SBATCH --ntasks=<%= ntasks %>
 #SBATCH --mincpus=<%= mincpus %>
-#SBATCH --cpus-per-task=<%= resources$ncpus %>
-#SBATCH --mem-per-cpu=<%= resources$memory %>
+#SBATCH --cpus-per-task=<%= ncpus %>
+#SBATCH --mem-per-cpu=<%= memory %>
 #SBATCH --partition=all
 
 ## create our own temp dir and clean it up later
