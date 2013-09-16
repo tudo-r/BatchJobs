@@ -23,8 +23,6 @@ batchMap = function(reg, fun, ..., more.args=list()) {
   args = list(...)
   if (length(args) == 0L)
     return(invisible(integer(0L)))
-  if(!all(vapply(args, is.vector, logical(1L))))
-    stop("All args in '...' must be vectors!")
   n = unique(vapply(args, length, integer(1L)))
   if(length(n) != 1L)
     stop("All args in '...' must be of the same length!")
@@ -41,9 +39,9 @@ batchMap = function(reg, fun, ..., more.args=list()) {
   seeds = addIntModulo(seed, seq(0L, n-1L))
 
   # serialize pars to char vector
-  pars = mapply(function(...) {
-    rawToChar(serialize(list(...), connection=NULL, ascii=TRUE))
-  }, ..., USE.NAMES=FALSE)
+  pars = vapply(seq_len(n), function(i) {
+    rawToChar(serialize(lapply(args, "[[", i), connection=NULL, ascii=TRUE))
+  }, character(1L))
   fun.id = saveFunction(reg, fun, more.args)
 
   # add jobs to DB
