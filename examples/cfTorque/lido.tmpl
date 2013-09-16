@@ -12,6 +12,8 @@
 ##                            passed manually: R, icc, gcc, binutils, gotoblas, openmpi, torque, maui.
 ## nodes [integer(1)]:        Number of required nodes,
 ##                            Set larger than 1 if you want to further parallelize with MPI within your job
+## parcpus [integer(1)]:      Alternative name for 'nodes'.
+##                            Offered so we have consistent names for Torque and SLURM.
 ## walltime [integer(1)]:     Walltime for this job, in seconds.
 ##                            Must be at least 60 seconds.
 ## memory   [integer(1)]:     Memory in megabytes for each job. Is mapped to vmem on Lido.
@@ -29,19 +31,29 @@
 ## 'default.resources' as a named list.
 
 <%
-d = setdiff(names(resources), c("walltime", "memory", "nodes", "R", "modules"))
+d = setdiff(names(resources), c("walltime", "memory", "nodes", "parcpus", "R", "modules"))
 if (length(d) > 0)
   stopf("Illegal resources used: %s", collapse(d))
 
 walltime = convertInteger(resources$walltime)
 memory = convertInteger(resources$memory)
 nodes = convertInteger(resources$nodes)
+parcpus = convertInteger(resources$parcpus)
 R = resources$R
 modules = resources$modules
 
 checkArg(walltime, "integer", len=1L, na.ok=FALSE, lower=60, upper=60*60*24*28)
 checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=100, upper=64*1024)
-checkArg(nodes, "integer", len=1L, na.ok=FALSE, lower=1)
+if (!is.null(nodes))
+  checkArg(nodes, "integer", len=1L, na.ok=FALSE, lower=1)
+if (!is.null(parcpus))
+  checkArg(parcpus, "integer", len=1L, na.ok=FALSE, lower=1)
+if (is.null(nodes) && is.null(parcpus))
+  stopf("You must set either 'nodes' or 'parcpus'!")
+if (!is.null(nodes) && !is.null(parcpus))
+  stopf("You cannot set both 'nodes' and 'parcpus'!")
+if (is.null(nodes))
+  nodes = parcpus  
 checkArg(R, choices=c(
   "R-2.14.1-icc-11.1", "R-2.15.1-gcc-4.3.5", 
   "R-2.15.1-gcc-4.7.1", "R-2.15.3-gcc-4.7.2", "R-2.15.3-gcc-4.8.0",
