@@ -4,6 +4,8 @@
 ## ntasks [integer(1)]:       Number of required tasks,
 ##                            Set larger than 1 if you want to further parallelize
 ##                            with MPI within your job.
+## parcpus [integer(1)]:      Alternative name for 'ntasks'.
+##                            Offered so we have consistent names for Torque and SLURM.
 ## ncpus [integer(1)]:        Number of required cpus per task,
 ##                            Set larger than 1 if you want to further parallelize
 ##                            with multicore/parallel within each task.
@@ -15,17 +17,28 @@
 ## Default resources can be set in your .BatchJobs.R by defining the variable
 ## 'default.resources' as a named list.
 <%
-d = setdiff(names(resources), c("walltime", "memory", "ntasks", "ncpus"))
+d = setdiff(names(resources), c("walltime", "memory", "ntasks", "parcpus", "ncpus"))
 if (length(d) > 0L)
   stopf("Illegal resources used: %s", collapse(d))
 
 walltime = convertInteger(resources$walltime)
 memory = convertInteger(resources$memory)
 ntasks = convertInteger(resources$ntasks)
+parcpus = convertInteger(resources$parcpus)
 ncpus = convertInteger(resources$ncpus)
 checkArg(walltime, "integer", len=1L, na.ok=FALSE, lower=1L, upper=172800L)
 checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=100L, upper=64000L)
-checkArg(ntasks, "integer", len=1L, na.ok=FALSE, lower=1L, upper=65L)
+checkArg(, "integer", len=1L, na.ok=FALSE, lower=1L, upper=65L)
+if (!is.null(ntasks))
+  checkArg(ntasks, "integer", len=1L, na.ok=FALSE, lower=1)
+if (!is.null(parcpus))
+  checkArg(parcpus, "integer", len=1L, na.ok=FALSE, lower=1)
+if (is.null(ntasks) && is.null(parcpus))
+  stopf("You must set either 'ntasks' or 'parcpus'!")
+if (!is.null(ntasks) && !is.null(parcpus))
+  stopf("You cannot set both 'ntasks' and 'parcpus'!")
+if (is.null(ntasks))
+  ntasks = parcpus  
 checkArg(ncpus, "integer", len=1L, na.ok=FALSE, lower=1L, upper=12L)
 
 cmd = "R CMD BATCH --no-save --no-restore"
