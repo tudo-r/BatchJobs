@@ -22,7 +22,6 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
 
   if (check.posix && getOption("BatchJobs.check.posix", TRUE)) {
     path.abs = makePathAbsolute(path)
-    # FIXME replace '/' with .Platform$file.sep (-> test on windows if we need any escaping)
     if(! grepl("^[[:alnum:]:/_.-]+$", path.abs))
       stopf("Directory '%s' contains characters that are not fully portable according to POSIX standards. Allowed: a-z A-Z 0-9 : / . - _", path.abs)
   }
