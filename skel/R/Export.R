@@ -69,7 +69,6 @@ batchExport = function(reg, ..., li=list(), trigger="slave") {
 batchImport = function(reg, triggers = "slave") {
   checkArg(reg, "Registry")
   checkArg(triggers, subset=c("both", "master", "slave"))
-  # FIXME assign does not return keys in current CRAN version!
   unlist(lapply(file.path(getExportDir(reg$file.dir), triggers),
                 function(fd) fail(fd)$assign(envir = .GlobalEnv)))
 }
