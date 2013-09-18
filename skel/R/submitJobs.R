@@ -225,14 +225,15 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
         interrupted = FALSE
 
         if (batch.result$status > 0L && batch.result$status <= 100L) {
+          if (is.finite(max.retires) && retries > max.retries)
+            stopf("Retried already %i times to submit. Aborting.", max.retries)
+
           # temp error, wait and increase retries, then submit again in next iteration
           Sys.sleep(wait(retries))
 
           # log message to file
           logger$log(batch.result$msg)
 
-          if (retries > max.retries)
-            stopf("Retried already %i times to submit. Aborting.", retries)
           retries = retries + 1L
         } else if (batch.result$status > 100L && batch.result$status <= 200L) {
           # fatal error, abort at once
