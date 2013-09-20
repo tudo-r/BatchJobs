@@ -36,6 +36,7 @@ createShardedDirs = function(reg, ids) {
 # tests a directory for read and write permissions
 # uses a heuristic for windows
 is.accessible = function(path) {
+  #FIXME use bbmisc function isWindows()
   if (grepl("windows", getOperatingSystem(), ignore.case=TRUE)) {
     # Workaround: No POSIX file system informations available, use a heuristic
     rnd = basename(tempfile(""))

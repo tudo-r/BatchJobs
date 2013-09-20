@@ -112,13 +112,17 @@ setOnSlave = function(x, resources.path=as.character(NA)) {
   options(BatchJobs.resources.path=resources.path)
 }
 
+# FIXME BBmisc
 getOperatingSystem = function() {
   .Platform$OS.type
 }
 
+# FIXME BBmisc
 now = function() {
   as.integer(Sys.time())
 }
+
+#FIXME: why dont we depent on stringr for this?
 
 # Extract a FIRST match for a pattern from a vector of strings.
 # @param x [\code{character}]\cr
@@ -141,6 +145,7 @@ strextract = function(x, pattern) {
   }, x, starts, stops, USE.NAMES=FALSE)
 }
 
+#FIXME: why dont we depent on stringr for this?
 trim = function(x, ltrim=TRUE, rtrim=TRUE) {
   if (ltrim)
     x = sub("^[[:space:]]+", "", x)
@@ -149,6 +154,7 @@ trim = function(x, ltrim=TRUE, rtrim=TRUE) {
   return(x)
 }
 
+# FIXME BBmisc
 list2df = function(li, force.names=FALSE, strings.as.factors = default.stringsAsFactors()) {
   if (length(li) == 0L)
     return(as.data.frame(matrix(nrow = 0L, ncol = 0L)))
@@ -170,6 +176,7 @@ list2df = function(li, force.names=FALSE, strings.as.factors = default.stringsAs
   as.data.frame(res, stringsAsFactors = strings.as.factors)
 }
 
+# FIXME BBmisc
 shortenString = function(x, len, str.short="...") {
   if (is.na(x))
     return(NA_character_)
