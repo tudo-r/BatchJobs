@@ -194,7 +194,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
       id1 = id[1L]
       retries = 0L
 
-      repeat { # max.retires max be Inf
+      repeat { # max.retries max be Inf
         if (limit.concurrent.jobs && length(cf$listJobs(conf, reg)) >= conf$max.concurrent.jobs) {
           # emulate a temporary erroneous batch result
           batch.result = makeSubmitJobResult(status=10L, batch.job.id=NA_character_, "Max concurrent jobs exhausted")
@@ -225,7 +225,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
         interrupted = FALSE
 
         if (batch.result$status > 0L && batch.result$status <= 100L) {
-          if (is.finite(max.retires) && retries > max.retries)
+          if (is.finite(max.retries) && retries > max.retries)
             stopf("Retried already %i times to submit. Aborting.", max.retries)
 
           # temp error, wait and increase retries, then submit again in next iteration
