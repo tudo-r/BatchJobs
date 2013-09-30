@@ -121,7 +121,7 @@ dbCreateJobDefTable = function(reg) {
 dbCreateJobDefTable.Registry = function(reg) {
   #message("Initializing job definition table...")
 
-  query = sprintf("CREATE TABLE %s_job_def (job_def_id INTEGER PRIMARY KEY, fun_id TEXT, pars TEXT, alias TEXT)", reg$id)
+  query = sprintf("CREATE TABLE %s_job_def (job_def_id INTEGER PRIMARY KEY, fun_id TEXT, pars TEXT, jobname TEXT)", reg$id)
   dbDoQuery(reg, query, flags="rwc")
   dbCreateExpandedJobsView(reg)
 }
@@ -166,14 +166,14 @@ dbGetJobs = function(reg, ids) {
 #' @method dbGetJobs Registry
 #' @S3method dbGetJobs Registry
 dbGetJobs.Registry = function(reg, ids) {
-  query = sprintf("SELECT job_id, fun_id, pars, alias, seed FROM %s_expanded_jobs", reg$id)
+  query = sprintf("SELECT job_id, fun_id, pars, jobname, seed FROM %s_expanded_jobs", reg$id)
   tab = dbSelectWithIds(reg, query, ids)
    lapply(seq_row(tab), function(i) {
     makeJob(id=tab$job_id[i],
             fun.id=tab$fun_id[i],
             fun=NULL,
             pars=unserialize(charToRaw(tab$pars[i])),
-            alias=tab$alias[i],
+            name=tab$jobname[i],
             seed=tab$seed[i])
   })
 }
@@ -329,13 +329,13 @@ dbGetStats = function(reg, ids, running=FALSE, expired=FALSE, times=FALSE, batch
   df
 }
 
-dbGetAliasNames = function(reg, ids) {
-  query = sprintf("SELECT job_id, alias FROM %s_expanded_jobs", reg$id)
+dbGetJobNameTable = function(reg, ids) {
+  query = sprintf("SELECT job_id, jobname FROM %s_expanded_jobs", reg$id)
   dbSelectWithIds(reg, query, ids)
 }
 
-dbMatchAliasNames = function(reg, ids, aliases) {
-  query = sprintf("SELECT job_id FROM %s_expanded_jobs WHERE alias IN (%s)", reg$id, collapse(sqlQuote(aliases)))
+dbMatchJobNames = function(reg, ids, jobnames) {
+  query = sprintf("SELECT job_id FROM %s_expanded_jobs WHERE jobname IN (%s)", reg$id, collapse(sqlQuote(jobnames)))
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
@@ -446,4 +446,9 @@ dbConvertNumericToPOSIXct = function(x) {
 dbSetJobFunction = function(reg, ids, fun.id) {
   query = sprintf("UPDATE %1$s_job_def SET fun_id = '%2$s' WHERE job_def_id IN (SELECT job_def_id FROM %1$s_job_status WHERE job_id IN (%3$s))", reg$id, fun.id, collapse(ids))
   dbDoQuery(reg, query, flags="rw")
+}
+
+dbSetJobNames = function(reg, ids, jobnames) {
+  queries = sprintf("UPDATE %1$s_job_def SET jobname = '%2$s' WHERE job_def_id IN (SELECT job_def_id FROM %1$s_job_status WHERE job_id IN (%3$i))", reg$id, jobnames, ids)
+  dbDoQueries(reg, queries, flags="rw")
 }

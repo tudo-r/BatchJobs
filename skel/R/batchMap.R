@@ -12,7 +12,7 @@
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is empty list.
 #' @param use.names [\code{logical(1)}]\cr
-#'   Sets the storage of alias names to enable named results in \code{\link{loadResults}}.
+#'   Store parameter names to enable named results in \code{\link{loadResults}} and some other functions.
 #'   Default is \code{FALSE}.
 #' @return Vector of type \code{integer} with job ids.
 #' @examples
@@ -51,11 +51,11 @@ batchMap = function(reg, fun, ..., more.args=list(), use.names=FALSE) {
   }, character(1L))
   fun.id = saveFunction(reg, fun, more.args)
 
-  # generate alias col
-  alias = if (use.names) getArgNames(args) else rep.int(NA_character_, n)
+  # generate jobnames col
+  jobname = if (use.names) getArgNames(args) else rep.int(NA_character_, n)
 
   # add jobs to DB
-  n = dbAddData(reg, "job_def", data = data.frame(fun_id=fun.id, pars=pars, alias=alias))
+  n = dbAddData(reg, "job_def", data = data.frame(fun_id=fun.id, pars=pars, jobname=jobname))
   job.def.ids = dbGetLastAddedIds(reg, "job_def", "job_def_id", n)
   n = dbAddData(reg, "job_status", data=data.frame(job_def_id=job.def.ids, seed=seeds))
   job.ids = dbGetLastAddedIds(reg, "job_status", "job_id", n)

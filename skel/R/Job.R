@@ -13,14 +13,14 @@
 #'   Default is \code{digest(fun)}.
 #' @param pars [\code{list}]\cr
 #'   Parameter list for job function.
-#' @param alias [\code{character(1)}]\cr
+#' @param name [\code{character(1)}]\cr
 #'   Alias name for this job.
 #' @param seed [\code{integer(1)}]\cr
 #'   Random seed for job.
 #' @aliases Job
 #' @export
-makeJob = function(id=NA_integer_, fun, fun.id=digest(fun), pars, alias, seed) {
-  setClasses(list(id=id, fun=fun, fun.id=fun.id, pars=pars, alias=alias, seed=seed), "Job")
+makeJob = function(id=NA_integer_, fun, fun.id=digest(fun), pars, name, seed) {
+  setClasses(list(id=id, fun=fun, fun.id=fun.id, pars=pars, name=name, seed=seed), "Job")
 }
 
 #' Get number of jobs in registry.
@@ -49,7 +49,7 @@ print.Job = function(x, ...) {
   catf("  Job id: %s", x$id)
   catf("  Fun id: %s", x$fun.id)
   catf("  Fun formals: %s", collapse(names(formals(x$fun))))
-  catf("  Alias: %s", x$alias)
+  catf("  Name: %s", x$name)
   catf("  Seed: %i", x$seed)
   catf("  Pars: %s", listToShortString(x$pars))
 }

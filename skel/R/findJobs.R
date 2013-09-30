@@ -10,8 +10,8 @@
 #'   This implies that you have named the parameters when you passed the vectors.
 #'   If you forgot to do this you can use \code{.arg1}, \code{.arg2}, etc., to refer to the
 #'   the unnamed ones.
-#' @param aliases [\code{character}]\cr
-#'   Restrict to jobs with provided aliases. Exact matching is used.
+#' @param jobnames [\code{character}]\cr
+#'   Restrict to jobs with stored names. Exact matching is used.
 #' @return [\code{integer}]. Ids for jobs which match the query.
 #' @export
 #' @examples
@@ -19,18 +19,18 @@
 #' f <- function(x, y) x * y
 #' batchExpandGrid(reg, f, x=1:2, y=1:3)
 #' findJobs(reg, pars=(y > 2))
-findJobs = function(reg, ids, pars, aliases) {
+findJobs = function(reg, ids, pars, jobnames) {
   checkRegistry(reg, strict=TRUE)
   syncRegistry(reg)
   if (!missing(ids)) 
     checkIds(reg, ids)
 
-  if (missing(pars) && missing(aliases))
+  if (missing(pars) && missing(jobnames))
     return(getJobIds(reg))
 
-  if (!missing(aliases)) {
-    checkArg(aliases, "character", na.ok=FALSE)
-    ids = dbMatchAliasNames(reg, ids, aliases)
+  if (!missing(jobnames)) {
+    checkArg(jobnames, "character", na.ok=FALSE)
+    ids = dbMatchJobNames(reg, ids, jobnames)
   }
 
   if (!missing(pars)) {

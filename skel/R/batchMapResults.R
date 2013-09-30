@@ -47,7 +47,7 @@
 #' # check results
 #' reduceResults(reg2, fun=function(aggr,job,res) c(aggr, res))
 batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.args=list()) {
-  # FIXME conserve alias names
+  # FIXME conserve jobnames
   checkRegistry(reg)
   syncRegistry(reg)
   checkRegistry(reg2)

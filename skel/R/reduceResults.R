@@ -121,7 +121,7 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
 
 #' @export
 #' @rdname reduceResults
-reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names = TRUE) {
+reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names=TRUE) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {

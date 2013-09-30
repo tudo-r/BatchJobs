@@ -52,7 +52,7 @@ updateRegistry.Registry = function(reg) {
   }
 
   if (version.reg < package_version("1.1")) {
-    query = sprintf("ALTER TABLE %s_job_def ADD COLUMN alias TEXT", reg$id)
+    query = sprintf("ALTER TABLE %s_job_def ADD COLUMN jobname TEXT", reg$id)
     dbDoQuery(reg, query, flags="rwc")
   }
 

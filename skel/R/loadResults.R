@@ -10,13 +10,10 @@
 #' @param simplify [\code{logical(1)}]\cr
 #'   Should the result be simplified to a vector, matrix or higher dimensional array if possible?
 #'   Default is \code{TRUE}.
-#' @param use.names [\code{logical(1)}]\cr
-#'   Should the returned list be named with job ids?
-#'   Default is \code{TRUE}.
-#' @param use.alias [\code{logical(1)}]\cr
-#'   If \code{use.names}, prefer alias names over job ids?
-#'   Alias names are for example set if \code{batchMap} was called with \code{use.names} set to TRUE. 
-#'   Default is \code{FALSE}.
+#' @param use.names [\code{character(1)}]\cr
+#'   Name the results with job ids (\dQuote{ids}), stored job names (\dQuote{names}) 
+#'   or return a unnamed result (\dQuote{none}).
+#'   Default is \code{ids}.
 #' @param missing.ok [\code{logical(1)}]\cr
 #'   If \code{FALSE} an error is thrown if the results are not found.
 #'   Otherwise missing results are imputed to \code{NULL}.
@@ -24,7 +21,7 @@
 #' @return [\code{list}]. Results of jobs as list, possibly named by ids.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=TRUE, use.alias=FALSE, missing.ok=FALSE) {
+loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names="ids", missing.ok=FALSE) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
@@ -34,13 +31,14 @@ loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=T
   }
   checkPart(reg, part)
   checkArg(simplify, "logical", len=1L, na.ok=FALSE)
-  checkArg(use.names, "logical", len=1L, na.ok=FALSE)
-  checkArg(use.alias, "logical", len=1L, na.ok=FALSE)
+  use.names = convertUseNames(use.names)
   checkArg(missing.ok, "logical", len=1L, na.ok=FALSE)
 
   res = getResults(reg, ids, part, missing.ok)
-  if(use.names)
-    names(res) = if(use.alias) dbGetAliasNames(reg, ids)$alias else ids
+  names(res) = switch(use.names,
+                      "none" = NULL,
+                      "ids" = as.character(ids),
+                      "names" = dbGetJobNameTable(reg, ids)$jobname)
   if(simplify && length(res) > 0L)
     res = simplify2array(res, higher = (simplify=="array"))
 
