@@ -331,7 +331,12 @@ dbGetStats = function(reg, ids, running=FALSE, expired=FALSE, times=FALSE, batch
 
 dbGetAliasNames = function(reg, ids) {
   query = sprintf("SELECT job_id, alias FROM %s_expanded_jobs", reg$id)
-  dbSelectWithIds(reg, query, ids)$alias
+  dbSelectWithIds(reg, query, ids)
+}
+
+dbMatchAliasNames = function(reg, ids, aliases) {
+  query = sprintf("SELECT job_id FROM %s_expanded_jobs WHERE alias IN (%s)", reg$id, collapse(sqlQuote(aliases)))
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
 ############################################

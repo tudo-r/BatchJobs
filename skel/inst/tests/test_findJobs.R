@@ -24,3 +24,12 @@ test_that("findJobs", {
   expect_equal(findJobs(reg, pars = (x == y)), c(1, 6, 11, 16))
   expect_equal(findJobs(reg, pars = (x == xi)), c(3, 7, 11, 15))
 })
+
+test_that("findJobs with aliases", {
+  reg = makeTestRegistry()
+  batchMap(reg, identity, letters, use.names=TRUE)
+  ids = findJobs(reg, aliases = c("b", "c", "d"))
+  expect_equal(ids, 2:4)
+  submitJobs(reg, ids)
+  expect_equal(names(loadResults(reg, ids, use.alias = TRUE)), c("b", "c", "d"))
+})

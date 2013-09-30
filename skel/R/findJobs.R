@@ -10,6 +10,8 @@
 #'   This implies that you have named the parameters when you passed the vectors.
 #'   If you forgot to do this you can use \code{.arg1}, \code{.arg2}, etc., to refer to the
 #'   the unnamed ones.
+#' @param aliases [\code{character}]\cr
+#'   Restrict to jobs with provided aliases. Exact matching is used.
 #' @return [\code{integer}]. Ids for jobs which match the query.
 #' @export
 #' @examples
@@ -17,24 +19,37 @@
 #' f <- function(x, y) x * y
 #' batchExpandGrid(reg, f, x=1:2, y=1:3)
 #' findJobs(reg, pars=(y > 2))
-findJobs = function(reg, ids, pars) {
+findJobs = function(reg, ids, pars, aliases) {
   checkRegistry(reg, strict=TRUE)
   syncRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
-  jobs = dbGetJobs(reg, ids)
+  if (!missing(ids)) 
+    checkIds(reg, ids)
 
-  rename = function(pars) {
-    ns = names(pars)
-    if (is.null(ns)) {
-      ns = rep.int("", length(pars))
-    }
-    j = which(is.na(ns) | ns == "")
-    ns[j] = paste(".arg", seq_along(j), sep="")
-    setNames(pars, ns)
+  if (missing(pars) && missing(aliases))
+    return(getJobIds(reg))
+
+  if (!missing(aliases)) {
+    checkArg(aliases, "character", na.ok=FALSE)
+    ids = dbMatchAliasNames(reg, ids, aliases)
   }
 
-  ind = vapply(jobs, function(job, pars, ee) eval(pars, rename(job$pars), ee),
-               logical(1L), pars=substitute(pars), ee=parent.frame())
-  return(extractSubList(jobs[!is.na(ind) & ind], "id", element.value=integer(1L)))
+  if (!missing(pars)) {
+    jobs = dbGetJobs(reg, ids)
+
+    rename = function(pars) {
+      ns = names(pars)
+      if (is.null(ns)) {
+        ns = rep.int("", length(pars))
+      }
+      j = which(is.na(ns) | ns == "")
+      ns[j] = paste(".arg", seq_along(j), sep="")
+      setNames(pars, ns)
+    }
+
+    ind = vapply(jobs, function(job, pars, ee) eval(pars, rename(job$pars), ee),
+                 logical(1L), pars=substitute(pars), ee=parent.frame())
+    ids = extractSubList(jobs[!is.na(ind) & ind], "id", element.value=integer(1L))
+  }
+
+  ids
 }

@@ -40,7 +40,7 @@ loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names=T
 
   res = getResults(reg, ids, part, missing.ok)
   if(use.names)
-    names(res) = if(use.alias) dbGetAliasNames(reg, ids) else ids
+    names(res) = if(use.alias) dbGetAliasNames(reg, ids)$alias else ids
   if(simplify && length(res) > 0L)
     res = simplify2array(res, higher = (simplify=="array"))
 
