@@ -37,11 +37,10 @@ batchExpandGrid = function(reg, fun, ..., more.args=list()) {
     stopf("You cannot use the reserved arg names %s in ... args!", collapse(reserved))
   args$KEEP.OUT.ATTRS = FALSE
   args$stringsAsFactors = FALSE
+
   grid = do.call(expand.grid, args)
   if (is.null(ns))
     colnames(grid) = NULL
-  args = as.list(grid)
-  args = c(args, list(reg=reg, fun=fun, more.args=more.args))
-  do.call(batchMap, args)
+  do.call(batchMap, c(as.list(grid), list(reg=reg, fun=fun, more.args=more.args)))
   return(grid)
 }

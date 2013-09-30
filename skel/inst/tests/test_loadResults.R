@@ -28,4 +28,11 @@ test_that("loadResults", {
   expect_equal(loadResults(reg, ids=integer(0), simplify=FALSE, use.names=TRUE), nl)
   expect_equal(loadResults(reg, ids=integer(0), simplify=TRUE, use.names=FALSE), list())
   expect_equal(loadResults(reg, ids=integer(0), simplify=FALSE, use.names=FALSE), list())
+
+  # test names of loadResults
+  reg = makeTestRegistry()
+  batchMap(reg, identity, letters, use.names=TRUE)
+  submitJobs(reg)
+  expect_equal(names(loadResults(reg, use.names = TRUE, use.alias = FALSE)), as.character(1:26))
+  expect_equal(names(loadResults(reg, use.names = TRUE, use.alias = TRUE)), letters)
 })

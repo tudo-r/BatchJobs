@@ -14,4 +14,4 @@ Imports: utils, digest, DBI, RSQLite, sendmailR, brew, plyr, fail (>= 1.2)
 Suggests: testthat
 LazyData: yes
 ByteCompile: yes
-Version: 1.0
+Version: 1.1

@@ -51,6 +51,11 @@ updateRegistry.Registry = function(reg) {
     checkDir(getExportDir(reg$file.dir), create=TRUE)
   }
 
+  if (version.reg < package_version("1.1")) {
+    query = sprintf("ALTER TABLE %s_job_def ADD COLUMN alias TEXT", reg$id)
+    dbDoQuery(reg, query, flags="rwc")
+  }
+
   reg$packages$BatchJobs$version = version.pkg
   reg
 }

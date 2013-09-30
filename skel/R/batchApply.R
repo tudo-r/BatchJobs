@@ -12,13 +12,11 @@
 # @param chunk.size [\code{integer(1)}]\cr
 #   Preferred number of jobs in each chunk.
 #   Can not be used in combination with \code{n.chunks}.
-#   Default is \code{chunk.size = 1} if \code{n.chunks} is also not provided:
-#   This results in \code{\link{nrow}} or \code{\link{ncol}} jobs, respectively.
-#   Note that the ids will get not shuffled.
+#   Default is \code{chunk.size = 1} if \code{n.chunks} is also not provided and
+#   results in \code{\link{nrow}} or \code{\link{ncol}} jobs, respectively.
 # @param n.chunks [\code{integer(1)}]\cr
 #   Preferred number chunks.
 #   Can not be used in combination with \code{chunk.size}.
-#   Note that the ids will get shuffled not shuffled.
 # @param ... [any]\cr
 #   Arguments to vectorize over (list or vector).
 # @return Vector of type \code{integer} with job ids.
@@ -31,7 +29,7 @@
 # reduceResultsVector(reg, use.names=FALSE) == rowSums(X)
 # @export
 # FIXME why is this not exported? test and export
-batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ...) {
+batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ..., use.names=FALSE) {
   if (!is.matrix(X) && !is.array(X))
     stopf("Argument X must be of class matrix or array, not %s", class(X))
   dX = dim(X)
@@ -42,6 +40,8 @@ batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ...) {
     chunk.size = 1L
 
   inds = chunk(seq_len(dX[margin]), chunk.size=chunk.size, n.chunks=n.chunks, shuffle=FALSE)
+  if (use.names && !is.null(dimnames(X)[[margin]]))
+    names(inds) = dimnames(X)[[margin]]
   wrapper = function(.X, .inds, .user.fun, ...) {
     apply(.X[.inds,, drop=FALSE], 1L, .user.fun, ...)
   }

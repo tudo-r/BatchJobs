@@ -121,7 +121,7 @@ dbCreateJobDefTable = function(reg) {
 dbCreateJobDefTable.Registry = function(reg) {
   #message("Initializing job definition table...")
 
-  query = sprintf("CREATE TABLE %s_job_def (job_def_id INTEGER PRIMARY KEY, fun_id TEXT, pars TEXT)", reg$id)
+  query = sprintf("CREATE TABLE %s_job_def (job_def_id INTEGER PRIMARY KEY, fun_id TEXT, pars TEXT, alias TEXT)", reg$id)
   dbDoQuery(reg, query, flags="rwc")
   dbCreateExpandedJobsView(reg)
 }
@@ -166,13 +166,14 @@ dbGetJobs = function(reg, ids) {
 #' @method dbGetJobs Registry
 #' @S3method dbGetJobs Registry
 dbGetJobs.Registry = function(reg, ids) {
-  query = sprintf("SELECT job_id, fun_id, pars, seed FROM %s_expanded_jobs", reg$id)
+  query = sprintf("SELECT job_id, fun_id, pars, alias, seed FROM %s_expanded_jobs", reg$id)
   tab = dbSelectWithIds(reg, query, ids)
-  lapply(seq_row(tab), function(i) {
+   lapply(seq_row(tab), function(i) {
     makeJob(id=tab$job_id[i],
             fun.id=tab$fun_id[i],
             fun=NULL,
             pars=unserialize(charToRaw(tab$pars[i])),
+            alias=tab$alias[i],
             seed=tab$seed[i])
   })
 }
@@ -326,6 +327,11 @@ dbGetStats = function(reg, ids, running=FALSE, expired=FALSE, times=FALSE, batch
   x = c("t_min", "t_avg", "t_max")
   df[x] = lapply(df[x], as.double)
   df
+}
+
+dbGetAliasNames = function(reg, ids) {
+  query = sprintf("SELECT job_id, alias FROM %s_expanded_jobs", reg$id)
+  dbSelectWithIds(reg, query, ids)$alias
 }
 
 ############################################

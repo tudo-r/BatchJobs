@@ -184,3 +184,16 @@ shortenString = function(x, len, str.short="...") {
     return(paste(substr(x, 1L, len - nchar(str.short)), str.short, sep=""))
   return(x)
 }
+
+getArgNames = function(args, argnames) {
+  if (!length(args))
+    return(NULL)
+  if (!missing(argnames)) {
+    if (!is.null(argnames))
+      checkArg(argnames, "character", len=length(args))
+    return(argnames)
+  }
+  if (is.null(names(args[[1L]])) && is.character(args[[1L]]))
+      return(args[[1L]])
+  return(names(args[[1L]]))
+}
