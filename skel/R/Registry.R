@@ -135,8 +135,7 @@ loadRegistry = function(file.dir, work.dir) {
 
   requirePackages(names(reg$packages), why=sprintf("registry %s", reg$id))
 
-  on.slave = isOnSlave()
-  if (!on.slave) {
+  if (!isOnSlave()) {
     # FIXME check that no jobs are running, if possible, before updating
     adjusted = adjustRegistryPaths(reg, file.dir, work.dir)
     if (!isFALSE(adjusted))
@@ -148,11 +147,9 @@ loadRegistry = function(file.dir, work.dir) {
 
     if (!isFALSE(adjusted) || !isFALSE(updated))
       saveRegistry(reg)
+  } else {
+    loadExports(reg)
   }
-
-  triggers = c("both", if(on.slave) "slave" else "master")
-  lapply(file.path(getExportDir(reg$file.dir), triggers),
-         function(fd) fail(fd)$assign(envir = .GlobalEnv))
   return(reg)
 }
 
