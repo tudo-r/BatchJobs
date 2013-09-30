@@ -29,9 +29,10 @@
 #'   Default is first result.
 #' @param ... [any]\cr
 #'   Additional arguments to \code{fun}.
-#' @param use.names [\code{logical(1)}]\cr
-#'   Should the return values be named?
-#'   Default is \code{TRUE}.
+#' @param use.names [\code{character(1)}]\cr
+#'   Name the results with job ids (\dQuote{ids}), stored job names (\dQuote{names}) 
+#'   or return a unnamed result (\dQuote{none}).
+#'   Default is \code{ids}.
 #' @param rows [\code{logical(1)}]\cr
 #'   Should the selected vectors be used as rows (or columns) in the result matrix?
 #'   Default is \code{TRUE}.
@@ -121,7 +122,7 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, ...) {
 
 #' @export
 #' @rdname reduceResults
-reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names=TRUE) {
+reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names="ids") {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
@@ -136,7 +137,7 @@ reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names=T
     fun = function(job, res) res
   else
     checkArg(fun, formals=c("job", "res"))
-  checkArg(use.names, "logical", len=1L, na.ok=FALSE)
+  use.names = convertUseNames(use.names)
 
   n = length(ids)
   message("Reducing ", n, " results...")
@@ -155,29 +156,32 @@ reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names=T
     }
   }, error=bar$error)
 
-  if (use.names)
-    names(res) = ids
+  names(res) = switch(use.names,
+                      "none" = NULL,
+                      "ids" = as.character(ids),
+                      "names" = dbGetJobNames(reg, ids))
   return(res)
 }
 
 
 #' @export
 #' @rdname reduceResults
-reduceResultsVector = function(reg, ids, part=NA_character_, fun, ..., use.names=TRUE) {
+reduceResultsVector = function(reg, ids, part=NA_character_, fun, ..., use.names="ids") {
   unlist(reduceResultsList(reg, ids, part, fun, ..., use.names = use.names))
 }
 
 #' @export
 #' @rdname reduceResults
-reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE, use.names=TRUE) {
+reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE, use.names="ids") {
   checkArg(rows, "logical", len=1L, na.ok=FALSE)
-  res = reduceResultsList(reg, ids, part, fun, ..., use.names = use.names)
+  use.names = convertUseNames(use.names)
+  res = reduceResultsList(reg, ids, part, fun, ..., use.names=use.names)
 
   if (length(res) == 0L)
     return(matrix(0, nrow = 0L, ncol = 0L))
 
   n = length(res)
-  dn = if (use.names) list(names(res), names(res[[1L]])) else NULL
+  dn = if (use.names != "none") list(names(res), names(res[[1L]])) else NULL
   res = unlist(res, use.names = FALSE)
 
   if (rows)
@@ -188,7 +192,7 @@ reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE
 
 #' @export
 #' @rdname reduceResults
-reduceResultsDataFrame = function(reg, ids, part=NA_character_, fun, ..., use.names=TRUE,
+reduceResultsDataFrame = function(reg, ids, part=NA_character_, fun, ..., use.names="ids",
   strings.as.factors=default.stringsAsFactors()) {
   checkArg(strings.as.factors, "logical", len=1L, na.ok=FALSE)
 

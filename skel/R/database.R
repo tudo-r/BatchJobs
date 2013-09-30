@@ -329,9 +329,9 @@ dbGetStats = function(reg, ids, running=FALSE, expired=FALSE, times=FALSE, batch
   df
 }
 
-dbGetJobNameTable = function(reg, ids) {
+dbGetJobNames = function(reg, ids) {
   query = sprintf("SELECT job_id, jobname FROM %s_expanded_jobs", reg$id)
-  dbSelectWithIds(reg, query, ids)
+  as.character(dbSelectWithIds(reg, query, ids)$jobname)
 }
 
 dbMatchJobNames = function(reg, ids, jobnames) {

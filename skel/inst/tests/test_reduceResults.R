@@ -48,9 +48,9 @@ test_that("reduceResultsReturnValue", {
   submitJobs(reg)
   z1 = (1:3)^2
 
-  expect_equal(reduceResultsVector(reg, use.names=FALSE), z1)
-  expect_equal(reduceResultsList(reg, use.names=FALSE), as.list(z1))
-  expect_equal(reduceResultsMatrix(reg, use.names=FALSE), matrix(z1, ncol=1))
+  expect_equal(reduceResultsVector(reg, use.names="none"), z1)
+  expect_equal(reduceResultsList(reg, use.names="none"), as.list(z1))
+  expect_equal(reduceResultsMatrix(reg, use.names="none"), matrix(z1, ncol=1))
 
   # data.frame w/o colnames is nothing we want to test ...
   # y = data.frame(z1); colnames(y) = NULL
@@ -60,28 +60,28 @@ test_that("reduceResultsReturnValue", {
   z2 = z1
   names(z2) = xs
   names(z2) = xs
-  expect_equal(reduceResultsVector(reg, use.names=TRUE), z2)
-  expect_equal(reduceResultsList(reg, use.names=TRUE), as.list(z2))
+  expect_equal(reduceResultsVector(reg, use.names="ids"), z2)
+  expect_equal(reduceResultsList(reg, use.names="ids"), as.list(z2))
   y = matrix(z2, ncol=1); rownames(y)=xs; colnames(y) = NULL
-  expect_equal(reduceResultsMatrix(reg, use.names=TRUE), y)
+  expect_equal(reduceResultsMatrix(reg, use.names="ids"), y)
 
   reg = makeTestRegistry()
   batchMap(reg, function(x) list(a=x, b=x^2), xs)
   submitJobs(reg)
 
-  expect_equal(reduceResultsVector(reg, fun=function(job, res) res$a, use.names=FALSE), xs)
-  expect_equal(reduceResultsVector(reg, fun=function(job, res) res$b, use.names=FALSE), xs^2)
-  expect_equal(reduceResultsList(reg, fun=function(job, res) res$a, use.names=FALSE), as.list(xs))
-  expect_equal(reduceResultsList(reg, fun=function(job, res) res$b, use.names=FALSE), as.list((xs)^2))
+  expect_equal(reduceResultsVector(reg, fun=function(job, res) res$a, use.names="none"), xs)
+  expect_equal(reduceResultsVector(reg, fun=function(job, res) res$b, use.names="none"), xs^2)
+  expect_equal(reduceResultsList(reg, fun=function(job, res) res$a, use.names="none"), as.list(xs))
+  expect_equal(reduceResultsList(reg, fun=function(job, res) res$b, use.names="none"), as.list((xs)^2))
 
   y = cbind(xs, z1); dimnames(y) = NULL
-  expect_equal(reduceResultsMatrix(reg, use.names=FALSE), y)
+  expect_equal(reduceResultsMatrix(reg, use.names="none"), y)
   rownames(y) = xs; colnames(y) = c("a", "b")
-  expect_equal(reduceResultsMatrix(reg, use.names=TRUE), y)
+  expect_equal(reduceResultsMatrix(reg, use.names="ids"), y)
   dimnames(y) = NULL; y = t(y)
-  expect_equal(reduceResultsMatrix(reg, use.names=FALSE, rows=FALSE), y)
+  expect_equal(reduceResultsMatrix(reg, use.names="none", rows=FALSE), y)
   colnames(y) = xs; rownames(y) = c("a", "b")
-  expect_equal(reduceResultsMatrix(reg, use.names=TRUE, rows=FALSE), y)
+  expect_equal(reduceResultsMatrix(reg, use.names="ids", rows=FALSE), y)
 
   y = data.frame(xs, z1); rownames(y) = as.character(xs); colnames(y) = c("a", "b")
   expect_equal(reduceResultsDataFrame(reg), y)
@@ -103,10 +103,10 @@ test_that("reduceResultsReturnValue works with empty results", {
   batchMap(reg,  function(x) identity, xs)
   submitJobs(reg)
 
-  expect_equal(reduceResultsVector(reg, use.names=FALSE), c())
-  expect_equal(reduceResultsList(reg, use.names=FALSE), list())
-  expect_equal(reduceResultsMatrix(reg, use.names=FALSE), matrix(0, nrow=0,ncol=0))
-  expect_equal(reduceResultsDataFrame(reg, use.names=FALSE), data.frame())
+  expect_equal(reduceResultsVector(reg, use.names="none"), c())
+  expect_equal(reduceResultsList(reg, use.names="none"), list())
+  expect_equal(reduceResultsMatrix(reg, use.names="none"), matrix(0, nrow=0,ncol=0))
+  expect_equal(reduceResultsDataFrame(reg, use.names="none"), data.frame())
 })
 
 
@@ -116,6 +116,6 @@ test_that("reduceResultsReturnValue works with other args", {
 	xs = 1:3
 	batchMap(reg, identity, xs)
 	submitJobs(reg)
-	z = reduceResultsMatrix(reg, fun = function(job, res, y) (res-y)^2, y = 1, use.names = FALSE)
+	z = reduceResultsMatrix(reg, fun = function(job, res, y) (res-y)^2, y = 1, use.names = "none")
   expect_equal(z[,1], (xs-1)^2)
 })

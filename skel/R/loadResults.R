@@ -38,7 +38,7 @@ loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names="
   names(res) = switch(use.names,
                       "none" = NULL,
                       "ids" = as.character(ids),
-                      "names" = dbGetJobNameTable(reg, ids)$jobname)
+                      "names" = dbGetJobNames(reg, ids))
   if(simplify && length(res) > 0L)
     res = simplify2array(res, higher = (simplify=="array"))
 
