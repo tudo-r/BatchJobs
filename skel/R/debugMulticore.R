@@ -10,7 +10,9 @@
 #'   Default is \code{c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")}.
 #' @return Nothing.
 #' @export
-debugMulticore = function(r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")) {
+debugMulticore = function(r.options) {
+  if (missing(r.options))
+    r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")
   conf = getBatchJobsConf()
   conf$debug = TRUE
   conf$mail.start = conf$mail.done = conf$mail.error = "none"

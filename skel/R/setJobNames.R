@@ -5,7 +5,7 @@
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs.
 #'   Default is all jobs.
-#' @param names [\code{character}]\cr
+#' @param jobnames [\code{character}]\cr
 #'   Character vector with length equal to \code{length(ids)}.
 #'   \code{NA} removes the names stored in the registry. 
 #'   A single \code{NA} is replicated to match the length of ids provided.
