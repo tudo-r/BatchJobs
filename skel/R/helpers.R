@@ -207,3 +207,6 @@ convertUseNames = function(use.names) {
   checkArg(use.names, "logical", len=1L, na.ok=FALSE)
   c("none", "ids")[use.names+1L]
 }
+
+# FIXME remove this after CRAN upload
+names2 = BBmisc::names2
