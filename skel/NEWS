@@ -16,6 +16,10 @@ BatchJobs_1.1-xxx:
 - The registry now supports a list of source directories. 
   All R files in these subdirectories are sourced on the slaves (and also on the master)
   Nice if you have a lot of helper code in seperate R files which is needed in your jobs.
+- batchMap and all result functions where this is reasonable support naming results with the names
+  of the elements that were mapped over (see use.names argument)
+- batchMap now supports mapping over any kind of object (not only lists and vectors) that supports the 
+  "length" and "[" / "[["- index method. 
 
 BatchJobs_1.0-966:
 - Dropped support for R < 2.13.0 (.find.packages deprecated)
