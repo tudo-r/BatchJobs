@@ -30,10 +30,11 @@
 #'   (like filled queues). Each time \code{wait} is called to wait a certain
 #'   number of seconds.
 #'   Default is 10 times.
-#' @param chunks.as.arrayjobs [\code{logical(1)}]\cr
-#'   If ids are passed as a list of chunked job ids, execute jobs in a chunk
-#'   as array jobs. Note that your scheduler and your template must be adjusted to
-#'   use this option. Default is \code{FALSE}.
+# FIXME reenable if we support array jobs officially   
+# @param chunks.as.arrayjobs [\code{logical(1)}]\cr
+#   If ids are passed as a list of chunked job ids, execute jobs in a chunk
+#   as array jobs. Note that your scheduler and your template must be adjusted to
+#   use this option. Default is \code{FALSE}.
 #' @param job.delay [\code{function(n, i)} or \code{logical(1)}]\cr
 #'   Function that defines how many seconds a job should be delayed before it starts.
 #'   This is an expert option and only necessary to change when you want submit
@@ -54,7 +55,10 @@
 #' # Submit the 10 jobs again, now randomized into 2 chunks:
 #' chunked = chunk(getJobIds(reg), n.chunks=2, shuffle=TRUE)
 #' submitJobs(reg, chunked)
-submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.as.arrayjobs=FALSE, job.delay=FALSE) {
+submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, job.delay=FALSE) {
+  
+  chunks.as.arrayjobs = FALSE
+  
   ### helper function to calculate the delay
   getDelays = function(cf, job.delay, n) {
     if (is.logical(job.delay)) {
