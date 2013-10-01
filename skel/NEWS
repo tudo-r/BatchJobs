@@ -1,4 +1,4 @@
-BatchJobs_1.1-xxx:
+BatchJobs_1.1-1135:
 - Increased minor version number
 - Added support for SLURM schedulers
 - Function getErrors renamed to getErrorMessages due to conflicts with RUnit.
