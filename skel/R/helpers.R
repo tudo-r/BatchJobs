@@ -202,7 +202,8 @@ convertUseNames = function(use.names) {
   if (is.character(use.names) && length(use.names) == 1L && use.names %in% c("none", "ids", "names"))
     return(use.names)
   
-  warning("Logical values for 'use.names' is deprecated and will be removed in a future version. Use 'none', 'ids' or 'names' instead.") 
+  # FIXME re-add this for the next release
+  # warning("Logical values for 'use.names' is deprecated and will be removed in a future version. Use 'none', 'ids' or 'names' instead.") 
   checkArg(use.names, "logical", len=1L, na.ok=FALSE)
   c("none", "ids")[use.names+1L]
 }
