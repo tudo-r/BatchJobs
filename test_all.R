@@ -2,6 +2,7 @@ library("methods")
 library("BBmisc")
 library("devtools")
 library("testthat")
+library("fail")
 options(BBmisc.ProgressBar.style = "off")
 
 if (interactive()) {
