@@ -119,3 +119,17 @@ test_that("reduceResultsReturnValue works with other args", {
 	z = reduceResultsMatrix(reg, fun = function(job, res, y) (res-y)^2, y = 1, use.names = "none")
   expect_equal(z[,1], (xs-1)^2)
 })
+
+test_that("reduceResultsReturnValue works with job names", {
+  reg = makeTestRegistry()
+  ns = letters[1:3]
+	xs = setNames(1:3, ns)
+	batchMap(reg, identity, xs, use.names=TRUE)
+	submitJobs(reg)
+
+  expect_equal(names(reduceResultsList(reg, use.names="names")), ns)
+  expect_equal(names(reduceResultsVector(reg, use.names="names")), ns)
+  expect_equal(rownames(reduceResultsDataFrame(reg, use.names="names")), ns)
+  expect_equal(rownames(reduceResultsMatrix(reg, use.names="names")), ns)
+  expect_equal(colnames(reduceResultsMatrix(reg, use.names="names", rows=FALSE)), ns)
+})
