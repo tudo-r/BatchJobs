@@ -46,9 +46,12 @@ batchMap = function(reg, fun, ..., more.args=list(), use.names=FALSE) {
   seeds = addIntModulo(seed, seq(0L, n-1L))
 
   # serialize pars to char vector
-  pars = vapply(seq_len(n), function(i) {
-    rawToChar(serialize(lapply(args, "[[", i), connection=NULL, ascii=TRUE))
-  }, character(1L))
+  pars = mapply(function(...) {
+    rawToChar(serialize(list(...), connection=NULL, ascii=TRUE))
+  }, ..., USE.NAMES=FALSE)
+  # pars = vapply(seq_len(n), function(i) {
+  #   rawToChar(serialize(lapply(args, "[[", i), connection=NULL, ascii=TRUE))
+  # }, character(1L))
   fun.id = saveFunction(reg, fun, more.args)
 
   # generate jobnames col

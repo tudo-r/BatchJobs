@@ -1,4 +1,4 @@
-makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages) {
+makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages, src.files=character(0L)) {
   checkArg(id, cl = "character", len = 1L, na.ok = FALSE)
   checkIdValid(id, allow.minus=FALSE)
   checkArg(file.dir, cl = "character", len = 1L, na.ok = FALSE)
@@ -15,6 +15,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.resul
     checkArg(seed, cl = "integer", len = 1L, lower = 1L, na.ok = FALSE)
   }
   checkArg(packages, cl = "character", na.ok = FALSE)
+  checkArg(src.files, cl = "character", na.ok = FALSE)
   packages = union(packages, "BatchJobs")
   requirePackages(packages, stop=TRUE, suppress.warnings=TRUE)
 
@@ -43,6 +44,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.resul
     file.dir = file.dir,
     sharding = sharding,
     work.dir = work.dir,
+    src.files = src.files,
     multiple.result.files = multiple.result.files,
     packages = packages[order(names(packages))]
   ), "Registry")
@@ -83,6 +85,9 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.resul
 #' @param packages [\code{character}]\cr
 #'   Packages that will always be loaded on each node.
 #'   Default is \code{character(0)}.
+#' @param src.files [\code{character}]\cr
+#'   Files relative to your \code{work.dir} to be sourced on registry load.
+#'   Default is \code{character(0)}.
 #' @param skip [\code{logical(1)}]\cr
 #'   Skip creation of a new registry if a registry is found in \code{file.dir}.
 #'   Defaults to \code{TRUE}.
@@ -93,14 +98,14 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.resul
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' print(reg)
 makeRegistry = function(id, file.dir, sharding=TRUE, work.dir, multiple.result.files = FALSE,
-                        seed, packages=character(0L), skip = TRUE) {
+                        seed, packages=character(0L), src.files=character(0L), skip = TRUE) {
   if (missing(file.dir))
     file.dir = file.path(getwd(), paste(id, "files", sep="-"))
   checkArg(skip, "logical", len=1L, na.ok=FALSE)
   if (skip && isRegistryDir(file.dir))
     return(loadRegistry(file.dir = file.dir))
 
-  reg = makeRegistryInternal(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages)
+  reg = makeRegistryInternal(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages, src.files)
 
   dbCreateJobStatusTable(reg)
   dbCreateJobDefTable(reg)
@@ -150,6 +155,9 @@ loadRegistry = function(file.dir, work.dir) {
   } else {
     loadExports(reg)
   }
+  
+  sourceFiles(reg)
+
   return(reg)
 }
 
