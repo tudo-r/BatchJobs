@@ -5,7 +5,7 @@ test_that("exports", {
           # library(testthat)
           # source("helpers.R")
   reg = makeTestRegistry()
-  p = BatchJobs:::getExportDir(reg$file.dir)
+  p = file.path(reg$file.dir, "exports")
   save2(exported_x = 1:3, file = file.path(p, "x.RData"))
   loadExports(reg)
   expect_true(exists("exported_x", where=.GlobalEnv))

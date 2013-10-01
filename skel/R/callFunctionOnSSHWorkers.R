@@ -59,7 +59,7 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
   if (!consecutive && show.output)
     stop("show.output=TRUE can only be used in consecutive mode.")
 
-  conf = BatchJobs:::getBatchJobsConf()
+  conf = getBatchJobsConf()
   cf = conf$cluster.functions
   mail.old = c(conf$mail.start, conf$mail.done, conf$mail.error)
   if (cf$name != "SSH")

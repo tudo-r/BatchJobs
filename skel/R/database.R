@@ -208,7 +208,7 @@ dbGetJobIds = function(reg) {
 }
 
 dbCheckJobIds = function(reg, ids) {
-  not.found = setdiff(ids, BatchJobs:::dbGetJobIds(reg))
+  not.found = setdiff(ids, dbGetJobIds(reg))
   if (length(not.found) > 0L)
     stopf("Ids not present in registry: %s", collapse(not.found))
 }
