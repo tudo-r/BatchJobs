@@ -12,7 +12,7 @@ test_that("doJob", {
   expect_equal(ids, id)
   saveConf(reg)
   expect_output({ 
-    y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)
+    y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
   }, "BatchJobs job")
   expect_equal(y, 123)
   df = dbGetJobStatusTable(reg)
@@ -36,7 +36,7 @@ test_that("doJob", {
   batchMap(reg, f, 1)
   saveConf(reg)
   expect_output({ 
-    y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id)
+    y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
   }, "BatchJobs job")
   expect_equal(y, bar + 1)
   expect_equal(getwd(), wd.now)

@@ -19,9 +19,6 @@ test_that("batchMap", {
 
 })
 
-# FIXME we should really think about how to enable this test for package test mode
-if (interactive()) {
-  
 test_that("batchMap non atomic", {
   # factors
   reg = makeTestRegistry()
@@ -29,21 +26,11 @@ test_that("batchMap non atomic", {
   submitJobs(reg)
   expect_equal(loadResults(reg, simplify=TRUE), setNames(factor(letters[1:5]), 1:5))
 
-  x = list(els = 3:1)
-  class(x) = "foo"
-  length.foo = function(x) length(x$els)
-  `[.foo` = function(x, ..., drop = TRUE) {
-    x$els[...]
-  }
-  `[[.foo` = function(x, ..., drop = TRUE) {
-    x$els[[...]]
-  }
-
   reg = makeTestRegistry()
-  ids = batchMap(reg, identity, x)
+  ids = batchMap(reg, identity, overloaded.index.obj)
   submitJobs(reg)
-  expect_equal(loadResults(reg, use.names=FALSE, simplify=TRUE), 3:1)
+  res = loadResults(reg, use.names=FALSE, simplify=TRUE)
+  expect_equal(res, 3:1)
 })
 
-}
 

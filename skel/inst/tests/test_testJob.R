@@ -12,7 +12,7 @@ test_that("testJob", {
   expect_equal(ids, id)
   expect_output({
     st = showStatus(reg)
-  }, "Status for jobs: 1")
+  }, "Status for 1 jobs")
   expect_equal(st$submitted, 0)
   expect_equal(st$started, 0)
   expect_equal(st$done, 0)
@@ -27,7 +27,7 @@ test_that("testJob", {
   expect_equal(ids, id)
   expect_output({
     df = showStatus(reg)
-  }, "Status for jobs: 1")
+  }, "Status for 1 jobs")
   expect_equal(st$submitted, 0)
   expect_equal(st$started, 0)
   expect_equal(st$done, 0)

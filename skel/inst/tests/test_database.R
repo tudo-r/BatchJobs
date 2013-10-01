@@ -12,7 +12,7 @@ test_that("database", {
   f = function(x) stop(err.msg)
   batchMap(reg, f, 1)
   submitJobs(reg)
-  expect_output(showStatus(reg), "Status for jobs: 1")
+  expect_output(showStatus(reg), "Status for 1 jobs")
 })
 
 test_that("dbSelectWithIds works", {  

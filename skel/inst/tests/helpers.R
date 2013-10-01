@@ -8,3 +8,16 @@ makeTestRegistry = function(packages=character(0), ...) {
     ...
   )
 }
+
+overloaded.index.obj = list(els = 3:1)
+class(overloaded.index.obj) = "OverloadedIndex"
+  
+length.OverloadedIndex = function(x) length(x$els)
+
+`[.OverloadedIndex` = function(x, ..., drop = TRUE) {
+  x$els[...]
+}
+
+`[[.OverloadedIndex` = function(x, ..., drop = TRUE) {
+  x$els[[...]]
+}
