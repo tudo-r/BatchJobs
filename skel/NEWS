@@ -10,7 +10,12 @@ BatchJobs_1.1-xxx:
 - Improved stability and speed of killJobs
 - Added a workaround to fix file URI handling on windows
 - Many minor bug and documentation fixes
-  
+- The registry now supports an "exports" directory of exported objects,
+  which are always loaded on the slaves, e.g. data objects which are needed in every job
+  This directory can be either managed manually or - more  conveniently - via the "fail" package on CRAN.
+- The registry now supports a list of source directories. 
+  All R files in these subdirectories are sourced on the slaves (and also on the master)
+  Nice if you have a lot of helper code in seperate R files which is needed in your jobs.
 
 BatchJobs_1.0-966:
 - Dropped support for R < 2.13.0 (.find.packages deprecated)
