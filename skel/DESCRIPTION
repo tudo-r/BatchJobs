@@ -8,7 +8,7 @@ Maintainer: Bernd Bischl <bernd_bischl@gmx.net>
 URL: http://batchjobs.googlecode.com
 BugReports: http://code.google.com/p/batchjobs/issues/list
 MailingList: batchjobs@googlegroups.com
-License: BSD
+License: BSD_3_clause + file LICENSE
 Depends: R (>= 2.13.0), BBmisc (>= 1.3-64)
 Imports: utils, digest, DBI, RSQLite, sendmailR, brew, plyr, fail (>= 1.2)
 Suggests: testthat
