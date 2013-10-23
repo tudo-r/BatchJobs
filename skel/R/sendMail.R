@@ -24,7 +24,7 @@ sendMail = function(reg, job, result.str, extra.msg="",
 
     if (ischunk) {
       ids = extractSubList(job, "id")
-      pars = vapply(job, function(j) listToShortString(j$par), character(1L))
+      pars = vapply(job, function(j) convertToShortString(j$par), character(1L))
     } else {
       ids = job$id
       pars = capture.output(print(firstjob))
@@ -52,7 +52,7 @@ sendMail = function(reg, job, result.str, extra.msg="",
     )
     if (is.error(ok)) {
       warningf("Could not send mail!\nFrom: %s\nTo: %s\nControl: %s\nError message: %s",
-        conf$mail.from, conf$mail.to, listToShortString(conf$mail.control), as.character(ok))
+        conf$mail.from, conf$mail.to, convertToShortString(conf$mail.control), as.character(ok))
     }
   }
   invisible(NULL)

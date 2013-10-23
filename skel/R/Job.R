@@ -51,5 +51,5 @@ print.Job = function(x, ...) {
   catf("  Fun formals: %s", collapse(names(formals(x$fun))))
   catf("  Name: %s", x$name)
   catf("  Seed: %i", x$seed)
-  catf("  Pars: %s", listToShortString(x$pars))
+  catf("  Pars: %s", convertToShortString(x$pars))
 }
