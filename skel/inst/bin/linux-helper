@@ -93,13 +93,13 @@ case $CMD in
         # use ww for unlimited width in ps for command output
         # we count all R procs, all R50, and all where JOBDIR was in the call args
         ps -e -ww -o pcpu= -o ucomm= -o command= | \
-        awk -v j=$JOBDIR -v load=$LOAD '
+        awk -v j=$JOBDIR -v sysload=$LOAD '
           BEGIN {rprocs=0;rprocs_50=0;njobs=0} 
           $2 != "R" {next} 
           {rprocs++} 
           $1 > 50.0 {rprocs_50++} 
           $0 ~ j {njobs++} 
-          END {print load " " rprocs " " rprocs_50 " " njobs}'
+          END {print sysload " " rprocs " " rprocs_50 " " njobs}'
         ;;
     list-jobs)
         JOBDIR="$1/jobs"
