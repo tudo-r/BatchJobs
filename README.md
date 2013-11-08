@@ -1,7 +1,8 @@
-# BatchJobs
 [![Build Status](https://travis-ci.org/tudo-r/BatchJobs.png)](https://travis-ci.org/tudo-r/BatchJobs)
 
-## Features of BatchJobs
+# BatchJobs
+
+## Core features of BatchJobs
 * Create, submit and control [R](http://www.r-project.org/) jobs on batch systems
 * Supported batch systems include Torque/PBS, SGE, SLURM and LSF
 * Provides the functional programming tools Map, Reduce and Filter to operate on the cluster
@@ -11,6 +12,8 @@
 * Query status of jobs and display log files inside R
 * Chunk small, fast tasks together to one batch job
 * Possibility to write your own simple cluster interface if your architecture is not supported
+* The [BatchExperiments](https://github.com/tudo-r/Batchexperiments) package extends this package with functionality required for comprehensive computer experiments
+  and simulation studies.
 
 
 ## Quickstart and Documentation
