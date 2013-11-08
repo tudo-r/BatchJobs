@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/tudo-r/BatchJobs.png)](https://travis-ci.org/tudo-r/BatchJobs)
-
 # BatchJobs
 
 ## Core features of BatchJobs
@@ -30,3 +28,5 @@ Currently the best introduction to the package is our [technical report](http://
 For more detailed information on the functions please use the [R documentation](http://tudo-r.github.io/BatchJobs/).
 
 We also have a [mailing list](http://groups.google.com/group/batchjobs).
+
+[![Build Status](https://travis-ci.org/tudo-r/BatchJobs.png)](https://travis-ci.org/tudo-r/BatchJobs)
