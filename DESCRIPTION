@@ -1,15 +1,15 @@
 Package: BatchJobs
 Title: Batch computing with R.
 Description: Provides Map, Reduce and Filter variants to generate jobs on batch
-    computing systems like PBS/Torque, LSF and Sun Grid Engine. Multicore and
+    computing systems like PBS/Torque, LSF, SLURM and Sun Grid Engine. Multicore and
     SSH systems are also supported. For further details see the project web
     page.
 Author: Bernd Bischl <bernd_bischl@gmx.net>,
     Michel Lang <michellang@gmail.com>,
     Olaf Mersmann <olafm@p-value.net>
 Maintainer: Bernd Bischl <bernd_bischl@gmx.net>
-URL: http://github.com/tudo-r/BatchJobs
-BugReports: http://code.google.com/p/batchjobs/issues/list
+URL: https://github.com/tudo-r/BatchJobs
+BugReports: https://github.com/tudo-r/BatchJobs/issues
 MailingList: batchjobs@googlegroups.com
 License: BSD_3_clause + file LICENSE
 Depends:
@@ -28,7 +28,7 @@ Suggests:
     testthat
 LazyData: yes
 ByteCompile: yes
-Version: 1.1
+Version: 1.2
 Collate:
     'Exports.R'
     'Job.R'
