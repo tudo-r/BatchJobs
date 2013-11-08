@@ -8,7 +8,7 @@ Author: Bernd Bischl <bernd_bischl@gmx.net>,
     Michel Lang <michellang@gmail.com>,
     Olaf Mersmann <olafm@p-value.net>
 Maintainer: Bernd Bischl <bernd_bischl@gmx.net>
-URL: http://batchjobs.googlecode.com
+URL: http://github.com/tudo-r/BatchJobs
 BugReports: http://code.google.com/p/batchjobs/issues/list
 MailingList: batchjobs@googlegroups.com
 License: BSD_3_clause + file LICENSE

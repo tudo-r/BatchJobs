@@ -2,3 +2,5 @@ examples
 external_tests
 inst/tests/unittests-files
 .travis.yml
+.git
+.gitignore
