@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>batchExpandGrid. BatchJobs 1.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">BatchJobs 1.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Map function over all combinations.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>batchExpandGrid(reg, fun, ..., more.args = list())</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>reg</dt>
+      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>] Empty Registry
+  that will store jobs for the mapping.</dd>
+      <dt>fun</dt>
+      <dd>[<code>function</code>] Function to map over the
+  combinations.</dd>
+      <dt>...</dt>
+      <dd>[any] Vectors that are used to compute all
+  combinations.  If the arguments are named, these names
+  are used to bind to arguments of <code>fun</code>.</dd>
+      <dt>more.args</dt>
+      <dd>[<code>list</code>] A list of other
+  arguments passed to <code>fun</code>.  Default is empty list.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>[<code>data.frame</code>]. Expanded grid of combinations
+  produced by <code><a href='http://www.inside-r.org/r-doc/base/expand.grid'>expand.grid</a></code>.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Maps an n-ary-function over a list of all combinations
+  which are given by some vectors. Internally
+  <code><a href='http://www.inside-r.org/r-doc/base/expand.grid'>expand.grid</a></code> is used to compute the
+  combinations, then <code><a href='batchMap.html'>batchMap</a></code> is called.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+</div>
+<strong class='message'>Creating dir: /tmp/Rtmp2Ha18Z/file408d212e72ce</strong>
+<strong class='message'>Saving registry: /tmp/Rtmp2Ha18Z/file408d212e72ce/registry.RData</strong>
+<div class='input'>f <- function(x, y, z) x * y  + z
+batchExpandGrid(reg, f, x=1:2, y=1:3, more.args=list(z=10))
+</div>
+<strong class='message'>Adding 6 jobs to DB.</strong>
+<div class='output'>  x y
+1 1 1
+2 2 1
+3 1 2
+4 2 2
+5 1 3
+6 2 3
+</div>
+<div class='input'>submitJobs(reg)
+</div>
+<strong class='message'>Saving conf: /tmp/Rtmp2Ha18Z/file408d212e72ce/conf.RData</strong>
+<strong class='message'>Submitting 6 chunks / 6 jobs.</strong>
+<strong class='message'>Cluster functions: Interactive.</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Writing 6 R scripts...</strong>
+<strong class='message'>2013-11-08 12:17:24: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d212e72ce/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d212e72ce/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=1 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:24</strong>
+<strong class='message'>Setting seed: 123</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d212e72ce/jobs/01/1-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:24: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:24: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d212e72ce/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d212e72ce/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=2 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:24</strong>
+<strong class='message'>Setting seed: 124</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d212e72ce/jobs/02/2-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:24: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:24: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d212e72ce/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d212e72ce/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=3 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:24</strong>
+<strong class='message'>Setting seed: 125</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d212e72ce/jobs/03/3-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:24: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:24: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d212e72ce/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d212e72ce/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=4 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:24</strong>
+<strong class='message'>Setting seed: 126</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d212e72ce/jobs/04/4-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:24: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:25: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d212e72ce/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d212e72ce/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=5 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:25</strong>
+<strong class='message'>Setting seed: 127</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d212e72ce/jobs/05/5-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:25: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:25: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d212e72ce/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d212e72ce/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=6 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:25</strong>
+<strong class='message'>Setting seed: 128</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d212e72ce/jobs/06/6-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:25: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<div class='output'>SubmitJobs |+                                                                                                                                                              |   0% (00:00:00)SubmitJobs |++++++++++++++++++++++++++                                                                                                                                     |  17% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                                          |  33% (00:00:00)SubmitJobs |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                               |  50% (00:00:00)SubmitJobs |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                     |  67% (00:00:00)SubmitJobs |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                           |  83% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<strong class='message'>Sending 6 submit messages...
+Might take some time, do not interrupt this!</strong>
+<div class='input'>reduceResultsMatrix(reg, fun=function(job, res) cbind(job$pars, res))
+</div>
+<strong class='message'>Reducing 6 results...</strong>
+<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |++++++++++++++++++++++++++                                                                                                                                  |  17% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                                        |  33% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                              |  50% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                    |  67% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                          |  83% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<div class='output'>  [,1] [,2] [,3] [,4]
+1    1    1   11   11
+2    2    1   12   12
+3    1    2   12   12
+4    2    2   14   14
+5    1    3   13   13
+6    2    3   16   16
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>batchExpandGrid</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

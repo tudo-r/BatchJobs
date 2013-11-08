@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>makeSSHWorker. BatchJobs 1.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">BatchJobs 1.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Create SSH worker for SSH cluster functions.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>makeSSHWorker(nodename, rhome = "", ncpus, max.jobs, max.load, nice, r.options = c("--no-save", 
+  "--no-restore", "--no-init-file", "--no-site-file"), script)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>nodename</dt>
+      <dd>[<code>character(1)</code>] Host name of
+  node.</dd>
+      <dt>rhome</dt>
+      <dd>[<code>character(1)</code>] Path to R
+  installation on worker.  &#147;&#148; means R installation
+  on the PATH is used, of course this implies that it must
+  be on the PATH (also for non-interactive shells)!
+  Default is &#147;&#148;.</dd>
+      <dt>ncpus</dt>
+      <dd>[<code>integers(1)</code>] Number of VPUs of
+  worker.  Default means to query the worker via
+  &#147;/proc/cpuinfo&#148;.</dd>
+      <dt>max.jobs</dt>
+      <dd>[<code>integer(1)</code>] Maximal number of
+  jobs that can run concurrently for the current registry.
+  Default is <code>ncpus</code>.</dd>
+      <dt>max.load</dt>
+      <dd>[<code>numeric(1)</code>] Load average (of
+  the last 5 min) at which the worker is considered
+  occupied, so that no job can be submitted.  Default is
+  <code>ncpus-1</code>.</dd>
+      <dt>nice</dt>
+      <dd>[<code>integer(1)</code>] Process priority to
+  run R with set via nice. Integers between -20 and 19 are
+  allowed.  If missing, processes are not nice'd and the
+  system default applies (usually 0).  Default is no
+  niceing.</dd>
+      <dt>r.options</dt>
+      <dd>[<code>character</code>] Options for R and
+  Rscript, one option per element of the vector, a la
+  &#147;--vanilla&#148;.  Default is <code>c("--no-save",
+  "--no-restore", "--no-init-file", "--no-site-file")</code>.</dd>
+      <dt>script</dt>
+      <dd>[<code>character(1)</code>] Path to helper
+  bash script which interacts with the worker.  You really
+  should not have to touch this, as this would imply that
+  we have screwed up and published an incompatible version
+  for your system.  This option is only provided as a last
+  resort for very experienced hackers.  Note that the path
+  has to be absolute.  This is what is done in the package:
+  <a href = 'http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/skel/inst/bin/linux-helper'>http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/skel/inst/bin/linux-helper</a>
+  Default means to take it from package directory.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>[<code><a href='makeSSHWorker.html'>SSHWorker</a></code>].</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Create SSH worker for SSH cluster functions.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>SSHWorker</li><li>makeSSHWorker</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

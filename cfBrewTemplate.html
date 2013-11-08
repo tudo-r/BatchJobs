@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>cfBrewTemplate. BatchJobs 1.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">BatchJobs 1.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Cluster functions helper: Brew your template into a job description file.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>cfBrewTemplate(conf, template, rscript, extension)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>conf</dt>
+      <dd>[<code>environment</code>] BatchJobs
+  configuration.</dd>
+      <dt>template</dt>
+      <dd>[<code>character(1)</code>] Job desfription
+  template as a char vecrtor, possibly read in via
+  <code><a href='cfReadBrewTemplate.html'>cfReadBrewTemplate</a></code>.</dd>
+      <dt>rscript</dt>
+      <dd>[<code>character(1)</code>] File path to you
+  your corresponding R script for the job.</dd>
+      <dt>extension</dt>
+      <dd>[<code>character(1)</code>] Extension for
+  the job description file, e.g. &#147;pbs&#148;.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>[<code>character(1)</code>]. File path of result.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>This function is only intended for use in your own
+  cluster functions implementation.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>Calls brew silently on your template, any error will lead
+  to an exception. If debug mode is turned on in the
+  configuration, the file is stored at the same place as
+  the corresponding R script in the &#147;jobs&#148;-subdir of
+  your files directory, otherwise in the temp dir via
+  <code><a href='http://www.inside-r.org/r-doc/base/tempfile'>tempfile</a></code>.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>cfBrewTemplate</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

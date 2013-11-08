@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>reduceResults. BatchJobs 1.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">BatchJobs 1.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Reduce results from result directory.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>reduceResults(reg, ids, part = NA_character_, fun, init, ...)
+
+reduceResultsList(reg, ids, part = NA_character_, fun, ..., use.names = "ids")
+
+reduceResultsVector(reg, ids, part = NA_character_, fun, ..., use.names = "ids")
+
+reduceResultsMatrix(reg, ids, part = NA_character_, fun, ..., rows = TRUE, use.names = "ids")
+
+reduceResultsDataFrame(reg, ids, part = NA_character_, fun, ..., use.names = "ids", 
+  strings.as.factors = default.stringsAsFactors())</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>reg</dt>
+      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>] Registry.</dd>
+      <dt>ids</dt>
+      <dd>[<code>integer</code>] Ids of selected jobs.
+  Default is all jobs for which results are available.</dd>
+      <dt>part</dt>
+      <dd>[<code>character</code>] Only useful for multiple
+  result files, then defines which result file part(s)
+  should be loaded.  <code>NA</code> means all parts are loaded,
+  which is the default.</dd>
+      <dt>fun</dt>
+      <dd>[<code>function</code>] For <code>reduceResults</code>,
+  a function <code>function(aggr, job, res, ...)</code> to reduce
+  things, for all others, a function <code>function(job,
+  res, ...)</code> to select stuff.  Here, <code>job</code> is the
+  current job descriptor (see <code><a href='makeJob.html'>Job</a></code>),
+  <code>result</code> is the current result object and
+  <code>aggr</code> are the so far aggregated results. When using
+  <code>reduceResults</code>, your function should add the stuff
+  you want to have from <code>job</code> and <code>result</code> to
+  <code>aggr</code> and return that.  When using the other
+  reductions, you should select the stuff you want to have
+  from <code>job</code> and <code>result</code> and return something
+  that can be coerced to an element of the selected return
+  data structure (reasonable conversion is tried
+  internally).  Default behavior for this argument is to
+  return <code>res</code>, except for <code>reduceResults</code> where
+  no default is available.</dd>
+      <dt>init</dt>
+      <dd>[<code>ANY</code>] Initial element, as used in
+  <code><a href='http://www.inside-r.org/r-doc/base/funprog'>Reduce</a></code>.  Default is first result.</dd>
+      <dt>...</dt>
+      <dd>[any] Additional arguments to <code>fun</code>.</dd>
+      <dt>use.names</dt>
+      <dd>[<code>character(1)</code>] Name the
+  results with job ids (&#147;ids&#148;), stored job names
+  (&#147;names&#148;) or return a unnamed result
+  (&#147;none&#148;).  Default is <code>ids</code>.</dd>
+      <dt>rows</dt>
+      <dd>[<code>logical(1)</code>] Should the selected
+  vectors be used as rows (or columns) in the result
+  matrix?  Default is <code>TRUE</code>.</dd>
+      <dt>strings.as.factors</dt>
+      <dd>[<code>logical(1)</code>] Should all
+  character columns in result be converted to factors?
+  Default is <code>default.stringsAsFactors()</code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>Aggregated results, return type depends on function. If
+  <code>ids</code> is empty: <code>reduceResults</code> returns
+  <code>init</code> (if available) or <code>NULL</code>,
+  <code>reduceResultsVector</code> returns <code>c()</code>,
+  <code>reduceResultsList</code> returns <code>list()</code>,
+  <code>reduceResultsMatrix</code> returns <code>matrix(0,0,0)</code>,
+  <code>reduceResultsDataFrame</code> returns
+  <code>data.frame()</code>.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>The following functions provide ways to reduce result
+  files into either specific R objects (like vectors,
+  lists, matrices or data.frames) or to arbitrarily
+  aggregate them, which is a more general operation.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># generate results:
+reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+</div>
+<strong class='message'>Creating dir: /tmp/Rtmp2Ha18Z/file408d36400bb</strong>
+<strong class='message'>Saving registry: /tmp/Rtmp2Ha18Z/file408d36400bb/registry.RData</strong>
+<div class='input'>f <- function(x) x^2
+batchMap(reg, f, 1:5)
+</div>
+<strong class='message'>Adding 5 jobs to DB.</strong>
+<div class='input'>submitJobs(reg)
+</div>
+<strong class='message'>Saving conf: /tmp/Rtmp2Ha18Z/file408d36400bb/conf.RData</strong>
+<strong class='message'>Submitting 5 chunks / 5 jobs.</strong>
+<strong class='message'>Cluster functions: Interactive.</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Writing 5 R scripts...</strong>
+<strong class='message'>2013-11-08 12:17:49: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d36400bb/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d36400bb/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=1 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:49</strong>
+<strong class='message'>Setting seed: 123</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d36400bb/jobs/01/1-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:49: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:50: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d36400bb/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d36400bb/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=2 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:50</strong>
+<strong class='message'>Setting seed: 124</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d36400bb/jobs/02/2-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:50: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:50: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d36400bb/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d36400bb/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=3 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:50</strong>
+<strong class='message'>Setting seed: 125</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d36400bb/jobs/03/3-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:50: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:50: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d36400bb/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d36400bb/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=4 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:50</strong>
+<strong class='message'>Setting seed: 126</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d36400bb/jobs/04/4-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:50: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:50: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d36400bb/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d36400bb/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=5 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:50</strong>
+<strong class='message'>Setting seed: 127</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d36400bb/jobs/05/5-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:50: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<div class='output'>SubmitJobs |+                                                                                                                                                              |   0% (00:00:00)SubmitJobs |++++++++++++++++++++++++++++++++                                                                                                                               |  20% (00:00:04)SubmitJobs |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                               |  40% (00:00:01)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                |  60% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                |  80% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<strong class='message'>Sending 5 submit messages...
+Might take some time, do not interrupt this!</strong>
+<div class='input'>
+# reduce results to a vector
+reduceResultsVector(reg)
+</div>
+<strong class='message'>Reducing 5 results...</strong>
+<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++                                                                                                                             |  20% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                              |  40% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                              |  60% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                               |  80% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<div class='output'> 1  2  3  4  5 
+ 1  4  9 16 25 
+</div>
+<div class='input'># reduce results to sum
+reduceResults(reg, fun=function(aggr, job, res) aggr+res)
+</div>
+<strong class='message'>Reducing 5 results...</strong>
+<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++                                                                                                                             |  20% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                              |  40% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                              |  60% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                               |  80% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<div class='output'>[1] 55
+</div>
+<div class='input'>
+reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+</div>
+<strong class='message'>Creating dir: /tmp/Rtmp2Ha18Z/file408d456c6a61</strong>
+<strong class='message'>Saving registry: /tmp/Rtmp2Ha18Z/file408d456c6a61/registry.RData</strong>
+<div class='input'>f <- function(x) list(a=x, b=as.character(2*x), c=x^2)
+batchMap(reg, f, 1:5)
+</div>
+<strong class='message'>Adding 5 jobs to DB.</strong>
+<div class='input'>submitJobs(reg)
+</div>
+<strong class='message'>Saving conf: /tmp/Rtmp2Ha18Z/file408d456c6a61/conf.RData</strong>
+<strong class='message'>Submitting 5 chunks / 5 jobs.</strong>
+<strong class='message'>Cluster functions: Interactive.</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Writing 5 R scripts...</strong>
+<strong class='message'>2013-11-08 12:17:50: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d456c6a61/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d456c6a61/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=1 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:50</strong>
+<strong class='message'>Setting seed: 123</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d456c6a61/jobs/01/1-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:50: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:50: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d456c6a61/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d456c6a61/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=2 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:50</strong>
+<strong class='message'>Setting seed: 124</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d456c6a61/jobs/02/2-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:50: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:50: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d456c6a61/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d456c6a61/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=3 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:50</strong>
+<strong class='message'>Setting seed: 125</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d456c6a61/jobs/03/3-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:50: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:50: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d456c6a61/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d456c6a61/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=4 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:50</strong>
+<strong class='message'>Setting seed: 126</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d456c6a61/jobs/04/4-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:50: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<strong class='message'>2013-11-08 12:17:51: Starting job on node lang.</strong>
+<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d456c6a61/registry.RData</strong>
+<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d456c6a61/conf.RData</strong>
+<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
+<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>########## Executing jid=5 ##########</strong>
+<strong class='message'>Timestamp: 2013-11-08 12:17:51</strong>
+<strong class='message'>Setting seed: 127</strong>
+<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d456c6a61/jobs/05/5-result.RData</strong>
+<strong class='message'>2013-11-08 12:17:51: Job on slave is finished.</strong>
+<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
+<strong class='message'>Memory usage according to gc:</strong>
+<div class='output'>SubmitJobs |+                                                                                                                                                              |   0% (00:00:00)SubmitJobs |++++++++++++++++++++++++++++++++                                                                                                                               |  20% (00:00:00)SubmitJobs |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                               |  40% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                |  60% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                |  80% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<strong class='message'>Sending 5 submit messages...
+Might take some time, do not interrupt this!</strong>
+<div class='input'># reduce results to a vector
+reduceResultsVector(reg, fun=function(job, res) res$a)
+</div>
+<strong class='message'>Reducing 5 results...</strong>
+<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++                                                                                                                             |  20% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                              |  40% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                              |  60% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                               |  80% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<div class='output'>1 2 3 4 5 
+1 2 3 4 5 
+</div>
+<div class='input'>reduceResultsVector(reg, fun=function(job, res) res$b)
+</div>
+<strong class='message'>Reducing 5 results...</strong>
+<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++                                                                                                                             |  20% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                              |  40% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                              |  60% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                               |  80% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<div class='output'>   1    2    3    4    5 
+ "2"  "4"  "6"  "8" "10" 
+</div>
+<div class='input'># reduce results to a list
+reduceResultsList(reg)
+</div>
+<strong class='message'>Reducing 5 results...</strong>
+<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++                                                                                                                             |  20% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                              |  40% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                              |  60% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                               |  80% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<div class='output'>$`1`
+$`1`$a
+[1] 1
+
+$`1`$b
+[1] "2"
+
+$`1`$c
+[1] 1
+
+
+$`2`
+$`2`$a
+[1] 2
+
+$`2`$b
+[1] "4"
+
+$`2`$c
+[1] 4
+
+
+$`3`
+$`3`$a
+[1] 3
+
+$`3`$b
+[1] "6"
+
+$`3`$c
+[1] 9
+
+
+$`4`
+$`4`$a
+[1] 4
+
+$`4`$b
+[1] "8"
+
+$`4`$c
+[1] 16
+
+
+$`5`
+$`5`$a
+[1] 5
+
+$`5`$b
+[1] "10"
+
+$`5`$c
+[1] 25
+
+
+</div>
+<div class='input'># reduce results to a matrix
+reduceResultsMatrix(reg, fun=function(job, res) res[c(1,3)])
+</div>
+<strong class='message'>Reducing 5 results...</strong>
+<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++                                                                                                                             |  20% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                              |  40% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                              |  60% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                               |  80% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<div class='output'>  a  c
+1 1  1
+2 2  4
+3 3  9
+4 4 16
+5 5 25
+</div>
+<div class='input'>reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=TRUE)
+</div>
+<strong class='message'>Reducing 5 results...</strong>
+<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++                                                                                                                             |  20% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                              |  40% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                              |  60% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                               |  80% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<div class='output'>  foo bar
+1   1   1
+2   2   4
+3   3   9
+4   4  16
+5   5  25
+</div>
+<div class='input'>reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=FALSE)
+</div>
+<strong class='message'>Reducing 5 results...</strong>
+<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++                                                                                                                             |  20% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                              |  40% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                              |  60% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                               |  80% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<div class='output'>    1 2 3  4  5
+foo 1 2 3  4  5
+bar 1 4 9 16 25
+</div>
+<div class='input'># reduce results to a data.frame
+print(str(reduceResultsDataFrame(reg)))
+</div>
+<strong class='message'>Reducing 5 results...</strong>
+<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++                                                                                                                             |  20% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                              |  40% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                              |  60% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                               |  80% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+'data.frame':	5 obs. of  3 variables:
+ $ a: int  1 2 3 4 5
+ $ b: Factor w/ 5 levels "10","2","4","6",..: 2 3 4 5 1
+ $ c: num  1 4 9 16 25
+NULL
+</div>
+<div class='input'># reduce results to a sum
+reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
+</div>
+<strong class='message'>Reducing 5 results...</strong>
+<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++                                                                                                                             |  20% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                              |  40% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                              |  60% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                               |  80% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</div>
+<div class='output'>[1] 15
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>reduceResults</li><li>reduceResultsDataFrame</li><li>reduceResultsList</li><li>reduceResultsMatrix</li><li>reduceResultsVector</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

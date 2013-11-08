@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>callFunctionOnSSHWorkers. BatchJobs 1.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">BatchJobs 1.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Call an arbitrary function on specified SSH workers.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>callFunctionOnSSHWorkers(nodenames, fun, ..., consecutive = FALSE, show.output = consecutive, 
+  simplify = TRUE, use.names = TRUE, dir = getwd())</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>nodenames</dt>
+      <dd>[<code>character</code>] Nodenames of
+  workers to call function on.  Only workers which were
+  specified in your <code><a href='makeClusterFunctionsSSH.html'>makeClusterFunctionsSSH</a></code>
+  configuration can be used.</dd>
+      <dt>fun</dt>
+      <dd>[<code>function</code>] Function to call on
+  workers.</dd>
+      <dt>...</dt>
+      <dd>[any] Arguments for <code>fun</code>.</dd>
+      <dt>consecutive</dt>
+      <dd>[<code>logical(1)</code>] Do calls
+  consecutively and always wait until each worker is done.
+  Default is <code>FALSE</code>.</dd>
+      <dt>show.output</dt>
+      <dd>[<code>logical(1)</code>] Show output of
+  workers on master during call.  Can be useful to see what
+  is happening.  Can only be used in consecutive mode.
+  Default is <code>consecutive</code>.</dd>
+      <dt>simplify</dt>
+      <dd>[<code>logical(1)</code>] Should the result
+  be simplified? See <code><a href='http://www.inside-r.org/r-doc/base/lapply'>sapply</a></code>.  Default is
+  <code>TRUE</code>.</dd>
+      <dt>use.names</dt>
+      <dd>[<code>logical(1)</code>] Name results by
+  <code>nodenames</code>.  Default is <code>TRUE</code>.</dd>
+      <dt>dir</dt>
+      <dd>[<code>character(1)</code>] Directory under which
+  a temporary registry will be created in a subdirectory
+  for communication.  This has to be somewhere on the
+  shared filesystem. The created subdirectory will be
+  cleaned up on exit.  Default is current working
+  directory.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>Results of function calls, either a list or simplified.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Calls can be made in parallel or consecutively, the
+  function waits until all calls have finished and returns
+  call results. In consecutive mode the output on the
+  workers can also be shown on the master during
+  computation.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>Please read and understand the comments for argument
+  <code>dir</code>.</p>
+  
+      <p>Note that this function should only be used for short
+  administrative tasks or information gathering on the
+  workers, the true work horse for real computation is
+  <code><a href='submitJobs.html'>submitJobs</a></code>.</p>
+  
+      <p>In <code><a href='makeSSHWorker.html'>makeSSHWorker</a></code> various options for load
+  management are possible. Note that these will be ignored
+  for the current call to execute it immediatly.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>callFunctionOnSSHWorkers</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

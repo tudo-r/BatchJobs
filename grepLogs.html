@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>grepLogs. BatchJobs 1.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">BatchJobs 1.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Grep log files for a pattern.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>grepLogs(reg, ids, pattern = "warn", ignore.case = TRUE, verbose = FALSE, range = 2L)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>reg</dt>
+      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>] Registry.</dd>
+      <dt>ids</dt>
+      <dd>[<code>integer</code>] Ids of jobs to grep.
+  Default is all terminated jobs (done + errors).</dd>
+      <dt>pattern</dt>
+      <dd>[<code>character(1)</code>] Pattern to search
+  for. See <code><a href='http://www.inside-r.org/r-doc/base/grep'>grep</a></code>.  Default is <code>"warn"</code>.</dd>
+      <dt>ignore.case</dt>
+      <dd>[<code>logical(1)</code>] Ignore case.
+  See <code><a href='http://www.inside-r.org/r-doc/base/grep'>grep</a></code>.  Default is <code>TRUE</code>.</dd>
+      <dt>verbose</dt>
+      <dd>[<code>logical(1)</code>] Print matches.
+  Default is <code>FALSE</code>.</dd>
+      <dt>range</dt>
+      <dd>[<code>integer(1)</code>] If <code>verbose</code> is
+  set to <code>TRUE</code>, print <code>range</code> leading and
+  trailing lines for contextual information about the
+  warning.  Default is <code>2</code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>[<code>integer</code>]. Ids of jobs where pattern was found in
+  the log file.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Searches for occurence of <code>pattern</code> in log files.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>grepLogs</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  <code><a href='showLog.html'>showLog</a></code>, <code><a href='getErrorMessages.html'>getErrorMessages</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
