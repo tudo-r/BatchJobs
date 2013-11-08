@@ -1,0 +1,39 @@
+\name{setJobFunction}
+\alias{setJobFunction}
+\title{Sets the job function for already existing jobs.}
+\usage{
+  setJobFunction(reg, ids, fun, more.args = list(),
+    reset = TRUE, force = FALSE)
+}
+\arguments{
+  \item{reg}{[\code{\link{Registry}}]\cr Registry.}
+
+  \item{ids}{[\code{integer}]\cr Ids of jobs.  Default is
+  all jobs.}
+
+  \item{fun}{[\code{function}]\cr Replacement function.}
+
+  \item{more.args}{[\code{list}]\cr A list of other
+  arguments passed to \code{fun}.  Default is empty list.}
+
+  \item{reset}{[\code{logical(1)}]\cr Reset job status via
+  \code{\link{resetJobs}}.  Default is \code{TRUE}.}
+
+  \item{force}{[\code{logical(1)}]\cr See
+  \code{\link{resetJobs}}.  Default is \code{FALSE}.}
+}
+\value{
+  Nothing.
+}
+\description{
+  Use this function only as last measure when there is a
+  bug in a part of your job function and you have already
+  computed a large number of (unaffected) results. This
+  function allows you to fix the error and to associate the
+  jobs with the corrected function.
+}
+\details{
+  Note that by default the computational state of the
+  affected jobs is also reset.
+}
+

@@ -1,0 +1,28 @@
+\name{getSSHWorkersInfo}
+\alias{getSSHWorkersInfo}
+\title{Print and return R installation and other information for SSH workers.}
+\usage{
+  getSSHWorkersInfo(nodenames)
+}
+\arguments{
+  \item{nodenames}{[\code{character}]\cr Nodenames of
+  workers.}
+}
+\value{
+  [\code{list}]. Displayed information as a list named by
+  nodenames.
+}
+\description{
+  Workers are queried in parallel via
+  \code{\link{callFunctionOnSSHWorkers}}.
+}
+\details{
+  The function will display a warning if the first lib path
+  on the worker is not writable as this indicates potential
+  problems in the configuration and
+  \code{\link{installPackagesOnSSHWorkers}} will not work.
+}
+\seealso{
+  \code{\link{callFunctionOnSSHWorkers}}
+}
+

@@ -1,0 +1,32 @@
+\name{cfHandleUnknownSubmitError}
+\alias{cfHandleUnknownSubmitError}
+\title{Cluster functions helper: Handle an unknown error during job submission.}
+\usage{
+  cfHandleUnknownSubmitError(cmd, exit.code, output)
+}
+\arguments{
+  \item{cmd}{[\code{character(1)}]\cr OS command used to
+  submit the job, e.g. qsub.}
+
+  \item{exit.code}{[\code{integer(1)}]\cr Exit code of the
+  OS command, should not be 0.}
+
+  \item{output}{[\code{character}]\cr Output of the OS
+  command, hopefully an informative error message.  If
+  these are mutiple lines in a vector, they are
+  automatically pasted together.}
+}
+\value{
+  [\code{\link{SubmitJobResult}}].
+}
+\description{
+  This function is only intended for use in your own
+  cluster functions implementation.
+}
+\details{
+  Simply constructs a \code{\link{SubmitJobResult}} object
+  with status code 101, NA as batch job id and an
+  informative error message containing the output of the OS
+  command in \code{output}.
+}
+

@@ -1,0 +1,68 @@
+\name{batchMapResults}
+\alias{batchMapResults}
+\title{Maps a function over the results of a registry by using batchMap.}
+\usage{
+  batchMapResults(reg, reg2, fun, ..., ids,
+    part = NA_character_, more.args = list())
+}
+\arguments{
+  \item{reg}{[\code{\link{Registry}}]\cr Registry whose
+  results should be mapped by \code{fun}.}
+
+  \item{reg2}{[\code{\link{Registry}}]\cr Empty registry
+  that should store the job for the mapping.}
+
+  \item{fun}{[\code{function(job, res, ...)}]\cr Function
+  to map over results of \code{reg}.  Further arguments
+  come from ... of \code{batchMapResults} and
+  \code{more.args}.}
+
+  \item{...}{[any]\cr Furher arguments to vectorize over
+  (list or vector).  Must all be the same length as number
+  of results in \code{reg}.}
+
+  \item{ids}{[\code{integer}]\cr Ids of jobs whose results
+  should be mapped with \code{fun}.  Default is all jobs.}
+
+  \item{part}{[\code{character}] Only useful for multiple
+  result files, then defines which result file part(s)
+  should be loaded.  \code{NA} means all parts are loaded,
+  which is the default.}
+
+  \item{more.args}{[\code{list}]\cr A list of other
+  arguments passed to \code{fun}.  Default is empty list.}
+}
+\value{
+  Vector of type \code{integer} with job ids.
+}
+\description{
+  Maps a function over the results of a registry by using
+  batchMap.
+}
+\examples{
+reg1 <- makeRegistry(id="BatchJobsExample1", file.dir=tempfile(), seed=123)
+# square some numbers
+f <- function(x) x^2
+batchMap(reg1, f, 1:10)
+
+# submit jobs and wait for the jobs to finish
+submitJobs(reg1)
+waitForJobs(reg1)
+
+# look at results
+reduceResults(reg1, fun=function(aggr,job,res) c(aggr, res))
+
+reg2 <- makeRegistry(id="BatchJobsExample2", file.dir=tempfile(), seed=123)
+
+# define function to tranform results, we simply do the inverse of the squaring
+g <- function(job, res) sqrt(res)
+batchMapResults(reg1, reg2, fun=g)
+
+# submit jobs and wait for the jobs to finish
+submitJobs(reg2)
+waitForJobs(reg2)
+
+# check results
+reduceResults(reg2, fun=function(aggr,job,res) c(aggr, res))
+}
+

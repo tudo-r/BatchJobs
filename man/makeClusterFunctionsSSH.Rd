@@ -1,0 +1,45 @@
+\name{makeClusterFunctionsSSH}
+\alias{makeClusterFunctionsSSH}
+\title{Create an SSH cluster to execute jobs.}
+\usage{
+  makeClusterFunctionsSSH(..., workers)
+}
+\arguments{
+  \item{...}{[\code{\link{SSHWorker}}]\cr Worker objects,
+  all created with \code{\link{makeSSHWorker}}.}
+
+  \item{workers}{[list of \code{\link{SSHWorker}}]\cr
+  Alternative way to pass workers.}
+}
+\value{
+  [\code{ClusterFunctions}].
+}
+\description{
+  Worker nodes must share the same file system and be
+  accessible by ssh without manually entering passwords
+  (e.g. by ssh-agent or passwordless pubkey). Note that you
+  can also use this function to parallelize on multiple
+  cores on your local machine. But you still have to run an
+  ssh server and provide passwordless access to localhost.
+}
+\examples{
+\dontrun{
+
+# Assume you have three nodes larry, curley and moe. All have 6
+# cpu cores. On curley and moe R is installed under
+# "/opt/R/R-current" and on larry R is installed under
+# "/usr/local/R/". larry should not be used extensively because
+# somebody else wants to compute there as well.
+# Then a call to 'makeClusterFunctionsSSH'
+# might look like this:
+
+cluster.functions = makeClusterFunctionsSSH(
+  makeSSHWorker(nodename="larry", rhome="/usr/local/R", max.jobs=2),
+  makeSSHWorker(nodename="curley", rhome="/opt/R/R-current"),
+  makeSSHWorker(nodename="moe", rhome="/opt/R/R-current"))
+}
+}
+\seealso{
+  \link{ClusterFunctions} \code{\link{makeSSHWorker}}
+}
+

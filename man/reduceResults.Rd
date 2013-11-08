@@ -1,0 +1,118 @@
+\name{reduceResults}
+\alias{reduceResults}
+\alias{reduceResultsDataFrame}
+\alias{reduceResultsList}
+\alias{reduceResultsMatrix}
+\alias{reduceResultsVector}
+\title{Reduce results from result directory.}
+\usage{
+  reduceResults(reg, ids, part = NA_character_, fun, init,
+    ...)
+
+  reduceResultsList(reg, ids, part = NA_character_, fun,
+    ..., use.names = "ids")
+
+  reduceResultsVector(reg, ids, part = NA_character_, fun,
+    ..., use.names = "ids")
+
+  reduceResultsMatrix(reg, ids, part = NA_character_, fun,
+    ..., rows = TRUE, use.names = "ids")
+
+  reduceResultsDataFrame(reg, ids, part = NA_character_,
+    fun, ..., use.names = "ids",
+    strings.as.factors = default.stringsAsFactors())
+}
+\arguments{
+  \item{reg}{[\code{\link{Registry}}]\cr Registry.}
+
+  \item{ids}{[\code{integer}]\cr Ids of selected jobs.
+  Default is all jobs for which results are available.}
+
+  \item{part}{[\code{character}] Only useful for multiple
+  result files, then defines which result file part(s)
+  should be loaded.  \code{NA} means all parts are loaded,
+  which is the default.}
+
+  \item{fun}{[\code{function}]\cr For \code{reduceResults},
+  a function \code{function(aggr, job, res, ...)} to reduce
+  things, for all others, a function \code{function(job,
+  res, ...)} to select stuff.  Here, \code{job} is the
+  current job descriptor (see \code{\link{Job}}),
+  \code{result} is the current result object and
+  \code{aggr} are the so far aggregated results. When using
+  \code{reduceResults}, your function should add the stuff
+  you want to have from \code{job} and \code{result} to
+  \code{aggr} and return that.  When using the other
+  reductions, you should select the stuff you want to have
+  from \code{job} and \code{result} and return something
+  that can be coerced to an element of the selected return
+  data structure (reasonable conversion is tried
+  internally).  Default behavior for this argument is to
+  return \code{res}, except for \code{reduceResults} where
+  no default is available.}
+
+  \item{init}{[\code{ANY}]\cr Initial element, as used in
+  \code{\link{Reduce}}.  Default is first result.}
+
+  \item{...}{[any]\cr Additional arguments to \code{fun}.}
+
+  \item{use.names}{[\code{character(1)}]\cr Name the
+  results with job ids (\dQuote{ids}), stored job names
+  (\dQuote{names}) or return a unnamed result
+  (\dQuote{none}).  Default is \code{ids}.}
+
+  \item{rows}{[\code{logical(1)}]\cr Should the selected
+  vectors be used as rows (or columns) in the result
+  matrix?  Default is \code{TRUE}.}
+
+  \item{strings.as.factors}{[\code{logical(1)}] Should all
+  character columns in result be converted to factors?
+  Default is \code{default.stringsAsFactors()}.}
+}
+\value{
+  Aggregated results, return type depends on function. If
+  \code{ids} is empty: \code{reduceResults} returns
+  \code{init} (if available) or \code{NULL},
+  \code{reduceResultsVector} returns \code{c()},
+  \code{reduceResultsList} returns \code{list()},
+  \code{reduceResultsMatrix} returns \code{matrix(0,0,0)},
+  \code{reduceResultsDataFrame} returns
+  \code{data.frame()}.
+}
+\description{
+  The following functions provide ways to reduce result
+  files into either specific R objects (like vectors,
+  lists, matrices or data.frames) or to arbitrarily
+  aggregate them, which is a more general operation.
+}
+\examples{
+# generate results:
+reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+f <- function(x) x^2
+batchMap(reg, f, 1:5)
+submitJobs(reg)
+
+# reduce results to a vector
+reduceResultsVector(reg)
+# reduce results to sum
+reduceResults(reg, fun=function(aggr, job, res) aggr+res)
+
+reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+f <- function(x) list(a=x, b=as.character(2*x), c=x^2)
+batchMap(reg, f, 1:5)
+submitJobs(reg)
+# reduce results to a vector
+reduceResultsVector(reg, fun=function(job, res) res$a)
+reduceResultsVector(reg, fun=function(job, res) res$b)
+# reduce results to a list
+reduceResultsList(reg)
+# reduce results to a matrix
+reduceResultsMatrix(reg, fun=function(job, res) res[c(1,3)])
+reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=TRUE)
+reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=FALSE)
+# reduce results to a data.frame
+print(str(reduceResultsDataFrame(reg)))
+# reduce results to a sum
+reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
+}
+

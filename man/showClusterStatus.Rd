@@ -1,0 +1,23 @@
+\name{showClusterStatus}
+\alias{showClusterStatus}
+\title{Show information about available computational resources on cluster.}
+\usage{
+  showClusterStatus(reg)
+}
+\arguments{
+  \item{reg}{[\code{\link{Registry}}]\cr Registry.  Must
+  not be passed and this is the default.}
+}
+\value{
+  [\code{data.frame}]. Returns the displayed table
+  invisibly.
+}
+\description{
+  Currently only supported for multicore and SSH mode.
+  Displays: Name of node, current load, number of running R
+  processes, number of R processes with more than 50% load,
+  number of BatchJobs jobs running. The latter counts
+  either jobs belonging to \code{reg} or all BatchJobs jobs
+  if reg was not passed.
+}
+

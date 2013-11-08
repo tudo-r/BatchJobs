@@ -1,0 +1,66 @@
+\name{callFunctionOnSSHWorkers}
+\alias{callFunctionOnSSHWorkers}
+\title{Call an arbitrary function on specified SSH workers.}
+\usage{
+  callFunctionOnSSHWorkers(nodenames, fun, ...,
+    consecutive = FALSE, show.output = consecutive,
+    simplify = TRUE, use.names = TRUE, dir = getwd())
+}
+\arguments{
+  \item{nodenames}{[\code{character}]\cr Nodenames of
+  workers to call function on.  Only workers which were
+  specified in your \code{\link{makeClusterFunctionsSSH}}
+  configuration can be used.}
+
+  \item{fun}{[\code{function}]\cr Function to call on
+  workers.}
+
+  \item{...}{[any]\cr Arguments for \code{fun}.}
+
+  \item{consecutive}{[\code{logical(1)}]\cr Do calls
+  consecutively and always wait until each worker is done.
+  Default is \code{FALSE}.}
+
+  \item{show.output}{[\code{logical(1)}]\cr Show output of
+  workers on master during call.  Can be useful to see what
+  is happening.  Can only be used in consecutive mode.
+  Default is \code{consecutive}.}
+
+  \item{simplify}{[\code{logical(1)}]\cr Should the result
+  be simplified? See \code{\link{sapply}}.  Default is
+  \code{TRUE}.}
+
+  \item{use.names}{[\code{logical(1)}]\cr Name results by
+  \code{nodenames}.  Default is \code{TRUE}.}
+
+  \item{dir}{[\code{character(1)}]\cr Directory under which
+  a temporary registry will be created in a subdirectory
+  for communication.  This has to be somewhere on the
+  shared filesystem. The created subdirectory will be
+  cleaned up on exit.  Default is current working
+  directory.}
+}
+\value{
+  Results of function calls, either a list or simplified.
+}
+\description{
+  Calls can be made in parallel or consecutively, the
+  function waits until all calls have finished and returns
+  call results. In consecutive mode the output on the
+  workers can also be shown on the master during
+  computation.
+}
+\details{
+  Please read and understand the comments for argument
+  \code{dir}.
+
+  Note that this function should only be used for short
+  administrative tasks or information gathering on the
+  workers, the true work horse for real computation is
+  \code{\link{submitJobs}}.
+
+  In \code{\link{makeSSHWorker}} various options for load
+  management are possible. Note that these will be ignored
+  for the current call to execute it immediatly.
+}
+

@@ -1,0 +1,47 @@
+\name{installPackagesOnSSHWorkers}
+\alias{installPackagesOnSSHWorkers}
+\title{Install packages on SSH workers.}
+\usage{
+  installPackagesOnSSHWorkers(nodenames, pkgs,
+    repos = getOption("repos"), consecutive = TRUE,
+    show.output = consecutive, ...)
+}
+\arguments{
+  \item{nodenames}{[\code{character}]\cr Nodenames of
+  workers.}
+
+  \item{pkgs}{[\code{character}]\cr See
+  \code{\link{install.packages}}.}
+
+  \item{repos}{[\code{character}]\cr See
+  \code{\link{install.packages}}.  If the user must be
+  queried this is of course done on the master.}
+
+  \item{consecutive}{[\code{logical(1)}]\cr See
+  \code{\link{callFunctionOnSSHWorkers}}.  Default is
+  \code{TRUE}.}
+
+  \item{show.output}{[\code{logical(1)}]\cr See
+  \code{\link{callFunctionOnSSHWorkers}}.  Default is
+  \code{consecutive}.}
+
+  \item{...}{[any]\cr Passed to
+  \code{\link{install.packages}}.}
+}
+\value{
+  Nothing.
+}
+\description{
+  Installation is done via
+  \code{\link{callFunctionOnSSHWorkers}} and
+  \code{\link{install.packages}}.
+}
+\details{
+  Note that as usual the function tries to install the
+  packages into the first path of \code{.libPaths()} of
+  each each worker.
+}
+\seealso{
+  \code{\link{callFunctionOnSSHWorkers}}
+}
+

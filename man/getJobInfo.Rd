@@ -1,0 +1,44 @@
+\name{getJobInfo}
+\alias{getJobInfo}
+\title{Get computational information of jobs.}
+\usage{
+  getJobInfo(reg, ids, pars = FALSE, prefix.pars = FALSE,
+    select, unit = "seconds")
+}
+\arguments{
+  \item{reg}{[\code{\link{Registry}}]\cr Registry.}
+
+  \item{ids}{[\code{integer}]\cr Ids of jobs.  Default is
+  all jobs.}
+
+  \item{pars}{[\code{logical(1)}]\cr Include job parameters
+  in the output?  Default is \code{FALSE}.}
+
+  \item{prefix.pars}{[\code{logical(1)}]\cr Should a prefix
+  be added to job parameter names (column names) to avoid
+  name clashes?  Default is \code{FALSE}.}
+
+  \item{select}{[\code{character}]\cr Select only a subset
+  of columns.  Usually this is not required and you can
+  subset yourself, but in some rare cases it may be
+  advantageous to not query all information.  Note that the
+  column \dQuote{id} (job id) is always selected.  If not
+  provided, all columns are queried and returned.}
+
+  \item{unit}{[\code{character(1)}]\cr Unit to convert
+  execution and queing times to.  Possible values:
+  \dQuote{seconds}, \dQuote{minutes}, \dQuote{hours},
+  \dQuote{days} and \dQuote{weeks}.  Default is
+  \dQuote{seconds}.}
+}
+\value{
+  [\code{data.frame}].
+}
+\description{
+  Returns time stamps (submitted, started, done), time
+  running, time in queue, error messages (shortened, see
+  \code{\link{showLog}} for detailed error messages),
+  hostname of the host the job was executed, the assigned
+  batch ID, the R PID and the seed of the job.
+}
+

@@ -1,0 +1,37 @@
+\name{debugSSH}
+\alias{debugSSH}
+\title{Helper function to debug SSH mode.}
+\usage{
+  debugSSH(nodename, rhome = "",
+    r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
+    dir = getwd())
+}
+\arguments{
+  \item{nodename}{[\code{character(1)}]\cr Node on which
+  worker should be constructed for the test.}
+
+  \item{rhome}{[\code{character(1)}]\cr Path to R
+  installation on the worker.  \dQuote{} means R
+  installation on the PATH is used, of course this implies
+  that it must be on the PATH (also for non-interactive
+  shells)!  Default is \dQuote{}.}
+
+  \item{r.options}{[\code{list}] Options for R and Rscript,
+  one option per element of the vector, a la
+  \dQuote{--vanilla}.  Default is \code{c("--no-save",
+  "--no-restore", "--no-init-file", "--no-site-file")}.}
+
+  \item{dir}{[\code{character(1)}]\cr Path where internally
+  used test registries can be created.  Note that this must
+  be shared for the worker.  Default is current working
+  directory.}
+}
+\value{
+  Nothing.
+}
+\description{
+  Useful in case of configuration problems. Tries different
+  operations of increasing difficulty and provides debug
+  output on the console.
+}
+

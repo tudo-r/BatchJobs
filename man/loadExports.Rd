@@ -1,0 +1,20 @@
+\name{loadExports}
+\alias{loadExports}
+\title{Load exported R data objects stored.}
+\usage{
+  loadExports(reg)
+}
+\arguments{
+  \item{reg}{[\code{Registry}]\cr Location of the file.dir
+  to load the registry from.}
+}
+\value{
+  Invisibly returns a character vector of loaded file
+  names.
+}
+\description{
+  Loads all \code{RData} files in the \dQuote{exports}
+  subdirectory of your \code{file.dir} and assigns the
+  objects to the global environment.
+}
+

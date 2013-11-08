@@ -1,0 +1,25 @@
+\name{setJobNames}
+\alias{setJobNames}
+\title{Set job names.}
+\usage{
+  setJobNames(reg, ids, jobnames)
+}
+\arguments{
+  \item{reg}{[\code{\link{Registry}}]\cr Registry.}
+
+  \item{ids}{[\code{integer}]\cr Ids of jobs.  Default is
+  all jobs.}
+
+  \item{jobnames}{[\code{character}]\cr Character vector
+  with length equal to \code{length(ids)}.  \code{NA}
+  removes the names stored in the registry.  A single
+  \code{NA} is replicated to match the length of ids
+  provided.}
+}
+\value{
+  Named vector of job ids.
+}
+\description{
+  Set job names.
+}
+

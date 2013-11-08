@@ -1,0 +1,32 @@
+\name{makeJob}
+\alias{Job}
+\alias{makeJob}
+\title{Creates a job description.}
+\usage{
+  makeJob(id = NA_integer_, fun, fun.id = digest(fun),
+    pars, name, seed)
+}
+\arguments{
+  \item{id}{[\code{integer(1)}]\cr Job id, determined by DB
+  autoincrement.  Default is \code{NA}.}
+
+  \item{fun}{[\code{function}]\cr Job function to apply on
+  parameters.}
+
+  \item{fun.id}{[\code{character(1)}]\cr Id used to store
+  function on disk.  Default is \code{digest(fun)}.}
+
+  \item{pars}{[\code{list}]\cr Parameter list for job
+  function.}
+
+  \item{name}{[\code{character(1)}]\cr Alias name for this
+  job.}
+
+  \item{seed}{[\code{integer(1)}]\cr Random seed for job.}
+}
+\description{
+  Usually you will not do this manually. Every object is a
+  list that contains the passed arguments of the
+  constructor.
+}
+

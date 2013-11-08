@@ -1,0 +1,41 @@
+\name{showStatus}
+\alias{showStatus}
+\title{Show status information about jobs.}
+\usage{
+  showStatus(reg, ids, run.and.exp = TRUE, errors = 10L)
+}
+\arguments{
+  \item{reg}{[\code{\link{Registry}}]\cr Registry.}
+
+  \item{ids}{[\code{integer}]\cr Ids of selected jobs.
+  Default is all jobs.}
+
+  \item{errors}{[\code{integer(1)}]\cr How many of the
+  error messages should be displayed if any errors occured
+  in the jobs?  Default is 10.}
+
+  \item{run.and.exp}{[\code{logical(1)}]\cr Show running
+  and expired jobs?  Requires to list the job on the batch
+  system. If not possible, because that cluster function is
+  not avilable, this option is ignored anyway.  Default is
+  \code{TRUE}.}
+}
+\value{
+  [\code{list}] List of absolute job numbers as printed by
+  showStatus.  Returned invisibly.
+}
+\description{
+  E.g.: How many there are, how many are done, any errors,
+  etc.
+}
+\examples{
+reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+f <- function(x) x^2
+batchMap(reg, f, 1:10)
+submitJobs(reg)
+
+# after a few moments:
+showStatus(reg)
+# should show 10 submitted jobs, which are all done.
+}
+

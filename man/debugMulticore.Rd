@@ -1,0 +1,21 @@
+\name{debugMulticore}
+\alias{debugMulticore}
+\title{Helper function to debug multicore mode.}
+\usage{
+  debugMulticore(r.options)
+}
+\arguments{
+  \item{r.options}{[\code{list}] Options for R and Rscript,
+  one option per element of the vector, a la
+  \dQuote{--vanilla}.  Default is \code{c("--no-save",
+  "--no-restore", "--no-init-file", "--no-site-file")}.}
+}
+\value{
+  Nothing.
+}
+\description{
+  Useful in case of severe errors. Tries different
+  operations of increasing difficulty and provides debug
+  output on the console
+}
+

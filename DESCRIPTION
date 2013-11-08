@@ -1,17 +1,99 @@
 Package: BatchJobs
 Title: Batch computing with R.
-Description: Provides Map, Reduce and Filter variants to generate jobs on batch computing systems like PBS/Torque, LSF and Sun Grid Engine. Multicore and SSH systems are also supported. For further details see the project web page.
+Description: Provides Map, Reduce and Filter variants to generate jobs on batch
+    computing systems like PBS/Torque, LSF and Sun Grid Engine. Multicore and
+    SSH systems are also supported. For further details see the project web
+    page.
 Author: Bernd Bischl <bernd_bischl@gmx.net>,
-  Michel Lang <michellang@gmail.com>, 
-  Olaf Mersmann <olafm@p-value.net>
+    Michel Lang <michellang@gmail.com>,
+    Olaf Mersmann <olafm@p-value.net>
 Maintainer: Bernd Bischl <bernd_bischl@gmx.net>
 URL: http://batchjobs.googlecode.com
 BugReports: http://code.google.com/p/batchjobs/issues/list
 MailingList: batchjobs@googlegroups.com
 License: BSD_3_clause + file LICENSE
-Depends: R (>= 2.13.0), BBmisc (>= 1.4)
-Imports: utils, digest, DBI, RSQLite, sendmailR, brew, plyr, fail (>= 1.2)
-Suggests: testthat
+Depends:
+    R (>= 2.13.0),
+    BBmisc (>= 1.4)
+Imports:
+    utils,
+    digest,
+    DBI,
+    RSQLite,
+    sendmailR,
+    brew,
+    plyr,
+    fail (>= 1.2)
+Suggests:
+    testthat
 LazyData: yes
 ByteCompile: yes
 Version: 1.1
+Collate:
+    'Exports.R'
+    'Job.R'
+    'Registry.R'
+    'Resources.R'
+    'Worker.R'
+    'WorkerLinux.R'
+    'addJob.R'
+    'applyJobFunction.R'
+    'batchApply.R'
+    'batchExpandGrid.R'
+    'batchMap.R'
+    'batchMapQuick.R'
+    'batchMapResults.R'
+    'batchReduce.R'
+    'batchReduceResults.R'
+    'buffer.R'
+    'callFunctionOnSSHWorkers.R'
+    'checkIdValid.R'
+    'clusterFunctions.R'
+    'clusterFunctionsHelpers.R'
+    'clusterFunctionsInteractive.R'
+    'clusterFunctionsLSF.R'
+    'clusterFunctionsLocal.R'
+    'clusterFunctionsMulticore.R'
+    'clusterFunctionsSGE.R'
+    'clusterFunctionsSLURM.R'
+    'clusterFunctionsSSH.R'
+    'clusterFunctionsTorque.R'
+    'clusterFunctionsUnitTests.R'
+    'conf.R'
+    'database.R'
+    'debugMulticore.R'
+    'debugSSH.R'
+    'doJob.R'
+    'filenames.R'
+    'filterResults.R'
+    'findJobs.R'
+    'findStatus.R'
+    'getErrorMessages.R'
+    'getJob.R'
+    'getJobInfo.R'
+    'getLogFiles.R'
+    'getSSHWorkersInfo.R'
+    'grepLogs.R'
+    'helpers.R'
+    'installPackagesOnSSHWorkers.R'
+    'killJobs.R'
+    'loadResult.R'
+    'loadResults.R'
+    'reduceResults.R'
+    'resetJobs.R'
+    'scheduleWorkerJobs.R'
+    'sendMail.R'
+    'setJobFunction.R'
+    'setJobNames.R'
+    'showClusterStatus.R'
+    'showLog.R'
+    'showStatus.R'
+    'sourceRegistryFiles.R'
+    'submitJobs.R'
+    'sweepRegistry.R'
+    'syncRegistry.R'
+    'testJob.R'
+    'updateRegistry.R'
+    'waitForJobs.R'
+    'writeRscripts.R'
+    'zzz.R'

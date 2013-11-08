@@ -1,0 +1,80 @@
+\name{makeRegistry}
+\alias{Registry}
+\alias{makeRegistry}
+\title{Construct a registry object.}
+\usage{
+  makeRegistry(id, file.dir, sharding = TRUE, work.dir,
+    multiple.result.files = FALSE, seed,
+    packages = character(0L), src.dirs = character(0L),
+    skip = TRUE)
+}
+\arguments{
+  \item{id}{[\code{character(1)}]\cr Name of registry.
+  Displayed e.g. in mails or in cluster queue.}
+
+  \item{file.dir}{[\code{character(1)}]\cr Path where files
+  regarding the registry / jobs should be saved.  Default
+  is \dQuote{<id>-files} in current working directory if
+  \code{id} is set.}
+
+  \item{sharding}{[\code{logical(1)}]\cr Enable sharding to
+  distribute result files into different subdirectories?
+  Important if you have many experiments.  Default is
+  \code{TRUE}.}
+
+  \item{work.dir}{[\code{character(1)}]\cr Working
+  directory for R process when experiment is executed.
+  Default is the current working directory when registry is
+  created.}
+
+  \item{multiple.result.files}{[\code{logical(1)}]\cr
+  Should a result file be generated for every list element
+  of the returned list of the job function?  Note that the
+  function provided to \code{\link{batchMap}} or
+  \code{\link{batchReduce}} must return a named list if
+  this is set to \code{TRUE}.  The result file will be
+  named \dQuote{<id>-result-<element name>.RData} instead
+  of \dQuote{<id>-result.RData}.  Default is \code{FALSE}.}
+
+  \item{seed}{[\code{integer(1)}]\cr Start seed for
+  experiments. The first experiment in the registry will
+  use this seed, for the subsequent ones the seed is
+  incremented by 1.  Default is a random number from 1 to
+  \code{.Machine$integer.max/2}.}
+
+  \item{packages}{[\code{character}]\cr Packages that will
+  always be loaded on each node.  Default is
+  \code{character(0)}.}
+
+  \item{src.dirs}{[\code{character}]\cr Directories
+  relative to your \code{work.dir} containing R scripts to
+  be sourced on registry load (both on slave and master).
+  Files not matching the pattern \dQuote{\\.[Rr]$} are
+  ignored.  Useful if you have many helper functions that
+  are needed during the execution of your jobs.  These
+  files should only contain function definitions and no
+  executable code.  Default is \code{character(0)}.}
+
+  \item{skip}{[\code{logical(1)}]\cr Skip creation of a new
+  registry if a registry is found in \code{file.dir}.
+  Defaults to \code{TRUE}.}
+}
+\value{
+  [\code{\link{Registry}}]
+}
+\description{
+  Note that if you don't want links in your paths
+  (\code{file.dir}, \code{work.dir}) to get resolved and
+  have complete control over the way the path is used
+  internally, pass an absolute path which begins with
+  \dQuote{/}.
+}
+\details{
+  Every object is a list that contains the passed arguments
+  of the constructor.
+}
+\examples{
+reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+print(reg)
+}
+

@@ -1,0 +1,32 @@
+\name{cfKillBatchJob}
+\alias{cfKillBatchJob}
+\title{Cluster functions helper: Kill a batch job via OS command}
+\usage{
+  cfKillBatchJob(cmd, batch.job.id, max.tries = 3L)
+}
+\arguments{
+  \item{cmd}{[\code{character(1)}]\cr OS command, e.g.
+  \dQuote{qdel}.}
+
+  \item{batch.job.id}{[\code{character(1)}]\cr Id of the
+  batch job on the batch system.}
+
+  \item{max.tries}{[\code{integer(1)}]\cr Number of total
+  times to try execute the OS command in cases of failures.
+  Default is \code{3}.}
+}
+\value{
+  Nothing.
+}
+\description{
+  This function is only intended for use in your own
+  cluster functions implementation.
+}
+\details{
+  Calls the OS command to kill a job via \code{system} like
+  this: \dQuote{cmd batch.job.id}. If the command returns
+  an exit code > 0, the command is repeated after a 1
+  second sleep \code{max.tries-1} times. If the command
+  failed in all tries, an exception is generated.
+}
+

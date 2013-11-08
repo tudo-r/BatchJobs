@@ -1,0 +1,38 @@
+\name{grepLogs}
+\alias{grepLogs}
+\title{Grep log files for a pattern.}
+\usage{
+  grepLogs(reg, ids, pattern = "warn", ignore.case = TRUE,
+    verbose = FALSE, range = 2L)
+}
+\arguments{
+  \item{reg}{[\code{\link{Registry}}]\cr Registry.}
+
+  \item{ids}{[\code{integer}]\cr Ids of jobs to grep.
+  Default is all terminated jobs (done + errors).}
+
+  \item{pattern}{[\code{character(1)}]\cr Pattern to search
+  for. See \code{\link{grep}}.  Default is \code{"warn"}.}
+
+  \item{ignore.case}{[\code{logical(1)}]\cr Ignore case.
+  See \code{\link{grep}}.  Default is \code{TRUE}.}
+
+  \item{verbose}{[\code{logical(1)}]\cr Print matches.
+  Default is \code{FALSE}.}
+
+  \item{range}{[\code{integer(1)}]\cr If \code{verbose} is
+  set to \code{TRUE}, print \code{range} leading and
+  trailing lines for contextual information about the
+  warning.  Default is \code{2}.}
+}
+\value{
+  [\code{integer}]. Ids of jobs where pattern was found in
+  the log file.
+}
+\description{
+  Searches for occurence of \code{pattern} in log files.
+}
+\seealso{
+  \code{\link{showLog}}, \code{\link{getErrorMessages}}
+}
+
