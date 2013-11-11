@@ -19,11 +19,21 @@ To install the latest stable release from CRAN:
 ```splus
 install.packages("BatchJobs")
 ```
-You can install the development version using the [devtools](http://cran.r-project.org/web/packages/devtools) package by executing
+You can install the development version using the [devtools](http://cran.r-project.org/web/packages/devtools) package:
 ```splus
-library(devtools); install_github("BatchJobs", username="tudo-r")
+library(devtools)
+install_github("BatchJobs", username="tudo-r")
 ```
-Then start trying out the package in the default local mode or  proceed to [Configuration](../../wiki/Configuration) to set up  cluster execution.
+Sometimes it might be required to update BatchJobs' dependencies as well.
+If you encounter errors during installation, try upgrading by [BBmisc](https://github.com/berndbischl/BBmisc) and [fail](https://github.com/mllg/fail) before filing a bug report:
+```{r}
+library(devtools)
+install_github("BBmisc", username="berndbischl")
+install_github("fail", username="mllg")
+```
+A fresh installation defaults to a local execution mode.
+Proceed to [Configuration](../../wiki/Configuration) to set up cluster execution.
+
 Currently the best introduction to the package is our [technical report](http://sfb876.tu-dortmund.de/PublicPublicationFiles/bischl_etal_2012a.pdf).
 For more detailed information on the functions please use the [R documentation](http://tudo-r.github.io/BatchJobs/).
 
