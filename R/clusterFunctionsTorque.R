@@ -46,7 +46,7 @@ makeClusterFunctionsTorque = function(template.file) {
 
   listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
-    runOSCommandLinux("qselect", c("-u $USER", "-s -s EHQRTW"))$output
+    runOSCommandLinux("qselect", c("-u $USER", "-s EHQRTW"))$output
   }
 
   getArrayEnvirName = function() "PBS_ARRAYID"
