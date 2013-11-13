@@ -18,7 +18,7 @@ To install the latest stable release from CRAN:
 ```splus
 install.packages("BatchJobs")
 ```
-To install the development version use the [devtools](http://cran.r-project.org/web/packages/devtools) package:
+To install the development version use [devtools](http://cran.r-project.org/web/packages/devtools):
 ```splus
 library(devtools)
 install_github("BatchJobs", username="tudo-r")
