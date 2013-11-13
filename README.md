@@ -36,6 +36,7 @@ Proceed to [Configuration](../../wiki/Configuration) to set up cluster execution
 ## Documentation
 Currently the best introduction to the package is our [technical report](http://sfb876.tu-dortmund.de/PublicPublicationFiles/bischl_etal_2012a.pdf).
 For more detailed information on the functions consult the [R documentation](http://tudo-r.github.io/BatchJobs/).
+We also provide a [FAQ](../../wiki/FAQ) in our [wiki](../../wiki).
 
 We also have a [mailing list](http://groups.google.com/group/batchjobs).
 
