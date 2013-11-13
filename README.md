@@ -26,7 +26,7 @@ install_github("BatchJobs", username="tudo-r")
 ```
 Sometimes it might be required to update BatchJobs' dependencies as well.
 If you encounter errors during installation, try upgrading by [BBmisc](https://github.com/berndbischl/BBmisc) and [fail](https://github.com/mllg/fail) before filing a bug report:
-```{r}
+```splus
 library(devtools)
 install_github("BBmisc", username="berndbischl")
 install_github("fail", username="mllg")
