@@ -1,17 +1,16 @@
 # BatchJobs
 
-## Core features of BatchJobs
+## Core features
 * Create, submit and control [R](http://www.r-project.org/) jobs on batch systems
-* Supported batch systems include Torque/PBS, SGE, SLURM and LSF
 * Provides the functional programming tools Map, Reduce and Filter to operate on the cluster
-* Reduce or Filter results of batch jobs into R data structures
+* Supported systems include Torque/PBS, SGE, SLURM and LSF
+* Support for makeshift SSH clusters and local (multicore) execution
+* Convenient collection and aggregation of results
 * Further Map and Reduce results from previous jobs as batch jobs
 * Optional mail sending using [sendmailR](http://cran.r-project.org/web/packages/sendmailR) after job completion
 * Query status of jobs and display log files inside R
-* Chunk small, fast tasks together to one batch job
 * Possibility to write your own simple cluster interface if your architecture is not supported
-* The [BatchExperiments](https://github.com/tudo-r/Batchexperiments) package extends this package with functionality required for comprehensive computer experiments
-  and simulation studies.
+* [BatchExperiments](https://github.com/tudo-r/Batchexperiments) extends this package with functionality required for comprehensive computer experiments and simulation studies.
 
 
 ## Quickstart and Documentation
