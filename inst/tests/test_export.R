@@ -13,6 +13,7 @@ test_that("exports", {
 
   batchMap(reg, function(i) exported_x[i], i = 1:3)
   submitJobs(reg)
+  waitForJobs(reg)
   res = loadResults(reg, simplify=TRUE, use.names="none")
   expect_equal(res, 1:3)
 })

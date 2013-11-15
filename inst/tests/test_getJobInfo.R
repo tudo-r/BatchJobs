@@ -19,6 +19,7 @@ test_that("getJobInfo", {
   tab = getJobInfo(reg)
   mycheck(tab)
   submitJobs(reg)
+  waitForJobs(reg)
   tab = getJobInfo(reg)
   mycheck(tab)
 

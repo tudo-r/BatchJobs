@@ -2,7 +2,7 @@ context("doJob")
 
 if (interactive()) {
 
-test_that("doJob", {  
+test_that("doJob", {
   reg = makeTestRegistry()
   id = 1L
   batchMap(reg, identity, 123)
@@ -11,7 +11,7 @@ test_that("doJob", {
   ids = findNotDone(reg)
   expect_equal(ids, id)
   saveConf(reg)
-  expect_output({ 
+  expect_output({
     y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
   }, "BatchJobs job")
   expect_equal(y, 123)
@@ -21,7 +21,7 @@ test_that("doJob", {
   expect_equal(y, 123)
   ids = findNotDone(reg)
   expect_equal(length(ids), 0)
-  
+
   # test working directory
   reg = makeTestRegistry()
   wd.now = getwd()
@@ -31,16 +31,16 @@ test_that("doJob", {
   reg$work.dir = wd.job
   f = function(x) {
     load("foo.RData")
-    bar+x    
+    bar+x
   }
   batchMap(reg, f, 1)
   saveConf(reg)
-  expect_output({ 
+  expect_output({
     y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
   }, "BatchJobs job")
   expect_equal(y, bar + 1)
   expect_equal(getwd(), wd.now)
-  
+
   # test packages
   # be sneaky otherwise we get error here due to pack check
   reg = makeTestRegistry()
@@ -48,12 +48,14 @@ test_that("doJob", {
   saveRegistry(reg)
   batchMap(reg, identity, 1)
   expect_error(submitJobs(reg), "please install the following packages: foo")
+  waitForJobs(reg)
   expect_equal(findNotDone(reg), id)
 
   reg = makeTestRegistry(packages=c("randomForest"))
   f = function(i) randomForest(Species~., data=iris)
   batchMap(reg, f, 1)
   submitJobs(reg)
+  waitForJobs(reg)
   expect_equal(length(findNotDone(reg)), 0)
 })
 

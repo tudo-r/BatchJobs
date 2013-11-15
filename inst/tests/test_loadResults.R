@@ -1,10 +1,11 @@
-context("submitJobs")
+context("loadResults")
 
 test_that("loadResults", {
   reg = makeTestRegistry()
   ids = 1:2
   batchMap(reg, identity, ids)
   submitJobs(reg)
+  waitForJobs(reg)
   ys1 = 1:2
   ys2 = loadResults(reg, simplify=TRUE, use.names="none")
   expect_equal(ys1, ys2)
@@ -32,6 +33,7 @@ test_that("loadResults", {
   reg = makeTestRegistry()
   batchMap(reg, identity, letters, use.names=TRUE)
   submitJobs(reg)
+  waitForJobs(reg)
   expect_equal(names(loadResults(reg, use.names = "ids")), as.character(1:26))
   expect_equal(names(loadResults(reg, use.names = "names")), letters)
 })

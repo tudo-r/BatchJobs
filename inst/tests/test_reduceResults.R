@@ -4,6 +4,7 @@ test_that("reduceResults", {
   reg = makeTestRegistry()
   batchMap(reg,  function(x) x^2, 1:3)
   submitJobs(reg)
+  waitForJobs(reg)
   y = reduceResults(reg, fun=function(aggr, job, res) aggr+res, init=0L)
   expect_equal(y, sum((1:3)^2))
 })
@@ -15,6 +16,7 @@ test_that("reduceResults works with empty results", {
   expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1), NULL)
   expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, init=0L), 0L)
   submitJobs(reg)
+  waitForJobs(reg)
   expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, ids=integer(0L)), NULL)
   expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, ids=integer(0L), init=0L), 0L)
 })
@@ -23,6 +25,7 @@ test_that("reduceResults with multiple.result.files", {
   reg = makeTestRegistry(multiple.result.files=TRUE)
   batchMap(reg, function(x) list(foo = x, bar = 1), 1:10)
   submitJobs(reg)
+  waitForJobs(reg)
 
   # quick check for named list as return value of loadResult
   expect_equal(loadResult(reg, 2)$foo, 2)
@@ -46,6 +49,7 @@ test_that("reduceResultsReturnValue", {
   reg = makeTestRegistry()
   batchMap(reg,  function(x) x^2, xs)
   submitJobs(reg)
+  waitForJobs(reg)
   z1 = (1:3)^2
 
   expect_equal(reduceResultsVector(reg, use.names="none"), z1)
@@ -68,6 +72,7 @@ test_that("reduceResultsReturnValue", {
   reg = makeTestRegistry()
   batchMap(reg, function(x) list(a=x, b=x^2), xs)
   submitJobs(reg)
+  waitForJobs(reg)
 
   expect_equal(reduceResultsVector(reg, fun=function(job, res) res$a, use.names="none"), xs)
   expect_equal(reduceResultsVector(reg, fun=function(job, res) res$b, use.names="none"), xs^2)
@@ -89,6 +94,7 @@ test_that("reduceResultsReturnValue", {
   reg = makeTestRegistry()
   batchMap(reg, function(i) list(a="a", b="b"), 1:2)
   submitJobs(reg)
+  waitForJobs(reg)
   y = data.frame(a=rep("a", 2), b=rep("b", 2), stringsAsFactors=FALSE)
   rownames(y) = as.character(rownames(y))
   expect_equal(reduceResultsDataFrame(reg, strings.as.factors=FALSE), y)
@@ -102,6 +108,7 @@ test_that("reduceResultsReturnValue works with empty results", {
   reg = makeTestRegistry()
   batchMap(reg,  function(x) identity, xs)
   submitJobs(reg)
+  waitForJobs(reg)
 
   expect_equal(reduceResultsVector(reg, use.names="none"), c())
   expect_equal(reduceResultsList(reg, use.names="none"), list())
@@ -116,6 +123,7 @@ test_that("reduceResultsReturnValue works with other args", {
 	xs = 1:3
 	batchMap(reg, identity, xs)
 	submitJobs(reg)
+  waitForJobs(reg)
 	z = reduceResultsMatrix(reg, fun = function(job, res, y) (res-y)^2, y = 1, use.names = "none")
   expect_equal(z[,1], (xs-1)^2)
 })
@@ -126,6 +134,7 @@ test_that("reduceResultsReturnValue works with job names", {
 	xs = setNames(1:3, ns)
 	batchMap(reg, identity, xs, use.names=TRUE)
 	submitJobs(reg)
+  waitForJobs(reg)
 
   expect_equal(names(reduceResultsList(reg, use.names="names")), ns)
   expect_equal(names(reduceResultsVector(reg, use.names="names")), ns)

@@ -14,6 +14,7 @@ test_that("source registry files", {
 
   batchMap(reg, function(i) i + xxx, i = 1:3)
   submitJobs(reg)
+  waitForJobs(reg)
   res = loadResults(reg, simplify=TRUE, use.names="none")
   expect_equal(res, 123 + 1:3)
 })

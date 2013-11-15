@@ -5,6 +5,7 @@ test_that("resetJobs", {
   batchMap(reg, identity, 1:3)
   ids = getJobIds(reg)
   submitJobs(reg)
+  waitForJobs(reg)
   done = findDone(reg)
 
   # test that nothing happens on empty id vector

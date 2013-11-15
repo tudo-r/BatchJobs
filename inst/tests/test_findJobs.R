@@ -31,6 +31,7 @@ test_that("findJobs with names", {
   ids = findJobs(reg, jobnames = c("b", "c", "d"))
   expect_equal(ids, 2:4)
   submitJobs(reg, ids)
+  waitForJobs(reg)
   expect_equal(names(loadResults(reg, ids, use.names = "names")), c("b", "c", "d"))
   setJobNames(reg, 1:5, sprintf("x%i", 1:5))
   expect_equal(names(loadResults(reg, ids, use.names = "names")), c("x2", "x3", "x4"))

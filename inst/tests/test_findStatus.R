@@ -9,6 +9,7 @@ test_that("findStatus", {
   batchMap(reg, f, 1:3)
   ids = getJobIds(reg)
   submitJobs(reg)
+  waitForJobs(reg)
   j = findDone(reg)
   expect_equal(j, ids[-2])
   j = findErrors(reg)

@@ -7,6 +7,7 @@ test_that("getLogFiles", {
   ch = chunk(ids[1:8], chunk.size=4)
   submitJobs(reg, ch)
   submitJobs(reg, ids[9:10])
+  waitForJobs(reg)
   fs = getLogFiles(reg, ids)
   expect_equal(length(unique(fs)), 4)
   expect_true(grepl("9", fs[9]))
