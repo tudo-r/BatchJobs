@@ -21,6 +21,15 @@ test_that("reduceResults works with empty results", {
   expect_equal(reduceResults(reg, fun=function(aggr, job, res) 1, ids=integer(0L), init=0L), 0L)
 })
 
+test_that("reduceResults works with imputations", {
+  reg = makeTestRegistry()
+  batchMap(reg, identity, 1:5)
+  submitJobs(reg, c(1:2, 4:5))
+  waitForJobs(reg)
+  expect_equal(reduceResults(reg, ids=1:5, fun=function(aggr, job, res) aggr+res, impute.val=3), 15)
+  expect_equal(reduceResults(reg, ids=1:5, fun=function(aggr, job, res) sum(aggr, res, na.rm=TRUE), impute.val=NA), 12)
+})
+
 test_that("reduceResults with multiple.result.files", {
   reg = makeTestRegistry(multiple.result.files=TRUE)
   batchMap(reg, function(x) list(foo = x, bar = 1), 1:10)
@@ -114,6 +123,19 @@ test_that("reduceResultsReturnValue works with empty results", {
   expect_equal(reduceResultsList(reg, use.names="none"), list())
   expect_equal(reduceResultsMatrix(reg, use.names="none"), matrix(0, nrow=0,ncol=0))
   expect_equal(reduceResultsDataFrame(reg, use.names="none"), data.frame())
+})
+
+test_that("reduceResultsReturnValue works with imputations", {
+  reg = makeTestRegistry()
+  ids = batchMap(reg, identity, 1:5)
+  submitJobs(reg, 1:4)
+  waitForJobs(reg)
+
+  res = c(1:4, NA_real_)
+  expect_equal(reduceResultsVector(reg, ids, impute.val=NA_real_), setNames(res, 1:5))
+  expect_equal(reduceResultsList(reg, ids, impute.val=NA_real_), setNames(as.list(res), 1:5))
+  expect_equal(reduceResultsMatrix(reg, ids, impute.val=NA_real_), setRowNames(matrix(res), 1:5))
+  expect_equal(reduceResultsDataFrame(reg, ids, impute.val=NA_real_, use.names="none"), data.frame(X = res))
 })
 
 
