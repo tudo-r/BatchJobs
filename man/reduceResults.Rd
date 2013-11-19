@@ -7,19 +7,19 @@
 \title{Reduce results from result directory.}
 \usage{
   reduceResults(reg, ids, part = NA_character_, fun, init,
-    ...)
+    impute.val, ...)
 
   reduceResultsList(reg, ids, part = NA_character_, fun,
-    ..., use.names = "ids")
+    ..., use.names = "ids", impute.val)
 
   reduceResultsVector(reg, ids, part = NA_character_, fun,
-    ..., use.names = "ids")
+    ..., use.names = "ids", impute.val)
 
   reduceResultsMatrix(reg, ids, part = NA_character_, fun,
-    ..., rows = TRUE, use.names = "ids")
+    ..., rows = TRUE, use.names = "ids", impute.val)
 
   reduceResultsDataFrame(reg, ids, part = NA_character_,
-    fun, ..., use.names = "ids",
+    fun, ..., use.names = "ids", impute.val,
     strings.as.factors = default.stringsAsFactors())
 }
 \arguments{
@@ -60,6 +60,14 @@
   results with job ids (\dQuote{ids}), stored job names
   (\dQuote{names}) or return a unnamed result
   (\dQuote{none}).  Default is \code{ids}.}
+
+  \item{impute.val}{[any]\cr For \code{reduceResults}: If
+  not missing, the value of \code{impute.val} is passed to
+  function \code{fun} as argument \code{res} for jobs with
+  missing results.\cr For the specialized reduction
+  functions \code{reduceResults[Type]}: If not missing,
+  \code{impute.val} is used as a replacement for the return
+  value of \code{fun} on missing results.}
 
   \item{rows}{[\code{logical(1)}]\cr Should the selected
   vectors be used as rows (or columns) in the result
