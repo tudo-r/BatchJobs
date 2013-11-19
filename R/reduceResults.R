@@ -185,16 +185,16 @@ reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names="
 
 #' @export
 #' @rdname reduceResults
-reduceResultsVector = function(reg, ids, part=NA_character_, fun, ..., use.names="ids") {
-  unlist(reduceResultsList(reg, ids, part, fun, ..., use.names = use.names))
+reduceResultsVector = function(reg, ids, part=NA_character_, fun, ..., use.names="ids", impute.val) {
+  unlist(reduceResultsList(reg, ids, part, fun, ..., use.names=use.names, impute.val=impute.val))
 }
 
 #' @export
 #' @rdname reduceResults
-reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE, use.names="ids") {
+reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE, use.names="ids", impute.val) {
   checkArg(rows, "logical", len=1L, na.ok=FALSE)
   use.names = convertUseNames(use.names)
-  res = reduceResultsList(reg, ids, part, fun, ..., use.names=use.names)
+  res = reduceResultsList(reg, ids, part, fun, ..., use.names=use.names, impute.val=impute.val)
 
   if (length(res) == 0L)
     return(matrix(0, nrow = 0L, ncol = 0L))
@@ -211,12 +211,12 @@ reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE
 
 #' @export
 #' @rdname reduceResults
-reduceResultsDataFrame = function(reg, ids, part=NA_character_, fun, ..., use.names="ids",
+reduceResultsDataFrame = function(reg, ids, part=NA_character_, fun, ..., use.names="ids", impute.val,
   strings.as.factors=default.stringsAsFactors()) {
   checkArg(strings.as.factors, "logical", len=1L, na.ok=FALSE)
 
-  res = reduceResultsList(reg, ids, part, fun, ..., use.names = use.names)
-  if (length(res) == 0L)
+  res = reduceResultsList(reg, ids, part, fun, ..., use.names=use.names, impute.val=impute.val)
+  if (!length(res))
     return(data.frame())
 
   list2df(res, force.names=TRUE, strings.as.factors = strings.as.factors)
