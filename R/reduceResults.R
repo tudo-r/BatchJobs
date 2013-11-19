@@ -34,8 +34,10 @@
 #'   or return a unnamed result (\dQuote{none}).
 #'   Default is \code{ids}.
 #' @param impute.val [any]\cr
-#'   If not missing, the value of \code{impute.val} is passed to function \code{fun}
-#'   as argument \code{res} for jobs with missing results.
+#'   For \code{reduceResults}: If not missing, the value of \code{impute.val} is passed to function \code{fun}
+#'   as argument \code{res} for jobs with missing results.\cr
+#'   For the specialized reduction functions \code{reduceResults[Type]}: If not missing, \code{impute.val} is
+#'   used as a replacement for the return value of \code{fun} on missing results.
 #' @param rows [\code{logical(1)}]\cr
 #'   Should the selected vectors be used as rows (or columns) in the result matrix?
 #'   Default is \code{TRUE}.
