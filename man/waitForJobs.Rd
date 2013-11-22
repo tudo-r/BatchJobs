@@ -9,7 +9,7 @@
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
 
   \item{ids}{[\code{integer}]\cr Vector of job ids.
-  Default is all jobs currently on the system.}
+  Default is all submitted jobs not yet terminated.}
 
   \item{sleep}{[\code{numeric(1)}]\cr Seconds to sleep
   between status updates. Default is \code{10}.}
@@ -22,22 +22,23 @@
   this to \code{Inf}.  Default is \code{604800} (one
   week).}
 
-  \item{stop.on.error}{[\code{logical(1)}]\cr Immediatly
+  \item{stop.on.error}{[\code{logical(1)}]\cr Immediately
   return if a job terminates with an error? Default is
   \code{FALSE}.}
 }
 \value{
   Returns \code{TRUE} if all jobs terminated successfully
-  and \code{FALSE} if either an error occured or the
+  and \code{FALSE} if either an error occurred or the
   timeout is reached.
 }
 \description{
   Waits for termination of jobs while displaying a progress
   bar containing summarizing informations of the jobs. The
-  following abbrevations are used in the progress bar:
-  \dQuote{S} for number of jobs on system, \dQuote{R} for
-  number of jobs running \dQuote{D} for number of jobs
-  successfully terminated and \dQuote{E} for number of jobs
-  terminated with an R exception.
+  following abbreviations are used in the progress bar:
+  \dQuote{S} for number of jobs on system, \dQuote{D} for
+  number of jobs successfully terminated, \dQuote{E} for
+  number ofjobs terminated with an R exception and
+  \dQuote{R} for number of jobs currently running on the
+  system.
 }
 
