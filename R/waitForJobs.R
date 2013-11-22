@@ -30,10 +30,14 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
 
   batch.ids = getBatchIds(reg, "Cannot find jobs on system")
 
-  if (missing(ids))
-    ids = dbFindOnSystem(reg, ids, batch.ids = batch.ids)
-  else
+  if (missing(ids)) {
+    ids = dbFindOnSystem(reg, ids, batch.ids=batch.ids)
+  } else {
     ids = checkIds(reg, ids)
+    not.submitted = dbFindSubmitted(reg, ids, negate=TRUE)
+    if (length(not.submitted)) {
+      stopf("Not all jobs have been submitted, e.g. job with id %i", head(not.submitted, 1L))
+  }
 
   checkArg(sleep, "numeric", len=1L, lower=1, na.ok=FALSE)
   if (is.infinite(sleep))
@@ -48,15 +52,13 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
   timeout = now() + timeout
   bar = makeProgressBar(min=0L, max=n, label="Waiting                  ")
   on.exit(bar$kill())
-  on.sys = ids
 
   repeat {
-    on.sys = dbFindOnSystem(reg, on.sys, batch.ids = batch.ids)
-    n.on.sys = length(on.sys)
-    stats = dbGetStats(reg, ids, running=TRUE, expired=FALSE, times=FALSE, batch.ids = batch.ids)
+    stats = dbGetStats(reg, ids, running=TRUE, expired=FALSE, times=FALSE, batch.ids=batch.ids)
+    n.on.sys = n - stats$done - stats$error
     bar$set(n - n.on.sys, msg = sprintf("Waiting [S:%i R:%i D:%i E:%i]", n.on.sys, stats$running, stats$done, stats$error))
 
-    if (stop.on.error && stats$error > 0L) {
+    if (stop.on.error && stats$error) {
       err = dbGetErrorMsgs(reg, ids, filter=TRUE, limit=1L)
       messagef("Job %i terminated with an error: %s", err$job_id, err$error)
       return(FALSE)
