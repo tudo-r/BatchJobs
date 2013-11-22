@@ -261,6 +261,12 @@ dbFindOnSystem = function(reg, ids, negate=FALSE, batch.ids) {
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
+dbFindSubmittedNotTerminated = function(reg, ids, negate=FALSE) {
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (submitted IS NOT NULL AND done IS NULL AND error IS NULL)",
+                  reg$id, if (negate) "NOT" else "")
+  dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
+}
+
 dbFindRunning = function(reg, ids, negate=FALSE, batch.ids) {
   if (missing(batch.ids))
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")

@@ -2,16 +2,17 @@
 #'
 #' Waits for termination of jobs while displaying a progress bar
 #' containing summarizing informations of the jobs.
-#' The following abbrevations are used in the progress bar:
-#' \dQuote{S} for number of jobs on system, \dQuote{R} for number of jobs running
-#' \dQuote{D} for number of jobs successfully terminated and \dQuote{E} for number of
-#' jobs terminated with an R exception.
+#' The following abbreviations are used in the progress bar:
+#' \dQuote{S} for number of jobs on system, \dQuote{D} for number of
+#' jobs successfully terminated, \dQuote{E} for number ofjobs terminated
+#' with an R exception and \dQuote{R} for number of jobs currently running
+#' on the system.
 #'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 #' @param ids [\code{integer}]\cr
 #'   Vector of job ids.
-#'   Default is all jobs currently on the system.
+#'   Default is all submitted jobs not yet terminated.
 #' @param sleep [\code{numeric(1)}]\cr
 #'   Seconds to sleep between status updates. Default is \code{10}.
 #' @param timeout [\code{numeric(1)}]\cr
@@ -20,25 +21,21 @@
 #'   are problematic to detect. If you don't want a timeout, set this to \code{Inf}.
 #'   Default is \code{604800} (one week).
 #' @param stop.on.error [\code{logical(1)}]\cr
-#'   Immediatly return if a job terminates with an error? Default is \code{FALSE}.
+#'   Immediately return if a job terminates with an error? Default is \code{FALSE}.
 #' @return Returns \code{TRUE} if all jobs terminated successfully and \code{FALSE} if either
-#'   an error occured or the timeout is reached.
+#'   an error occurred or the timeout is reached.
 #' @export
 waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE) {
   checkRegistry(reg)
   syncRegistry(reg)
-
-  batch.ids = getBatchIds(reg, "Cannot find jobs on system")
-
   if (missing(ids)) {
-    ids = dbFindOnSystem(reg, ids, batch.ids=batch.ids)
+    ids = dbFindSubmittedNotTerminated(reg)
   } else {
     ids = checkIds(reg, ids)
     not.submitted = dbFindSubmitted(reg, ids, negate=TRUE)
-    if (length(not.submitted)) {
+    if (length(not.submitted))
       stopf("Not all jobs have been submitted, e.g. job with id %i", head(not.submitted, 1L))
   }
-
   checkArg(sleep, "numeric", len=1L, lower=1, na.ok=FALSE)
   if (is.infinite(sleep))
     stop("Argument 'sleep' must be finite")
@@ -48,15 +45,19 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
   n = length(ids)
   if (n == 0L)
     return(TRUE)
-
   timeout = now() + timeout
+  batch.ids = getBatchIds(reg, "Cannot find jobs on system")
+  i = 0L
+
   bar = makeProgressBar(min=0L, max=n, label="Waiting                  ")
   on.exit(bar$kill())
 
   repeat {
+    i = i + 1L
+
     stats = dbGetStats(reg, ids, running=TRUE, expired=FALSE, times=FALSE, batch.ids=batch.ids)
-    n.on.sys = n - stats$done - stats$error
-    bar$set(n - n.on.sys, msg = sprintf("Waiting [S:%i R:%i D:%i E:%i]", n.on.sys, stats$running, stats$done, stats$error))
+    n.sys = n - stats$done - stats$error
+    bar$set(n - n.sys, msg = sprintf("Waiting [S:%i D:%i E:%i R:%i]", n.sys, stats$done, stats$error, stats$running))
 
     if (stop.on.error && stats$error) {
       err = dbGetErrorMsgs(reg, ids, filter=TRUE, limit=1L)
@@ -64,18 +65,26 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
       return(FALSE)
     }
 
-    if (n.on.sys == 0L || (is.finite(timeout) && now() > timeout))
-      break
+    if (n.sys == 0L)
+      return(!dbAnyErrors(reg, ids))
+
+    if (i %% 5L == 0L) {
+      # update batch ids
+      batch.ids = getBatchIds(reg, "Cannot find jobs on system")
+
+      # check if there are still jobs on the system and none has mystically disappeared
+      # NOTE it seems like some schedulers are "laggy", we should not do this operation
+      # in the first loop w/o a sleep
+      if(!length(dbFindOnSystem(reg, ids, batch.ids=batch.ids)))
+        return(!dbAnyErrors(reg, ids))
+    }
+
+    if (is.finite(timeout) && now() > timeout) {
+      messagef("Timeout reached. %i jobs still on system.", n.sys)
+      return(FALSE)
+    }
 
     Sys.sleep(sleep)
     suppressMessages(syncRegistry(reg))
-    batch.ids = getBatchIds(reg, "Cannot find jobs on system")
   }
-
-  if (n.on.sys > 0L) {
-    messagef("Timeout reached. %i jobs still on system.", n.on.sys)
-    return(FALSE)
-  }
-
-  return(!dbAnyErrors(reg, ids))
 }
