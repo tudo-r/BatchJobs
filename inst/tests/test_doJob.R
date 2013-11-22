@@ -25,7 +25,7 @@ test_that("doJob", {
   # test working directory
   reg = makeTestRegistry()
   wd.now = getwd()
-  wd.job = tempdir()
+  wd.job = tf()
   bar = 123
   save(bar=bar, file=file.path(wd.job, "foo.RData"))
   reg$work.dir = wd.job

@@ -1,11 +1,12 @@
 context("source registry files")
 
 test_that("source registry files", {
-  p = tempdir()
-  dir.create(file.path(p, "src"), recursive=TRUE)
-  cat("xxx = 123", file = file.path(p, "src", "test.R"))
+  reg = makeTestRegistry()
+  p = tf()
+  dir.create(p, recursive=TRUE)
+  cat("xxx = 123", file = file.path(p, "test.R"))
+  reg = makeTestRegistry(cleanup=FALSE, src.dir=p)
 
-  reg = makeTestRegistry(work.dir = tempdir(), src.dirs = "src")
   expect_true(exists("xxx", envir=.GlobalEnv))
 
   rm(list = "xxx", envir=.GlobalEnv)
