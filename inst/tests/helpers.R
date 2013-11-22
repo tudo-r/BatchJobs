@@ -1,4 +1,5 @@
-options(BBmisc.ProgressBar.style = "off")
+if (!interactive())
+  options(BBmisc.ProgressBar.style = "off")
 
 makeTestRegistry = function(packages=character(0), ..., cleanup=TRUE) {
   fd = "unittests-files"
