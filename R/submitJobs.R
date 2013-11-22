@@ -73,7 +73,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
     ids = dbFindSubmitted(reg, negate=TRUE)
     if (length(ids) == 0L) {
       message("All jobs submitted, nothing to do!")
-      return(invisible(NULL))
+      return(invisible(integer(0L)))
     }
   } else {
     if (is.list(ids)) {
