@@ -47,13 +47,12 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
     return(TRUE)
   timeout = now() + timeout
   batch.ids = getBatchIds(reg, "Cannot find jobs on system")
-  i = 0L
+  i = 1L
 
   bar = makeProgressBar(min=0L, max=n, label="Waiting                  ")
   on.exit(bar$kill())
 
   repeat {
-    i = i + 1L
 
     stats = dbGetStats(reg, ids, running=TRUE, expired=FALSE, times=FALSE, batch.ids=batch.ids)
     n.sys = n - stats$done - stats$error
@@ -66,7 +65,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
     }
 
     if (n.sys == 0L)
-      return(!dbAnyErrors(reg, ids))
+      return(stats$error == 0L)
 
     if (i %% 5L == 0L) {
       # update batch ids
@@ -76,7 +75,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
       # NOTE it seems like some schedulers are "laggy", we should not do this operation
       # in the first loop w/o a sleep
       if(!length(dbFindOnSystem(reg, ids, batch.ids=batch.ids)))
-        return(!dbAnyErrors(reg, ids))
+        return(stats$error == 0L)
     }
 
     if (is.finite(timeout) && now() > timeout) {
@@ -85,6 +84,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
     }
 
     Sys.sleep(sleep)
+    i = i + 1L
     suppressMessages(syncRegistry(reg))
   }
 }

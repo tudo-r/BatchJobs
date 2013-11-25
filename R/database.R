@@ -285,15 +285,9 @@ dbFindExpiredJobs = function(reg, ids, negate=FALSE, batch.ids) {
   dbSelectWithIds(reg, query, ids, where=FALSE)$job_id
 }
 
-
 dbGetFirstJobInChunkIds = function(reg, ids){
   query = sprintf("SELECT job_id, first_job_in_chunk_id FROM %s_job_status", reg$id)
   dbSelectWithIds(reg, query, ids)$first_job_in_chunk_id
-}
-
-dbAnyErrors = function(reg, ids) {
-  query = sprintf("SELECT job_id FROM %s_job_status WHERE error IS NOT NULL", reg$id)
-  as.logical(nrow(dbSelectWithIds(reg, query, ids, where=FALSE, reorder=FALSE, limit=1L)))
 }
 
 dbGetErrorMsgs = function(reg, ids, filter=FALSE, limit) {
