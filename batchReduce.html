@@ -1,369 +1,0 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-<title>batchReduce. BatchJobs 1.1</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="author" content="">
-
-<link href="css/bootstrap.css" rel="stylesheet">
-<link href="css/bootstrap-responsive.css" rel="stylesheet">
-<link href="css/highlight.css" rel="stylesheet">
-<link href="css/staticdocs.css" rel="stylesheet">
-
-<!--[if lt IE 9]>
-  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
-  </head>
-
-  <body>
-    <div class="navbar">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="brand" href="#">BatchJobs 1.1</a>
-      <div class="nav">
-        <ul class="nav">
-          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-    <div class="container">
-      <header>
-        
-      </header>
-      
-      <h1>Reduces via a binary function over a list adding jobs to a registry.</h1>
-
-<div class="row">
-  <div class="span8">
-    <h2>Usage</h2>
-    <pre>batchReduce(reg, fun, xs, init, block.size, more.args = list())</pre>
-    
-    <h2>Arguments</h2>
-    <dl>
-      <dt>reg</dt>
-      <dd>[<code><a href='makeRegistry.html'>Registry</a></code>] Empty Registry.</dd>
-      <dt>fun</dt>
-      <dd>[<code>function(aggr, x, ...)</code>] Function to
-  reduce <code>xs</code> with.</dd>
-      <dt>xs</dt>
-      <dd>[<code>vector</code>] Vector to reduce.</dd>
-      <dt>init</dt>
-      <dd>[any] Initial object for reducing.</dd>
-      <dt>block.size</dt>
-      <dd>[<code>integer(1)</code>] Number of
-  elements of <code>xs</code> reduced in one job.</dd>
-      <dt>more.args</dt>
-      <dd>[<code>list</code>] A list of other
-  arguments passed to <code>fun</code>.  Default is empty list.</dd>
-    </dl>
-    
-    <div class="Value">
-      <h2>Value</h2>
-      
-      <p>Vector of type <code>integer</code> with job ids.</p>
-  
-    </div>
-
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p>Each jobs reduces a certain number of elements on one
-  slave. You can then submit these jobs to the batch
-  system.</p>
-  
-    </div>
-    
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'># define function to reduce on slave, we want to sum a vector
-f <- function(aggr, x) aggr + x
-reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
-</div>
-<strong class='message'>Creating dir: /tmp/Rtmp2Ha18Z/file408d5df3cb40</strong>
-<strong class='message'>Saving registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<div class='input'># sum 20 numbers on each slave process, i.e. 5 jobs
-batchReduce(reg, fun=f, 1:100, init=0, block.size=5)
-</div>
-<strong class='message'>Adding 20 jobs to DB.</strong>
-<div class='input'>submitJobs(reg)
-</div>
-<strong class='message'>Saving conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Submitting 20 chunks / 20 jobs.</strong>
-<strong class='message'>Cluster functions: Interactive.</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Writing 20 R scripts...</strong>
-<strong class='message'>2013-11-08 12:17:32: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=1 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:32</strong>
-<strong class='message'>Setting seed: 123</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/01/1-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:32: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:32: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=2 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:32</strong>
-<strong class='message'>Setting seed: 124</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/02/2-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:32: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:32: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=3 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:32</strong>
-<strong class='message'>Setting seed: 125</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/03/3-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:32: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:32: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=4 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:32</strong>
-<strong class='message'>Setting seed: 126</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/04/4-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:32: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:32: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=5 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:32</strong>
-<strong class='message'>Setting seed: 127</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/05/5-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:32: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:33: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=6 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:33</strong>
-<strong class='message'>Setting seed: 128</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/06/6-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:33: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:33: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=7 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:33</strong>
-<strong class='message'>Setting seed: 129</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/07/7-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:33: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:33: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=8 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:33</strong>
-<strong class='message'>Setting seed: 130</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/08/8-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:33: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:33: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=9 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:33</strong>
-<strong class='message'>Setting seed: 131</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/09/9-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:33: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:33: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=10 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:33</strong>
-<strong class='message'>Setting seed: 132</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/10/10-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:33: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:33: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=11 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:33</strong>
-<strong class='message'>Setting seed: 133</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/11/11-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:33: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:33: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=12 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:33</strong>
-<strong class='message'>Setting seed: 134</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/12/12-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:33: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:33: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=13 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:33</strong>
-<strong class='message'>Setting seed: 135</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/13/13-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:33: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:34: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=14 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:34</strong>
-<strong class='message'>Setting seed: 136</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/14/14-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:34: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:34: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=15 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:34</strong>
-<strong class='message'>Setting seed: 137</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/15/15-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:34: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:34: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=16 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:34</strong>
-<strong class='message'>Setting seed: 138</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/16/16-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:34: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:34: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=17 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:34</strong>
-<strong class='message'>Setting seed: 139</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/17/17-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:34: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:34: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=18 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:34</strong>
-<strong class='message'>Setting seed: 140</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/18/18-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:34: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:34: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=19 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:34</strong>
-<strong class='message'>Setting seed: 141</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/19/19-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:34: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<strong class='message'>2013-11-08 12:17:34: Starting job on node lang.</strong>
-<strong class='message'>Loading registry: /tmp/Rtmp2Ha18Z/file408d5df3cb40/registry.RData</strong>
-<strong class='message'>Loading conf: /tmp/Rtmp2Ha18Z/file408d5df3cb40/conf.RData</strong>
-<strong class='message'>Auto-mailer settings: start=none, done=none, error=none.</strong>
-<strong class='message'>Setting work dir: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>########## Executing jid=20 ##########</strong>
-<strong class='message'>Timestamp: 2013-11-08 12:17:34</strong>
-<strong class='message'>Setting seed: 142</strong>
-<strong class='message'>Writing result file: /tmp/Rtmp2Ha18Z/file408d5df3cb40/jobs/20/20-result.RData</strong>
-<strong class='message'>2013-11-08 12:17:34: Job on slave is finished.</strong>
-<strong class='message'>Setting work back to: /home/lang/vcs/tudo-r/BatchJobs</strong>
-<strong class='message'>Memory usage according to gc:</strong>
-<div class='output'>SubmitJobs |+                                                                                                                                                              |   0% (00:00:00)SubmitJobs |++++++++                                                                                                                                                       |   5% (00:00:00)SubmitJobs |++++++++++++++++                                                                                                                                               |  10% (00:00:00)SubmitJobs |++++++++++++++++++++++++                                                                                                                                       |  15% (00:00:00)SubmitJobs |++++++++++++++++++++++++++++++++                                                                                                                               |  20% (00:00:00)SubmitJobs |++++++++++++++++++++++++++++++++++++++++                                                                                                                       |  25% (00:00:03)SubmitJobs |++++++++++++++++++++++++++++++++++++++++++++++++                                                                                                               |  30% (00:00:02)SubmitJobs |++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                                       |  35% (00:00:01)SubmitJobs |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                               |  40% (00:00:01)SubmitJobs |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                       |  45% (00:00:01)SubmitJobs |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                               |  50% (00:00:01)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                        |  55% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                |  60% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                        |  65% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                |  70% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                        |  75% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                |  80% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                        |  85% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                |  90% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++        |  95% (00:00:00)SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
-</div>
-<strong class='message'>Sending 20 submit messages...
-Might take some time, do not interrupt this!</strong>
-<div class='input'># now reduce one final time on master
-reduceResults(reg, fun=function(aggr,job,res) f(aggr, res))
-</div>
-<strong class='message'>Reducing 20 results...</strong>
-<div class='output'>reduceResults |+                                                                                                                                                           |   0% (00:00:00)reduceResults |++++++++                                                                                                                                                    |   5% (00:00:00)reduceResults |++++++++++++++++                                                                                                                                            |  10% (00:00:00)reduceResults |+++++++++++++++++++++++                                                                                                                                     |  15% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++                                                                                                                             |  20% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++                                                                                                                     |  25% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++                                                                                                             |  30% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                                     |  35% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                              |  40% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                                      |  45% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                              |  50% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                                      |  55% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                              |  60% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                       |  65% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                               |  70% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                       |  75% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                               |  80% (00:00:00)reduceResults |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                       |  85% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                |  90% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++        |  95% (00:00:00)reduceResults |++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
-</div>
-<div class='output'>[1] 5050
-</div></pre>
-  </div>
-  <div class="span4">
-    <!-- <ul>
-      <li>batchReduce</li>
-    </ul>
-    <ul>
-      
-    </ul> -->
-      
-        
-  </div>
-</div>
-      
-      <footer>
-      <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
-      </footer>
-    </div>
-  </body>
-</html>
