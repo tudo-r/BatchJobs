@@ -1,5 +1,23 @@
 # BatchJobs
 
+Provides Map, Reduce and Filter variants to generate jobs on batch computing systems like PBS/Torque, LSF and Sun Grid Engine. Multicore and SSH systems are also supported.
+
+* Offical CRAN release site: 
+  http://cran.r-project.org/web/packages/BatchJobs/index.html
+
+* R Documentation in HTML:
+  http://tudo-r.github.io/BatchJobs/man
+
+* Run this in R to install the current GitHub version:
+  ```splus
+  devtools::install_github("BatchJobs", username="tudo-r")
+  ```
+
+* [Further installation instructions](https://github.com/tudo-r/PackagesInfo/wiki/Installation-Information)
+
+* Travis CI: [![Build Status](https://travis-ci.org/tudo-r/BatchJobs.png)](https://travis-ci.org/tudo-r/BatchJobs)
+
+
 ## Core features
 * Create, submit and control [R](http://www.r-project.org/) jobs on batch systems
 * Provides the functional programming tools Map, Reduce and Filter to operate on the cluster
@@ -13,31 +31,14 @@
 * [BatchExperiments](https://github.com/tudo-r/Batchexperiments) extends this package with functionality required for comprehensive computer experiments and simulation studies.
 
 
-## Quickstart
-To install the latest stable release from CRAN:
-```splus
-install.packages("BatchJobs")
-```
-To install the development version use [devtools](http://cran.r-project.org/web/packages/devtools):
-```splus
-library(devtools)
-install_github("BatchJobs", username="tudo-r")
-```
-Sometimes it might be required to update BatchJobs' dependencies as well.
-If you encounter errors during installation, try upgrading by [BBmisc](https://github.com/berndbischl/BBmisc) and [fail](https://github.com/mllg/fail) before filing a bug report:
-```splus
-library(devtools)
-install_github("BBmisc", username="berndbischl")
-install_github("fail", username="mllg")
-```
+## Configuration 
 A fresh installation defaults to a local execution mode.
 Proceed to [Configuration](../../wiki/Configuration) to set up cluster execution.
 
 ## Documentation
-Currently the best introduction to the package is our [technical report](http://sfb876.tu-dortmund.de/PublicPublicationFiles/bischl_etal_2012a.pdf).
-For more detailed information on the functions consult the [R documentation](http://tudo-r.github.io/BatchJobs/).
+Probably the best way to get started in 5 minutes is to read Henrik Bengtsson [intro slides](http://goo.gl/s1eqBz).
+If you have more time, read our [technical report](http://sfb876.tu-dortmund.de/PublicPublicationFiles/bischl_etal_2012a.pdf).
+For more detailed information on the functions consult the [R documentation](http://tudo-r.github.io/BatchJobs/man).
 We also provide a [FAQ](../../wiki/FAQ) in our [wiki](../../wiki).
 
 We also have a [mailing list](http://groups.google.com/group/batchjobs).
-
-[![Build Status](https://travis-ci.org/tudo-r/BatchJobs.png)](https://travis-ci.org/tudo-r/BatchJobs)
