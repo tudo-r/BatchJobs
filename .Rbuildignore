@@ -1,6 +1,10 @@
 examples
 external_tests
+makeR
 inst/tests/unittests-files
-.travis.yml
 .git
 .gitignore
+.travis.yml
+Makefile
+README.md
+
