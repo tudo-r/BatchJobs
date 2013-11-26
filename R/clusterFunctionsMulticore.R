@@ -1,10 +1,10 @@
 #' Use multiple cores on local Linux machine to spawn parallel jobs.
-#' 
+#'
 #' Jobs are spawned by starting multiple R sessions on the commandline
-#' (similar like on true batch systems). 
+#' (similar like on true batch systems).
 #' Packages \code{parallel} or \code{multicore} are not used in any way.
 #'
-#' @param ncpus [\code{integers(1)}]\cr
+#' @param ncpus [\code{integer(1)}]\cr
 #'   Number of VPUs of worker.
 #'   Default means to query the worker via \dQuote{/proc/cpuinfo}.
 #' @param max.jobs [\code{integer(1)}]\cr
