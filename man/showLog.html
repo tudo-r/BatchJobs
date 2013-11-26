@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Display the contents of a log file.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for showLog {BatchJobs}"><tr><td>showLog {BatchJobs}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Display the contents of a log file.</h2>
+
+<h3>Description</h3>
+
+<p>Display the contents of a log file, useful in case of
+errors.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  showLog(reg, id, pager = getOption("pager"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>reg</code></td>
+<td>
+<p>[<code><a href="makeRegistry.html">Registry</a></code>]<br> Registry.</p>
+</td></tr>
+<tr valign="top"><td><code>id</code></td>
+<td>
+<p>[<code>integer(1)</code>]<br> Id of selected job.
+Default is first id in registry.</p>
+</td></tr>
+<tr valign="top"><td><code>pager</code></td>
+<td>
+<p>[<code>any</code>]<br> Pager to use to display the
+log. Defaults to <code>getOption("pager")</code>.  This option
+is passed to <code>file.show</code> and is highly OS dependant
+and GUI dependant.  If either R's pager or the
+environment variable &ldquo;PAGER&rdquo; is set to
+&ldquo;less&rdquo; or &ldquo;vim&rdquo;, the correct part of the
+log file will be shown.  Otherwise you find information
+about the correct part in the beginning of the displayed
+file.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Note this rare special case: When you use chunking,
+submit some jobs, some jobs fail, then you resubmit these
+jobs again in different chunks, the log files will
+contain the log of the old, failed job as well.
+<code>showLog</code> tries to jump to the correct part of the
+new log file with a supported pager.
+</p>
+
+
+<h3>Value</h3>
+
+<p>[<code>character(1)</code>]. Invisibly returns path to log
+file.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="grepLogs.html">grepLogs</a></code>, <code><a href="getErrorMessages.html">getErrorMessages</a></code>
+</p>
+
+<hr><div align="center">[Package <em>BatchJobs</em> version 1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

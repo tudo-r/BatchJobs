@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Combination of makeRegistry, batchMap and submitJobs.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for batchMapQuick {BatchJobs}"><tr><td>batchMapQuick {BatchJobs}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Combination of makeRegistry, batchMap and submitJobs.</h2>
+
+<h3>Description</h3>
+
+<p>Combination of <code><a href="makeRegistry.html">makeRegistry</a></code>,
+<code><a href="batchMap.html">batchMap</a></code> and <code><a href="submitJobs.html">submitJobs</a></code> for
+quick computations on the cluster. Should only be used by
+skilled users who know what they are doing. Creates the
+file.dir in current directory under the name
+&ldquo;bmq_[random alphanumerics]&rdquo;, maps function,
+potentially chunks jobs and submits them.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  batchMapQuick(fun, ..., more.args = list(),
+    packages = character(0L), chunk.size, n.chunks,
+    chunks.as.arrayjobs = FALSE, inds, resources = list(),
+    temporary = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>fun</code></td>
+<td>
+<p>[<code>function</code>]<br> Function to map over
+<code>...</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>[any]<br> Arguments to vectorize over (list or
+vector).</p>
+</td></tr>
+<tr valign="top"><td><code>more.args</code></td>
+<td>
+<p>[<code>list</code>]<br> A list of other
+arguments passed to <code>fun</code>.  Default is empty list.</p>
+</td></tr>
+<tr valign="top"><td><code>packages</code></td>
+<td>
+<p>[<code>character</code>]<br> Packages that will
+always be loaded on each node.  Default is
+<code>character(0)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>chunk.size</code></td>
+<td>
+<p>[<code>integer(1)</code>]<br> Preferred number
+of jobs in each chunk.  Can not be used in combination
+with <code>n.chunks</code>.  Note that the ids will get
+shuffled to balance out possible run time differences.
+Default is not to use chunking.</p>
+</td></tr>
+<tr valign="top"><td><code>n.chunks</code></td>
+<td>
+<p>[<code>integer(1)</code>]<br> Preferred number
+chunks.  Can not be used in combination with
+<code>chunk.size</code>.  Note that the ids will get shuffled
+to balance out possible run time differences.  Default is
+not to use chunking.</p>
+</td></tr>
+<tr valign="top"><td><code>chunks.as.arrayjobs</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> Submit
+chunks as array jobs?  Default is <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>inds</code></td>
+<td>
+<p>[<code>integer</code>]<br> Indices of ids / chunks
+to submit.  Default is all.</p>
+</td></tr>
+<tr valign="top"><td><code>resources</code></td>
+<td>
+<p>[<code>list</code>]<br> Required resources for
+all batch jobs.  Default is empty list.</p>
+</td></tr>
+<tr valign="top"><td><code>temporary</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> Create the
+<code>file.dir</code> inside R's <code>tempdir</code>?  Default is
+<code>FALSE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[<code><a href="makeRegistry.html">Registry</a></code>]
+</p>
+
+<hr><div align="center">[Package <em>BatchJobs</em> version 1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

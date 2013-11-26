@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Reset computational state of jobs.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for resetJobs {BatchJobs}"><tr><td>resetJobs {BatchJobs}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Reset computational state of jobs.</h2>
+
+<h3>Description</h3>
+
+<p>Reset state of jobs in the database. Useful under two
+circumstances: Either to re-submit them because of
+changes in e.g. external data or to resolve rare issues
+when jobs are killed in an unfortunate state and
+therefore blocking your registry.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  resetJobs(reg, ids, force = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>reg</code></td>
+<td>
+<p>[<code><a href="makeRegistry.html">Registry</a></code>]<br> Registry.</p>
+</td></tr>
+<tr valign="top"><td><code>ids</code></td>
+<td>
+<p>[<code>integer</code>]<br> Ids of jobs to kill.
+Default is none.</p>
+</td></tr>
+<tr valign="top"><td><code>force</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> Reset jobs without
+checking whether they are currently running.  READ THE
+DETAILS SECTION!  Default is <code>FALSE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The function internally lists all jobs on the batch
+system and if those include some of the jobs you want to
+reset, it informs you to kill them first by raising an
+exception. If you really know what you are doing, you may
+set <code>force</code> to <code>TRUE</code> to omit this sanity
+check. Note that this is a dangerous operation to perform
+which may harm the database integrity. In this case you
+HAVE to make externally sure that none of the jobs you
+want to reset are still running.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Vector of reseted job ids.
+</p>
+
+<hr><div align="center">[Package <em>BatchJobs</em> version 1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>
