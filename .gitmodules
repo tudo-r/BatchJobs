@@ -1,0 +1,3 @@
+[submodule "tools"]
+	path = makeR
+	url = https://github.com/tudo-r/makeR
