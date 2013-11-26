@@ -1,6 +1,6 @@
 \name{makeSubmitJobResult}
-\alias{SubmitJobResult}
 \alias{makeSubmitJobResult}
+\alias{SubmitJobResult}
 \title{Create a SubmitJobResult object.}
 \usage{
   makeSubmitJobResult(status, batch.job.id, msg, ...)

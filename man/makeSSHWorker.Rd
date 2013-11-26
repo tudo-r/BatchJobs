@@ -1,6 +1,6 @@
 \name{makeSSHWorker}
-\alias{SSHWorker}
 \alias{makeSSHWorker}
+\alias{SSHWorker}
 \title{Create SSH worker for SSH cluster functions.}
 \usage{
   makeSSHWorker(nodename, rhome = "", ncpus, max.jobs,

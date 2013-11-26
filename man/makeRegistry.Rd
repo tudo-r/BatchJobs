@@ -1,6 +1,6 @@
 \name{makeRegistry}
-\alias{Registry}
 \alias{makeRegistry}
+\alias{Registry}
 \title{Construct a registry object.}
 \usage{
   makeRegistry(id, file.dir, sharding = TRUE, work.dir,

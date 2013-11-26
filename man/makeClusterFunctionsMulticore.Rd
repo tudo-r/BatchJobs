@@ -8,7 +8,7 @@
     script)
 }
 \arguments{
-  \item{ncpus}{[\code{integers(1)}]\cr Number of VPUs of
+  \item{ncpus}{[\code{integer(1)}]\cr Number of VPUs of
   worker.  Default means to query the worker via
   \dQuote{/proc/cpuinfo}.}
 
