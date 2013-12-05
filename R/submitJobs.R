@@ -43,7 +43,7 @@
 #'   The default function used with \code{job.delay} set to \code{TRUE} is no delay for
 #'   100 jobs or less and otherwise \code{runif(1, 0.1*n, 0.2*n)}.
 #'   If set to \code{FALSE} (the default) delaying jobs is disabled.
-#' @return Vector of submitted job ids.
+#' @return [\code{integer}]. Vector of submitted job ids.
 #' @export
 #' @examples
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)

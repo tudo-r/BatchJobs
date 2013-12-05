@@ -22,8 +22,8 @@
 #'   Default is \code{604800} (one week).
 #' @param stop.on.error [\code{logical(1)}]\cr
 #'   Immediately return if a job terminates with an error? Default is \code{FALSE}.
-#' @return Returns \code{TRUE} if all jobs terminated successfully and \code{FALSE} if either
-#'   an error occurred or the timeout is reached.
+#' @return [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated successfully 
+#'   and \code{FALSE} if either an error occurred or the timeout is reached.
 #' @export
 waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE) {
   checkRegistry(reg)
