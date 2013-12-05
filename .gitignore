@@ -1,3 +1,4 @@
 inst/tests/unittests-files
 
 BatchJobs_*.tar.gz
+test_src.R
