@@ -27,4 +27,4 @@ source("inst/tests/helpers.R")
 test_dir("inst/tests")
 
 # remove bmq stuff
-lapply(list.files("inst/tests/", pattern="bmq_", full.names=TRUE), unlink, recursive=TRUE)
+xs = lapply(list.files("inst/tests/", pattern="bmq_", full.names=TRUE), unlink, recursive=TRUE)

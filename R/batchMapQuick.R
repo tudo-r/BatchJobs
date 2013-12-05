@@ -52,7 +52,7 @@ batchMapQuick = function(fun, ..., more.args=list(), packages=character(0L),
   # otherwise we cannot look at it / do anything with it in case of errors
   try({
     ids = batchMap(reg, fun, ..., more.args=more.args)
-    if (!missing(chunk.size) && !missing(n.chunks))
+    if (!missing(chunk.size) || !missing(n.chunks)) 
       ids = chunk(ids, chunk.size=chunk.size, n.chunks=n.chunks, shuffle=TRUE)
     if (!missing(inds))
       ids = ids[inds]

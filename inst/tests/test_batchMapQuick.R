@@ -1,7 +1,5 @@
 context("batchMapQuick")
 
-if (interactive()) {
-
 test_that("batchMapQuick", {
   reg = batchMapQuick(function(x) x^2, 1:3, temporary=TRUE)
   y = sapply(getJobIds(reg), function(id) loadResult(reg, id))
@@ -24,4 +22,9 @@ test_that("batchMapQuick", {
   expect_equal(getJobNr(reg), 0L)
 })
 
-}
+test_that("batchMapQuick chunks properly", {
+  expect_message({
+    reg = batchMapQuick(identity, 1:4, chunk.size=2)
+  }, "Submitting 2 chunks / 4 jobs")
+})
+
