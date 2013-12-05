@@ -25,7 +25,8 @@ Imports:
     plyr,
     fail (>= 1.2)
 Suggests:
-    testthat
+    testthat,
+    MASS
 LazyData: yes
 ByteCompile: yes
 Version: 1.2
