@@ -52,7 +52,7 @@
   (the default) delaying jobs is disabled.}
 }
 \value{
-  Vector of submitted job ids.
+  [\code{integer}]. Vector of submitted job ids.
 }
 \description{
   If the internal submit cluster function completes

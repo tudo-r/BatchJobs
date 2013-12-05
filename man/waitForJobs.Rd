@@ -27,9 +27,9 @@
   \code{FALSE}.}
 }
 \value{
-  Returns \code{TRUE} if all jobs terminated successfully
-  and \code{FALSE} if either an error occurred or the
-  timeout is reached.
+  [\code{logical(1)}]. Returns \code{TRUE} if all jobs
+  terminated successfully and \code{FALSE} if either an
+  error occurred or the timeout is reached.
 }
 \description{
   Waits for termination of jobs while displaying a progress
