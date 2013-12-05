@@ -68,8 +68,8 @@ of an error, NULL is returned.
 reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), seed=123)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/RtmpTp3YLN/file415513b22837
-## Saving registry: /tmp/RtmpTp3YLN/file415513b22837/registry.RData
+<pre><code>## Creating dir: /tmp/user/1000/Rtmp6kubH8/file63d74f10500b
+## Saving registry: /tmp/user/1000/Rtmp6kubH8/file63d74f10500b/registry.RData
 </code></pre>
 
 <pre><code class="r">f &lt;- function(x) if (x==1) stop(&quot;oops&quot;) else x
@@ -82,11 +82,11 @@ batchMap(reg, f, 1:2)
 <pre><code class="r">testJob(reg, 1)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/RtmpTp3YLN/415561c9c9f1
-## Saving registry: /tmp/RtmpTp3YLN/415561c9c9f1/registry.RData
+<pre><code>## Creating dir: /tmp/user/1000/Rtmp6kubH8/63d732fa9ac4
+## Saving registry: /tmp/user/1000/Rtmp6kubH8/63d732fa9ac4/registry.RData
 ## ### Output of new R process starts here ###
 ## ### Output of new R process ends here ###
-## ### Approximate running time: 1.07 seconds
+## ### Approximate running time: 1.20 seconds
 </code></pre>
 
 <pre><code>## NULL
@@ -95,11 +95,11 @@ batchMap(reg, f, 1:2)
 <pre><code class="r">testJob(reg, 2)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/RtmpTp3YLN/41553a41e433
-## Saving registry: /tmp/RtmpTp3YLN/41553a41e433/registry.RData
+<pre><code>## Creating dir: /tmp/user/1000/Rtmp6kubH8/63d76918ba52
+## Saving registry: /tmp/user/1000/Rtmp6kubH8/63d76918ba52/registry.RData
 ## ### Output of new R process starts here ###
 ## ### Output of new R process ends here ###
-## ### Approximate running time: 1.13 seconds
+## ### Approximate running time: 1.21 seconds
 </code></pre>
 
 <pre><code>## [1] 2
