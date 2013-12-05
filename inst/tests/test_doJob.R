@@ -40,6 +40,7 @@ test_that("doJob", {
   }, "BatchJobs job")
   expect_equal(y, bar + 1)
   expect_equal(getwd(), wd.now)
+  unlink(file.path(wd.job, "foo.RData"))
 
   # test packages
   # be sneaky otherwise we get error here due to pack check
