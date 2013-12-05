@@ -5,7 +5,7 @@
 #'
 #' @param reg [\code{Registry}]\cr
 #'   Location of the file.dir to load the registry from.
-#' @return Invisibly returns a character vector of loaded file names.
+#' @return [\code{character}]. Invisibly returns a character vector of loaded file names.
 #' @export
 loadExports = function(reg) {
   checkRegistry(reg)
