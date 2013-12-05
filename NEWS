@@ -1,3 +1,9 @@
+BatchJobs_1.2:
+- fix a bug where chunking did not work with batchMapQuick
+- some smaller fixes to make the package behave more robustly on different systems
+- most reduceResults* functions now have an 'impute.val' option that be used to fill in
+  dummy result values for job who did not finish, e.g., because an error occurred in them
+
 BatchJobs_1.1-1135:
 - Increased minor version number
 - Added support for SLURM schedulers
