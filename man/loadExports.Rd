@@ -9,8 +9,8 @@
   to load the registry from.}
 }
 \value{
-  Invisibly returns a character vector of loaded file
-  names.
+  [\code{character}]. Invisibly returns a character vector
+  of loaded file names.
 }
 \description{
   Loads all \code{RData} files in the \dQuote{exports}
