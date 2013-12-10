@@ -1,4 +1,5 @@
-makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages, src.dirs=character(0L)) {
+makeRegistryInternal = function(id, file.dir, sharding, work.dir,
+  multiple.result.files, seed, packages, src.dirs, src.files) {
   checkArg(id, cl = "character", len = 1L, na.ok = FALSE)
   checkIdValid(id, allow.minus=FALSE)
   checkArg(file.dir, cl = "character", len = 1L, na.ok = FALSE)
@@ -18,7 +19,8 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.resul
   packages = union(packages, "BatchJobs")
   requirePackages(packages, stop=TRUE, suppress.warnings=TRUE)
   checkArg(src.dirs, cl = "character", na.ok = FALSE)
-  sourceRegistryFilesInternal(work.dir, src.dirs, .GlobalEnv)
+  checkArg(src.files, cl = "character", na.ok = FALSE)
+  sourceRegistryFilesInternal(work.dir, src.dirs, src.files)
 
   # make paths absolute to be sure. otherwise cfSSH wont work for example
   checkDir(file.dir, create=TRUE, check.empty=TRUE, check.posix=TRUE, msg=TRUE)
@@ -46,6 +48,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.resul
     sharding = sharding,
     work.dir = work.dir,
     src.dirs = src.dirs,
+    src.files = src.files,
     multiple.result.files = multiple.result.files,
     packages = packages[order(names(packages))]
   ), "Registry")
@@ -87,9 +90,15 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.resul
 #'   Packages that will always be loaded on each node.
 #'   Default is \code{character(0)}.
 #' @param src.dirs [\code{character}]\cr
-#'   Directories relative to your \code{work.dir} containing R scripts 
+#'   Directories relative to your \code{work.dir} containing R scripts
 #'   to be sourced on registry load (both on slave and master).
 #'   Files not matching the pattern \dQuote{\\.[Rr]$} are ignored.
+#'   Useful if you have many helper functions that are needed during the execution of your jobs.
+#'   These files should only contain function definitions and no executable code.
+#'   Default is \code{character(0)}.
+#' @param src.files [\code{character}]\cr
+#'   R scripts files relative to your \code{work.dir}
+#'   to be sourced on registry load (both on slave and master).
 #'   Useful if you have many helper functions that are needed during the execution of your jobs.
 #'   These files should only contain function definitions and no executable code.
 #'   Default is \code{character(0)}.
@@ -102,15 +111,15 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir, multiple.resul
 #' @examples
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' print(reg)
-makeRegistry = function(id, file.dir, sharding=TRUE, work.dir, multiple.result.files = FALSE,
-                        seed, packages=character(0L), src.dirs=character(0L), skip = TRUE) {
+makeRegistry = function(id, file.dir, sharding=TRUE, work.dir, multiple.result.files=FALSE,
+                        seed, packages=character(0L), src.dirs=character(0L), src.files=character(0L), skip=TRUE) {
   if (missing(file.dir))
     file.dir = file.path(getwd(), paste(id, "files", sep="-"))
   checkArg(skip, "logical", len=1L, na.ok=FALSE)
   if (skip && isRegistryDir(file.dir))
     return(loadRegistry(file.dir = file.dir))
 
-  reg = makeRegistryInternal(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages, src.dirs)
+  reg = makeRegistryInternal(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages, src.dirs, src.files)
 
   dbCreateJobStatusTable(reg)
   dbCreateJobDefTable(reg)
@@ -160,8 +169,8 @@ loadRegistry = function(file.dir, work.dir) {
   } else {
     loadExports(reg)
   }
-  
-  sourceRegistryFilesInternal(reg$work.dir, reg$src.dirs)
+
+  sourceRegistryFiles(reg)
 
   return(reg)
 }

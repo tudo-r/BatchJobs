@@ -1,4 +1,6 @@
-#' Source files in source directories specified in the registry.
+#' Source registry files
+#'
+#' Sources all files found in \code{src.dirs} and specified via \code{src.files}.
 #'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
@@ -6,24 +8,28 @@
 #'   Environment to source the files into. Default is the global environment.
 #' @return Nothing.
 #' @export
-sourceRegistryFiles = function(reg, envir = .GlobalEnv) {
+sourceRegistryFiles = function(reg, envir=.GlobalEnv) {
   checkRegistry(reg)
-  sourceRegistryFilesInternal(reg$work.dir, reg$src.dirs, envir)
+  checkArg(envir, "environment")
+  sourceRegistryFilesInternal(reg$work.dir, reg$src.dirs, reg$src.files)
 }
 
-sourceRegistryFilesInternal = function(work.dir, src.dirs, envir = .GlobalEnv) {
-  if (length(src.dirs)) {
-    checkArg(envir, "environment")
-    dirs = file.path(work.dir, src.dirs)
+sourceRegistryFilesInternal = function(work.dir, dirs, files, envir=.GlobalEnv) {
+  files = file.path(work.dir, c(getRScripts(dirs), files))
+  ok = file.exists(files)
+  if (any(!ok))
+    stopf("Files to source not found, e.g. %s", head(files[!ok], 1L))
+  lapply(files, sys.source, envir=envir)
+  invisible(NULL)
+}
+
+getRScripts = function(dirs) {
+  if (length(dirs)) {
     ok = isDirectory(dirs)
     if (any(!ok))
       stopf("Directories not found: %s", collapse(dirs[!ok]))
-    for (dir in dirs) {
-      f = list.files(dir, pattern = "\\.[Rr]$", full.names=TRUE)
-      messagef("Sourcing %i files in %s...", length(f), dir)
-      lapply(f, sys.source, envir = envir)
-    }
+    unlist(lapply(dirs, list.files, pattern = "\\.[Rr]$", full.names=TRUE))
+  } else {
+    character(0L)
   }
-
-  invisible(NULL)
 }

@@ -57,6 +57,10 @@ updateRegistry.Registry = function(reg) {
     reg$src.dirs = character(0L)
   }
 
+  if (version.reg < package_version("1.2")) {
+    reg$src.files = character(0L)
+  }
+
   reg$packages$BatchJobs$version = version.pkg
   reg
 }
