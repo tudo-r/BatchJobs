@@ -36,7 +36,6 @@ makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, nice,
   r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {
 
   worker = makeWorkerLocalLinux(r.options, script, ncpus, max.jobs, max.load, nice)
-  workers = list(localhost=worker)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     updateWorker(worker, reg$file.dir, tdiff=0L)
