@@ -2,9 +2,8 @@
 \alias{installPackagesOnSSHWorkers}
 \title{Install packages on SSH workers.}
 \usage{
-  installPackagesOnSSHWorkers(nodenames, pkgs,
-    repos = getOption("repos"), consecutive = TRUE,
-    show.output = consecutive, ...)
+installPackagesOnSSHWorkers(nodenames, pkgs, repos = getOption("repos"),
+  consecutive = TRUE, show.output = consecutive, ...)
 }
 \arguments{
   \item{nodenames}{[\code{character}]\cr Nodenames of
@@ -29,19 +28,19 @@
   \code{\link{install.packages}}.}
 }
 \value{
-  Nothing.
+Nothing.
 }
 \description{
-  Installation is done via
-  \code{\link{callFunctionOnSSHWorkers}} and
-  \code{\link{install.packages}}.
+Installation is done via
+\code{\link{callFunctionOnSSHWorkers}} and
+\code{\link{install.packages}}.
 }
 \details{
-  Note that as usual the function tries to install the
-  packages into the first path of \code{.libPaths()} of
-  each each worker.
+Note that as usual the function tries to install the
+packages into the first path of \code{.libPaths()} of each
+each worker.
 }
 \seealso{
-  \code{\link{callFunctionOnSSHWorkers}}
+\code{\link{callFunctionOnSSHWorkers}}
 }
 

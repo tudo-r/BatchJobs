@@ -2,7 +2,7 @@
 \alias{getJob}
 \title{Get job from registry by id.}
 \usage{
-  getJob(reg, id, load.fun = FALSE, check.id = TRUE)
+getJob(reg, id, load.fun = FALSE, check.id = TRUE)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -16,9 +16,9 @@
   Default is \code{TRUE}.}
 }
 \value{
-  [\code{\link{Job}}].
+[\code{\link{Job}}].
 }
 \description{
-  Get job from registry by id.
+Get job from registry by id.
 }
 

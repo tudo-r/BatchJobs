@@ -2,9 +2,8 @@
 \alias{batchReduceResults}
 \title{Reduces results via a binary function and adds jobs for this to a registry.}
 \usage{
-  batchReduceResults(reg, reg2, fun, ids,
-    part = NA_character_, init, block.size,
-    more.args = list())
+batchReduceResults(reg, reg2, fun, ids, part = NA_character_, init,
+  block.size, more.args = list())
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry whose
@@ -33,13 +32,13 @@
   arguments passed to \code{fun}.  Default is empty list.}
 }
 \value{
-  Vector of type \code{integer} with job ids.
+Vector of type \code{integer} with job ids.
 }
 \description{
-  Each jobs reduces a certain number of results on one
-  slave. You can then submit these jobs to the batch
-  system. Later, you can do a final reduction with
-  \code{\link{reduceResults}} on the master.
+Each jobs reduces a certain number of results on one slave.
+You can then submit these jobs to the batch system. Later,
+you can do a final reduction with
+\code{\link{reduceResults}} on the master.
 }
 \examples{
 # generating example results:

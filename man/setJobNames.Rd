@@ -2,7 +2,7 @@
 \alias{setJobNames}
 \title{Set job names.}
 \usage{
-  setJobNames(reg, ids, jobnames)
+setJobNames(reg, ids, jobnames)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -17,9 +17,9 @@
   provided.}
 }
 \value{
-  Named vector of job ids.
+Named vector of job ids.
 }
 \description{
-  Set job names.
+Set job names.
 }
 

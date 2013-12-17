@@ -1,8 +1,8 @@
 \name{sourceRegistryFiles}
 \alias{sourceRegistryFiles}
-\title{Source files in source directories specified in the registry.}
+\title{Source registry files}
 \usage{
-  sourceRegistryFiles(reg, envir = .GlobalEnv)
+sourceRegistryFiles(reg, envir = .GlobalEnv)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -12,10 +12,10 @@
   environment.}
 }
 \value{
-  Nothing.
+Nothing.
 }
 \description{
-  Source files in source directories specified in the
-  registry.
+Sources all files found in \code{src.dirs} and specified
+via \code{src.files}.
 }
 

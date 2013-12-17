@@ -2,7 +2,7 @@
 \alias{loadConfig}
 \title{Load a specific configuration file.}
 \usage{
-  loadConfig(conffile = ".BatchJobs.R")
+loadConfig(conffile = ".BatchJobs.R")
 }
 \arguments{
   \item{conffile}{[\code{character(1)}]\cr Location of the
@@ -11,12 +11,12 @@
   directory.}
 }
 \value{
-  Invisibly returns a list of configuration settings.
+Invisibly returns a list of configuration settings.
 }
 \description{
-  Load a specific configuration file.
+Load a specific configuration file.
 }
 \seealso{
-  \code{\link{getConfig}}, \code{\link{setConfig}}
+\code{\link{getConfig}}, \code{\link{setConfig}}
 }
 

@@ -2,8 +2,8 @@
 \alias{getJobInfo}
 \title{Get computational information of jobs.}
 \usage{
-  getJobInfo(reg, ids, pars = FALSE, prefix.pars = FALSE,
-    select, unit = "seconds")
+getJobInfo(reg, ids, pars = FALSE, prefix.pars = FALSE, select,
+  unit = "seconds")
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -32,13 +32,13 @@
   \dQuote{seconds}.}
 }
 \value{
-  [\code{data.frame}].
+[\code{data.frame}].
 }
 \description{
-  Returns time stamps (submitted, started, done), time
-  running, time in queue, error messages (shortened, see
-  \code{\link{showLog}} for detailed error messages),
-  hostname of the host the job was executed, the assigned
-  batch ID, the R PID and the seed of the job.
+Returns time stamps (submitted, started, done), time
+running, time in queue, error messages (shortened, see
+\code{\link{showLog}} for detailed error messages),
+hostname of the host the job was executed, the assigned
+batch ID, the R PID and the seed of the job.
 }
 

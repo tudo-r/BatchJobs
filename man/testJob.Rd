@@ -2,7 +2,7 @@
 \alias{testJob}
 \title{Tests a job by running it with Rscript in a new process.}
 \usage{
-  testJob(reg, id, resources = list())
+testJob(reg, id, resources = list())
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -16,12 +16,12 @@
   empty list.}
 }
 \value{
-  [any]. Result of job. If the job did not complete because
-  of an error, NULL is returned.
+[any]. Result of job. If the job did not complete because
+of an error, NULL is returned.
 }
 \description{
-  Useful for debugging. Note that neither the registry,
-  database or file directory are changed.
+Useful for debugging. Note that neither the registry,
+database or file directory are changed.
 }
 \examples{
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
@@ -31,6 +31,6 @@ testJob(reg, 1)
 testJob(reg, 2)
 }
 \seealso{
-  \code{\link{reduceResults}}
+\code{\link{reduceResults}}
 }
 

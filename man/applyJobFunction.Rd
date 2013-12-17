@@ -2,7 +2,7 @@
 \alias{applyJobFunction}
 \title{ONLY FOR INTERNAL USAGE.}
 \usage{
-  applyJobFunction(reg, job)
+applyJobFunction(reg, job)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -10,9 +10,9 @@
   \item{job}{[\code{\link{Job}}]\cr Job.}
 }
 \value{
-  [any]. Result of job.
+[any]. Result of job.
 }
 \description{
-  ONLY FOR INTERNAL USAGE.
+ONLY FOR INTERNAL USAGE.
 }
 

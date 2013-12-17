@@ -2,7 +2,7 @@
 \alias{resetJobs}
 \title{Reset computational state of jobs.}
 \usage{
-  resetJobs(reg, ids, force = FALSE)
+resetJobs(reg, ids, force = FALSE)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -15,24 +15,24 @@
   DETAILS SECTION!  Default is \code{FALSE}.}
 }
 \value{
-  Vector of reseted job ids.
+Vector of reseted job ids.
 }
 \description{
-  Reset state of jobs in the database. Useful under two
-  circumstances: Either to re-submit them because of
-  changes in e.g. external data or to resolve rare issues
-  when jobs are killed in an unfortunate state and
-  therefore blocking your registry.
+Reset state of jobs in the database. Useful under two
+circumstances: Either to re-submit them because of changes
+in e.g. external data or to resolve rare issues when jobs
+are killed in an unfortunate state and therefore blocking
+your registry.
 }
 \details{
-  The function internally lists all jobs on the batch
-  system and if those include some of the jobs you want to
-  reset, it informs you to kill them first by raising an
-  exception. If you really know what you are doing, you may
-  set \code{force} to \code{TRUE} to omit this sanity
-  check. Note that this is a dangerous operation to perform
-  which may harm the database integrity. In this case you
-  HAVE to make externally sure that none of the jobs you
-  want to reset are still running.
+The function internally lists all jobs on the batch system
+and if those include some of the jobs you want to reset, it
+informs you to kill them first by raising an exception. If
+you really know what you are doing, you may set
+\code{force} to \code{TRUE} to omit this sanity check. Note
+that this is a dangerous operation to perform which may
+harm the database integrity. In this case you HAVE to make
+externally sure that none of the jobs you want to reset are
+still running.
 }
 

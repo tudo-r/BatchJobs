@@ -2,7 +2,7 @@
 \alias{getJobResources}
 \title{Function to get the resources that were submitted for some jobs.}
 \usage{
-  getJobResources(reg, ids, as.list = TRUE)
+getJobResources(reg, ids, as.list = TRUE)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -15,10 +15,10 @@
   to a data.frame.  Default is \code{TRUE}.}
 }
 \value{
-  [\code{list} | \code{data.frame}]. List (or data.frame)
-  of resource lists as passed to \code{\link{submitJobs}}.
+[\code{list} | \code{data.frame}]. List (or data.frame) of
+resource lists as passed to \code{\link{submitJobs}}.
 }
 \description{
-  Throws an error if call it for unsubmitted jobs.
+Throws an error if call it for unsubmitted jobs.
 }
 

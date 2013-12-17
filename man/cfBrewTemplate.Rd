@@ -2,7 +2,7 @@
 \alias{cfBrewTemplate}
 \title{Cluster functions helper: Brew your template into a job description file.}
 \usage{
-  cfBrewTemplate(conf, template, rscript, extension)
+cfBrewTemplate(conf, template, rscript, extension)
 }
 \arguments{
   \item{conf}{[\code{environment}]\cr BatchJobs
@@ -19,18 +19,18 @@
   the job description file, e.g. \dQuote{pbs}.}
 }
 \value{
-  [\code{character(1)}]. File path of result.
+[\code{character(1)}]. File path of result.
 }
 \description{
-  This function is only intended for use in your own
-  cluster functions implementation.
+This function is only intended for use in your own cluster
+functions implementation.
 }
 \details{
-  Calls brew silently on your template, any error will lead
-  to an exception. If debug mode is turned on in the
-  configuration, the file is stored at the same place as
-  the corresponding R script in the \dQuote{jobs}-subdir of
-  your files directory, otherwise in the temp dir via
-  \code{\link{tempfile}}.
+Calls brew silently on your template, any error will lead
+to an exception. If debug mode is turned on in the
+configuration, the file is stored at the same place as the
+corresponding R script in the \dQuote{jobs}-subdir of your
+files directory, otherwise in the temp dir via
+\code{\link{tempfile}}.
 }
 

@@ -2,7 +2,7 @@
 \alias{findJobs}
 \title{Finds ids of jobs that match a query.}
 \usage{
-  findJobs(reg, ids, pars, jobnames)
+findJobs(reg, ids, pars, jobnames)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -21,10 +21,10 @@
   with stored names. Exact matching is used.}
 }
 \value{
-  [\code{integer}]. Ids for jobs which match the query.
+[\code{integer}]. Ids for jobs which match the query.
 }
 \description{
-  Finds ids of jobs that match a query.
+Finds ids of jobs that match a query.
 }
 \examples{
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)

@@ -2,22 +2,22 @@
 \alias{cfReadBrewTemplate}
 \title{Cluster functions helper: Read in your brew template file.}
 \usage{
-  cfReadBrewTemplate(template.file)
+cfReadBrewTemplate(template.file)
 }
 \arguments{
   \item{template.file}{[\code{character(1)}]\cr File path.}
 }
 \value{
-  [\code{character}].
+[\code{character}].
 }
 \description{
-  This function is only intended for use in your own
-  cluster functions implementation.
+This function is only intended for use in your own cluster
+functions implementation.
 }
 \details{
-  Simply reads your template and returns it as a character
-  vector. If you do this in the constructor of your cluster
-  functions once, you can avoid this repeated file access
-  later on.
+Simply reads your template and returns it as a character
+vector. If you do this in the constructor of your cluster
+functions once, you can avoid this repeated file access
+later on.
 }
 

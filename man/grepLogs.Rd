@@ -2,8 +2,8 @@
 \alias{grepLogs}
 \title{Grep log files for a pattern.}
 \usage{
-  grepLogs(reg, ids, pattern = "warn", ignore.case = TRUE,
-    verbose = FALSE, range = 2L)
+grepLogs(reg, ids, pattern = "warn", ignore.case = TRUE, verbose = FALSE,
+  range = 2L)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -26,13 +26,13 @@
   warning.  Default is \code{2}.}
 }
 \value{
-  [\code{integer}]. Ids of jobs where pattern was found in
-  the log file.
+[\code{integer}]. Ids of jobs where pattern was found in
+the log file.
 }
 \description{
-  Searches for occurence of \code{pattern} in log files.
+Searches for occurence of \code{pattern} in log files.
 }
 \seealso{
-  \code{\link{showLog}}, \code{\link{getErrorMessages}}
+\code{\link{showLog}}, \code{\link{getErrorMessages}}
 }
 

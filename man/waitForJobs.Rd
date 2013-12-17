@@ -2,8 +2,7 @@
 \alias{waitForJobs}
 \title{Wait for termination of jobs on the batch system.}
 \usage{
-  waitForJobs(reg, ids, sleep = 10, timeout = 604800,
-    stop.on.error = FALSE)
+waitForJobs(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -27,18 +26,17 @@
   \code{FALSE}.}
 }
 \value{
-  [\code{logical(1)}]. Returns \code{TRUE} if all jobs
-  terminated successfully and \code{FALSE} if either an
-  error occurred or the timeout is reached.
+[\code{logical(1)}]. Returns \code{TRUE} if all jobs
+terminated successfully and \code{FALSE} if either an error
+occurred or the timeout is reached.
 }
 \description{
-  Waits for termination of jobs while displaying a progress
-  bar containing summarizing informations of the jobs. The
-  following abbreviations are used in the progress bar:
-  \dQuote{S} for number of jobs on system, \dQuote{D} for
-  number of jobs successfully terminated, \dQuote{E} for
-  number ofjobs terminated with an R exception and
-  \dQuote{R} for number of jobs currently running on the
-  system.
+Waits for termination of jobs while displaying a progress
+bar containing summarizing informations of the jobs. The
+following abbreviations are used in the progress bar:
+\dQuote{S} for number of jobs on system, \dQuote{D} for
+number of jobs successfully terminated, \dQuote{E} for
+number ofjobs terminated with an R exception and \dQuote{R}
+for number of jobs currently running on the system.
 }
 

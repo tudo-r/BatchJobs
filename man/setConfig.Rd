@@ -2,7 +2,7 @@
 \alias{setConfig}
 \title{Set and overwrite configuration settings}
 \usage{
-  setConfig(conf = list(), ...)
+setConfig(conf = list(), ...)
 }
 \arguments{
   \item{conf}{[\code{Config} or \code{list}]\cr List of
@@ -14,12 +14,12 @@
   provided.}
 }
 \value{
-  Invisibly returns a list of configuration settings.
+Invisibly returns a list of configuration settings.
 }
 \description{
-  Set and overwrite configuration settings
+Set and overwrite configuration settings
 }
 \seealso{
-  \code{\link{getConfig}}, \code{\link{loadConfig}}
+\code{\link{getConfig}}, \code{\link{loadConfig}}
 }
 

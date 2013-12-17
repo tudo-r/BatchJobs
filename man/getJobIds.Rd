@@ -2,15 +2,15 @@
 \alias{getJobIds}
 \title{Get ids of jobs in registry.}
 \usage{
-  getJobIds(reg)
+getJobIds(reg)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
 }
 \value{
-  [\code{character}].
+[\code{character}].
 }
 \description{
-  Get ids of jobs in registry.
+Get ids of jobs in registry.
 }
 

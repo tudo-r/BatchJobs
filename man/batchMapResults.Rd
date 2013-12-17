@@ -2,8 +2,8 @@
 \alias{batchMapResults}
 \title{Maps a function over the results of a registry by using batchMap.}
 \usage{
-  batchMapResults(reg, reg2, fun, ..., ids,
-    part = NA_character_, more.args = list())
+batchMapResults(reg, reg2, fun, ..., ids, part = NA_character_,
+  more.args = list())
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry whose
@@ -33,11 +33,11 @@
   arguments passed to \code{fun}.  Default is empty list.}
 }
 \value{
-  Vector of type \code{integer} with job ids.
+Vector of type \code{integer} with job ids.
 }
 \description{
-  Maps a function over the results of a registry by using
-  batchMap.
+Maps a function over the results of a registry by using
+batchMap.
 }
 \examples{
 reg1 <- makeRegistry(id="BatchJobsExample1", file.dir=tempfile(), seed=123)

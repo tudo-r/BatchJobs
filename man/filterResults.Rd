@@ -2,7 +2,7 @@
 \alias{filterResults}
 \title{Find all results where a specific condition is true.}
 \usage{
-  filterResults(reg, ids, fun, ...)
+filterResults(reg, ids, fun, ...)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -17,11 +17,11 @@
   \item{...}{[any]\cr Additional arguments to \code{fun}.}
 }
 \value{
-  [\code{integer}]. Ids of jobs where \code{fun(job,
-  result)} returns \code{TRUE}.
+[\code{integer}]. Ids of jobs where \code{fun(job, result)}
+returns \code{TRUE}.
 }
 \description{
-  Find all results where a specific condition is true.
+Find all results where a specific condition is true.
 }
 \examples{
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)

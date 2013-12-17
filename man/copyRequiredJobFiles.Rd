@@ -2,7 +2,7 @@
 \alias{copyRequiredJobFiles}
 \title{ONLY FOR INTERNAL USAGE.}
 \usage{
-  copyRequiredJobFiles(reg1, reg2, id)
+copyRequiredJobFiles(reg1, reg2, id)
 }
 \arguments{
   \item{reg1}{[\code{\link{Registry}}]\cr Source registry.}
@@ -13,9 +13,9 @@
   \item{id}{[\code{character(1)}]\cr Job id.}
 }
 \value{
-  Nothing.
+Nothing.
 }
 \description{
-  ONLY FOR INTERNAL USAGE.
+ONLY FOR INTERNAL USAGE.
 }
 

@@ -2,7 +2,7 @@
 \alias{debugMulticore}
 \title{Helper function to debug multicore mode.}
 \usage{
-  debugMulticore(r.options)
+debugMulticore(r.options)
 }
 \arguments{
   \item{r.options}{[\code{list}] Options for R and Rscript,
@@ -11,11 +11,11 @@
   "--no-restore", "--no-init-file", "--no-site-file")}.}
 }
 \value{
-  Nothing.
+Nothing.
 }
 \description{
-  Useful in case of severe errors. Tries different
-  operations of increasing difficulty and provides debug
-  output on the console
+Useful in case of severe errors. Tries different operations
+of increasing difficulty and provides debug output on the
+console
 }
 

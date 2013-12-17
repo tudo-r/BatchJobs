@@ -2,7 +2,7 @@
 \alias{getLogFiles}
 \title{Get log file paths for jobs.}
 \usage{
-  getLogFiles(reg, ids)
+getLogFiles(reg, ids)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -11,9 +11,9 @@
   all jobs.}
 }
 \value{
-  [\code{character}]. Vector of file paths to log files.
+[\code{character}]. Vector of file paths to log files.
 }
 \description{
-  Get log file paths for jobs.
+Get log file paths for jobs.
 }
 

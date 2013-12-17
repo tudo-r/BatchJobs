@@ -2,7 +2,7 @@
 \alias{showLog}
 \title{Display the contents of a log file.}
 \usage{
-  showLog(reg, id, pager = getOption("pager"))
+showLog(reg, id, pager = getOption("pager"))
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -21,22 +21,21 @@
   file.}
 }
 \value{
-  [\code{character(1)}]. Invisibly returns path to log
-  file.
+[\code{character(1)}]. Invisibly returns path to log file.
 }
 \description{
-  Display the contents of a log file, useful in case of
-  errors.
+Display the contents of a log file, useful in case of
+errors.
 }
 \details{
-  Note this rare special case: When you use chunking,
-  submit some jobs, some jobs fail, then you resubmit these
-  jobs again in different chunks, the log files will
-  contain the log of the old, failed job as well.
-  \code{showLog} tries to jump to the correct part of the
-  new log file with a supported pager.
+Note this rare special case: When you use chunking, submit
+some jobs, some jobs fail, then you resubmit these jobs
+again in different chunks, the log files will contain the
+log of the old, failed job as well. \code{showLog} tries to
+jump to the correct part of the new log file with a
+supported pager.
 }
 \seealso{
-  \code{\link{grepLogs}}, \code{\link{getErrorMessages}}
+\code{\link{grepLogs}}, \code{\link{getErrorMessages}}
 }
 

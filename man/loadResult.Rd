@@ -2,8 +2,7 @@
 \alias{loadResult}
 \title{Loads a specific result file.}
 \usage{
-  loadResult(reg, id, part = NA_character_,
-    missing.ok = FALSE)
+loadResult(reg, id, part = NA_character_, missing.ok = FALSE)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -20,12 +19,12 @@
   \code{NULL} is returned.  Default is \code{FALSE}.}
 }
 \value{
-  [any]. Result of job.
+[any]. Result of job.
 }
 \description{
-  Loads a specific result file.
+Loads a specific result file.
 }
 \seealso{
-  \code{\link{reduceResults}}
+\code{\link{reduceResults}}
 }
 

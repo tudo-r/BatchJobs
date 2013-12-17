@@ -2,15 +2,15 @@
 \alias{dbCreateJobDefTable}
 \title{ONLY FOR INTERNAL USAGE.}
 \usage{
-  dbCreateJobDefTable(reg)
+dbCreateJobDefTable(reg)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
 }
 \value{
-  Nothing.
+Nothing.
 }
 \description{
-  ONLY FOR INTERNAL USAGE.
+ONLY FOR INTERNAL USAGE.
 }
 

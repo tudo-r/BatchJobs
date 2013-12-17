@@ -2,7 +2,7 @@
 \alias{dbGetJobs}
 \title{ONLY FOR INTERNAL USAGE.}
 \usage{
-  dbGetJobs(reg, ids)
+dbGetJobs(reg, ids)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -10,9 +10,9 @@
   \item{ids}{[\code{integer}]\cr Ids of selected jobs.}
 }
 \value{
-  [list of \code{\link{Job}}]. Retrieved jobs from DB.
+[list of \code{\link{Job}}]. Retrieved jobs from DB.
 }
 \description{
-  ONLY FOR INTERNAL USAGE.
+ONLY FOR INTERNAL USAGE.
 }
 

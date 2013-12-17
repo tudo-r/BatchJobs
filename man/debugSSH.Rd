@@ -2,9 +2,8 @@
 \alias{debugSSH}
 \title{Helper function to debug SSH mode.}
 \usage{
-  debugSSH(nodename, rhome = "",
-    r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
-    dir = getwd())
+debugSSH(nodename, rhome = "", r.options = c("--no-save", "--no-restore",
+  "--no-init-file", "--no-site-file"), dir = getwd())
 }
 \arguments{
   \item{nodename}{[\code{character(1)}]\cr Node on which
@@ -27,11 +26,11 @@
   directory.}
 }
 \value{
-  Nothing.
+Nothing.
 }
 \description{
-  Useful in case of configuration problems. Tries different
-  operations of increasing difficulty and provides debug
-  output on the console.
+Useful in case of configuration problems. Tries different
+operations of increasing difficulty and provides debug
+output on the console.
 }
 

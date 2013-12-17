@@ -2,9 +2,8 @@
 \alias{submitJobs}
 \title{Submit jobs or chunks of jobs to batch system via cluster function.}
 \usage{
-  submitJobs(reg, ids, resources = list(), wait,
-    max.retries = 10L, chunks.as.arrayjobs = FALSE,
-    job.delay = FALSE)
+submitJobs(reg, ids, resources = list(), wait, max.retries = 10L,
+  chunks.as.arrayjobs = FALSE, job.delay = FALSE)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -52,21 +51,21 @@
   (the default) delaying jobs is disabled.}
 }
 \value{
-  [\code{integer}]. Vector of submitted job ids.
+[\code{integer}]. Vector of submitted job ids.
 }
 \description{
-  If the internal submit cluster function completes
-  successfully, the \code{retries} counter is set back to 0
-  and the next job or chunk is submitted. If the internal
-  submit cluster function returns a fatal error, the submit
-  process is completely stopped and an exception is thrown.
-  If the internal submit cluster function returns a
-  temporary error, the submit process waits for a certain
-  time, which is determined by calling the user-defined
-  \code{wait}-function with the current \code{retries}
-  counter, the counter is increased by 1 and the same job
-  is submitted again. If \code{max.retries} is reached the
-  function simply terminates.
+If the internal submit cluster function completes
+successfully, the \code{retries} counter is set back to 0
+and the next job or chunk is submitted. If the internal
+submit cluster function returns a fatal error, the submit
+process is completely stopped and an exception is thrown.
+If the internal submit cluster function returns a temporary
+error, the submit process waits for a certain time, which
+is determined by calling the user-defined
+\code{wait}-function with the current \code{retries}
+counter, the counter is increased by 1 and the same job is
+submitted again. If \code{max.retries} is reached the
+function simply terminates.
 }
 \examples{
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)

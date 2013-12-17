@@ -2,10 +2,9 @@
 \alias{makeClusterFunctionsMulticore}
 \title{Use multiple cores on local Linux machine to spawn parallel jobs.}
 \usage{
-  makeClusterFunctionsMulticore(ncpus, max.jobs, max.load,
-    nice,
-    r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
-    script)
+makeClusterFunctionsMulticore(ncpus, max.jobs, max.load, nice,
+  r.options = c("--no-save", "--no-restore", "--no-init-file",
+  "--no-site-file"), script)
 }
 \arguments{
   \item{ncpus}{[\code{integer(1)}]\cr Number of VPUs of
@@ -42,12 +41,12 @@
   Default means to take it from package directory.}
 }
 \value{
-  [\code{\link{ClusterFunctions}}].
+[\code{\link{ClusterFunctions}}].
 }
 \description{
-  Jobs are spawned by starting multiple R sessions on the
-  commandline (similar like on true batch systems).
-  Packages \code{parallel} or \code{multicore} are not used
-  in any way.
+Jobs are spawned by starting multiple R sessions on the
+commandline (similar like on true batch systems). Packages
+\code{parallel} or \code{multicore} are not used in any
+way.
 }
 

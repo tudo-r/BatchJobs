@@ -2,8 +2,7 @@
 \alias{batchMap}
 \title{Maps a function over lists or vectors, adding jobs to a registry.}
 \usage{
-  batchMap(reg, fun, ..., more.args = list(),
-    use.names = FALSE)
+batchMap(reg, fun, ..., more.args = list(), use.names = FALSE)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Empty Registry
@@ -24,10 +23,10 @@
   Default is \code{FALSE}.}
 }
 \value{
-  Vector of type \code{integer} with job ids.
+Vector of type \code{integer} with job ids.
 }
 \description{
-  You can then submit these jobs to the batch system.
+You can then submit these jobs to the batch system.
 }
 \examples{
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)

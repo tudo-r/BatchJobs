@@ -3,8 +3,7 @@
 \alias{makeJob}
 \title{Creates a job description.}
 \usage{
-  makeJob(id = NA_integer_, fun, fun.id = digest(fun),
-    pars, name, seed)
+makeJob(id = NA_integer_, fun, fun.id = digest(fun), pars, name, seed)
 }
 \arguments{
   \item{id}{[\code{integer(1)}]\cr Job id, determined by DB
@@ -25,8 +24,7 @@
   \item{seed}{[\code{integer(1)}]\cr Random seed for job.}
 }
 \description{
-  Usually you will not do this manually. Every object is a
-  list that contains the passed arguments of the
-  constructor.
+Usually you will not do this manually. Every object is a
+list that contains the passed arguments of the constructor.
 }
 

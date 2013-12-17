@@ -2,7 +2,7 @@
 \alias{sweepRegistry}
 \title{Sweep obsolete files from the file system}
 \usage{
-  sweepRegistry(reg, sweep = c("scripts", "conf"))
+sweepRegistry(reg, sweep = c("scripts", "conf"))
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -20,22 +20,20 @@
   \code{c("scripts", "conf")}.}
 }
 \value{
-  [\code{logical}]. Invisibly returns \code{TRUE} on
-  success and \code{FALSE} if some files could not be
-  removed.
+[\code{logical}]. Invisibly returns \code{TRUE} on success
+and \code{FALSE} if some files could not be removed.
 }
 \description{
-  Removes R scripts, log files, resource informations and
-  temporarily stored configuration files from the
-  registry's file directory. Assuming all your jobs
-  completed successfully, none of these are needed for
-  further work. This operation potentially releases quite a
-  lot of disk space, depending on the number of your jobs.
-  BUT A HUGE WORD OF WARNING: IF you later notice something
-  strange and need to determine the reason for it, you are
-  at a huge disadvantage. Only do this at your own risk and
-  when you are sure that you have successfully completed a
-  project and only want to archive your produced
-  experiments and results.
+Removes R scripts, log files, resource informations and
+temporarily stored configuration files from the registry's
+file directory. Assuming all your jobs completed
+successfully, none of these are needed for further work.
+This operation potentially releases quite a lot of disk
+space, depending on the number of your jobs. BUT A HUGE
+WORD OF WARNING: IF you later notice something strange and
+need to determine the reason for it, you are at a huge
+disadvantage. Only do this at your own risk and when you
+are sure that you have successfully completed a project and
+only want to archive your produced experiments and results.
 }
 

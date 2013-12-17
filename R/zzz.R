@@ -1,3 +1,13 @@
+#' The BatchJobs package
+#'
+#' @section Additional information:
+#'
+#' Wiki, FAQ, examples and more on \url{https://github.com/tudo-r/BatchJobs}.
+#'
+#' @docType package
+#' @name BatchJobs
+NULL
+
 #' @import BBmisc
 #' @import utils
 #' @import DBI
@@ -7,6 +17,7 @@
 #' @importFrom brew brew
 #' @importFrom sendmailR sendmail
 #' @importFrom plyr rbind.fill
+NULL
 
 .BatchJobs.conf <- new.env()
 

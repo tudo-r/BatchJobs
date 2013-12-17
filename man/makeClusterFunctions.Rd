@@ -3,8 +3,8 @@
 \alias{makeClusterFunctions}
 \title{Create a ClusterFuntions object.}
 \usage{
-  makeClusterFunctions(name, submitJob, killJob, listJobs,
-    getArrayEnvirName, class = NULL, ...)
+makeClusterFunctions(name, submitJob, killJob, listJobs, getArrayEnvirName,
+  class = NULL, ...)
 }
 \arguments{
   \item{name}{[\code{character(1)}]\cr Name of cluster
@@ -63,17 +63,17 @@
   \item{...}{[\code{any}]\cr Currently ignored.}
 }
 \description{
-  Use this funtion when you implement a backend for a batch
-  system. You must define the functions specified in the
-  arguments.
+Use this funtion when you implement a backend for a batch
+system. You must define the functions specified in the
+arguments.
 }
 \seealso{
-  \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLocal}},
-  \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctionsTorque}},
-  \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSLURM}}
+\code{\link{makeClusterFunctionsInteractive}},
+\code{\link{makeClusterFunctionsLocal}},
+\code{\link{makeClusterFunctionsMulticore}},
+\code{\link{makeClusterFunctionsSSH}},
+\code{\link{makeClusterFunctionsTorque}},
+\code{\link{makeClusterFunctionsSGE}},
+\code{\link{makeClusterFunctionsSLURM}}
 }
 

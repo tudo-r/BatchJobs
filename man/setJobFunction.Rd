@@ -2,8 +2,8 @@
 \alias{setJobFunction}
 \title{Sets the job function for already existing jobs.}
 \usage{
-  setJobFunction(reg, ids, fun, more.args = list(),
-    reset = TRUE, force = FALSE)
+setJobFunction(reg, ids, fun, more.args = list(), reset = TRUE,
+  force = FALSE)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -23,17 +23,17 @@
   \code{\link{resetJobs}}.  Default is \code{FALSE}.}
 }
 \value{
-  Nothing.
+Nothing.
 }
 \description{
-  Use this function only as last measure when there is a
-  bug in a part of your job function and you have already
-  computed a large number of (unaffected) results. This
-  function allows you to fix the error and to associate the
-  jobs with the corrected function.
+Use this function only as last measure when there is a bug
+in a part of your job function and you have already
+computed a large number of (unaffected) results. This
+function allows you to fix the error and to associate the
+jobs with the corrected function.
 }
 \details{
-  Note that by default the computational state of the
-  affected jobs is also reset.
+Note that by default the computational state of the
+affected jobs is also reset.
 }
 

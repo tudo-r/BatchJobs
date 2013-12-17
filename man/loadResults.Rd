@@ -2,9 +2,8 @@
 \alias{loadResults}
 \title{Loads result files for id vector.}
 \usage{
-  loadResults(reg, ids, part = NA_character_,
-    simplify = FALSE, use.names = "ids",
-    missing.ok = FALSE)
+loadResults(reg, ids, part = NA_character_, simplify = FALSE,
+  use.names = "ids", missing.ok = FALSE)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -32,13 +31,13 @@
   Default is \code{FALSE}.}
 }
 \value{
-  [\code{list}]. Results of jobs as list, possibly named by
-  ids.
+[\code{list}]. Results of jobs as list, possibly named by
+ids.
 }
 \description{
-  Loads result files for id vector.
+Loads result files for id vector.
 }
 \seealso{
-  \code{\link{reduceResults}}
+\code{\link{reduceResults}}
 }
 

@@ -1,9 +1,9 @@
 \name{makeSubmitJobResult}
-\alias{makeSubmitJobResult}
 \alias{SubmitJobResult}
+\alias{makeSubmitJobResult}
 \title{Create a SubmitJobResult object.}
 \usage{
-  makeSubmitJobResult(status, batch.job.id, msg, ...)
+makeSubmitJobResult(status, batch.job.id, msg, ...)
 }
 \arguments{
   \item{status}{[\code{integer(1)}]\cr Launch status of
@@ -25,12 +25,12 @@
   \item{...}{[\code{any}]\cr Currently unused.}
 }
 \value{
-  [\code{\link{SubmitJobResult}}]. A list, containing
-  \code{status}, \code{batch.job.id} and \code{msg}.
+[\code{\link{SubmitJobResult}}]. A list, containing
+\code{status}, \code{batch.job.id} and \code{msg}.
 }
 \description{
-  Use this function in your implementation of
-  \code{\link{makeClusterFunctions}} to create a return
-  value for the \code{submitJob} function.
+Use this function in your implementation of
+\code{\link{makeClusterFunctions}} to create a return value
+for the \code{submitJob} function.
 }
 

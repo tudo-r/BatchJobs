@@ -2,16 +2,16 @@
 \alias{updateRegistry}
 \title{ONLY FOR INTERNAL USAGE.}
 \usage{
-  updateRegistry(reg)
+updateRegistry(reg)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
 }
 \value{
-  [any]. Updated \code{\link{Registry}} or \code{FALSE} if
-  no updates were performed.
+[any]. Updated \code{\link{Registry}} or \code{FALSE} if no
+updates were performed.
 }
 \description{
-  ONLY FOR INTERNAL USAGE.
+ONLY FOR INTERNAL USAGE.
 }
 

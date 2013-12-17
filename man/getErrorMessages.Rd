@@ -2,7 +2,7 @@
 \alias{getErrorMessages}
 \title{Get error messages of jobs.}
 \usage{
-  getErrorMessages(reg, ids)
+getErrorMessages(reg, ids)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -11,14 +11,14 @@
   all jobs with errors.}
 }
 \value{
-  [\code{character}]. Error messages for jobs as character
-  vector\cr \code{NA} if job has terminated successfully.
+[\code{character}]. Error messages for jobs as character
+vector\cr \code{NA} if job has terminated successfully.
 }
 \description{
-  Get error messages of jobs.
+Get error messages of jobs.
 }
 \seealso{
-  \code{\link{showLog}} for more contextual error
-  informations.
+\code{\link{showLog}} for more contextual error
+informations.
 }
 

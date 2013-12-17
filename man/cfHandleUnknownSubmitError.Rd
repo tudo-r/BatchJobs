@@ -2,7 +2,7 @@
 \alias{cfHandleUnknownSubmitError}
 \title{Cluster functions helper: Handle an unknown error during job submission.}
 \usage{
-  cfHandleUnknownSubmitError(cmd, exit.code, output)
+cfHandleUnknownSubmitError(cmd, exit.code, output)
 }
 \arguments{
   \item{cmd}{[\code{character(1)}]\cr OS command used to
@@ -17,16 +17,16 @@
   automatically pasted together.}
 }
 \value{
-  [\code{\link{SubmitJobResult}}].
+[\code{\link{SubmitJobResult}}].
 }
 \description{
-  This function is only intended for use in your own
-  cluster functions implementation.
+This function is only intended for use in your own cluster
+functions implementation.
 }
 \details{
-  Simply constructs a \code{\link{SubmitJobResult}} object
-  with status code 101, NA as batch job id and an
-  informative error message containing the output of the OS
-  command in \code{output}.
+Simply constructs a \code{\link{SubmitJobResult}} object
+with status code 101, NA as batch job id and an informative
+error message containing the output of the OS command in
+\code{output}.
 }
 

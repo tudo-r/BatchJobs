@@ -2,17 +2,17 @@
 \alias{getResources}
 \title{Function to get job resources in job function.}
 \usage{
-  getResources()
+getResources()
 }
 \value{
-  [\code{list}].
+[\code{list}].
 }
 \description{
-  Return the list passed to \code{\link{submitJobs}}, e.g.
-  nodes, walltime, etc.
+Return the list passed to \code{\link{submitJobs}}, e.g.
+nodes, walltime, etc.
 }
 \details{
-  Can only be called in job function during job execution
-  on slave.
+Can only be called in job function during job execution on
+slave.
 }
 

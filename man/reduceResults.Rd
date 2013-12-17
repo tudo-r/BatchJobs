@@ -6,21 +6,20 @@
 \alias{reduceResultsVector}
 \title{Reduce results from result directory.}
 \usage{
-  reduceResults(reg, ids, part = NA_character_, fun, init,
-    impute.val, ...)
+reduceResults(reg, ids, part = NA_character_, fun, init, impute.val, ...)
 
-  reduceResultsList(reg, ids, part = NA_character_, fun,
-    ..., use.names = "ids", impute.val)
+reduceResultsList(reg, ids, part = NA_character_, fun, ...,
+  use.names = "ids", impute.val)
 
-  reduceResultsVector(reg, ids, part = NA_character_, fun,
-    ..., use.names = "ids", impute.val)
+reduceResultsVector(reg, ids, part = NA_character_, fun, ...,
+  use.names = "ids", impute.val)
 
-  reduceResultsMatrix(reg, ids, part = NA_character_, fun,
-    ..., rows = TRUE, use.names = "ids", impute.val)
+reduceResultsMatrix(reg, ids, part = NA_character_, fun, ..., rows = TRUE,
+  use.names = "ids", impute.val)
 
-  reduceResultsDataFrame(reg, ids, part = NA_character_,
-    fun, ..., use.names = "ids", impute.val,
-    strings.as.factors = default.stringsAsFactors())
+reduceResultsDataFrame(reg, ids, part = NA_character_, fun, ...,
+  use.names = "ids", impute.val,
+  strings.as.factors = default.stringsAsFactors())
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
@@ -78,20 +77,19 @@
   Default is \code{default.stringsAsFactors()}.}
 }
 \value{
-  Aggregated results, return type depends on function. If
-  \code{ids} is empty: \code{reduceResults} returns
-  \code{init} (if available) or \code{NULL},
-  \code{reduceResultsVector} returns \code{c()},
-  \code{reduceResultsList} returns \code{list()},
-  \code{reduceResultsMatrix} returns \code{matrix(0,0,0)},
-  \code{reduceResultsDataFrame} returns
-  \code{data.frame()}.
+Aggregated results, return type depends on function. If
+\code{ids} is empty: \code{reduceResults} returns
+\code{init} (if available) or \code{NULL},
+\code{reduceResultsVector} returns \code{c()},
+\code{reduceResultsList} returns \code{list()},
+\code{reduceResultsMatrix} returns \code{matrix(0,0,0)},
+\code{reduceResultsDataFrame} returns \code{data.frame()}.
 }
 \description{
-  The following functions provide ways to reduce result
-  files into either specific R objects (like vectors,
-  lists, matrices or data.frames) or to arbitrarily
-  aggregate them, which is a more general operation.
+The following functions provide ways to reduce result files
+into either specific R objects (like vectors, lists,
+matrices or data.frames) or to arbitrarily aggregate them,
+which is a more general operation.
 }
 \examples{
 # generate results:
