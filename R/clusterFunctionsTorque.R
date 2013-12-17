@@ -12,11 +12,8 @@
 #' \code{submitJob} function, see here \code{\link{ClusterFunctions}}.
 #' It is the template file's job to choose a queue for the job
 #' and handle the desired resource allocations.
-#' A simple example is provided here
-#' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfTorque/simple.tmpl}
-#' and a more complex one here
-#' \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfTorque/lido.tmpl}
-#' in the package repository on its homepage.
+#' Examples can be found on
+#' \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfTorque}.
 #'
 #' @param template.file [\code{character(1)}]\cr
 #'   Path to a brew template file that is used for the PBS job file.

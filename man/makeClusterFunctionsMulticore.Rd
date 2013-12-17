@@ -37,7 +37,7 @@ makeClusterFunctionsMulticore(ncpus, max.jobs, max.load, nice,
   for your system.  This option is only provided as a last
   resort for very experienced hackers.  Note that the path
   has to be absolute.  This is what is done in the package:
-  \url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/skel/inst/bin/linux-helper}
+  \url{https://github.com/tudo-r/BatchJobs/blob/master/inst/bin/linux-helper}
   Default means to take it from package directory.}
 }
 \value{

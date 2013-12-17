@@ -26,10 +26,7 @@ The template file can access all arguments passed to the
 \code{submitJob} function, see here
 \code{\link{ClusterFunctions}}. It is the template file's
 job to choose a queue for the job and handle the desired
-resource allocations. A simple example is provided here
-\url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfSLURM/simple.tmpl}
-and a more complex one here
-\url{http://code.google.com/p/batchjobs/source/browse/trunk/BatchJobs/examples/cfSLURM/dortmund_fk_statistik.tmpl}
-in the package repository on its homepage.
+resource allocations. Examples can be found on
+\url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfSLURM}.
 }
 

@@ -4,7 +4,7 @@
 \title{BatchJobs configuration.}
 \description{
 In order to understand how the package should be configured
-please read:
-\url{https://code.google.com/p/batchjobs/wiki/Configuration}
+please read
+\url{https://github.com/tudo-r/BatchJobs/wiki/Configuration}.
 }
 
