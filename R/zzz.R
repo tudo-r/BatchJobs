@@ -2,7 +2,12 @@
 #'
 #' @section Additional information:
 #'
-#' Wiki, FAQ, examples and more on \url{https://github.com/tudo-r/BatchJobs}.
+#' \describe{
+#'   \item{Homepage:}{\url{https://github.com/tudo-r/BatchJobs}}
+#'   \item{Wiki:}{\url{https://github.com/tudo-r/BatchJobs/wiki}}
+#'   \item{FAQ:}{\url{https://github.com/tudo-r/BatchJobs/wiki/FAQ}}
+#'   \item{Configuration:}{\url{https://github.com/tudo-r/BatchJobs/wiki/Configuration}}
+#' }
 #'
 #' @docType package
 #' @name BatchJobs
