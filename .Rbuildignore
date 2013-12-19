@@ -5,6 +5,7 @@ inst/tests/unittests-files
 
 .git
 .gitignore
+.gitmodules
 .travis.yml
 
 Makefile
