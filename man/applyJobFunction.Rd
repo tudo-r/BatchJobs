@@ -15,4 +15,5 @@ applyJobFunction(reg, job)
 \description{
 ONLY FOR INTERNAL USAGE.
 }
+\keyword{internal}
 

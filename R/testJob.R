@@ -84,6 +84,7 @@ testJob = function(reg, id, resources=list()) {
 #' @param id [\code{character(1)}]\cr
 #'   Job id.
 #' @return Nothing.
+#' @keywords internal
 #' @export
 copyRequiredJobFiles = function(reg1, reg2, id) {
   UseMethod("copyRequiredJobFiles")

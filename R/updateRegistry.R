@@ -2,6 +2,7 @@
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 #' @return [any]. Updated \code{\link{Registry}} or \code{FALSE} if no updates were performed.
+#' @keywords internal
 #' @export
 updateRegistry = function(reg) {
     UseMethod("updateRegistry")

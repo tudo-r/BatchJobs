@@ -15,4 +15,5 @@ dbGetJobs(reg, ids)
 \description{
 ONLY FOR INTERNAL USAGE.
 }
+\keyword{internal}
 

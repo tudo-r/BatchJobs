@@ -112,6 +112,7 @@ dbSelectWithIds = function(reg, query, ids, where=TRUE, group.by, limit, reorder
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 #' @return Nothing.
+#' @keywords internal
 #' @export
 dbCreateJobDefTable = function(reg) {
   UseMethod("dbCreateJobDefTable")
@@ -157,6 +158,7 @@ dbCreateExpandedJobsView = function(reg) {
 #' @param ids [\code{integer}]\cr
 #'   Ids of selected jobs.
 #' @return [list of \code{\link{Job}}]. Retrieved jobs from DB.
+#' @keywords internal
 #' @export
 dbGetJobs = function(reg, ids) {
   UseMethod("dbGetJobs")
