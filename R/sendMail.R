@@ -34,7 +34,7 @@ sendMail = function(reg, job, result.str, extra.msg="",
       "start" = "started",
       "done"  = "finished",
       "error" = "terminated with exception")
-    subj = sprintf("[%s]: %s %s has %s", reg$id, ifelse(ischunk, "Chunk", "Job"), firstjob$id, cstr)
+    subj = sprintf("[%s]: %s %s has %s", reg$id, ifelse(ischunk, "Chunk with first job ", "Job"), firstjob$id, cstr)
     msg = paste(myformat("Ids", ids), myformat("Job Info", pars), sep = "")
 
     # append result information
