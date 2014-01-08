@@ -166,7 +166,6 @@ saveSingleResult = function(reg, job, result, multiple.result.files) {
   }
 }
 
-
 calcResultString = function(result) {
-  paste(capture.output(str(result)), collapse = "\n")
+  paste0(capture.output(str(result)), collapse = "\n")
 }

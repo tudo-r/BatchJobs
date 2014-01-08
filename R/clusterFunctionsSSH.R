@@ -104,7 +104,7 @@ makeClusterFunctionsSSH = function(..., workers) {
       if (is.error(pid))
         makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="Submit failed.")
       else
-        makeSubmitJobResult(status=0L,batch.job.id=paste(worker$nodename, pid, sep="#"))
+        makeSubmitJobResult(status=0L,batch.job.id=paste0(worker$nodename, "#", pid))
     }
   }
 
@@ -124,7 +124,7 @@ makeClusterFunctionsSSH = function(..., workers) {
       nodename = worker[["nodename"]]
       pids = listWorkerJobs(worker, reg$file.dir)
       if (length(pids) > 0L) {
-        res = c(res, paste(nodename, "#", pids, sep=""))
+        res = c(res, paste0(nodename, "#", pids))
       }
     }
     res

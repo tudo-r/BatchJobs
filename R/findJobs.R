@@ -42,7 +42,7 @@ findJobs = function(reg, ids, pars, jobnames) {
         ns = rep.int("", length(pars))
       }
       j = which(is.na(ns) | ns == "")
-      ns[j] = paste(".arg", seq_along(j), sep="")
+      ns[j] = paste0(".arg", seq_along(j))
       setNames(pars, ns)
     }
 

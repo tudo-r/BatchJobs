@@ -35,16 +35,16 @@ sendMail = function(reg, job, result.str, extra.msg="",
       "done"  = "finished",
       "error" = "terminated with exception")
     subj = sprintf("[%s]: %s %s has %s", reg$id, ifelse(ischunk, "Chunk with first job ", "Job"), firstjob$id, cstr)
-    msg = paste(myformat("Ids", ids), myformat("Job Info", pars), sep = "")
+    msg = paste0(myformat("Ids", ids), myformat("Job Info", pars))
 
     # append result information
     if (condition != "start") {
       if (extra.msg != "")
-        msg = paste(msg, myformat("Message", extra.msg), sep = "")
-      msg = paste(msg, myformat("Results", result.str), sep = "")
+        msg = paste0(msg, myformat("Message", extra.msg))
+      msg = paste0(msg, myformat("Results", result.str))
       # we cannot not list the jobs while on the slave in showStatus
       if(firstjob$id == last)
-        msg = paste(msg, myformat("Status", capture.output(showStatus(reg, run.and.exp=FALSE))), sep = "")
+        msg = paste0(msg, myformat("Status", capture.output(showStatus(reg, run.and.exp=FALSE))))
     }
     # if a mail problem occurs, we only warn but do not terminate
     ok = try (

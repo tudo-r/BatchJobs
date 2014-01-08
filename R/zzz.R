@@ -22,6 +22,8 @@ NULL
 #' @importFrom brew brew
 #' @importFrom sendmailR sendmail
 #' @importFrom plyr rbind.fill
+#' @importFrom stringr str_extract
+#' @importFrom stringr str_trim
 NULL
 
 .BatchJobs.conf <- new.env()

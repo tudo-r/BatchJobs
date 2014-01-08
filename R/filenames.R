@@ -86,7 +86,7 @@ getJobDirs = function(reg, ids, unique=FALSE) {
 }
 
 getFilePaths = function(reg, id, suffix, ext) {
-  fn = sprintf("%i%s.%s", id, ifelse(is.null(suffix), "", paste("-", suffix, sep="")), ext)
+  fn = sprintf("%i%s.%s", id, ifelse(is.null(suffix), "", paste0("-", suffix)), ext)
   file.path(getJobDirs(reg, id), fn)
 }
 
@@ -112,7 +112,7 @@ getLogFilePath = function(reg, id)
   getFilePaths(reg, id, NULL, "out")
 
 getResultFilePath = function(reg, id, part=NA_character_) {
-  s = if (is.na(part)) "result" else paste("result", part, sep="-")
+  s = if (is.na(part)) "result" else paste0("result-", part)
   getFilePaths(reg, id, s, "RData")
 }
 

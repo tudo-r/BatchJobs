@@ -33,7 +33,7 @@ makeClusterFunctionsSLURM = function(template.file) {
     } else if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("sbatch", res$exit.code, res$output)
     } else {
-      makeSubmitJobResult(status=0L, batch.job.id=trim(strsplit(output, split=" ")[[1L]][4L]))
+      makeSubmitJobResult(status=0L, batch.job.id=str_trim(strsplit(output, split=" ")[[1L]][4L]))
     }
   }
 

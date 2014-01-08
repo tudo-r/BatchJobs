@@ -13,7 +13,7 @@ BugReports: https://github.com/tudo-r/BatchJobs/issues
 MailingList: batchjobs@googlegroups.com
 License: BSD_3_clause + file LICENSE
 Depends:
-    R (>= 2.13.0),
+    R (>= 2.15.0),
     BBmisc (>= 1.4)
 Imports:
     utils,
@@ -23,6 +23,7 @@ Imports:
     sendmailR,
     brew,
     plyr,
+    stringr,
     fail (>= 1.2)
 Suggests:
     testthat,

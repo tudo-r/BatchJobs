@@ -114,7 +114,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
 makeRegistry = function(id, file.dir, sharding=TRUE, work.dir, multiple.result.files=FALSE,
                         seed, packages=character(0L), src.dirs=character(0L), src.files=character(0L), skip=TRUE) {
   if (missing(file.dir))
-    file.dir = file.path(getwd(), paste(id, "files", sep="-"))
+    file.dir = file.path(getwd(), paste0(id, "-files"))
   checkArg(skip, "logical", len=1L, na.ok=FALSE)
   if (skip && isRegistryDir(file.dir))
     return(loadRegistry(file.dir = file.dir))
@@ -135,7 +135,7 @@ print.Registry = function(x, ...) {
   cat("  Work dir:", x$work.dir, "\n")
   cat("  Multiple result files:", x$multiple.result.files, "\n")
   cat("  Seed:", x$seed, "\n")
-  cat("  Required packages:", paste(names(x$packages), collapse=", "), "\n")
+  cat("  Required packages:", collapse(names(x$packages), ", "), "\n")
 }
 
 #' Load a previously saved registry.

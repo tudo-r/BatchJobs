@@ -34,7 +34,7 @@ readSQLFile = function(con) {
 }
 
 writeSQLFile = function(x, con) {
-  writeLines(c(paste(x, ";"), "--EOF--"), con = con)
+  writeLines(c(paste0(x, ";"), "--EOF--"), con = con)
 }
 
 useStagedQueries = function() {

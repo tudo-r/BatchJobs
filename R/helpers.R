@@ -122,38 +122,6 @@ now = function() {
   as.integer(Sys.time())
 }
 
-#FIXME: why dont we depent on stringr for this?
-
-# Extract a FIRST match for a pattern from a vector of strings.
-# @param x [\code{character}]\cr
-#   Vector of strings.
-# @param x [\code{character(1)}]\cr
-#   Regexp pattern. Just 1.
-# @return [\code{character}]. Same length as x.
-#   Returns NA if pattern was not found.
-strextract = function(x, pattern) {
-  if (length(x) == 0L)
-    return(character(0L))
-  starts = regexpr(pattern, x)
-  lens = attr(starts, "match.length")
-  stops = starts + lens - 1L
-  mapply(function(x, start, stop) {
-    if (start == -1L)
-      as.character(NA)
-    else
-      substr(x, start, stop)
-  }, x, starts, stops, USE.NAMES=FALSE)
-}
-
-#FIXME: why dont we depent on stringr for this?
-trim = function(x, ltrim=TRUE, rtrim=TRUE) {
-  if (ltrim)
-    x = sub("^[[:space:]]+", "", x)
-  if (rtrim)
-    x = sub("[[:space:]]+$", "", x)
-  return(x)
-}
-
 # FIXME BBmisc
 list2df = function(li, force.names=FALSE, strings.as.factors = default.stringsAsFactors()) {
   if (length(li) == 0L)
@@ -181,7 +149,7 @@ shortenString = function(x, len, str.short="...") {
   if (is.na(x))
     return(NA_character_)
   if (nchar(x) > len)
-    return(paste(substr(x, 1L, len - nchar(str.short)), str.short, sep=""))
+    return(paste0(substr(x, 1L, len - nchar(str.short)), str.short))
   return(x)
 }
 
