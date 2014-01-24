@@ -15,11 +15,12 @@ sourceRegistryFiles = function(reg, envir=.GlobalEnv) {
 }
 
 sourceRegistryFilesInternal = function(work.dir, dirs, files, envir=.GlobalEnv) {
-  files = file.path(work.dir, c(getRScripts(file.path(work.dir, dirs)), files))
-  ok = file.exists(files)
+  f1 = getRScripts(file.path(work.dir, dirs))
+  f2 = file.path(work.dir, files)
+  ok = file.exists(f2)
   if (any(!ok))
-    stopf("Files to source not found, e.g. %s", head(files[!ok], 1L))
-  lapply(files, sys.source, envir=envir)
+    stopf("Files to source not found, e.g. %s", head(f2[!ok], 1L))
+  lapply(c(f1, f2), sys.source, envir=envir)
   invisible(NULL)
 }
 
