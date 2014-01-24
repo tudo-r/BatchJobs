@@ -14,7 +14,7 @@ MailingList: batchjobs@googlegroups.com
 License: BSD_3_clause + file LICENSE
 Depends:
     R (>= 2.15.0),
-    BBmisc (>= 1.4)
+    BBmisc (>= 1.5)
 Imports:
     utils,
     digest,
