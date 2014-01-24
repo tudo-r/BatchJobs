@@ -66,6 +66,11 @@ is determined by calling the user-defined
 counter, the counter is increased by 1 and the same job is
 submitted again. If \code{max.retries} is reached the
 function simply terminates.
+
+Potential temporary submit warnings and errors are logged
+inside your file directory in the file \dQuote{submit.log}.
+To keep track you can use \code{tail -f
+[file.dir]/submit.log} in another terminal.
 }
 \examples{
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)

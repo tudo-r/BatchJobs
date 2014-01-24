@@ -1,5 +1,6 @@
-#' Submit jobs or chunks of jobs to batch system via cluster function.
+#' @title Submit jobs or chunks of jobs to batch system via cluster function.
 #'
+#' @description
 #' If the internal submit cluster function completes successfully, the \code{retries}
 #' counter is set back to 0 and the next job or chunk is submitted.
 #' If the internal submit cluster function returns a fatal error, the submit process
@@ -9,6 +10,12 @@
 #' \code{wait}-function with the current \code{retries} counter, the counter is
 #' increased by 1 and the same job is submitted again. If \code{max.retries} is
 #' reached the function simply terminates.
+#'
+#' Potential temporary submit warnings and errors are logged inside your file
+#' directory in the file \dQuote{submit.log}.
+#' To keep track you can use \code{tail -f [file.dir]/submit.log} in another
+#' terminal.
+#'
 #'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
