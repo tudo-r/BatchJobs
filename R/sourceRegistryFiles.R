@@ -15,7 +15,7 @@ sourceRegistryFiles = function(reg, envir=.GlobalEnv) {
 }
 
 sourceRegistryFilesInternal = function(work.dir, dirs, files, envir=.GlobalEnv) {
-  files = file.path(work.dir, c(getRScripts(dirs), files))
+  files = file.path(work.dir, c(getRScripts(file.path(work.dir, dirs)), files))
   ok = file.exists(files)
   if (any(!ok))
     stopf("Files to source not found, e.g. %s", head(files[!ok], 1L))
