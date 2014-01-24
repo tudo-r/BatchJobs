@@ -1,8 +1,13 @@
 BatchJobs_1.2:
-- fix a bug where chunking did not work with batchMapQuick
-- some smaller fixes to make the package behave more robustly on different systems
-- most reduceResults* functions now have an 'impute.val' option that be used to fill in
-  dummy result values for job who did not finish, e.g., because an error occurred in them
+- Fixed a bug where too many running jobs were queried on some Torque systems
+- Fixed a bug where chunking did not work with batchMapQuick
+- Fixed mail subjects to be more precise on job IDs
+- Fixed output of running time in testJob()
+- More robust error handling in syncRegistry
+- waitForJobs is now more conservative in waiting for termination of jobs.
+- New argument "impute.val" for reduceResults-family of functions:
+  This allows to conveniently reduce results while some are missing
+- Experimental framework to support sourcing of multiple files and directories
 
 BatchJobs_1.1-1135:
 - Increased minor version number
