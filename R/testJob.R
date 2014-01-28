@@ -59,8 +59,7 @@ testJob = function(reg, id, resources=list(), external=TRUE) {
     file.copy(from=file.path(r$file.dir, "BatchJobs.db"), to=file.path(td, "BatchJobs.db"), overwrite=TRUE)
 
     # copy conf
-    conf = getBatchJobsConf()
-    save(file = getConfFilePath(reg), conf)
+    saveConf(reg)
 
     # copy job stuff
     copyRequiredJobFiles(r, reg, id)
@@ -71,16 +70,13 @@ testJob = function(reg, id, resources=list(), external=TRUE) {
                   disable.mail=TRUE, delays=0)
 
     # execute
-    rhome = Sys.getenv("R_HOME")
-    cmd = sprintf("%s/bin/Rscript %s", rhome, getRScriptFilePath(reg, id))
     now = Sys.time()
-
     message("### Output of new R process starts here ###")
-    system(cmd, wait=TRUE)
+    system3(file.path(R.home("bin"), "Rscript"), getRScriptFilePath(reg, id), wait=TRUE)
     message("### Output of new R process ends here ###")
-
     dt = difftime(Sys.time(), now)
     messagef("### Approximate running time: %.2f %s", as.double(dt), units(dt))
+
     res = try(getResult(reg, id))
     if (is.error(res))
       return(NULL)
