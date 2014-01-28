@@ -49,10 +49,12 @@ test_that("doJob", {
   expect_error(suppressAll(testJob(reg, 1)), "Please install the following packages: foo")
   expect_equal(findNotDone(reg), id)
 
-  reg = makeTestRegistry(packages=c("randomForest"))
-  f = function(i) randomForest(Species~., data=iris)
-  batchMap(reg, f, 1)
-  submitJobs(reg)
-  waitForJobs(reg)
-  expect_equal(length(findNotDone(reg)), 0)
+  if (isExpensiveExampleOk()) {
+    reg = makeTestRegistry(packages=c("randomForest"))
+    f = function(i) randomForest(Species~., data=iris)
+    batchMap(reg, f, 1)
+    submitJobs(reg)
+    waitForJobs(reg)
+    expect_equal(length(findNotDone(reg)), 0)
+  }
 })

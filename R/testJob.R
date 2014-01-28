@@ -8,7 +8,10 @@
 #'   Id of job to test.
 #'   Default is first job id of registry.
 #' @param external [\code{logical(1)}]\cr
-#'   Run test in fresh R session instead of current.
+#'   Run test in an independent external R session instead of current.
+#'   The former allows to uncover missing variable definitions (which may
+#'   accidentially be defined in the current global environment) and the latter
+#'   is useful to get traceable execeptions.
 #'   Default is \code{TRUE}.
 #' @param resources [\code{list}]\cr
 #'   Usually not needed, unless you call the function \code{\link{getResources}} in your job.
@@ -79,14 +82,14 @@ testJob = function(reg, id, resources=list(), external=TRUE) {
     dt = difftime(Sys.time(), now)
     messagef("### Approximate running time: %.2f %s", as.double(dt), units(dt))
     res = try(getResult(reg, id))
+    if (is.error(res))
+      return(NULL)
   } else {
     setOnSlave(TRUE)
     on.exit(setOnSlave(FALSE))
-    # FIXME: we need to save the resources here! :(
+    # FIXME: stuff we might need to store before: conf, resources
     res = applyJobFunction(reg, getJob(reg, id, load.fun=TRUE))
   }
-  if (is.error(res))
-    return(NULL)
   return(res)
 }
 
