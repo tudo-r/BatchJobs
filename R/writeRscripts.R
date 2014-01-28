@@ -1,38 +1,18 @@
-writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp,
-                         disable.mail, delays, interactive.test) {
-  if (!interactive.test) {
-    template = paste(
-      "Sys.sleep(%%f)",
-      "options(BatchJobs.on.slave=TRUE, BatchJobs.resources.path='%s')",
-      "library(BatchJobs)",
-      "res = BatchJobs:::doJob(",
-      "\treg=loadRegistry('%s'),",
-      "\tids=c(%%s),",
-      "\tmultiple.result.files=%s,",
-      "\tdisable.mail=%s,",
-      "\tfirst=%iL,",
-      "\tlast=%iL,",
-      "\tarray.id=%s)",
-      "BatchJobs:::setOnSlave(FALSE)",
-      sep="\n")
-
-  } else {
-    template = paste(
-      "ignore = %%f",
-      "setOnSlave(TRUE, resources.path='%s')",
-      "res = doJob(",
-      "\treg=loadRegistry('%s'),",
-      "\tids=c(%%s),",
-      "\tmultiple.result.files=%s,",
-      "\tdisable.mail=%s,",
-      "\tfirst=%iL,",
-      "\tlast=%iL,",
-      "\tarray.id=%s)",
-      "setOnSlave(FALSE)",
-      sep="\n")
-  }
-
-
+writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail, delays) {
+  template = paste(
+    "Sys.sleep(%%f)",
+    "options(BatchJobs.on.slave=TRUE, BatchJobs.resources.path='%s')",
+    "library(BatchJobs)",
+    "res = BatchJobs:::doJob(",
+    "\treg=loadRegistry('%s'),",
+    "\tids=c(%%s),",
+    "\tmultiple.result.files=%s,",
+    "\tdisable.mail=%s,",
+    "\tfirst=%iL,",
+    "\tlast=%iL,",
+    "\tarray.id=%s)",
+    "BatchJobs:::setOnSlave(FALSE)",
+    sep="\n")
   fids = vapply(ids, head, integer(1L), 1L) # first job id in chunk
   first = head(fids, 1L)
   last = tail(fids, 1L)

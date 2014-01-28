@@ -60,7 +60,7 @@ testJob = function(reg, id, resources=list()) {
   # write r script
   resources.timestamp = saveResources(reg, resources)
   writeRscripts(reg, getClusterFunctions(conf), id, chunks.as.arrayjobs=FALSE, resources.timestamp=resources.timestamp,
-                disable.mail=TRUE, delays=0, interactive.test=FALSE)
+                disable.mail=TRUE, delays=0)
 
   # execute
   rhome = Sys.getenv("R_HOME")

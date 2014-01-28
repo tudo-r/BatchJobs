@@ -2,15 +2,13 @@ context("makeRegistry")
 
 test_that("makeRegistry", {
   reg = makeTestRegistry()
-  expect_true(is(reg, "Registry"))
+  expect_true(inherits(reg, "Registry"))
   expect_true(is.list(reg))
   expect_true(file.exists(reg$file.dir))
   expect_true(file.exists(file.path(reg$file.dir, "BatchJobs.db")))
   expect_output(print(reg), "Job registry")
-  if (interactive()) {
-    df = dbGetJobStatusTable(reg)
-    expect_true(is.data.frame(df) && nrow(df) == 0 && ncol(df) == 12)
-  }
+  df = BatchJobs:::dbGetJobStatusTable(reg)
+  expect_true(is.data.frame(df) && nrow(df) == 0 && ncol(df) == 12)
 })
 
 
@@ -31,4 +29,3 @@ test_that("loadRegistry works", {
   reg2 = loadRegistry(reg1$file.dir)
   expect_is(reg2, "Registry")
 })
-

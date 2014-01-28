@@ -11,9 +11,7 @@ test_that("resources", {
   waitForJobs(reg)
   expect_equal(loadResult(reg, 1)[names(res)], res)
 
-  if (interactive()) {
-    expect_equal(testJob(reg, 1, resources=res)[names(res)], res)
-  }
+  expect_equal(suppressAll(testJob(reg, 1, resources=res)[names(res)]), res)
 
   # query on master
   res1 = getJobResources(reg, 1)[[1]]
@@ -31,23 +29,11 @@ test_that("resources", {
   res2 = getJobResources(reg, 1)
   expect_equal(res1, res2)
 
-  if (FALSE) {
-    # defaults in conf
-    if (interactive())
-      conf = getBatchJobsConf()
-    else
-      conf = BatchJobs:::getBatchJobsConf()
-
-    # FIXME why is this even a test?
-    # we are setting invalid resources which should always trigger an error
-    conf$default.resources = list(walltime=1, memory=2, xxx=3)
-    reg = makeTestRegistry()
-    batchMap(reg, function(i) getResources(), 1)
-    submitJobs(reg, resources=list(memory=200))
-    waitForJobs(reg)
-    res = list(walltime=1, memory=20, xxx=3)
-    expect_equal(loadResult(reg, 1), res)
-    expect_equal(getJobResources(reg)[[1]], res)
-    conf$default.resources = list()
-  }
+  # defaults in conf
+  # conf = BatchJobs:::getBatchJobsConf()
+  # conf$default.resources = list(walltime=1, memory=2, xxx=3)
+  # reg = makeTestRegistry()
+  # batchMap(reg, function(i) getResources(), 1)
+  # expect_error(submitJobs(reg, resources=list(memory=200)), "Illegal resources used")
+  # waitForJobs(reg)
 })

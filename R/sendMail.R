@@ -4,7 +4,7 @@ sendMail = function(reg, job, result.str, extra.msg="",
   if (disable.mail)
     return(invisible(NULL))
   conf = getBatchJobsConf()
-  ischunk = !is(job, "Job")
+  ischunk = !inherits(job, "Job")
   firstjob = if(ischunk) job[[1L]] else job
   # should we mail
   mail.conds = list(start=conf$mail.start, done=conf$mail.done, error=conf$mail.error)

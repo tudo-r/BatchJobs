@@ -1,21 +1,19 @@
 context("doJob")
 
-if (interactive()) {
-
 test_that("doJob", {
   reg = makeTestRegistry()
   id = 1L
   batchMap(reg, identity, 123)
-  df = dbGetJobStatusTable(reg)
+  df = BatchJobs:::dbGetJobStatusTable(reg)
   expect_true(is.data.frame(df) && nrow(df) == 1 && ncol(df) == 12)
   ids = findNotDone(reg)
   expect_equal(ids, id)
-  saveConf(reg)
+  BatchJobs:::saveConf(reg)
   expect_output({
-    y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
+    y = BatchJobs:::doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
   }, "BatchJobs job")
   expect_equal(y, 123)
-  df = dbGetJobStatusTable(reg)
+  df = BatchJobs:::dbGetJobStatusTable(reg)
   expect_true(!is.na(df$started) && !is.na(df$done) && is.na(df$error))
   y = loadResult(reg, id)
   expect_equal(y, 123)
@@ -34,9 +32,9 @@ test_that("doJob", {
     bar+x
   }
   batchMap(reg, f, 1)
-  saveConf(reg)
+  BatchJobs:::saveConf(reg)
   expect_output({
-    y = doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
+    y = BatchJobs:::doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
   }, "BatchJobs job")
   expect_equal(y, bar + 1)
   expect_equal(getwd(), wd.now)
@@ -46,10 +44,9 @@ test_that("doJob", {
   # be sneaky otherwise we get error here due to pack check
   reg = makeTestRegistry()
   reg$packages = list(foo="foo")
-  saveRegistry(reg)
+  BatchJobs:::saveRegistry(reg)
   batchMap(reg, identity, 1)
-  expect_error(submitJobs(reg), "please install the following packages: foo")
-  waitForJobs(reg)
+  expect_error(suppressAll(testJob(reg, 1)), "Please install the following packages: foo")
   expect_equal(findNotDone(reg), id)
 
   reg = makeTestRegistry(packages=c("randomForest"))
@@ -59,5 +56,3 @@ test_that("doJob", {
   waitForJobs(reg)
   expect_equal(length(findNotDone(reg)), 0)
 })
-
-}

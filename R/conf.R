@@ -208,8 +208,8 @@ loadConfig = function(conffile = ".BatchJobs.R") {
 #' @seealso \code{\link{getConfig}}, \code{\link{loadConfig}}
 #' @export
 setConfig = function(conf = list(), ...) {
-  if (!is.list(conf) && !is(conf, "Config"))
-    stopf("Argument 'conf' must be of class 'list' or 'Config', not %s", class(conf)[1])
+  if (!is.list(conf) && !inherits(conf, "Config"))
+    stopf("Argument 'conf' must be of class 'list' or 'Config', not %s", head(conf, 1L))
   overwrites = insert(conf, list(...))
   if (!length(overwrites))
     return(invisible(getConfig()))

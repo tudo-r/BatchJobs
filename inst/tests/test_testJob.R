@@ -1,12 +1,10 @@
 context("testJob")
 
-if (interactive()) {
-  
-test_that("testJob", {  
+test_that("testJob", {
   reg = makeTestRegistry()
   id = 1L
   batchMap(reg, identity, 1)
-  res = testJob(reg, id)
+  res = suppressAll(testJob(reg, id))
   expect_equal(res, 1)
   ids = findNotDone(reg)
   expect_equal(ids, id)
@@ -17,11 +15,11 @@ test_that("testJob", {
   expect_equal(st$started, 0)
   expect_equal(st$done, 0)
   expect_equal(st$error, 0)
-  
+
   reg = makeTestRegistry()
   f = function(i) {library(xxxxx);1}
   batchMap(reg, f, 1)
-  res = testJob(reg, id)
+  res = suppressAll(testJob(reg, id))
   expect_true(is.null(res))
   ids = findNotDone(reg)
   expect_equal(ids, id)
@@ -33,5 +31,3 @@ test_that("testJob", {
   expect_equal(st$done, 0)
   expect_equal(st$error, 0)
 })
-
-}

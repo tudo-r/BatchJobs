@@ -185,7 +185,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   messagef("Writing %i R scripts...", n)
   resources.timestamp = saveResources(reg, resources)
   writeRscripts(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail=FALSE,
-                delays=getDelays(cf, job.delay, n), interactive.test = !is.null(conf$interactive))
+                delays=getDelays(cf, job.delay, n))
 
   ### reset status of jobs: delete errors, done, ...
   dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids)), staged=FALSE)

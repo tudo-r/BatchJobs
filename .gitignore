@@ -2,5 +2,3 @@ inst/tests/unittests-files
 
 BatchJobs_*.tar.gz
 BatchJobs.Rcheck
-test_src.R
-
