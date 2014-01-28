@@ -31,7 +31,7 @@ test_that("batchMapQuick", {
 })
 
 test_that("batchMapQuick chunks properly", {
-  in_dir("unittests-files", {
+  in.dir("unittests-files", {
     expect_message({
       reg = batchMapQuick(identity, 1:4, chunk.size=2)
     }, "Submitting 2 chunks / 4 jobs")
