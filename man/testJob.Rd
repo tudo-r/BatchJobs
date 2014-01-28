@@ -2,13 +2,20 @@
 \alias{testJob}
 \title{Tests a job by running it with Rscript in a new process.}
 \usage{
-testJob(reg, id, resources = list())
+testJob(reg, id, resources = list(), external = TRUE)
 }
 \arguments{
   \item{reg}{[\code{\link{Registry}}]\cr Registry.}
 
   \item{id}{[\code{integer(1)}]\cr Id of job to test.
   Default is first job id of registry.}
+
+  \item{external}{[\code{logical(1)}]\cr Run test in an
+  independent external R session instead of current.  The
+  former allows to uncover missing variable definitions
+  (which may accidentially be defined in the current global
+  environment) and the latter is useful to get traceable
+  execeptions.  Default is \code{TRUE}.}
 
   \item{resources}{[\code{list}]\cr Usually not needed,
   unless you call the function \code{\link{getResources}}
