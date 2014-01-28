@@ -11,7 +11,8 @@ test_that("resources", {
   waitForJobs(reg)
   expect_equal(loadResult(reg, 1)[names(res)], res)
 
-  # expect_equal(testJob(reg, 1, resources=res)[names(res)], res)
+  # see FIXME in testJob.R
+  # expect_equal(testJob(reg, 1, resources=res, external=FALSE)[names(res)], res)
 
   # query on master
   res1 = getJobResources(reg, 1)[[1]]
