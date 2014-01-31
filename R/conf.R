@@ -48,8 +48,10 @@ readConfs = function(path) {
   fn.user = path.expand("~/.BatchJobs.R")
   fn.wd = suppressWarnings(normalizePath(".BatchJobs.R"))
   conffiles = Filter(file.exists, unique(c(fn.pack, fn.user, fn.wd)))
-  if (length(conffiles) == 0L)
-    stop("No configuation found at all. Not in package, not in user.home, not in work dir!")
+  if (length(conffiles) == 0L) {
+    warning("No configuation found at all. Not in package, not in user.home, not in work dir!")
+    assignConfDefaults()
+  }
 
   # really do this in 2 steps
   # otherwise weird things might happen due to lazy eval combined with envirs
