@@ -83,7 +83,8 @@ testJob = function(reg, id, resources=list(), external=TRUE) {
   } else {
     setOnSlave(TRUE)
     on.exit(setOnSlave(FALSE))
-    # FIXME: stuff we might need to store before: conf, resources
+    # FIXME: stuff we might need to store before: resources
+    saveConf(reg)
     res = applyJobFunction(reg, getJob(reg, id, load.fun=TRUE))
   }
   return(res)

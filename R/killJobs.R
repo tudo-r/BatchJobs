@@ -95,7 +95,7 @@ killJobs = function(reg, ids) {
   }
 
   # first try to kill
-  message(shortenString(collapse(bjids), 200L, ",..."))
+  message(clipString(collapse(bjids), 200L, ",..."))
   bjids.notkilled = doKill(bjids)
 
   # second try to kill

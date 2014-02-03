@@ -358,7 +358,7 @@ dbRemoveJobs = function(reg, ids) {
 ############################################
 dbSendMessage = function(reg, msg, staged = FALSE) {
   if (staged) {
-    fn = getSQLFileName(reg, msg$type, msg$ids[1L], getOrderCharacters()[msg$type])
+    fn = getPendingFile(reg, msg$type, msg$ids[1L])
     writeSQLFile(msg$msg, fn)
   } else {
     dbDoQuery(reg, msg$msg, flags="rw")
@@ -378,7 +378,7 @@ dbSendMessages = function(reg, msgs, max.retries=200L, sleep=function(r) 1.025^r
 
     for (cur in msgs) {
       first = cur[[1L]]
-      fn = getSQLFileName(reg, first$type, first$ids[1L], chars[first$type])
+      fn = getPendingFile(reg, first$type, first$ids[1L], chars[first$type])
       writeSQLFile(extractSubList(cur, "msg"), fn)
     }
   } else {

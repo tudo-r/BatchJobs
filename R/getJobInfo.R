@@ -27,7 +27,7 @@ getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
 
   # shorten error messages
   if (!is.null(tab$error.msg))
-    tab$error.msg = vapply(tab$error.msg, shortenString, "", len = 30L)
+    tab$error.msg = vapply(tab$error.msg, clipString, "", len = 30L)
 
   # convert time diffs
   div = setNames(c(1L, 60L, 3600L, 86400L, 604800L), c("seconds", "minutes", "hours", "days", "weeks"))[unit]

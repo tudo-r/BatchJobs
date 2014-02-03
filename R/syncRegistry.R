@@ -1,4 +1,4 @@
-syncRegistry = function(reg) { # FIXME option to use external sync
+syncRegistry = function(reg) {
   conf = getBatchJobsConf()
   if (conf$staged.queries) {
     if (conf$debug && isOnSlave())

@@ -36,8 +36,7 @@ createShardedDirs = function(reg, ids) {
 # tests a directory for read and write permissions
 # uses a heuristic for windows
 is.accessible = function(path) {
-  #FIXME use bbmisc function isWindows()
-  if (grepl("windows", getOperatingSystem(), ignore.case=TRUE)) {
+  if (isWindows()) {
     # Workaround: No POSIX file system informations available, use a heuristic
     rnd = basename(tempfile(""))
     tf1 = file.path(path, sprintf("test_write_access_file_%s", rnd))
@@ -129,7 +128,6 @@ getExportDir = function(file.dir)
   file.path(file.dir, "exports")
 
 
-# FIXME: chnage name
-getSQLFileName = function(reg, type, id, char = getOrderCharacters()[type]) {
+getPendingFile = function(reg, type, id, char = getOrderCharacters()[type]) {
   file.path(getPendingDir(reg$file.dir), sprintf("pending_%s_%s_%i.sql", char, type, id))
 }
