@@ -8,6 +8,8 @@ BatchJobs_1.2:
 - New argument "impute.val" for reduceResults-family of functions:
   This allows to conveniently reduce results while some are missing
 - Experimental framework to support sourcing of multiple files and directories
+- testJob can now run jobs interactively in the current R session if argument
+  "external" is set to TRUE.
 
 BatchJobs_1.1-1135:
 - Increased minor version number
