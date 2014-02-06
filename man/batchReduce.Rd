@@ -28,6 +28,7 @@ Each jobs reduces a certain number of elements on one
 slave. You can then submit these jobs to the batch system.
 }
 \examples{
+\dontrun{
 # define function to reduce on slave, we want to sum a vector
 f <- function(aggr, x) aggr + x
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
@@ -39,5 +40,6 @@ waitForJobs(reg)
 
 # now reduce one final time on master
 reduceResults(reg, fun=function(aggr,job,res) f(aggr, res))
+}
 }
 

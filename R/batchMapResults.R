@@ -22,6 +22,7 @@
 #' @return Vector of type \code{integer} with job ids.
 #' @export
 #' @examples
+#' \dontrun{
 #' reg1 <- makeRegistry(id="BatchJobsExample1", file.dir=tempfile(), seed=123)
 #' # square some numbers
 #' f <- function(x) x^2
@@ -46,6 +47,7 @@
 #'
 #' # check results
 #' reduceResults(reg2, fun=function(aggr,job,res) c(aggr, res))
+#' }
 batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.args=list()) {
   # FIXME conserve jobnames
   checkRegistry(reg)

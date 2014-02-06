@@ -92,6 +92,7 @@ matrices or data.frames) or to arbitrarily aggregate them,
 which is a more general operation.
 }
 \examples{
+\dontrun{
 # generate results:
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 f <- function(x) x^2
@@ -123,5 +124,6 @@ reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=FA
 print(str(reduceResultsDataFrame(reg)))
 # reduce results to a sum
 reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
+}
 }
 

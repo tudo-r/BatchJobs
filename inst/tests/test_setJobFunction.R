@@ -6,12 +6,12 @@ test_that("setJobFunction", {
   batchMap(reg, f, x = 1:3)
   submitJobs(reg)
   waitForJobs(reg)
-  expect_equal(findErrors(reg), 2)
-  expect_equal(findDone(reg), c(1, 3))
+  expect_equal(findErrors(reg), 2L)
+  expect_equal(findDone(reg), c(1L, 3L))
 
   f = function(x) x
   setJobFunction(reg, fun=f, ids=2L, reset=TRUE, force=TRUE)
-  submitJobs(reg, 2)
+  submitJobs(reg, 2L)
   waitForJobs(reg)
   expect_equal(findDone(reg), 1:3)
 })

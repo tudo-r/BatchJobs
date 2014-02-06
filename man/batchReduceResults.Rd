@@ -41,6 +41,7 @@ you can do a final reduction with
 \code{\link{reduceResults}} on the master.
 }
 \examples{
+\dontrun{
 # generating example results:
 reg1 <- makeRegistry(id="BatchJobsExample1", file.dir=tempfile(), seed=123)
 f <- function(x) x^2
@@ -59,5 +60,6 @@ waitForJobs(reg)
 
 # now reduce one final time on master
 reduceResults(reg2, fun=myreduce)
+}
 }
 

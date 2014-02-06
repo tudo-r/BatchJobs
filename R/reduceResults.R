@@ -50,6 +50,7 @@
 #'   \code{reduceResultsDataFrame} returns \code{data.frame()}.
 #' @export
 #' @examples
+#' \dontrun{
 #' # generate results:
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x) x^2
@@ -81,6 +82,7 @@
 #' print(str(reduceResultsDataFrame(reg)))
 #' # reduce results to a sum
 #' reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
+#' }
 # FIXME we need more documentation for reduceResultsReturnValue ...
 reduceResults = function(reg, ids, part=NA_character_, fun, init, impute.val, ...) {
   checkRegistry(reg)

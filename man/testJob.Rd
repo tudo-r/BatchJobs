@@ -31,11 +31,13 @@ Useful for debugging. Note that neither the registry,
 database or file directory are changed.
 }
 \examples{
+\dontrun{
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 f <- function(x) if (x==1) stop("oops") else x
 batchMap(reg, f, 1:2)
 testJob(reg, 1, external=FALSE)
 testJob(reg, 2, external=FALSE)
+}
 }
 \seealso{
 \code{\link{reduceResults}}

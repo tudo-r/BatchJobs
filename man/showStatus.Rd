@@ -29,6 +29,7 @@ E.g.: How many there are, how many are done, any errors,
 etc.
 }
 \examples{
+\dontrun{
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 f <- function(x) x^2
 batchMap(reg, f, 1:10)
@@ -38,5 +39,6 @@ waitForJobs(reg)
 # after a few moments:
 showStatus(reg)
 # should show 10 submitted jobs, which are all done.
+}
 }
 

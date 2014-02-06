@@ -1,7 +1,7 @@
 #' Maps a function over lists or vectors, adding jobs to a registry.
 #'
 #' You can then submit these jobs to the batch system.
-#' 
+#'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Empty Registry that will store jobs for the mapping.
 #' @param fun [\code{function}]\cr

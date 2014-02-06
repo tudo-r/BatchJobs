@@ -25,6 +25,7 @@
 #' @return Vector of type \code{integer} with job ids.
 #' @export
 #' @examples
+#' \dontrun{
 #' # generating example results:
 #' reg1 <- makeRegistry(id="BatchJobsExample1", file.dir=tempfile(), seed=123)
 #' f <- function(x) x^2
@@ -43,6 +44,7 @@
 #'
 #' # now reduce one final time on master
 #' reduceResults(reg2, fun=myreduce)
+#' }
 batchReduceResults = function(reg, reg2, fun, ids, part=NA_character_, init, block.size, more.args=list()) {
   checkRegistry(reg)
   checkRegistry(reg2)

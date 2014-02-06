@@ -24,6 +24,7 @@ returns \code{TRUE}.
 Find all results where a specific condition is true.
 }
 \examples{
+\dontrun{
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 f <- function(x) x^2
 batchMap(reg, f, 1:10)
@@ -32,5 +33,6 @@ waitForJobs(reg)
 
 # which square numbers are even:
 filterResults(reg, fun=function(job, res) res \%\% 2 == 0)
+}
 }
 
