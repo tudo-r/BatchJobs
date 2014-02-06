@@ -53,18 +53,14 @@
 #' @return [\code{integer}]. Vector of submitted job ids.
 #' @export
 #' @examples
-#' \dontrun{
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
-#' waitForJobs(reg)
 #'
 #' # Submit the 10 jobs again, now randomized into 2 chunks:
 #' chunked = chunk(getJobIds(reg), n.chunks=2, shuffle=TRUE)
 #' submitJobs(reg, chunked)
-#' waitForJobs(reg)
-#' }
 submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.as.arrayjobs=FALSE, job.delay=FALSE) {
   ### helper function to calculate the delay
   getDelays = function(cf, job.delay, n) {

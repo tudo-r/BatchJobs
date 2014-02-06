@@ -92,13 +92,11 @@ matrices or data.frames) or to arbitrarily aggregate them,
 which is a more general operation.
 }
 \examples{
-\dontrun{
 # generate results:
 reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 f <- function(x) x^2
 batchMap(reg, f, 1:5)
 submitJobs(reg)
-waitForJobs(reg)
 
 # reduce results to a vector
 reduceResultsVector(reg)
@@ -109,7 +107,6 @@ reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 f <- function(x) list(a=x, b=as.character(2*x), c=x^2)
 batchMap(reg, f, 1:5)
 submitJobs(reg)
-waitForJobs(reg)
 
 # reduce results to a vector
 reduceResultsVector(reg, fun=function(job, res) res$a)
@@ -124,6 +121,5 @@ reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=FA
 print(str(reduceResultsDataFrame(reg)))
 # reduce results to a sum
 reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
-}
 }
 

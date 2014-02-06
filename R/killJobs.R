@@ -22,18 +22,15 @@
 #' @return Vector of type \code{integer} with ids of killed jobs.
 #' @export
 #' @examples
-#' \dontrun{
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x) Sys.sleep(x)
 #' batchMap(reg, f, 1:10 + 5)
 #' submitJobs(reg)
-#' waitForJobs(reg)
 #'
 #' # kill all jobs currently _runnig_
 #' killJobs(reg, findRunning(reg))
 #' # kill all jobs queued or running
 #' killJobs(reg, findNotTerminated(reg))
-#' }
 killJobs = function(reg, ids) {
   checkRegistry(reg)
   syncRegistry(reg)

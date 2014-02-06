@@ -16,14 +16,11 @@
 #'   Default is empty list.
 #' @return [\code{data.frame}]. Expanded grid of combinations produced by \code{\link{expand.grid}}.
 #' @examples
-#' \dontrun{
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x, y, z) x * y  + z
 #' batchExpandGrid(reg, f, x=1:2, y=1:3, more.args=list(z=10))
 #' submitJobs(reg)
-#' waitForJobs(reg)
 #' reduceResultsMatrix(reg, fun=function(job, res) cbind(job$pars, res))
-#' }
 #' @export
 batchExpandGrid = function(reg, fun, ..., more.args=list()) {
   checkRegistry(reg, strict=TRUE)

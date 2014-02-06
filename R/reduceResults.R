@@ -50,13 +50,11 @@
 #'   \code{reduceResultsDataFrame} returns \code{data.frame()}.
 #' @export
 #' @examples
-#' \dontrun{
 #' # generate results:
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:5)
 #' submitJobs(reg)
-#' waitForJobs(reg)
 #'
 #' # reduce results to a vector
 #' reduceResultsVector(reg)
@@ -67,7 +65,6 @@
 #' f <- function(x) list(a=x, b=as.character(2*x), c=x^2)
 #' batchMap(reg, f, 1:5)
 #' submitJobs(reg)
-#' waitForJobs(reg)
 #'
 #' # reduce results to a vector
 #' reduceResultsVector(reg, fun=function(job, res) res$a)
@@ -82,7 +79,6 @@
 #' print(str(reduceResultsDataFrame(reg)))
 #' # reduce results to a sum
 #' reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
-#' }
 # FIXME we need more documentation for reduceResultsReturnValue ...
 reduceResults = function(reg, ids, part=NA_character_, fun, init, impute.val, ...) {
   checkRegistry(reg)

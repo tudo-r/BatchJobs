@@ -21,13 +21,10 @@
 #' @seealso \code{\link{reduceResults}}
 #' @export
 #' @examples
-#' \dontrun{
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' f <- function(x) if (x==1) stop("oops") else x
 #' batchMap(reg, f, 1:2)
-#' testJob(reg, 1, external=FALSE)
-#' testJob(reg, 2, external=FALSE)
-#' }
+#' testJob(reg, 2)
 testJob = function(reg, id, resources=list(), external=TRUE) {
   checkRegistry(reg)
   #syncRegistry(reg)
