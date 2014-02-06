@@ -22,6 +22,7 @@
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
+#' waitForJobs(reg)
 #'
 #' # after a few moments:
 #' showStatus(reg)
