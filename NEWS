@@ -1,3 +1,5 @@
+BatchJobs_1.3:
+
 BatchJobs_1.2:
 - Fixed a bug where too many running jobs were queried on some Torque systems
 - Fixed a bug where chunking did not work with batchMapQuick
@@ -26,13 +28,13 @@ BatchJobs_1.1-1135:
 - The registry now supports an "exports" directory of exported objects,
   which are always loaded on the slaves, e.g. data objects which are needed in every job
   This directory can be either managed manually or - more  conveniently - via the "fail" package on CRAN.
-- The registry now supports a list of source directories. 
+- The registry now supports a list of source directories.
   All R files in these subdirectories are sourced on the slaves (and also on the master)
   Nice if you have a lot of helper code in seperate R files which is needed in your jobs.
 - batchMap and all result functions where this is reasonable support naming results with the names
   of the elements that were mapped over (see use.names argument)
-- batchMap now supports mapping over any kind of object (not only lists and vectors) that supports the 
-  "length" and "[" / "[["- index method. 
+- batchMap now supports mapping over any kind of object (not only lists and vectors) that supports the
+  "length" and "[" / "[["- index method.
 
 BatchJobs_1.0-966:
 - Dropped support for R < 2.13.0 (.find.packages deprecated)
@@ -44,8 +46,8 @@ BatchJobs_1.0-966:
 - New functions: findStarted() and findNotStarted()
 
 BatchJobs_1.0-915:
-- new option to raise warnings to errors on the slaves 
-- option to set process priority via nice in clusterFunctionsMulticore and 
+- new option to raise warnings to errors on the slaves
+- option to set process priority via nice in clusterFunctionsMulticore and
   clusterFunctionsSSH
 - new helper functions: getErrors, getJobInfo, loadConfig, callFunctionOnSSHWorkers, getSSHWorkersInfo,
   installPackagesOnSSHWorkers, waitForJobs, several more find* functions
@@ -54,21 +56,21 @@ BatchJobs_1.0-915:
 - various smaller fixes
 - documentation fixes
 
-BatchJobs_1.0-606: 
+BatchJobs_1.0-606:
 - many dependencies are now imports
 - many fixes and improvements for stability in cluster functions
 - helper functions for your own cluster functions are exported and documented, they all start with cf*
 - interactive mode now has dummy functions for listing and killing jobs
 - interactive mode now generates log files
-- job resources (from submits) are stored and can be queried on the master and the slaves 
-  (see getResources and getJobResources) 
+- job resources (from submits) are stored and can be queried on the master and the slaves
+  (see getResources and getJobResources)
 - defaults for job resources can be specified in config file, see config part on web page
-- multicore and SSH mode now supports r.options, i.e. options to start Rscript and R CMD BATCH with   
+- multicore and SSH mode now supports r.options, i.e. options to start Rscript and R CMD BATCH with
 - function grepLogs to search log files for a pattern
 
-BatchJobs_1.0-527: 
+BatchJobs_1.0-527:
 - very minor bug fixes: for argument conversion and checks
 
-BatchJobs_1.0-485: 
+BatchJobs_1.0-485:
 - First submit to CRAN.
 
