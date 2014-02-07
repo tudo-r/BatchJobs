@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Convert a list of row-vectors of equal structure to a...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for convertListOfRowsToDataFrame {BBmisc}"><tr><td>convertListOfRowsToDataFrame {BBmisc}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Convert a list of row-vectors of equal structure to a data.frame.</h2>
+
+<h3>Description</h3>
+
+<p>Convert a list of row-vectors of equal structure to a
+data.frame.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+convertListOfRowsToDataFrame(rows,
+  strings.as.factors = default.stringsAsFactors(), row.names, col.names)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>rows</code></td>
+<td>
+<p>[<code>list</code>]<br> List of rows. Each row is a
+list or vector of the same structure.  That means all
+rows must have the same length and all corresponding
+elements must have the same class.</p>
+</td></tr>
+<tr valign="top"><td><code>strings.as.factors</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> Convert
+character columns to factors?  Default is
+<code>default.stringsAsFactors()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>row.names</code></td>
+<td>
+<p>[<code>character(nrow)</code> |
+<code>NULL</code>]<br> Row names for result.  <code>NULL</code>
+implies no row names are set.  By default the names of
+the list <code>rows</code> are taken.</p>
+</td></tr>
+<tr valign="top"><td><code>col.names</code></td>
+<td>
+<p>[<code>character(ncol)</code>]<br> Column
+names.  Default the are the names of the elements of the
+first row, or, if this row has no element names,
+&ldquo;V1&rdquo;, &ldquo;V2&rdquo;, and so on, is used.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[<code>data.frame</code>].
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+convertListOfRowsToDataFrame(list(list(x=1, y=&quot;a&quot;), list(x=2, y=&quot;b&quot;)))
+</code></pre>
+
+<pre><code>##   x y
+## 1 1 a
+## 2 2 b
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BBmisc</em> version 1.6 <a href="00Index.html">Index</a>]</div>
+</body></html>

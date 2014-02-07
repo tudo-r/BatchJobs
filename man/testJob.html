@@ -23,7 +23,7 @@ database or file directory are changed.
 <h3>Usage</h3>
 
 <pre>
-  testJob(reg, id, resources = list())
+testJob(reg, id, resources = list(), external = TRUE)
 </pre>
 
 
@@ -38,6 +38,15 @@ database or file directory are changed.
 <td>
 <p>[<code>integer(1)</code>]<br> Id of job to test.
 Default is first job id of registry.</p>
+</td></tr>
+<tr valign="top"><td><code>external</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> Run test in an
+independent external R session instead of current.  The
+former allows to uncover missing variable definitions
+(which may accidentially be defined in the current global
+environment) and the latter is useful to get traceable
+execeptions.  Default is <code>TRUE</code>.</p>
 </td></tr>
 <tr valign="top"><td><code>resources</code></td>
 <td>
@@ -68,8 +77,8 @@ of an error, NULL is returned.
 reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), seed=123)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/user/1000/Rtmp6kubH8/file63d74f10500b
-## Saving registry: /tmp/user/1000/Rtmp6kubH8/file63d74f10500b/registry.RData
+<pre><code>## Creating dir: /tmp/Rtmp14EkvD/file3d4b227a4580
+## Saving registry: /tmp/Rtmp14EkvD/file3d4b227a4580/registry.RData
 </code></pre>
 
 <pre><code class="r">f &lt;- function(x) if (x==1) stop(&quot;oops&quot;) else x
@@ -79,27 +88,15 @@ batchMap(reg, f, 1:2)
 <pre><code>## Adding 2 jobs to DB.
 </code></pre>
 
-<pre><code class="r">testJob(reg, 1)
-</code></pre>
-
-<pre><code>## Creating dir: /tmp/user/1000/Rtmp6kubH8/63d732fa9ac4
-## Saving registry: /tmp/user/1000/Rtmp6kubH8/63d732fa9ac4/registry.RData
-## ### Output of new R process starts here ###
-## ### Output of new R process ends here ###
-## ### Approximate running time: 1.20 seconds
-</code></pre>
-
-<pre><code>## NULL
-</code></pre>
-
 <pre><code class="r">testJob(reg, 2)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/user/1000/Rtmp6kubH8/63d76918ba52
-## Saving registry: /tmp/user/1000/Rtmp6kubH8/63d76918ba52/registry.RData
+<pre><code>## Creating dir: /tmp/Rtmp14EkvD/3d4b4058ab7b
+## Saving registry: /tmp/Rtmp14EkvD/3d4b4058ab7b/registry.RData
+## Saving conf: /tmp/Rtmp14EkvD/3d4b4058ab7b/conf.RData
 ## ### Output of new R process starts here ###
 ## ### Output of new R process ends here ###
-## ### Approximate running time: 1.21 seconds
+## ### Approximate running time: 1.75 secs
 </code></pre>
 
 <pre><code>## [1] 2

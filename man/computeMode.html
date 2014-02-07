@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Compute statistical mode of a vector (value that occurs most...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for computeMode {BBmisc}"><tr><td>computeMode {BBmisc}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Compute statistical mode of a vector (value that occurs most frequently).</h2>
+
+<h3>Description</h3>
+
+<p>Works for integer, numeric, factor and character vectors.
+The implementation is currently not extremely efficient.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+computeMode(x, ties.method = "random", na.rm = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>[<code>vector</code>]<br> Factor, character, integer,
+numeric or logical vector.</p>
+</td></tr>
+<tr valign="top"><td><code>na.rm</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> If <code>TRUE</code>,
+missing values in the data removed.  if <code>FALSE</code>,
+they are used as a separate level and this level could
+therefore be returned as the most frequent one.  Default
+is <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>ties.method</code></td>
+<td>
+<p>[<code>character(1)</code>]<br>
+&ldquo;first&rdquo;, &ldquo;random&rdquo;, &ldquo;last&rdquo;: Decide
+which value to take in case of ties.  Default is
+&ldquo;random&rdquo;.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Modal value of length 1, data type depends on data type of
+<code>x</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+computeMode(c(1,2,3,3))
+</code></pre>
+
+<pre><code>## [1] 3
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BBmisc</em> version 1.6 <a href="00Index.html">Index</a>]</div>
+</body></html>

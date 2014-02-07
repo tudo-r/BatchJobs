@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Find row- or columnwise the index of the maximal / minimal...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for getMaxIndexOfRows {BBmisc}"><tr><td>getMaxIndexOfRows {BBmisc}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Find row- or columnwise the index of the maximal / minimal element in a matrix.</h2>
+
+<h3>Description</h3>
+
+<p><code>getMaxIndexOfRows</code> returns the index of the maximal
+element of each row. <code>getMinIndexOfRows</code> returns the
+index of the minimal element of each row.
+<code>getMaxIndexOfCols</code> returns the index of the maximal
+element of each col. <code>getMinIndexOfCols</code> returns the
+index of the minimal element of each col. If a
+corresponding vector (row or col) is empty, possibly after
+NA removal, -1 is returned as index.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+getMaxIndexOfRows(x, ties.method = "random", na.rm = FALSE)
+
+getMinIndexOfRows(x, ties.method = "random", na.rm = FALSE)
+
+getMaxIndexOfCols(x, ties.method = "random", na.rm = FALSE)
+
+getMinIndexOfCols(x, ties.method = "random", na.rm = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>[<code>matrix(n,m)</code>] <br> Numerical input
+matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>ties.method</code></td>
+<td>
+<p>[<code>character(1)</code>]<br> How should
+ties be handled?  Possible are: &ldquo;random&rdquo;,
+&ldquo;first&rdquo;, &ldquo;last&rdquo;.  Default is
+&ldquo;random&rdquo;.</p>
+</td></tr>
+<tr valign="top"><td><code>na.rm</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> If <code>FALSE</code>, NA
+is returned if an NA is encountered in <code>x</code>.  If
+<code>TRUE</code>, NAs are disregarded.  Default is
+<code>FALSE</code></p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[<code>integer(n)</code>].
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+x &lt;- matrix(runif(5 * 3), ncol=3)
+print(x)
+</code></pre>
+
+<pre><code>##        [,1]    [,2]   [,3]
+## [1,] 0.6061 0.30158 0.6895
+## [2,] 0.9511 0.14420 0.3536
+## [3,] 0.6121 0.67093 0.8442
+## [4,] 0.2112 0.32374 0.8455
+## [5,] 0.8051 0.01175 0.1470
+</code></pre>
+
+<pre><code class="r">print(getMaxIndexOfRows(x))
+</code></pre>
+
+<pre><code>## [1] 3 1 3 3 1
+</code></pre>
+
+<pre><code class="r">print(getMinIndexOfRows(x))
+</code></pre>
+
+<pre><code>## [1] 2 2 1 1 2
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BBmisc</em> version 1.6 <a href="00Index.html">Index</a>]</div>
+</body></html>

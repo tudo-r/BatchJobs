@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Simple bin packing.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for binPack {BBmisc}"><tr><td>binPack {BBmisc}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Simple bin packing.</h2>
+
+<h3>Description</h3>
+
+<p>Maps numeric items in <code>x</code> into groups with sum less or
+equal than <code>capacity</code>. A very simple greedy algorithm
+is used, which is not really optimized for speed. This is a
+convenience function for smaller vectors, not a competetive
+solver for the real binbacking problem. If an element of
+<code>x</code> exceeds <code>capacity</code>, an error is thrown.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+binPack(x, capacity)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>[<code>numeric</code>]<br> Numeric vector of elements
+to group.</p>
+</td></tr>
+<tr valign="top"><td><code>capacity</code></td>
+<td>
+<p>[<code>numeric(1)</code>]<br> Maximum capacity
+of each bin, i.e., elements will be grouped so their sum
+does not exceed this limit.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[<code>integer</code>]. Integer with values &ldquo;1&rdquo; to
+&ldquo;n.bins&rdquo; indicating bin membership.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+x = 1:10
+bp = binPack(x, 11)
+xs = split(x, bp)
+print(xs)
+</code></pre>
+
+<pre><code>## $`1`
+## [1]  1 10
+## 
+## $`2`
+## [1] 2 9
+## 
+## $`3`
+## [1] 3 8
+## 
+## $`4`
+## [1] 4 7
+## 
+## $`5`
+## [1] 5 6
+</code></pre>
+
+<pre><code class="r">print(sapply(xs, sum))
+</code></pre>
+
+<pre><code>##  1  2  3  4  5 
+## 11 11 11 11 11
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BBmisc</em> version 1.6 <a href="00Index.html">Index</a>]</div>
+</body></html>

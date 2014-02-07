@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Combine multiple factors and return a factor.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for cFactor {BBmisc}"><tr><td>cFactor {BBmisc}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Combine multiple factors and return a factor.</h2>
+
+<h3>Description</h3>
+
+<p>Note that function does not inherit from <code><a href="../../base/html/c.html">c</a></code> to
+not change R semantics behind your back when this package
+is loaded.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cFactor(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>[<code>factor</code>]<br> The factors.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[<code>factor</code>].
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+f1 &lt;- factor(c(&quot;a&quot;, &quot;b&quot;))
+f2 &lt;- factor(c(&quot;b&quot;, &quot;c&quot;))
+print(c(f1, f2))
+</code></pre>
+
+<pre><code>## [1] 1 2 1 2
+</code></pre>
+
+<pre><code class="r">print(cFactor(f1, f2))
+</code></pre>
+
+<pre><code>## [1] a b b c
+## Levels: a b c
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BBmisc</em> version 1.6 <a href="00Index.html">Index</a>]</div>
+</body></html>

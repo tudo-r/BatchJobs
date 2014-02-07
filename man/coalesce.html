@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Returns first non-missing, non-null argument.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for coalesce {BBmisc}"><tr><td>coalesce {BBmisc}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Returns first non-missing, non-null argument.</h2>
+
+<h3>Description</h3>
+
+<p>Returns first non-missing, non-null argument, otherwise
+<code>NULL</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+coalesce(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>[any]<br> Arguments.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[any].
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+f = function(x,y) {
+  print(coalesce(NULL, x, y))
+}
+f(y=3)
+</code></pre>
+
+<pre><code>## [1] 3
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BBmisc</em> version 1.6 <a href="00Index.html">Index</a>]</div>
+</body></html>

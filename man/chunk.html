@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Chunk elements of vectors into blocks of nearly equal size.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for chunk {BBmisc}"><tr><td>chunk {BBmisc}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Chunk elements of vectors into blocks of nearly equal size.</h2>
+
+<h3>Description</h3>
+
+<p>In case of shuffling and vectors that cannot be chunked
+evenly, it is chosen randomly which levels / chunks will
+receive 1 element less. If you do not shuffle, always the
+last chunks will receive 1 element less.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+chunk(x, chunk.size, n.chunks, shuffle = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>[<code>vector</code> | <code>list</code>]<br> Vector or list
+to chunk.</p>
+</td></tr>
+<tr valign="top"><td><code>chunk.size</code></td>
+<td>
+<p>[<code>integer(1)</code>]<br> Requested number
+of elements in each chunk.  Cannot be used in combination
+with <code>n.chunks</code>.  If <code>x</code> cannot be evenly
+chunked, some chunks will have 1 element less.</p>
+</td></tr>
+<tr valign="top"><td><code>n.chunks</code></td>
+<td>
+<p>[<code>integer(1)</code>]<br> Requested number
+of chunks.  Can not be used in combination with
+<code>chunks.size</code></p>
+</td></tr>
+<tr valign="top"><td><code>shuffle</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> Shuffle <code>x</code>?
+Default is <code>FALSE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[unnamed <code>list</code>] of chunks.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+xs &lt;- 1:10
+chunk(xs, chunk.size=3)
+</code></pre>
+
+<pre><code>## [[1]]
+## [1] 1 2 3
+## 
+## [[2]]
+## [1] 4 5 6
+## 
+## [[3]]
+## [1] 7 8
+## 
+## [[4]]
+## [1]  9 10
+</code></pre>
+
+<pre><code class="r">chunk(xs, n.chunks=2)
+</code></pre>
+
+<pre><code>## [[1]]
+## [1] 1 2 3 4 5
+## 
+## [[2]]
+## [1]  6  7  8  9 10
+</code></pre>
+
+<pre><code class="r">chunk(xs, n.chunks=2, shuffle=TRUE)
+</code></pre>
+
+<pre><code>## [[1]]
+## [1]  1  2  4  8 10
+## 
+## [[2]]
+## [1] 3 5 6 7 9
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BBmisc</em> version 1.6 <a href="00Index.html">Index</a>]</div>
+</body></html>

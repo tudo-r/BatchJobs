@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Extracts a named element from a list of lists.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for extractSubList {BBmisc}"><tr><td>extractSubList {BBmisc}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Extracts a named element from a list of lists.</h2>
+
+<h3>Description</h3>
+
+<p>Extracts a named element from a list of lists.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+extractSubList(xs, element, element.value, simplify = TRUE,
+  use.names = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>xs</code></td>
+<td>
+<p>[<code>list</code>]<br> A list of named lists.</p>
+</td></tr>
+<tr valign="top"><td><code>element</code></td>
+<td>
+<p>[<code>character(1)</code>]<br> Name of element
+to extract from the list elements of <code>xs</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>element.value</code></td>
+<td>
+<p>[any]<br> If given,
+<code><a href="../../base/html/lapply.html">vapply</a></code> is used and this argument is passed
+to <code>FUN.VALUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>simplify</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> If <code>TRUE</code>
+<code><a href="../../base/html/lapply.html">sapply</a></code> is used, otherwise
+<code><a href="../../base/html/lapply.html">lapply</a></code>.  Default is <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>use.names</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> If <code>TRUE</code>
+and <code>xs</code> is named, the result is named as <code>xs</code>,
+otherwise the result is unnamed.  Default is
+<code>TRUE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[<code>list</code> or simplified vector].
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+xs = list(list(a=1, b=2), list(a=5, b=7))
+extractSubList(xs, &quot;a&quot;)
+</code></pre>
+
+<pre><code>## [1] 1 5
+</code></pre>
+
+<pre><code class="r">extractSubList(xs, &quot;a&quot;, simplify=FALSE)
+</code></pre>
+
+<pre><code>## [[1]]
+## [1] 1
+## 
+## [[2]]
+## [1] 5
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BBmisc</em> version 1.6 <a href="00Index.html">Index</a>]</div>
+</body></html>

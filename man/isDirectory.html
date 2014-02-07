@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Is one / are several files a directory?</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for isDirectory {BBmisc}"><tr><td>isDirectory {BBmisc}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Is one / are several files a directory?</h2>
+
+<h3>Description</h3>
+
+<p>If a file does not exist, <code>FALSE</code> is returned.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+isDirectory(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>[<code>character(1)</code>]<br> File names, all
+strings.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[<code>logical</code>].
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+print(isDirectory(tempdir()))
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">print(isDirectory(tempfile()))
+</code></pre>
+
+<pre><code>## [1] FALSE
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BBmisc</em> version 1.6 <a href="00Index.html">Index</a>]</div>
+</body></html>

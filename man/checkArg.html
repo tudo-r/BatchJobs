@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Check for a function argument.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for checkArg {BBmisc}"><tr><td>checkArg {BBmisc}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Check for a function argument.</h2>
+
+<h3>Description</h3>
+
+<p>Throws exception if checks are not passed. Note that
+argument is evaluated when checked.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+checkArg(x, cl, s4 = FALSE, len, min.len, max.len, choices, subset,
+  lower = NA, upper = NA, na.ok = TRUE, formals)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>[any]<br> Argument.</p>
+</td></tr>
+<tr valign="top"><td><code>cl</code></td>
+<td>
+<p>[<code>character</code>]<br> Class that argument must
+&ldquo;inherit&rdquo; from.  If multiple classes are given,
+<code>x</code> must &ldquo;inherit&rdquo; from at least one of
+these.  See also argument <code>s4</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>s4</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> If <code>TRUE</code>, use
+<code>is</code> for checking class <code>cl</code>, otherwise use
+<code><a href="../../base/html/class.html">inherits</a></code>, which implies that only S3
+classes are correctly checked. This is done for speed
+reasons as calling <code><a href="../../methods/html/is.html">is</a></code> is pretty slow.
+Default is <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>len</code></td>
+<td>
+<p>[<code>integer(1)</code>]<br> Length that argument
+must have.  Not checked if not passed, which is the
+default.</p>
+</td></tr>
+<tr valign="top"><td><code>min.len</code></td>
+<td>
+<p>[<code>integer(1)</code>]<br> Minimal length that
+argument must have.  Not checked if not passed, which is
+the default.</p>
+</td></tr>
+<tr valign="top"><td><code>max.len</code></td>
+<td>
+<p>[<code>integer(1)</code>]<br> Maximal length that
+argument must have.  Not checked if not passed, which is
+the default.</p>
+</td></tr>
+<tr valign="top"><td><code>choices</code></td>
+<td>
+<p>[any]<br> Discrete number of choices,
+expressed by a vector of R objects.  If passed, argument
+must be identical to one of these and nothing else is
+checked.</p>
+</td></tr>
+<tr valign="top"><td><code>subset</code></td>
+<td>
+<p>[any]<br> Discrete number of choices,
+expressed by a vector of R objects.  If passed, argument
+must be identical to a subset of these and nothing else
+is checked.</p>
+</td></tr>
+<tr valign="top"><td><code>lower</code></td>
+<td>
+<p>[<code>numeric(1)</code>]<br> Lower bound for
+numeric vector arguments.  Default is <code>NA</code>, which
+means not required.</p>
+</td></tr>
+<tr valign="top"><td><code>upper</code></td>
+<td>
+<p>[<code>numeric(1)</code>]<br> Upper bound for
+numeric vector arguments.  Default is <code>NA</code>, which
+means not required.</p>
+</td></tr>
+<tr valign="top"><td><code>na.ok</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> Is it ok if a vector
+argument contains NAs?  Default is <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>formals</code></td>
+<td>
+<p>[<code>character</code>]<br> If this is passed,
+<code>x</code> must be a function.  It is then checked that
+<code>formals</code> are the names of the (first) formal
+arguments in the signature of <code>x</code>.  Meaning
+<code>checkArg(function(a, b), formals="a")</code> is ok.
+Default is missing.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Nothing.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+x &lt;- 1L
+checkArg(x, &quot;integer&quot;, len=1, na.ok=FALSE, upper=3L)
+x &lt;- as.integer(NA)
+checkArg(x, &quot;integer&quot;, len=1, na.ok=TRUE)
+x &lt;- c(&quot;foo&quot;, &quot;bar&quot;)
+checkArg(x, &quot;character&quot;)
+x &lt;- &quot;foo&quot;
+checkArg(x, choices=c(&quot;foo&quot;, &quot;bar&quot;))
+x &lt;- c(&quot;foo&quot;, &quot;bar&quot;)
+checkArg(x, subset=c(&quot;foo&quot;, &quot;bar&quot;))
+fun &lt;- function(foo, bar)
+checkArg(fun, formals=c(&quot;foo&quot;, &quot;bar&quot;))
+
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BBmisc</em> version 1.6 <a href="00Index.html">Index</a>]</div>
+</body></html>

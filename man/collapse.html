@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Collapse vector to string.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for collapse {BBmisc}"><tr><td>collapse {BBmisc}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Collapse vector to string.</h2>
+
+<h3>Description</h3>
+
+<p>A simple wrapper for <code>paste(x, collapse)</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+collapse(x, sep = ",")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>[<code>vector</code>]<br> Vector to collapse.</p>
+</td></tr>
+<tr valign="top"><td><code>sep</code></td>
+<td>
+<p>[<code>character(1)</code>]<br> Passed to
+<code>collapse</code> in <code><a href="../../base/html/paste.html">paste</a></code>.  Default is
+&ldquo;,&rdquo;.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[<code>character(1)</code>].
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+collapse(c(&quot;foo&quot;, &quot;bar&quot;))
+</code></pre>
+
+<pre><code>## [1] &quot;foo,bar&quot;
+</code></pre>
+
+<pre><code class="r">collapse(c(&quot;foo&quot;, &quot;bar&quot;), sep=&quot;;&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;foo;bar&quot;
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BBmisc</em> version 1.6 <a href="00Index.html">Index</a>]</div>
+</body></html>
