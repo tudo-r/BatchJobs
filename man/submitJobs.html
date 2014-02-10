@@ -119,8 +119,8 @@ no delay for 100 jobs or less and otherwise
 reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), seed=123)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/Rtmp14EkvD/file3d4b2f0317ec
-## Saving registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
+<pre><code>## Creating dir: /tmp/Rtmp8gOjcv/file2428461a8c89
+## Saving registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
 </code></pre>
 
 <pre><code class="r">f &lt;- function(x) x^2
@@ -133,140 +133,140 @@ batchMap(reg, f, 1:10)
 <pre><code class="r">submitJobs(reg)
 </code></pre>
 
-<pre><code>## Saving conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+<pre><code>## Saving conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Submitting 10 chunks / 10 jobs.
 ## Cluster functions: Interactive.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Writing 10 R scripts...
-## 2014-02-07 07:55:50: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:12: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=1 ##########
-## Timestamp: 2014-02-07 07:55:50
+## Timestamp: 2014-02-10 11:43:12
 ## Setting seed: 123
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/01/1-result.RData
-## 2014-02-07 07:55:51: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/01/1-result.RData
+## 2014-02-10 11:43:12: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## 2014-02-07 07:55:51: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:12: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=2 ##########
-## Timestamp: 2014-02-07 07:55:51
+## Timestamp: 2014-02-10 11:43:12
 ## Setting seed: 124
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/02/2-result.RData
-## 2014-02-07 07:55:51: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/02/2-result.RData
+## 2014-02-10 11:43:12: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## 2014-02-07 07:55:51: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:12: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=3 ##########
-## Timestamp: 2014-02-07 07:55:51
+## Timestamp: 2014-02-10 11:43:12
 ## Setting seed: 125
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/03/3-result.RData
-## 2014-02-07 07:55:51: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/03/3-result.RData
+## 2014-02-10 11:43:12: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## 2014-02-07 07:55:51: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:12: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=4 ##########
-## Timestamp: 2014-02-07 07:55:51
+## Timestamp: 2014-02-10 11:43:12
 ## Setting seed: 126
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/04/4-result.RData
-## 2014-02-07 07:55:51: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/04/4-result.RData
+## 2014-02-10 11:43:12: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## 2014-02-07 07:55:51: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:12: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=5 ##########
-## Timestamp: 2014-02-07 07:55:51
+## Timestamp: 2014-02-10 11:43:12
 ## Setting seed: 127
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/05/5-result.RData
-## 2014-02-07 07:55:51: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/05/5-result.RData
+## 2014-02-10 11:43:12: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## 2014-02-07 07:55:51: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:12: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=6 ##########
-## Timestamp: 2014-02-07 07:55:51
+## Timestamp: 2014-02-10 11:43:12
 ## Setting seed: 128
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/06/6-result.RData
-## 2014-02-07 07:55:51: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/06/6-result.RData
+## 2014-02-10 11:43:12: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## 2014-02-07 07:55:51: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:12: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=7 ##########
-## Timestamp: 2014-02-07 07:55:51
+## Timestamp: 2014-02-10 11:43:12
 ## Setting seed: 129
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/07/7-result.RData
-## 2014-02-07 07:55:51: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/07/7-result.RData
+## 2014-02-10 11:43:12: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## 2014-02-07 07:55:52: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:13: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=8 ##########
-## Timestamp: 2014-02-07 07:55:52
+## Timestamp: 2014-02-10 11:43:13
 ## Setting seed: 130
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/08/8-result.RData
-## 2014-02-07 07:55:52: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/08/8-result.RData
+## 2014-02-10 11:43:13: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## 2014-02-07 07:55:52: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:13: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=9 ##########
-## Timestamp: 2014-02-07 07:55:52
+## Timestamp: 2014-02-10 11:43:13
 ## Setting seed: 131
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/09/9-result.RData
-## 2014-02-07 07:55:52: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/09/9-result.RData
+## 2014-02-10 11:43:13: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## 2014-02-07 07:55:52: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:13: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=10 ##########
-## Timestamp: 2014-02-07 07:55:52
+## Timestamp: 2014-02-10 11:43:13
 ## Setting seed: 132
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/10/10-result.RData
-## 2014-02-07 07:55:52: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/10/10-result.RData
+## 2014-02-10 11:43:13: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
 </code></pre>
 
 <pre><code>## 
 SubmitJobs |+                                                |   0% (00:00:00)
-SubmitJobs |+++++                                            |  10% (00:00:09)
-SubmitJobs |++++++++++                                       |  20% (00:00:04)
-SubmitJobs |+++++++++++++++                                  |  30% (00:00:02)
-SubmitJobs |++++++++++++++++++++                             |  40% (00:00:01)
-SubmitJobs |++++++++++++++++++++++++                         |  50% (00:00:01)
+SubmitJobs |+++++                                            |  10% (00:00:00)
+SubmitJobs |++++++++++                                       |  20% (00:00:00)
+SubmitJobs |+++++++++++++++                                  |  30% (00:00:00)
+SubmitJobs |++++++++++++++++++++                             |  40% (00:00:00)
+SubmitJobs |++++++++++++++++++++++++                         |  50% (00:00:00)
 SubmitJobs |+++++++++++++++++++++++++++++                    |  60% (00:00:00)
 SubmitJobs |++++++++++++++++++++++++++++++++++               |  70% (00:00:00)
 SubmitJobs |+++++++++++++++++++++++++++++++++++++++          |  80% (00:00:00)
@@ -284,67 +284,67 @@ chunked = chunk(getJobIds(reg), n.chunks=2, shuffle=TRUE)
 submitJobs(reg, chunked)
 </code></pre>
 
-<pre><code>## Saving conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+<pre><code>## Saving conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Submitting 2 chunks / 10 jobs.
 ## Cluster functions: Interactive.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Writing 2 R scripts...
-## 2014-02-07 07:55:52: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:13: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
-## 2014-02-07 07:55:52: Waiting 557 secs between msg flushes.
-## ########## Executing jid=1 ##########
-## Timestamp: 2014-02-07 07:55:52
-## Setting seed: 123
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/01/1-result.RData
-## ########## Executing jid=5 ##########
-## Timestamp: 2014-02-07 07:55:52
-## Setting seed: 127
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/05/5-result.RData
+## 2014-02-10 11:43:13: Waiting 552 secs between msg flushes.
+## ########## Executing jid=2 ##########
+## Timestamp: 2014-02-10 11:43:13
+## Setting seed: 124
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/02/2-result.RData
 ## ########## Executing jid=6 ##########
-## Timestamp: 2014-02-07 07:55:52
+## Timestamp: 2014-02-10 11:43:13
 ## Setting seed: 128
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/06/6-result.RData
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/06/6-result.RData
+## ########## Executing jid=7 ##########
+## Timestamp: 2014-02-10 11:43:13
+## Setting seed: 129
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/07/7-result.RData
 ## ########## Executing jid=8 ##########
-## Timestamp: 2014-02-07 07:55:52
+## Timestamp: 2014-02-10 11:43:13
 ## Setting seed: 130
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/08/8-result.RData
-## ########## Executing jid=10 ##########
-## Timestamp: 2014-02-07 07:55:52
-## Setting seed: 132
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/10/10-result.RData
-## 2014-02-07 07:55:52: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/08/8-result.RData
+## ########## Executing jid=9 ##########
+## Timestamp: 2014-02-10 11:43:13
+## Setting seed: 131
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/09/9-result.RData
+## 2014-02-10 11:43:13: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## 2014-02-07 07:55:53: Starting job on node bischl-x1.
-## Loading registry: /tmp/Rtmp14EkvD/file3d4b2f0317ec/registry.RData
-## Loading conf: /tmp/Rtmp14EkvD/file3d4b2f0317ec/conf.RData
+## 2014-02-10 11:43:13: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file2428461a8c89/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file2428461a8c89/conf.RData
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
-## 2014-02-07 07:55:53: Waiting 382 secs between msg flushes.
-## ########## Executing jid=2 ##########
-## Timestamp: 2014-02-07 07:55:53
-## Setting seed: 124
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/02/2-result.RData
+## 2014-02-10 11:43:13: Waiting 416 secs between msg flushes.
+## ########## Executing jid=1 ##########
+## Timestamp: 2014-02-10 11:43:13
+## Setting seed: 123
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/01/1-result.RData
 ## ########## Executing jid=3 ##########
-## Timestamp: 2014-02-07 07:55:53
+## Timestamp: 2014-02-10 11:43:13
 ## Setting seed: 125
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/03/3-result.RData
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/03/3-result.RData
 ## ########## Executing jid=4 ##########
-## Timestamp: 2014-02-07 07:55:53
+## Timestamp: 2014-02-10 11:43:13
 ## Setting seed: 126
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/04/4-result.RData
-## ########## Executing jid=7 ##########
-## Timestamp: 2014-02-07 07:55:53
-## Setting seed: 129
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/07/7-result.RData
-## ########## Executing jid=9 ##########
-## Timestamp: 2014-02-07 07:55:53
-## Setting seed: 131
-## Writing result file: /tmp/Rtmp14EkvD/file3d4b2f0317ec/jobs/09/9-result.RData
-## 2014-02-07 07:55:53: Job on slave is finished.
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/04/4-result.RData
+## ########## Executing jid=5 ##########
+## Timestamp: 2014-02-10 11:43:13
+## Setting seed: 127
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/05/5-result.RData
+## ########## Executing jid=10 ##########
+## Timestamp: 2014-02-10 11:43:13
+## Setting seed: 132
+## Writing result file: /tmp/Rtmp8gOjcv/file2428461a8c89/jobs/10/10-result.RData
+## 2014-02-10 11:43:13: Job on slave is finished.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
 </code></pre>
@@ -363,5 +363,5 @@ SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 </code></pre>
 
 
-<hr><div align="center">[Package <em>BatchJobs</em> version 1.2 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>BatchJobs</em> version 1.3 <a href="00Index.html">Index</a>]</div>
 </body></html>

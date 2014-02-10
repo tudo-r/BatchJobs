@@ -77,8 +77,8 @@ of an error, NULL is returned.
 reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), seed=123)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/Rtmp14EkvD/file3d4b227a4580
-## Saving registry: /tmp/Rtmp14EkvD/file3d4b227a4580/registry.RData
+<pre><code>## Creating dir: /tmp/Rtmp8gOjcv/file2428133a1990
+## Saving registry: /tmp/Rtmp8gOjcv/file2428133a1990/registry.RData
 </code></pre>
 
 <pre><code class="r">f &lt;- function(x) if (x==1) stop(&quot;oops&quot;) else x
@@ -91,12 +91,12 @@ batchMap(reg, f, 1:2)
 <pre><code class="r">testJob(reg, 2)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/Rtmp14EkvD/3d4b4058ab7b
-## Saving registry: /tmp/Rtmp14EkvD/3d4b4058ab7b/registry.RData
-## Saving conf: /tmp/Rtmp14EkvD/3d4b4058ab7b/conf.RData
+<pre><code>## Creating dir: /tmp/Rtmp8gOjcv/242838bc2701
+## Saving registry: /tmp/Rtmp8gOjcv/242838bc2701/registry.RData
+## Saving conf: /tmp/Rtmp8gOjcv/242838bc2701/conf.RData
 ## ### Output of new R process starts here ###
 ## ### Output of new R process ends here ###
-## ### Approximate running time: 1.75 secs
+## ### Approximate running time: 1.00 secs
 </code></pre>
 
 <pre><code>## [1] 2
@@ -106,5 +106,5 @@ batchMap(reg, f, 1:2)
 </code></pre>
 
 
-<hr><div align="center">[Package <em>BatchJobs</em> version 1.2 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>BatchJobs</em> version 1.3 <a href="00Index.html">Index</a>]</div>
 </body></html>

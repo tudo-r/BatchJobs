@@ -1,0 +1,599 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Reduce results from result directory.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for reduceResults {BatchJobs}"><tr><td>reduceResults {BatchJobs}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Reduce results from result directory.</h2>
+
+<h3>Description</h3>
+
+<p>The following functions provide ways to reduce result files
+into either specific R objects (like vectors, lists,
+matrices or data.frames) or to arbitrarily aggregate them,
+which is a more general operation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+reduceResults(reg, ids, part = NA_character_, fun, init, impute.val, ...)
+
+reduceResultsList(reg, ids, part = NA_character_, fun, ...,
+  use.names = "ids", impute.val)
+
+reduceResultsVector(reg, ids, part = NA_character_, fun, ...,
+  use.names = "ids", impute.val)
+
+reduceResultsMatrix(reg, ids, part = NA_character_, fun, ..., rows = TRUE,
+  use.names = "ids", impute.val)
+
+reduceResultsDataFrame(reg, ids, part = NA_character_, fun, ...,
+  use.names = "ids", impute.val,
+  strings.as.factors = default.stringsAsFactors())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>reg</code></td>
+<td>
+<p>[<code><a href="makeRegistry.html">Registry</a></code>]<br> Registry.</p>
+</td></tr>
+<tr valign="top"><td><code>ids</code></td>
+<td>
+<p>[<code>integer</code>]<br> Ids of selected jobs.
+Default is all jobs for which results are available.</p>
+</td></tr>
+<tr valign="top"><td><code>part</code></td>
+<td>
+<p>[<code>character</code>] Only useful for multiple
+result files, then defines which result file part(s)
+should be loaded.  <code>NA</code> means all parts are loaded,
+which is the default.</p>
+</td></tr>
+<tr valign="top"><td><code>fun</code></td>
+<td>
+<p>[<code>function</code>]<br> For <code>reduceResults</code>,
+a function <code>function(aggr, job, res, ...)</code> to reduce
+things, for all others, a function <code>function(job,
+  res, ...)</code> to select stuff.  Here, <code>job</code> is the
+current job descriptor (see <code><a href="makeJob.html">Job</a></code>),
+<code>result</code> is the current result object and
+<code>aggr</code> are the so far aggregated results. When using
+<code>reduceResults</code>, your function should add the stuff
+you want to have from <code>job</code> and <code>result</code> to
+<code>aggr</code> and return that.  When using the other
+reductions, you should select the stuff you want to have
+from <code>job</code> and <code>result</code> and return something
+that can be coerced to an element of the selected return
+data structure (reasonable conversion is tried
+internally).  Default behavior for this argument is to
+return <code>res</code>, except for <code>reduceResults</code> where
+no default is available.</p>
+</td></tr>
+<tr valign="top"><td><code>init</code></td>
+<td>
+<p>[<code>ANY</code>]<br> Initial element, as used in
+<code><a href="../../base/html/funprog.html">Reduce</a></code>.  Default is first result.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>[any]<br> Additional arguments to <code>fun</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>use.names</code></td>
+<td>
+<p>[<code>character(1)</code>]<br> Name the
+results with job ids (&ldquo;ids&rdquo;), stored job names
+(&ldquo;names&rdquo;) or return a unnamed result
+(&ldquo;none&rdquo;).  Default is <code>ids</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>impute.val</code></td>
+<td>
+<p>[any]<br> For <code>reduceResults</code>: If
+not missing, the value of <code>impute.val</code> is passed to
+function <code>fun</code> as argument <code>res</code> for jobs with
+missing results.<br> For the specialized reduction
+functions <code>reduceResults[Type]</code>: If not missing,
+<code>impute.val</code> is used as a replacement for the return
+value of <code>fun</code> on missing results.</p>
+</td></tr>
+<tr valign="top"><td><code>rows</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> Should the selected
+vectors be used as rows (or columns) in the result
+matrix?  Default is <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>strings.as.factors</code></td>
+<td>
+<p>[<code>logical(1)</code>] Should all
+character columns in result be converted to factors?
+Default is <code>default.stringsAsFactors()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Aggregated results, return type depends on function. If
+<code>ids</code> is empty: <code>reduceResults</code> returns
+<code>init</code> (if available) or <code>NULL</code>,
+<code>reduceResultsVector</code> returns <code>c()</code>,
+<code>reduceResultsList</code> returns <code>list()</code>,
+<code>reduceResultsMatrix</code> returns <code>matrix(0,0,0)</code>,
+<code>reduceResultsDataFrame</code> returns <code>data.frame()</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+# generate results:
+reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), seed=123)
+</code></pre>
+
+<pre><code>## Creating dir: /tmp/Rtmp8gOjcv/file242823b12449
+## Saving registry: /tmp/Rtmp8gOjcv/file242823b12449/registry.RData
+</code></pre>
+
+<pre><code class="r">f &lt;- function(x) x^2
+batchMap(reg, f, 1:5)
+</code></pre>
+
+<pre><code>## Adding 5 jobs to DB.
+</code></pre>
+
+<pre><code class="r">submitJobs(reg)
+</code></pre>
+
+<pre><code>## Saving conf: /tmp/Rtmp8gOjcv/file242823b12449/conf.RData
+## Submitting 5 chunks / 5 jobs.
+## Cluster functions: Interactive.
+## Auto-mailer settings: start=none, done=none, error=none.
+## Writing 5 R scripts...
+## 2014-02-10 11:43:08: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file242823b12449/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file242823b12449/conf.RData
+## Auto-mailer settings: start=none, done=none, error=none.
+## Setting work dir: /tmp/pkgdocs
+## ########## Executing jid=1 ##########
+## Timestamp: 2014-02-10 11:43:08
+## Setting seed: 123
+## Writing result file: /tmp/Rtmp8gOjcv/file242823b12449/jobs/01/1-result.RData
+## 2014-02-10 11:43:08: Job on slave is finished.
+## Setting work back to: /tmp/pkgdocs
+## Memory usage according to gc:
+## 2014-02-10 11:43:08: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file242823b12449/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file242823b12449/conf.RData
+## Auto-mailer settings: start=none, done=none, error=none.
+## Setting work dir: /tmp/pkgdocs
+## ########## Executing jid=2 ##########
+## Timestamp: 2014-02-10 11:43:08
+## Setting seed: 124
+## Writing result file: /tmp/Rtmp8gOjcv/file242823b12449/jobs/02/2-result.RData
+## 2014-02-10 11:43:08: Job on slave is finished.
+## Setting work back to: /tmp/pkgdocs
+## Memory usage according to gc:
+## 2014-02-10 11:43:08: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file242823b12449/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file242823b12449/conf.RData
+## Auto-mailer settings: start=none, done=none, error=none.
+## Setting work dir: /tmp/pkgdocs
+## ########## Executing jid=3 ##########
+## Timestamp: 2014-02-10 11:43:08
+## Setting seed: 125
+## Writing result file: /tmp/Rtmp8gOjcv/file242823b12449/jobs/03/3-result.RData
+## 2014-02-10 11:43:08: Job on slave is finished.
+## Setting work back to: /tmp/pkgdocs
+## Memory usage according to gc:
+## 2014-02-10 11:43:08: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file242823b12449/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file242823b12449/conf.RData
+## Auto-mailer settings: start=none, done=none, error=none.
+## Setting work dir: /tmp/pkgdocs
+## ########## Executing jid=4 ##########
+## Timestamp: 2014-02-10 11:43:08
+## Setting seed: 126
+## Writing result file: /tmp/Rtmp8gOjcv/file242823b12449/jobs/04/4-result.RData
+## 2014-02-10 11:43:08: Job on slave is finished.
+## Setting work back to: /tmp/pkgdocs
+## Memory usage according to gc:
+## 2014-02-10 11:43:08: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file242823b12449/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file242823b12449/conf.RData
+## Auto-mailer settings: start=none, done=none, error=none.
+## Setting work dir: /tmp/pkgdocs
+## ########## Executing jid=5 ##########
+## Timestamp: 2014-02-10 11:43:08
+## Setting seed: 127
+## Writing result file: /tmp/Rtmp8gOjcv/file242823b12449/jobs/05/5-result.RData
+## 2014-02-10 11:43:08: Job on slave is finished.
+## Setting work back to: /tmp/pkgdocs
+## Memory usage according to gc:
+</code></pre>
+
+<pre><code>## 
+SubmitJobs |+                                                |   0% (00:00:00)
+SubmitJobs |++++++++++                                       |  20% (00:00:00)
+SubmitJobs |++++++++++++++++++++                             |  40% (00:00:00)
+SubmitJobs |+++++++++++++++++++++++++++++                    |  60% (00:00:00)
+SubmitJobs |+++++++++++++++++++++++++++++++++++++++          |  80% (00:00:00)
+SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</code></pre>
+
+<pre><code>## Sending 5 submit messages...
+## Might take some time, do not interrupt this!
+</code></pre>
+
+<pre><code class="r">
+# reduce results to a vector
+reduceResultsVector(reg)
+</code></pre>
+
+<pre><code>## Reducing 5 results...
+</code></pre>
+
+<pre><code>## 
+reduceResults |+                                             |   0% (00:00:00)
+reduceResults |+++++++++                                     |  20% (00:00:00)
+reduceResults |++++++++++++++++++                            |  40% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
+reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</code></pre>
+
+<pre><code>##  1  2  3  4  5 
+##  1  4  9 16 25
+</code></pre>
+
+<pre><code class="r"># reduce results to sum
+reduceResults(reg, fun=function(aggr, job, res) aggr+res)
+</code></pre>
+
+<pre><code>## Reducing 5 results...
+</code></pre>
+
+<pre><code>## 
+reduceResults |+                                             |   0% (00:00:00)
+reduceResults |+++++++++                                     |  20% (00:00:00)
+reduceResults |++++++++++++++++++                            |  40% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
+reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</code></pre>
+
+<pre><code>## [1] 55
+</code></pre>
+
+<pre><code class="r">
+reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), seed=123)
+</code></pre>
+
+<pre><code>## Creating dir: /tmp/Rtmp8gOjcv/file242810af14d1
+## Saving registry: /tmp/Rtmp8gOjcv/file242810af14d1/registry.RData
+</code></pre>
+
+<pre><code class="r">f &lt;- function(x) list(a=x, b=as.character(2*x), c=x^2)
+batchMap(reg, f, 1:5)
+</code></pre>
+
+<pre><code>## Adding 5 jobs to DB.
+</code></pre>
+
+<pre><code class="r">submitJobs(reg)
+</code></pre>
+
+<pre><code>## Saving conf: /tmp/Rtmp8gOjcv/file242810af14d1/conf.RData
+## Submitting 5 chunks / 5 jobs.
+## Cluster functions: Interactive.
+## Auto-mailer settings: start=none, done=none, error=none.
+## Writing 5 R scripts...
+## 2014-02-10 11:43:09: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file242810af14d1/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file242810af14d1/conf.RData
+## Auto-mailer settings: start=none, done=none, error=none.
+## Setting work dir: /tmp/pkgdocs
+## ########## Executing jid=1 ##########
+## Timestamp: 2014-02-10 11:43:09
+## Setting seed: 123
+## Writing result file: /tmp/Rtmp8gOjcv/file242810af14d1/jobs/01/1-result.RData
+## 2014-02-10 11:43:09: Job on slave is finished.
+## Setting work back to: /tmp/pkgdocs
+## Memory usage according to gc:
+## 2014-02-10 11:43:09: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file242810af14d1/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file242810af14d1/conf.RData
+## Auto-mailer settings: start=none, done=none, error=none.
+## Setting work dir: /tmp/pkgdocs
+## ########## Executing jid=2 ##########
+## Timestamp: 2014-02-10 11:43:09
+## Setting seed: 124
+## Writing result file: /tmp/Rtmp8gOjcv/file242810af14d1/jobs/02/2-result.RData
+## 2014-02-10 11:43:09: Job on slave is finished.
+## Setting work back to: /tmp/pkgdocs
+## Memory usage according to gc:
+## 2014-02-10 11:43:09: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file242810af14d1/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file242810af14d1/conf.RData
+## Auto-mailer settings: start=none, done=none, error=none.
+## Setting work dir: /tmp/pkgdocs
+## ########## Executing jid=3 ##########
+## Timestamp: 2014-02-10 11:43:09
+## Setting seed: 125
+## Writing result file: /tmp/Rtmp8gOjcv/file242810af14d1/jobs/03/3-result.RData
+## 2014-02-10 11:43:09: Job on slave is finished.
+## Setting work back to: /tmp/pkgdocs
+## Memory usage according to gc:
+## 2014-02-10 11:43:09: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file242810af14d1/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file242810af14d1/conf.RData
+## Auto-mailer settings: start=none, done=none, error=none.
+## Setting work dir: /tmp/pkgdocs
+## ########## Executing jid=4 ##########
+## Timestamp: 2014-02-10 11:43:09
+## Setting seed: 126
+## Writing result file: /tmp/Rtmp8gOjcv/file242810af14d1/jobs/04/4-result.RData
+## 2014-02-10 11:43:09: Job on slave is finished.
+## Setting work back to: /tmp/pkgdocs
+## Memory usage according to gc:
+## 2014-02-10 11:43:09: Starting job on node Bischl.
+## Loading registry: /tmp/Rtmp8gOjcv/file242810af14d1/registry.RData
+## Loading conf: /tmp/Rtmp8gOjcv/file242810af14d1/conf.RData
+## Auto-mailer settings: start=none, done=none, error=none.
+## Setting work dir: /tmp/pkgdocs
+## ########## Executing jid=5 ##########
+## Timestamp: 2014-02-10 11:43:09
+## Setting seed: 127
+## Writing result file: /tmp/Rtmp8gOjcv/file242810af14d1/jobs/05/5-result.RData
+## 2014-02-10 11:43:09: Job on slave is finished.
+## Setting work back to: /tmp/pkgdocs
+## Memory usage according to gc:
+</code></pre>
+
+<pre><code>## 
+SubmitJobs |+                                                |   0% (00:00:00)
+SubmitJobs |++++++++++                                       |  20% (00:00:00)
+SubmitJobs |++++++++++++++++++++                             |  40% (00:00:00)
+SubmitJobs |+++++++++++++++++++++++++++++                    |  60% (00:00:00)
+SubmitJobs |+++++++++++++++++++++++++++++++++++++++          |  80% (00:00:00)
+SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</code></pre>
+
+<pre><code>## Sending 5 submit messages...
+## Might take some time, do not interrupt this!
+</code></pre>
+
+<pre><code class="r">
+# reduce results to a vector
+reduceResultsVector(reg, fun=function(job, res) res$a)
+</code></pre>
+
+<pre><code>## Reducing 5 results...
+</code></pre>
+
+<pre><code>## 
+reduceResults |+                                             |   0% (00:00:00)
+reduceResults |+++++++++                                     |  20% (00:00:00)
+reduceResults |++++++++++++++++++                            |  40% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
+reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</code></pre>
+
+<pre><code>## 1 2 3 4 5 
+## 1 2 3 4 5
+</code></pre>
+
+<pre><code class="r">reduceResultsVector(reg, fun=function(job, res) res$b)
+</code></pre>
+
+<pre><code>## Reducing 5 results...
+</code></pre>
+
+<pre><code>## 
+reduceResults |+                                             |   0% (00:00:00)
+reduceResults |+++++++++                                     |  20% (00:00:00)
+reduceResults |++++++++++++++++++                            |  40% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
+reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</code></pre>
+
+<pre><code>##    1    2    3    4    5 
+##  &quot;2&quot;  &quot;4&quot;  &quot;6&quot;  &quot;8&quot; &quot;10&quot;
+</code></pre>
+
+<pre><code class="r"># reduce results to a list
+reduceResultsList(reg)
+</code></pre>
+
+<pre><code>## Reducing 5 results...
+</code></pre>
+
+<pre><code>## 
+reduceResults |+                                             |   0% (00:00:00)
+reduceResults |+++++++++                                     |  20% (00:00:00)
+reduceResults |++++++++++++++++++                            |  40% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
+reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</code></pre>
+
+<pre><code>## $`1`
+## $`1`$a
+## [1] 1
+## 
+## $`1`$b
+## [1] &quot;2&quot;
+## 
+## $`1`$c
+## [1] 1
+## 
+## 
+## $`2`
+## $`2`$a
+## [1] 2
+## 
+## $`2`$b
+## [1] &quot;4&quot;
+## 
+## $`2`$c
+## [1] 4
+## 
+## 
+## $`3`
+## $`3`$a
+## [1] 3
+## 
+## $`3`$b
+## [1] &quot;6&quot;
+## 
+## $`3`$c
+## [1] 9
+## 
+## 
+## $`4`
+## $`4`$a
+## [1] 4
+## 
+## $`4`$b
+## [1] &quot;8&quot;
+## 
+## $`4`$c
+## [1] 16
+## 
+## 
+## $`5`
+## $`5`$a
+## [1] 5
+## 
+## $`5`$b
+## [1] &quot;10&quot;
+## 
+## $`5`$c
+## [1] 25
+</code></pre>
+
+<pre><code class="r"># reduce results to a matrix
+reduceResultsMatrix(reg, fun=function(job, res) res[c(1,3)])
+</code></pre>
+
+<pre><code>## Reducing 5 results...
+</code></pre>
+
+<pre><code>## 
+reduceResults |+                                             |   0% (00:00:00)
+reduceResults |+++++++++                                     |  20% (00:00:00)
+reduceResults |++++++++++++++++++                            |  40% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
+reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</code></pre>
+
+<pre><code>##   a  c
+## 1 1  1
+## 2 2  4
+## 3 3  9
+## 4 4 16
+## 5 5 25
+</code></pre>
+
+<pre><code class="r">reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=TRUE)
+</code></pre>
+
+<pre><code>## Reducing 5 results...
+</code></pre>
+
+<pre><code>## 
+reduceResults |+                                             |   0% (00:00:00)
+reduceResults |+++++++++                                     |  20% (00:00:00)
+reduceResults |++++++++++++++++++                            |  40% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
+reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</code></pre>
+
+<pre><code>##   foo bar
+## 1   1   1
+## 2   2   4
+## 3   3   9
+## 4   4  16
+## 5   5  25
+</code></pre>
+
+<pre><code class="r">reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=FALSE)
+</code></pre>
+
+<pre><code>## Reducing 5 results...
+</code></pre>
+
+<pre><code>## 
+reduceResults |+                                             |   0% (00:00:00)
+reduceResults |+++++++++                                     |  20% (00:00:00)
+reduceResults |++++++++++++++++++                            |  40% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
+reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</code></pre>
+
+<pre><code>##     1 2 3  4  5
+## foo 1 2 3  4  5
+## bar 1 4 9 16 25
+</code></pre>
+
+<pre><code class="r"># reduce results to a data.frame
+print(str(reduceResultsDataFrame(reg)))
+</code></pre>
+
+<pre><code>## Reducing 5 results...
+</code></pre>
+
+<pre><code>## 
+reduceResults |+                                             |   0% (00:00:00)
+reduceResults |+++++++++                                     |  20% (00:00:00)
+reduceResults |++++++++++++++++++                            |  40% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
+reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+## &#39;data.frame&#39;:    5 obs. of  3 variables:
+##  $ a: int  1 2 3 4 5
+##  $ b: Factor w/ 5 levels &quot;10&quot;,&quot;2&quot;,&quot;4&quot;,&quot;6&quot;,..: 2 3 4 5 1
+##  $ c: num  1 4 9 16 25
+## NULL
+</code></pre>
+
+<pre><code class="r"># reduce results to a sum
+reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
+</code></pre>
+
+<pre><code>## Reducing 5 results...
+</code></pre>
+
+<pre><code>## 
+reduceResults |+                                             |   0% (00:00:00)
+reduceResults |+++++++++                                     |  20% (00:00:00)
+reduceResults |++++++++++++++++++                            |  40% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
+reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
+reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
+</code></pre>
+
+<pre><code>## [1] 15
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BatchJobs</em> version 1.3 <a href="00Index.html">Index</a>]</div>
+</body></html>
