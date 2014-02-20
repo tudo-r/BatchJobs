@@ -39,11 +39,11 @@ resetJobs = function(reg, ids, force=FALSE) {
     }
     running = dbFindOnSystem(reg, ids)
     if (length(running) > 0L)
-      stopf("Can't reset jobs which are live on system running. You have to kill them first!\nIds: %s",
+      stopf("Can't reset jobs which are live on system. You have to kill them first!\nIds: %s",
             collapse(running))
   }
 
   messagef("Resetting %i jobs in DB.", length(ids))
-  dbSendMessage(reg, dbMakeMessageKilled(reg, ids), staged = FALSE)
+  dbSendMessage(reg, dbMakeMessageKilled(reg, ids), staged=FALSE)
   invisible(ids)
 }

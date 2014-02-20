@@ -25,7 +25,9 @@ writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp,
 
   # print delays and ids into template. sprintf will return a string of length length(delays) == length(ids)
   # put this together with file names into an mapply on cat.
+  files = getRScriptFilePath(fids, reg=reg)
   mapply(FUN=cat, SIMPLIFY=FALSE, USE.NAMES=FALSE,
          sprintf(template, delays, ids),
-         file = getRScriptFilePath(fids, reg = reg))
+         file = files)
+  invisible(files)
 }

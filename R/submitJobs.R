@@ -157,10 +157,17 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   messagef("Cluster functions: %s.", cf$name)
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.", conf$mail.start, conf$mail.done, conf$mail.error)
 
+
+  # use staged queries even on master if fs.timeout is set
+  # -> this way we are relatively sure that db transactions are performed in the intended order
+  staged = conf$staged.queries && !is.na(conf$fs.timeout)
+  fs.timeout = conf$fs.timeout
   interrupted = FALSE
+
   submit.msgs = buffer("list", 1000L, dbSendMessages,
                        reg=reg, max.retries=10000L, sleep=function(r) 5,
-                       staged=useStagedQueries())
+                       staged=staged, fs.timeout=fs.timeout)
+
   logger = makeSimpleFileLogger(file.path(reg$file.dir, "submit.log"), touch = FALSE, keep = 1L)
 
   ### set on exit handler to avoid inconsistencies caused by user interrupts
@@ -184,12 +191,11 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   ### write R scripts
   messagef("Writing %i R scripts...", n)
   resources.timestamp = saveResources(reg, resources)
-  writeRscripts(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail=FALSE,
-                delays=getDelays(cf, job.delay, n))
+  rscripts = writeRscripts(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail=FALSE,
+    delays=getDelays(cf, job.delay, n))
 
   ### reset status of jobs: delete errors, done, ...
-  dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids)), staged=FALSE)
-
+  dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids), type="first"), staged=staged, fs.timeout=fs.timeout)
 
   ### initialize progress bar
   bar = makeProgressBar(max=n, label="SubmitJobs")
@@ -197,11 +203,12 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
 
   # FIXME add a message about where to find log files
   tryCatch({
-    for (id in ids) {
+    for (i in seq_along(ids)) {
+      id = ids[[i]]
       id1 = id[1L]
       retries = 0L
 
-      repeat { # max.retries max be Inf
+      repeat { # max.retries may be Inf
         if (limit.concurrent.jobs && length(cf$listJobs(conf, reg)) >= conf$max.concurrent.jobs) {
           # emulate a temporary erroneous batch result
           batch.result = makeSubmitJobResult(status=10L, batch.job.id=NA_character_, "Max concurrent jobs exhausted")
@@ -209,20 +216,23 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
           # try to submit the job
           interrupted = TRUE
           submit.time = now()
-          batch.result = cf$submitJob(conf=conf, reg=reg,
-                                      job.name=sprintf("%s-%i", reg$id, id1),
-                                      rscript=getRScriptFilePath(reg, id1),
-                                      log.file=getLogFilePath(reg, id1),
-                                      job.dir=getJobDirs(reg, id1),
-                                      resources=resources,
-                                      arrayjobs=if(chunks.as.arrayjobs) length(id) else 1L)
+          batch.result = cf$submitJob(
+            conf=conf,
+            reg=reg,
+            job.name=sprintf("%s-%i", reg$id, id1),
+            rscript=rscripts[i],
+            log.file=getLogFilePath(reg, id1),
+            job.dir=getJobDirs(reg, id1),
+            resources=resources,
+            arrayjobs=if(chunks.as.arrayjobs) length(id) else 1L
+          )
         }
 
         ### validate status returned from cluster functions
         if (batch.result$status == 0L) {
           submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
-                                                  batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
-                                                  resources.timestamp=resources.timestamp))
+              batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
+              resources.timestamp=resources.timestamp))
           interrupted = FALSE
           bar$inc(1L)
           break

@@ -128,6 +128,6 @@ getExportDir = function(file.dir)
   file.path(file.dir, "exports")
 
 
-getPendingFile = function(reg, type, id, char = getOrderCharacters()[type]) {
+getPendingFile = function(reg, type, id, char = .OrderChars[type]) {
   file.path(getPendingDir(reg$file.dir), sprintf("pending_%s_%s_%i.sql", char, type, id))
 }

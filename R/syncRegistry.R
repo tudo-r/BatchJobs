@@ -41,6 +41,4 @@ useStagedQueries = function() {
   getBatchJobsConf()$staged.queries
 }
 
-getOrderCharacters = function() {
-  setNames(letters[1L:5L], c("submitted", "started", "done", "error", "killed"))
-}
+.OrderChars = setNames(letters[1L:6L], c("first", "submitted", "started", "done", "error", "last"))

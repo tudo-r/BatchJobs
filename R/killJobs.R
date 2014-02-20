@@ -116,6 +116,6 @@ killJobs = function(reg, ids) {
   # reset killed jobs
   ids = ids[data$batch_job_id %nin% bjids.notkilled]
   messagef("Resetting %i jobs in DB.", length(ids))
-  dbSendMessage(reg, dbMakeMessageKilled(reg, ids), staged = useStagedQueries())
+  dbSendMessage(reg, dbMakeMessageKilled(reg, ids, type="last"))
   invisible(ids)
 }

@@ -35,7 +35,7 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
 
 doSingleJob = function(reg, conf, id, multiple.result.files, disable.mail, first, last) {
   staged = conf$staged.queries
-  dbSendMessage(reg, dbMakeMessageStarted(reg, id), staged = staged)
+  dbSendMessage(reg, dbMakeMessageStarted(reg, id), staged=staged)
   job = getJob(reg, id, load.fun=TRUE, check.id=FALSE)
   sendMail(reg, job, result.str, "", disable.mail, condition = "start", first, last)
 
@@ -44,11 +44,11 @@ doSingleJob = function(reg, conf, id, multiple.result.files, disable.mail, first
   if (error) {
     errmsg = as.character(result)
     message("Error occurred: ", errmsg)
-    dbSendMessage(reg, dbMakeMessageError(reg, job$id, err.msg=errmsg), staged = staged)
+    dbSendMessage(reg, dbMakeMessageError(reg, job$id, err.msg=errmsg), staged=staged)
     result.str = errmsg
   } else {
     saveSingleResult(reg, job, result, multiple.result.files)
-    dbSendMessage(reg, dbMakeMessageDone(reg, id), staged = staged)
+    dbSendMessage(reg, dbMakeMessageDone(reg, id), staged=staged)
     result.str = calcResultString(result)
   }
   sendMail(reg, job, result.str, "", disable.mail, condition=ifelse(error, "error", "done"), first, last)
@@ -68,7 +68,7 @@ doChunk = function(reg, conf, ids, multiple.result.files, disable.mail, first, l
   mail.extra.msg = ""
 
   # send started message
-  dbSendMessage(reg, dbMakeMessageStarted(reg, ids), staged = staged)
+  dbSendMessage(reg, dbMakeMessageStarted(reg, ids), staged=staged)
 
   # notify status
   messagef("%s: Waiting %i secs between msg flushes.", Sys.time(), wait.flush)
@@ -92,7 +92,7 @@ doChunk = function(reg, conf, ids, multiple.result.files, disable.mail, first, l
 
     # if some minutes have passed since last flush, we can do it now
     cur.time = now()
-    if (cur.time - last.flush >= wait.flush && dbSendMessages(reg, msg.buf$get(), staged = staged)) {
+    if (cur.time - last.flush >= wait.flush && dbSendMessages(reg, msg.buf$get(), staged=staged)) {
       last.flush = cur.time
       msg.buf$clear()
     }
@@ -100,7 +100,7 @@ doChunk = function(reg, conf, ids, multiple.result.files, disable.mail, first, l
 
   # try to flush the remaining msgs at the end
   for (i in seq_len(10L)) {
-    if (dbSendMessages(reg, msg.buf$get(), staged = staged)) {
+    if (dbSendMessages(reg, msg.buf$get(), staged=staged)) {
       msg.buf$clear()
       break
     }

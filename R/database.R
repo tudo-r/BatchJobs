@@ -356,31 +356,35 @@ dbRemoveJobs = function(reg, ids) {
 ############################################
 ### Messages
 ############################################
-dbSendMessage = function(reg, msg, staged = FALSE) {
+dbSendMessage = function(reg, msg, staged=useStagedQueries(), fs.timeout=NA_real_) {
   if (staged) {
     fn = getPendingFile(reg, msg$type, msg$ids[1L])
     writeSQLFile(msg$msg, fn)
+    waitForFiles(fn, timeout=fs.timeout)
   } else {
     dbDoQuery(reg, msg$msg, flags="rw")
   }
 }
 
-dbSendMessages = function(reg, msgs, max.retries=200L, sleep=function(r) 1.025^r, staged = FALSE) {
+dbSendMessages = function(reg, msgs, max.retries=200L, sleep=function(r) 1.025^r,
+  staged=useStagedQueries(), fs.timeout=NA_real_) {
   if (length(msgs) == 0L)
     return(TRUE)
 
   if (staged) {
-    chars = getOrderCharacters()
+    chars = .OrderChars
 
     # reorder messages in sublist
     msgs = split(msgs, extractSubList(msgs, "type"))
     msgs = msgs[order(match(names(msgs), names(chars)))]
 
-    for (cur in msgs) {
+    fns = vapply(msgs, function(cur) {
       first = cur[[1L]]
       fn = getPendingFile(reg, first$type, first$ids[1L], chars[first$type])
       writeSQLFile(extractSubList(cur, "msg"), fn)
-    }
+      fn
+    }, character(1L))
+    waitForFiles(fns, timeout=fs.timeout)
   } else {
     ok = try(dbDoQueries(reg, extractSubList(msgs, "msg"), flags="rw", max.retries, sleep))
     if (is.error(ok)) {
@@ -398,46 +402,47 @@ dbSendMessages = function(reg, msgs, max.retries=200L, sleep=function(r) 1.025^r
 }
 
 
-dbMakeMessageSubmitted = function(reg, job.ids, time=now(), batch.job.id, first.job.in.chunk.id=NULL, resources.timestamp) {
+dbMakeMessageSubmitted = function(reg, job.ids, time=now(), batch.job.id, first.job.in.chunk.id=NULL,
+  resources.timestamp, type="submitted") {
   if(is.null(first.job.in.chunk.id))
     first.job.in.chunk.id = "NULL"
   updates = sprintf("first_job_in_chunk_id=%s, submitted=%i, batch_job_id='%s', resources_timestamp=%i",
                     first.job.in.chunk.id, time, batch.job.id, resources.timestamp)
   list(msg = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
        ids = job.ids,
-       type = "submitted")
+       type = type)
 }
 
-dbMakeMessageStarted = function(reg, job.ids, time=now()) {
+dbMakeMessageStarted = function(reg, job.ids, time=now(), type="started") {
   node = gsub("'", "\"", Sys.info()["nodename"], fixed=TRUE)
   updates = sprintf("started=%i, node='%s', r_pid=%i, error=NULL, done=NULL", time, node, Sys.getpid())
   list(msg = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
        ids = job.ids,
-       type = "started")
+       type = type)
 }
 
-dbMakeMessageError = function(reg, job.ids, err.msg) {
+dbMakeMessageError = function(reg, job.ids, err.msg, type="error") {
   # FIXME how to escape ticks (')? Just replaced with double quotes for the moment
   err.msg = gsub("'", "\"", err.msg, fixed=TRUE)
   err.msg = gsub("[^[:print:]]", " ", err.msg)
   updates = sprintf("error='%s', done=NULL", err.msg)
   list(msg = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
        ids = job.ids,
-       type = "error")
+       type = type)
 }
 
-dbMakeMessageDone = function(reg, job.ids, time=now()) {
+dbMakeMessageDone = function(reg, job.ids, time=now(), type="done") {
   updates = sprintf("done=%i, error=NULL", time)
   list(msg = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
        ids = job.ids,
-       type = "done")
+       type = type)
 }
 
-dbMakeMessageKilled = function(reg, job.ids) {
+dbMakeMessageKilled = function(reg, job.ids, type="last") {
   updates = "resources_timestamp=NULL, submitted=NULL, started=NULL, batch_job_id=NULL, node=NULL, r_pid=NULL, done=NULL, error=NULL"
   list(msgs = sprintf("UPDATE %s_job_status SET %s WHERE job_id in (%s)", reg$id, updates, collapse(job.ids)),
        ids = job.ids,
-       type = "killed")
+       type = type)
 }
 
 dbConvertNumericToPOSIXct = function(x) {

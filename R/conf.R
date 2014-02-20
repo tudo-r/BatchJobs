@@ -73,6 +73,7 @@ assignConfDefaults = function() {
   conf$raise.warnings = FALSE
   conf$staged.queries = FALSE
   conf$max.concurrent.jobs = Inf
+  conf$fs.timeout = NA_real_
 }
 
 # loads conf into namespace on slave
@@ -102,7 +103,8 @@ saveConf = function(reg) {
 getConfNames = function() {
   c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options",
-    "default.resources", "debug", "raise.warnings", "staged.queries", "max.concurrent.jobs")
+    "default.resources", "debug", "raise.warnings", "staged.queries",
+    "max.concurrent.jobs", "fs.timeout")
 }
 
 checkConf = function(conf) {
@@ -115,7 +117,7 @@ checkConf = function(conf) {
 
 checkConfElements = function(cluster.functions, mail.to, mail.from,
   mail.start, mail.done, mail.error, mail.control, db.driver, db.options, default.resources, debug,
-  raise.warnings, staged.queries, max.concurrent.jobs) {
+  raise.warnings, staged.queries, max.concurrent.jobs, fs.timeout) {
 
   if (!missing(cluster.functions))
     checkArg(cluster.functions, cl = "ClusterFunctions")
@@ -149,6 +151,8 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
     checkArg(staged.queries, cl = "logical", len = 1L, na.ok = FALSE)
   if (!missing(max.concurrent.jobs))
     checkArg(max.concurrent.jobs, cl = "numeric", len = 1L, na.ok = FALSE)
+  if (!missing(fs.timeout))
+    checkArg(fs.timeout, cl = "numeric", len = 1L)
 }
 
 getClusterFunctions = function(conf) {
@@ -172,11 +176,12 @@ printableConf = function(conf) {
     "  debug: %s",
     "  raise.warnings: %s",
     "  staged.queries: %s",
-    "  max.concurrent.jobs: %s\n",
+    "  max.concurrent.jobs: %s",
+    "  fs.timeout: %s\n",
     sep = "\n")
   sprintf(fmt, x$cluster.functions$name, x$mail.from, x$mail.to, x$mail.start, x$mail.done,
           x$mail.error, convertToShortString(x$default.resources), x$debug, x$raise.warnings,
-          x$staged.queries, x$max.concurrent.jobs)
+          x$staged.queries, x$max.concurrent.jobs, x$fs.timeout)
 }
 
 

@@ -155,3 +155,23 @@ convertUseNames = function(use.names) {
   checkArg(use.names, "logical", len=1L, na.ok=FALSE)
   c("none", "ids")[use.names+1L]
 }
+
+waitForFiles = function(fn, timeout=NA_real_, sleep=1) {
+  if (is.na(timeout))
+    return(invisible(TRUE))
+
+  start = now()
+  found = file.exists(fn)
+  if (!all(found)) {
+    repeat {
+      Sys.sleep(sleep)
+      found[!found] = file.exists(fn[!found])
+      if (all(found))
+        break
+      if (now() - start > timeout)
+        stopf("Error waiting for file system. File '%s' timed out after %.1f seconds", head(fn, 1L), timeout)
+    }
+  }
+
+  invisible(TRUE)
+}
