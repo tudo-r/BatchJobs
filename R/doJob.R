@@ -152,17 +152,16 @@ executeOneJob = function(reg, job, multiple.result.files) {
 }
 
 saveSingleResult = function(reg, job, result, multiple.result.files) {
+  saveOne = function(result, name) {
+    fn = getResultFilePath(reg, job$id, name)
+    message("Writing result file: ", fn)
+    save2(file=fn, result = result)
+  }
+
   if (multiple.result.files) {
-    nresult = names(result)
-    for (i in seq_along(result)) {
-      fn.res = getResultFilePath(reg, job$id, nresult[i])
-      message("Writing result file: ", fn.res)
-      save2(file=fn.res, result = result[[i]])
-    }
+    Map(saveOne, result=result, name=names(result))
   } else {
-    fn.res = getResultFilePath(reg, job$id)
-    message("Writing result file: ", fn.res)
-    save(file=fn.res, result)
+    saveOne(result, NA_character_)
   }
 }
 
