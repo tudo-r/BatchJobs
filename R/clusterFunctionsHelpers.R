@@ -58,6 +58,7 @@ cfBrewTemplate = function(conf, template, rscript, extension) {
   z = suppressAll(try(brew(text=template, output=outfile, envir=pf), silent=TRUE))
   if (is.error(z))
     stopf("Error brewing template: %s", as.character(z))
+  waitForFiles(outfile, conf$fs.timeout)
   return(outfile)
 }
 

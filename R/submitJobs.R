@@ -193,6 +193,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   resources.timestamp = saveResources(reg, resources)
   rscripts = writeRscripts(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail=FALSE,
     delays=getDelays(cf, job.delay, n))
+  waitForFiles(rscripts, timeout=fs.timeout)
 
   ### reset status of jobs: delete errors, done, ...
   dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids), type="first"), staged=staged, fs.timeout=fs.timeout)
