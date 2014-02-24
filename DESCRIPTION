@@ -17,6 +17,7 @@ Depends:
     BBmisc (>= 1.5)
 Imports:
     utils,
+    stats,
     digest,
     DBI,
     RSQLite,

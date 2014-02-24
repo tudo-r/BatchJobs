@@ -15,6 +15,7 @@ NULL
 
 #' @import BBmisc
 #' @import utils
+#' @import stats
 #' @import DBI
 #' @import RSQLite
 #' @import fail
