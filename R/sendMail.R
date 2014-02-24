@@ -37,22 +37,22 @@ sendMail = function(reg, job, result.str, extra.msg="",
     subj = sprintf("[%s]: %s %s has %s", reg$id, ifelse(ischunk, "Chunk with first job ", "Job"), firstjob$id, cstr)
     msg = paste0(myformat("Ids", ids), myformat("Job Info", pars))
 
-    # append result information
+    # append result and status information
     if (condition != "start") {
       if (extra.msg != "")
         msg = paste0(msg, myformat("Message", extra.msg))
       msg = paste0(msg, myformat("Results", result.str))
-      # we cannot not list the jobs while on the slave in showStatus
       if(firstjob$id == last)
         msg = paste0(msg, myformat("Status", capture.output(showStatus(reg, run.and.exp=FALSE))))
     }
+
     # if a mail problem occurs, we only warn but do not terminate
-    ok = try (
-      sendmail(conf$mail.from, conf$mail.to, subj, msg, control=conf$mail.control)
-    )
+    ok = try (sendmail(conf$mail.from, conf$mail.to, subj, msg, control=conf$mail.control))
     if (is.error(ok)) {
-      warningf("Could not send mail!\nFrom: %s\nTo: %s\nControl: %s\nError message: %s",
-        conf$mail.from, conf$mail.to, convertToShortString(conf$mail.control), as.character(ok))
+      warningf("Could not send mail to signal condition '%s'!\nFrom: %s\nTo: %s\nControl: %s\nError message: %s",
+        condition, conf$mail.from, conf$mail.to, convertToShortString(conf$mail.control), as.character(ok))
+    } else {
+      messagef("Mail signaling condition '%s' send to %s", condition, conf$mail.to)
     }
   }
   invisible(NULL)
