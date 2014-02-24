@@ -158,10 +158,10 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   messagef("Auto-mailer settings: start=%s, done=%s, error=%s.", conf$mail.start, conf$mail.done, conf$mail.error)
 
 
-  # use staged queries even on master if fs.timeout is set
+  # use staged queries on master if fs.timeout is set
   # -> this way we are relatively sure that db transactions are performed in the intended order
-  staged = conf$staged.queries && !is.na(conf$fs.timeout)
   fs.timeout = conf$fs.timeout
+  staged = conf$staged.queries && !is.na(fs.timeout)
   interrupted = FALSE
 
   submit.msgs = buffer("list", 1000L, dbSendMessages,
@@ -202,7 +202,6 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   bar = makeProgressBar(max=n, label="SubmitJobs")
   bar$set()
 
-  # FIXME add a message about where to find log files
   tryCatch({
     for (i in seq_along(ids)) {
       id = ids[[i]]
