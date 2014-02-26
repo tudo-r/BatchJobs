@@ -171,9 +171,9 @@ reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names="
   tryCatch({
     for (i in it) {
       # use lazy evaluation!
-      res[[i]] = fun(job = dbGetJobs(reg, ids[i])[[1L]],
-                     res = getResult(reg, ids[i], part),
-                     ...)
+      tmp = fun(job = dbGetJobs(reg, ids[i])[[1L]], res = getResult(reg, ids[i], part), ...)
+      if (!is.null(tmp))
+        res[[i]] = tmp
       bar$inc(1L)
     }
   }, error=bar$error)
