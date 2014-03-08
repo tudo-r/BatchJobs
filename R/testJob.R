@@ -63,6 +63,9 @@ testJob = function(reg, id, resources=list(), external=TRUE) {
     # copy job stuff
     copyRequiredJobFiles(r, reg, id)
 
+    # copy exports
+    file.copy(from=getExportDir(r$file.dir), to=td, recursive=TRUE)
+
     # write r script
     resources.timestamp = saveResources(reg, resources)
     writeRscripts(reg, getClusterFunctions(getBatchJobsConf()), id, chunks.as.arrayjobs=FALSE,
