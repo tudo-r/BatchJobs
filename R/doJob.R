@@ -141,7 +141,7 @@ executeOneJob = function(reg, job, multiple.result.files) {
   catf("Result:")
   print(str(result, max.level=1L, list.len=5L))
 
-  if (multiple.result.files) {
+  if (multiple.result.files && !is.error(result)) {
     if (!is.list(result)) {
       result = setClasses("multiple.result.files is TRUE, but your algorithm did not return a list!", "try-error")
     } else if (!isProperlyNamed(result)) {
