@@ -1,3 +1,4 @@
+library(methods)
 library(devtools)
 library(testthat)
 
