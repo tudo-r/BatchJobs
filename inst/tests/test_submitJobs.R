@@ -59,4 +59,3 @@ test_that("submitJobs works with chunking", {
   expect_equal(findDone(reg), 1:5)
   expect_equal(loadResults(reg, simplify=TRUE, use.names="none"), 1:5)
 })
-

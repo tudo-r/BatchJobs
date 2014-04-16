@@ -1,17 +1,17 @@
-sendMail = function(reg, job, result.str, extra.msg="",
+sendMail = function(reg, ids, result.str, extra.msg="",
   disable.mail, condition, first, last, conf) {
 
   if (disable.mail)
     return(invisible(NULL))
   conf = getBatchJobsConf()
-  ischunk = !inherits(job, "Job")
-  firstjob = if(ischunk) job[[1L]] else job
+  ischunk = (length(ids) > 1L)
+  first.id = if(ischunk) ids[[1L]] else ids
   # should we mail
   mail.conds = list(start=conf$mail.start, done=conf$mail.done, error=conf$mail.error)
   mail.cond = mail.conds[[condition]]
   if (mail.cond == "all" ||
-    (mail.cond %in% c("first", "first+last") && firstjob$id == first) ||
-    (mail.cond %in% c("last", "first+last") && firstjob$id == last)) {
+    (mail.cond %in% c("first", "first+last") && first.id == first) ||
+    (mail.cond %in% c("last", "first+last") && first.id == last)) {
 
     myformat = function(title, lines) {
       width = 76L
@@ -22,27 +22,26 @@ sendMail = function(reg, job, result.str, extra.msg="",
         str.bot, "\n", sep = "\n")
     }
 
-    if (ischunk) {
-      ids = extractSubList(job, "id")
-      pars = vapply(job, function(j) convertToShortString(j$par), character(1L))
-    } else {
-      ids = job$id
-      pars = capture.output(print(firstjob))
-    }
+    # if (ischunk) {
+    #   pars = vapply(job, function(j) convertToShortString(j$par), character(1L))
+    # } else {
+    #   pars = capture.output(print(first.id))
+    # }
 
     cstr = switch(condition,
       "start" = "started",
       "done"  = "finished",
       "error" = "terminated with exception")
-    subj = sprintf("[%s]: %s %s has %s", reg$id, ifelse(ischunk, "Chunk with first job ", "Job"), firstjob$id, cstr)
-    msg = paste0(myformat("Ids", ids), myformat("Job Info", pars))
+    subj = sprintf("[%s]: %s %s has %s", reg$id, ifelse(ischunk, "Chunk with first job ", "Job"), first.id, cstr)
+    # msg = paste0(myformat("Ids", ids), myformat("Job Info", pars))
+    msg = myformat("Ids", ids)
 
     # append result and status information
     if (condition != "start") {
       if (extra.msg != "")
         msg = paste0(msg, myformat("Message", extra.msg))
       msg = paste0(msg, myformat("Results", result.str))
-      if(firstjob$id == last)
+      if(first.id == last)
         msg = paste0(msg, myformat("Status", capture.output(showStatus(reg, run.and.exp=FALSE))))
     }
 

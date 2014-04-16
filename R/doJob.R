@@ -37,7 +37,7 @@ doSingleJob = function(reg, conf, id, multiple.result.files, disable.mail, first
   staged = conf$staged.queries
   dbSendMessage(reg, dbMakeMessageStarted(reg, id), staged=staged)
   job = getJob(reg, id, load.fun=TRUE, check.id=FALSE)
-  sendMail(reg, job, result.str, "", disable.mail, condition = "start", first, last)
+  sendMail(reg, id, result.str, "", disable.mail, condition = "start", first, last)
 
   result = executeOneJob(reg, job, multiple.result.files)
   error = is.error(result)
@@ -51,7 +51,7 @@ doSingleJob = function(reg, conf, id, multiple.result.files, disable.mail, first
     dbSendMessage(reg, dbMakeMessageDone(reg, id), staged=staged)
     result.str = calcResultString(result)
   }
-  sendMail(reg, job, result.str, "", disable.mail, condition=ifelse(error, "error", "done"), first, last)
+  sendMail(reg, id, result.str, "", disable.mail, condition=ifelse(error, "error", "done"), first, last)
   return(result)
 }
 
@@ -59,10 +59,11 @@ doSingleJob = function(reg, conf, id, multiple.result.files, disable.mail, first
 doChunk = function(reg, conf, ids, multiple.result.files, disable.mail, first, last) {
   # define and preallocate vars
   staged = conf$staged.queries
-  jobs = getJobs(reg, ids, load.fun=TRUE, check.ids=FALSE)
-  result.strs = character(length(jobs))
-  error = logical(length(jobs))
-  msg.buf = buffer("list", 2L * length(jobs) + 1L, TRUE)
+  # jobs = getJobs(reg, ids, load.fun=TRUE, check.ids=FALSE)
+  n = length(ids)
+  result.strs = character(n)
+  error = logical(n)
+  msg.buf = buffer("list", 2L * n + 1L, TRUE)
   wait.flush = round(runif(1L, 300, 600))
   last.flush = now()
   mail.extra.msg = ""
@@ -72,10 +73,10 @@ doChunk = function(reg, conf, ids, multiple.result.files, disable.mail, first, l
 
   # notify status
   messagef("%s: Waiting %i secs between msg flushes.", Sys.time(), wait.flush)
-  sendMail(reg, jobs, result.strs, "", disable.mail, condition="start", first, last)
+  sendMail(reg, ids, result.strs, "", disable.mail, condition="start", first, last)
 
-  for (i in seq_along(jobs)) {
-    job = jobs[[i]]
+  for (i in seq_len(n)) {
+    job = getJob(reg, ids[i], load.fun = TRUE, check.id = FALSE)
     msg.buf$push(dbMakeMessageStarted(reg, job$id))
     result = executeOneJob(reg, job, multiple.result.files)
 
@@ -120,7 +121,7 @@ doChunk = function(reg, conf, ids, multiple.result.files, disable.mail, first, l
 
   # send mail for whole chunk
   # if one of the jobs had an error, treat the whole chunk as erroneous in mail
-  sendMail(reg, jobs, result.strs, mail.extra.msg, disable.mail, condition=ifelse(any(error), "error", "done"), first, last)
+  sendMail(reg, ids, result.strs, mail.extra.msg, disable.mail, condition=ifelse(any(error), "error", "done"), first, last)
   return(NULL)
 }
 
