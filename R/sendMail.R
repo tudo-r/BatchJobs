@@ -17,18 +17,11 @@ sendMail = function(reg, ids, result.str, extra.msg="",
       collapse(c(sprintf("### %s", title), lines, "", ""), "\n")
     }
 
-    # if (ischunk) {
-    #   pars = vapply(job, function(j) convertToShortString(j$par), character(1L))
-    # } else {
-    #   pars = capture.output(print(first.id))
-    # }
-
     cstr = switch(condition,
       "start" = "started",
       "done"  = "finished",
       "error" = "terminated with exception")
     subj = sprintf("[%s]: %s %s has %s", reg$id, ifelse(ischunk, "Chunk with first job ", "Job"), first.id, cstr)
-    # msg = paste0(myformat("Ids", ids), myformat("Job Info", pars))
     msg = myformat("Ids", ids)
 
     # append result and status information
