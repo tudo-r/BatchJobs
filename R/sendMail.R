@@ -14,12 +14,7 @@ sendMail = function(reg, ids, result.str, extra.msg="",
     (mail.cond %in% c("last", "first+last") && first.id == last)) {
 
     myformat = function(title, lines) {
-      width = 76L
-      str.top = paste("###", title, collapse(rep.int("#", width - 5L - nchar(title)), ""), sep = " ")
-      str.bot = collapse(rep.int("#", width), "")
-      paste(str.top,
-        collapse(strwrap(lines, width = width - 2L, prefix = "# ", exdent = 2L), "\n"),
-        str.bot, "\n", sep = "\n")
+      collapse(c(sprintf("### %s", title), lines, "", ""), "\n")
     }
 
     # if (ischunk) {
