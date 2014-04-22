@@ -55,9 +55,9 @@ showLog = function(reg, id, pager=getOption("pager")) {
       if (length(pos) == 1L) {
         pos = pos + length(header) + 1L
         if(pager == "less")
-          pager = sprintf("%s +%ig", pager, pos)
+          pager = function(files, header, title, delete.file) system2("less", c(sprintf("+%ig", pos), files))
         else
-          pager = sprintf("%s +%i", pager, pos)
+          pager = function(files, header, title, delete.file) system2("vim", c(sprintf("+%i", pos), files))
       }
     }
   }
