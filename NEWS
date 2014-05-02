@@ -1,6 +1,7 @@
 BatchJobs_1.3:
 - added option in Registry for absolute paths src.files and src.dirs
 - package 'methods' is always loaded on slaved to avoid problems with S4 code
+- some smaller fixes
 
 BatchJobs_1.2:
 - Fixed a bug where too many running jobs were queried on some Torque systems
