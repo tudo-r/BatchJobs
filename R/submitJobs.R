@@ -79,7 +79,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   if (missing(ids)) {
     ids = dbFindSubmitted(reg, negate=TRUE)
     if (length(ids) == 0L) {
-      message("All jobs submitted, nothing to do!")
+      info("All jobs submitted, nothing to do!")
       return(invisible(integer(0L)))
     }
   } else {
@@ -153,9 +153,9 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   ### save config, start the work
   saveConf(reg)
   is.chunked = is.list(ids)
-  messagef("Submitting %i chunks / %i jobs.", n, if(is.chunked) sum(vapply(ids, length, integer(1L))) else n)
-  messagef("Cluster functions: %s.", cf$name)
-  messagef("Auto-mailer settings: start=%s, done=%s, error=%s.", conf$mail.start, conf$mail.done, conf$mail.error)
+  info("Submitting %i chunks / %i jobs.", n, if(is.chunked) sum(vapply(ids, length, integer(1L))) else n)
+  info("Cluster functions: %s.", cf$name)
+  info("Auto-mailer settings: start=%s, done=%s, error=%s.", conf$mail.start, conf$mail.done, conf$mail.error)
 
 
   # use staged queries on master if fs.timeout is set
@@ -179,7 +179,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
         resources.timestamp=resources.timestamp))
     }
     # send remaining msgs now
-    messagef("Sending %i submit messages...\nMight take some time, do not interrupt this!", submit.msgs$pos())
+    info("Sending %i submit messages...\nMight take some time, do not interrupt this!", submit.msgs$pos())
     submit.msgs$clear()
 
     # message the existance of the log file
@@ -189,7 +189,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   })
 
   ### write R scripts
-  messagef("Writing %i R scripts...", n)
+  info("Writing %i R scripts...", n)
   resources.timestamp = saveResources(reg, resources)
   rscripts = writeRscripts(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail=FALSE,
     delays=getDelays(cf, job.delay, n))

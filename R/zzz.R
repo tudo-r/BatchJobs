@@ -37,7 +37,8 @@ NULL
     } else {
       readConfs(file.path(libname, pkgname))
     }
-    packageStartupMessage(printableConf(getConfig()))
+    if (getOption("BatchJobs.verbose", default = TRUE))
+      packageStartupMessage(printableConf(getConfig()))
   }
 }
 

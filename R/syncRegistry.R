@@ -8,7 +8,7 @@ syncRegistry = function(reg) {
     if (length(fns) == 0L)
       return(invisible(TRUE))
 
-    message("Syncing registry ...")
+    info("Syncing registry ...")
 
     queries = lapply(fns, readSQLFile)
     ok = !vapply(queries, isFALSE, TRUE)

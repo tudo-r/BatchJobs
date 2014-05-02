@@ -43,7 +43,7 @@ resetJobs = function(reg, ids, force=FALSE) {
             collapse(running))
   }
 
-  messagef("Resetting %i jobs in DB.", length(ids))
+  info("Resetting %i jobs in DB.", length(ids))
   dbSendMessage(reg, dbMakeMessageKilled(reg, ids), staged=FALSE)
   invisible(ids)
 }

@@ -5,7 +5,7 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
         stop("File in place where dir should be created: ", path)
     } else {
       if (msg)
-        message("Creating dir: ", path)
+        info("Creating dir: ", path)
       if (!dir.create(path))
         stop("Could not create dir: ", path)
     }

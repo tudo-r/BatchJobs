@@ -22,7 +22,7 @@
 #'   Default is \code{604800} (one week).
 #' @param stop.on.error [\code{logical(1)}]\cr
 #'   Immediately return if a job terminates with an error? Default is \code{FALSE}.
-#' @return [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated successfully 
+#' @return [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated successfully
 #'   and \code{FALSE} if either an error occurred or the timeout is reached.
 #' @export
 waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE) {
@@ -60,7 +60,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
 
     if (stop.on.error && stats$error) {
       err = dbGetErrorMsgs(reg, ids, filter=TRUE, limit=1L)
-      messagef("Job %i terminated with an error: %s", err$job_id, err$error)
+      warningf("Job %i terminated with an error: %s", err$job_id, err$error)
       return(FALSE)
     }
 
@@ -79,7 +79,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
     }
 
     if (is.finite(timeout) && now() > timeout) {
-      messagef("Timeout reached. %i jobs still on system.", n.sys)
+      warningf("Timeout reached. %i jobs still on system.", n.sys)
       return(FALSE)
     }
 
