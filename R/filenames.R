@@ -27,6 +27,10 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
   }
 }
 
+checkDirs = function(paths, ...) {
+  vcapply(paths, checkDir)
+}
+
 createShardedDirs = function(reg, ids) {
   if (reg$sharding) {
     lapply(getJobDirs(reg, ids, unique=TRUE), checkDir, create=TRUE)
@@ -73,6 +77,11 @@ makePathAbsolute = function(path) {
   # FIXME test this on windows
   normalizePath(path, mustWork=FALSE, winslash = "/")
 }
+
+makePathsAbsolute = function(paths) {
+  vcapply(paths, makePathAbsolute)
+}
+  
 
 getJobDirs = function(reg, ids, unique=FALSE) {
   if (reg$sharding) {

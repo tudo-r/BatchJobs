@@ -1,5 +1,5 @@
 makeRegistryInternal = function(id, file.dir, sharding, work.dir,
-  multiple.result.files, seed, packages, src.dirs, src.files) {
+  multiple.result.files, seed, packages, src.dirs, src.files, src.absolute.paths) {
   checkArg(id, cl = "character", len = 1L, na.ok = FALSE)
   checkIdValid(id, allow.minus=FALSE)
   checkArg(file.dir, cl = "character", len = 1L, na.ok = FALSE)
@@ -20,20 +20,31 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   requirePackages(packages, stop=TRUE, suppress.warnings=TRUE)
   checkArg(src.dirs, cl = "character", na.ok = FALSE)
   checkArg(src.files, cl = "character", na.ok = FALSE)
-  sourceRegistryFilesInternal(work.dir, src.dirs, src.files)
+  checkArg(src.absolute.paths, cl = "logical", len = 1L, na.ok = FALSE)
 
   # make paths absolute to be sure. otherwise cfSSH wont work for example
+  # also check the dirs
+  # file dir
   checkDir(file.dir, create=TRUE, check.empty=TRUE, check.posix=TRUE, msg=TRUE)
   file.dir = makePathAbsolute(file.dir)
+  # job dir
   job.dir = getJobParentDir(file.dir)
   checkDir(job.dir, create=TRUE, check.empty=TRUE)
+  # fun dir
   fun.dir = getFunDir(file.dir)
   checkDir(fun.dir, create=TRUE, check.empty=TRUE)
+  # resources, pending, exports, work.dir
   checkDir(getResourcesDir(file.dir), create=TRUE, check.empty=TRUE)
   checkDir(getPendingDir(file.dir), create=TRUE, check.empty=TRUE)
   checkDir(getExportDir(file.dir), create=TRUE, check.empty=TRUE)
   checkDir(work.dir, check.posix=TRUE)
   work.dir = makePathAbsolute(work.dir)
+  # sources, convert to absolute then source
+  if (src.absolute.paths) {
+    src.dirs = makePathsAbsolute(src.dirs)
+    src.files = makePathsAbsolute(src.files)
+  }
+  sourceRegistryFilesInternal(src.absolute.paths, work.dir, src.dirs, src.files)
 
   packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
 
@@ -49,6 +60,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
     work.dir = work.dir,
     src.dirs = src.dirs,
     src.files = src.files,
+    src.absolute.paths = src.absolute.paths,
     multiple.result.files = multiple.result.files,
     packages = packages[order(names(packages))]
   ), "Registry")
@@ -90,18 +102,22 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
 #'   Packages that will always be loaded on each node.
 #'   Default is \code{character(0)}.
 #' @param src.dirs [\code{character}]\cr
-#'   Directories relative to your \code{work.dir} containing R scripts
+#'   Directories containing R scripts
 #'   to be sourced on registry load (both on slave and master).
 #'   Files not matching the pattern \dQuote{\\.[Rr]$} are ignored.
 #'   Useful if you have many helper functions that are needed during the execution of your jobs.
 #'   These files should only contain function definitions and no executable code.
 #'   Default is \code{character(0)}.
 #' @param src.files [\code{character}]\cr
-#'   R scripts files relative to your \code{work.dir}
+#'   R scripts files
 #'   to be sourced on registry load (both on slave and master).
 #'   Useful if you have many helper functions that are needed during the execution of your jobs.
 #'   These files should only contain function definitions and no executable code.
 #'   Default is \code{character(0)}.
+#' @param src.absolute.paths [\code{logical(1)}]\cr
+#'   Are the paths of the two R arguments above considered to be absolute
+#'   or relative to your \code{work.dir}?
+#'   Default is \code{FALSE}.
 #' @param skip [\code{logical(1)}]\cr
 #'   Skip creation of a new registry if a registry is found in \code{file.dir}.
 #'   Defaults to \code{TRUE}.
@@ -112,14 +128,16 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
 #' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
 #' print(reg)
 makeRegistry = function(id, file.dir, sharding=TRUE, work.dir, multiple.result.files=FALSE,
-                        seed, packages=character(0L), src.dirs=character(0L), src.files=character(0L), skip=TRUE) {
+                        seed, packages=character(0L), src.dirs=character(0L), src.files=character(0L),
+                        src.absolute.paths = FALSE, skip=TRUE) {
   if (missing(file.dir))
     file.dir = file.path(getwd(), paste0(id, "-files"))
   checkArg(skip, "logical", len=1L, na.ok=FALSE)
   if (skip && isRegistryDir(file.dir))
     return(loadRegistry(file.dir = file.dir))
 
-  reg = makeRegistryInternal(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages, src.dirs, src.files)
+  reg = makeRegistryInternal(id, file.dir, sharding, work.dir, multiple.result.files, seed, packages,
+    src.dirs, src.files, src.absolute.paths)
 
   dbCreateJobStatusTable(reg)
   dbCreateJobDefTable(reg)

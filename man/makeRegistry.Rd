@@ -5,7 +5,8 @@
 \usage{
 makeRegistry(id, file.dir, sharding = TRUE, work.dir,
   multiple.result.files = FALSE, seed, packages = character(0L),
-  src.dirs = character(0L), src.files = character(0L), skip = TRUE)
+  src.dirs = character(0L), src.files = character(0L),
+  src.absolute.paths = FALSE, skip = TRUE)
 }
 \arguments{
   \item{id}{[\code{character(1)}]\cr Name of registry.
@@ -61,6 +62,11 @@ makeRegistry(id, file.dir, sharding = TRUE, work.dir,
   execution of your jobs.  These files should only contain
   function definitions and no executable code.  Default is
   \code{character(0)}.}
+
+  \item{src.absolute.paths}{[\code{logical(1)}]\cr Are the
+  paths of the two R arguments above considered to be
+  absolute or relative to your \code{work.dir}?  Default is
+  \code{FALSE}.}
 
   \item{skip}{[\code{logical(1)}]\cr Skip creation of a new
   registry if a registry is found in \code{file.dir}.
