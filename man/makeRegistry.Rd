@@ -47,21 +47,20 @@ makeRegistry(id, file.dir, sharding = TRUE, work.dir,
   \code{character(0)}.}
 
   \item{src.dirs}{[\code{character}]\cr Directories
-  relative to your \code{work.dir} containing R scripts to
-  be sourced on registry load (both on slave and master).
-  Files not matching the pattern \dQuote{\\.[Rr]$} are
-  ignored.  Useful if you have many helper functions that
-  are needed during the execution of your jobs.  These
-  files should only contain function definitions and no
-  executable code.  Default is \code{character(0)}.}
-
-  \item{src.files}{[\code{character}]\cr R scripts files
-  relative to your \code{work.dir} to be sourced on
-  registry load (both on slave and master).  Useful if you
-  have many helper functions that are needed during the
-  execution of your jobs.  These files should only contain
-  function definitions and no executable code.  Default is
+  containing R scripts to be sourced on registry load (both
+  on slave and master).  Files not matching the pattern
+  \dQuote{\\.[Rr]$} are ignored.  Useful if you have many
+  helper functions that are needed during the execution of
+  your jobs.  These files should only contain function
+  definitions and no executable code.  Default is
   \code{character(0)}.}
+
+  \item{src.files}{[\code{character}]\cr R scripts files to
+  be sourced on registry load (both on slave and master).
+  Useful if you have many helper functions that are needed
+  during the execution of your jobs.  These files should
+  only contain function definitions and no executable code.
+  Default is \code{character(0)}.}
 
   \item{src.absolute.paths}{[\code{logical(1)}]\cr Are the
   paths of the two R arguments above considered to be
