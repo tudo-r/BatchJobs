@@ -120,16 +120,12 @@ dbCreateJobDefTable = function(reg) {
 
 #' @S3method dbCreateJobDefTable Registry
 dbCreateJobDefTable.Registry = function(reg) {
-  #message("Initializing job definition table...")
-
   query = sprintf("CREATE TABLE %s_job_def (job_def_id INTEGER PRIMARY KEY, fun_id TEXT, pars TEXT, jobname TEXT)", reg$id)
   dbDoQuery(reg, query, flags="rwc")
   dbCreateExpandedJobsView(reg)
 }
 
 dbCreateJobStatusTable = function(reg, extra.cols="", constraints="") {
-  #message("Initializing job status table...")
-
   query = sprintf(paste("CREATE TABLE %s_job_status (job_id INTEGER PRIMARY KEY, job_def_id INTEGER,",
                    "first_job_in_chunk_id INTEGER, seed INTEGER, resources_timestamp INTEGER, submitted INTEGER,",
                    "started INTEGER, batch_job_id TEXT, node TEXT, r_pid INTEGER,",

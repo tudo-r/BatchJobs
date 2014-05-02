@@ -98,7 +98,7 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, impute.val, ..
   checkArg(fun, formals=c("aggr", "job", "res"))
 
   n = length(ids)
-  message("Reducing ", n, " results...")
+  info("Reducing ", n, " results...")
   if (n == 0L) {
     if (missing(init))
       return(NULL)
@@ -155,7 +155,7 @@ reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names="
   use.names = convertUseNames(use.names)
 
   n = length(ids)
-  messagef("Reducing %i results...", n)
+  info("Reducing %i results...", n)
   if (n == 0L)
     return(list())
   res = vector("list", n)

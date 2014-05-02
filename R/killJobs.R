@@ -49,10 +49,10 @@ killJobs = function(reg, ids) {
                              cols = c("job_id", "batch_job_id", "submitted", "started", "done", "error"))
 
   # print first summary information on jobs to kill
-  messagef("Trying to kill %i jobs.", length(ids))
-  messagef("Jobs on system: %i", nrow(data))
-  messagef("Of these: %i not submitted, %i with no batch.job.id, %i already terminated",
-           sum(is.na(data$submitted)), sum(is.na(data$batch_job_id)), sum(!is.na(data$done) | !is.na(data$error)))
+  info("Trying to kill %i jobs.", length(ids))
+  info("Jobs on system: %i", nrow(data))
+  info("Of these: %i not submitted, %i with no batch.job.id, %i already terminated",
+    sum(is.na(data$submitted)), sum(is.na(data$batch_job_id)), sum(!is.na(data$done) | !is.na(data$error)))
 
 
   # subset data: restrict to jobs submitted, not done, no error, has bji
@@ -65,10 +65,10 @@ killJobs = function(reg, ids) {
 
   ids = data$job_id
   bjids = unique(data$batch_job_id)
-  messagef("Killing real batch jobs: %i", length(bjids))
+  info("Killing real batch jobs: %i", length(bjids))
 
   if (length(bjids) == 0L) {
-    message("No batch jobs to kill.")
+    info("No batch jobs to kill.")
     return(invisible(integer(0L)))
   }
 
@@ -95,12 +95,12 @@ killJobs = function(reg, ids) {
   }
 
   # first try to kill
-  message(clipString(collapse(bjids), 200L, ",..."))
+  info(clipString(collapse(bjids), 200L, ",..."))
   bjids.notkilled = doKill(bjids)
 
   # second try to kill
   if (length(bjids.notkilled) > 0L) {
-    messagef("Could not kill %i batch jobs, trying again.", length(bjids.notkilled))
+    info("Could not kill %i batch jobs, trying again.", length(bjids.notkilled))
     Sys.sleep(2)
     bjids.notkilled = doKill(bjids.notkilled)
   }
@@ -115,7 +115,7 @@ killJobs = function(reg, ids) {
 
   # reset killed jobs
   ids = ids[data$batch_job_id %nin% bjids.notkilled]
-  messagef("Resetting %i jobs in DB.", length(ids))
+  info("Resetting %i jobs in DB.", length(ids))
   dbSendMessage(reg, dbMakeMessageKilled(reg, ids, type="last"))
   invisible(ids)
 }

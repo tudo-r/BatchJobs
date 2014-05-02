@@ -149,7 +149,7 @@ loadRegistry = function(file.dir, work.dir) {
   fn = getRegistryFilePath(file.dir)
   if (!file.exists(fn))
     stopf("No registry found in '%s'", file.dir)
-  message("Loading registry: ", fn)
+  info("Loading registry: ", fn)
   reg = load2(fn, "reg")
 
   requirePackages(names(reg$packages), why=sprintf("registry %s", reg$id))
@@ -177,7 +177,7 @@ loadRegistry = function(file.dir, work.dir) {
 
 saveRegistry = function(reg) {
   fn = getRegistryFilePath(reg$file.dir)
-  message("Saving registry: ", fn)
+  info("Saving registry: ", fn)
   save(file=fn, reg)
 }
 

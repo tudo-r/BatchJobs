@@ -15,7 +15,8 @@ sourceConfFile = function(conffile) {
   if (!file.exists(conffile))
     stopf("Configuration file does not exist: '%s'", conffile)
 
-  packageStartupMessage(sprintf("Sourcing configuration file: '%s'", conffile))
+  if (getOption("BatchJobs.verbose", default = TRUE))
+    packageStartupMessage(sprintf("Sourcing configuration file: '%s'", conffile))
   conf = new.env()
   x = try(sys.source(conffile, envir=conf))
   if (is.error(x))
@@ -79,7 +80,7 @@ assignConfDefaults = function() {
 # loads conf into namespace on slave
 loadConf = function(reg) {
   fn = getConfFilePath(reg)
-  message("Loading conf: ", fn)
+  info("Loading conf: ", fn)
   ee = new.env()
   load(fn, envir=ee)
   ns = ls(ee$conf)
@@ -95,7 +96,7 @@ getBatchJobsConf = function() {
 
 saveConf = function(reg) {
   fn = getConfFilePath(reg)
-  message("Saving conf: ", fn)
+  info("Saving conf: ", fn)
   conf = getBatchJobsConf()
   save(file=fn, conf)
 }

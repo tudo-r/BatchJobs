@@ -30,7 +30,7 @@ updateRegistry.Registry = function(reg) {
   }
 
   # update registry
-  message("Updating Registry and DB to newer version.")
+  info("Updating Registry and DB to newer version.")
   if (version.reg < package_version("1.0.606")) {
     # create new resources dir
     resources.dir = getResourcesDir(reg$file.dir)

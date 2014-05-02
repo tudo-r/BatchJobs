@@ -39,7 +39,7 @@ batchMap = function(reg, fun, ..., more.args=list(), use.names=FALSE) {
 
   if (dbGetJobCount(reg) > 0L)
     stop("Registry is not empty!")
-  messagef("Adding %i jobs to DB.", n)
+  info("Adding %i jobs to DB.", n)
 
   # create seeds
   seed = reg$seed

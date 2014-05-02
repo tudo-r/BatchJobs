@@ -175,3 +175,8 @@ waitForFiles = function(fn, timeout=NA_real_, sleep=1) {
 
   invisible(TRUE)
 }
+
+info = function(...) {
+  if (getOption("BatchJobs.verbose", default=TRUE))
+    message(sprintf(...))
+}
