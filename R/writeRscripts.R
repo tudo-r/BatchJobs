@@ -1,18 +1,20 @@
 writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail, delays) {
+  # force loading 'methods' on slave to avoid package trouble there for some jobs
   template = paste(
     "Sys.sleep(%%f)",
-    "options(BatchJobs.on.slave=TRUE, BatchJobs.resources.path='%s')",
+    "options(BatchJobs.on.slave = TRUE, BatchJobs.resources.path = '%s')",
+    "library(methods)",
     "library(BatchJobs)",
     "res = BatchJobs:::doJob(",
-    "\treg=loadRegistry('%s'),",
-    "\tids=c(%%s),",
-    "\tmultiple.result.files=%s,",
-    "\tdisable.mail=%s,",
-    "\tfirst=%iL,",
-    "\tlast=%iL,",
-    "\tarray.id=%s)",
+    "\treg = loadRegistry('%s'),",
+    "\tids = c(%%s),",
+    "\tmultiple.result.files = %s,",
+    "\tdisable.mail = %s,",
+    "\tfirst = %iL,",
+    "\tlast = %iL,",
+    "\tarray.id = %s)",
     "BatchJobs:::setOnSlave(FALSE)",
-    sep="\n")
+    sep = "\n")
   fids = vapply(ids, head, integer(1L), 1L) # first job id in chunk
   first = head(fids, 1L)
   last = tail(fids, 1L)
@@ -25,9 +27,8 @@ writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp,
 
   # print delays and ids into template. sprintf will return a string of length length(delays) == length(ids)
   # put this together with file names into an mapply on cat.
-  files = getRScriptFilePath(fids, reg=reg)
-  mapply(FUN=cat, SIMPLIFY=FALSE, USE.NAMES=FALSE,
-         sprintf(template, delays, ids),
-         file = files)
+  files = getRScriptFilePath(fids, reg = reg)
+  mapply(FUN = cat, SIMPLIFY = FALSE, USE.NAMES = FALSE,
+    sprintf(template, delays, ids), file = files)
   invisible(files)
 }
