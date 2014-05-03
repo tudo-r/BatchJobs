@@ -195,7 +195,7 @@ loadRegistry = function(file.dir, work.dir) {
 
 saveRegistry = function(reg) {
   fn = getRegistryFilePath(reg$file.dir)
-  info("Saving registry: ", fn)
+  info("Saving registry: %s", fn)
   save(file=fn, reg)
 }
 
