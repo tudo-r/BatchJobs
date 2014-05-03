@@ -96,7 +96,7 @@ getBatchJobsConf = function() {
 
 saveConf = function(reg) {
   fn = getConfFilePath(reg)
-  info("Saving conf: ", fn)
+  info("Saving conf: %s", fn)
   conf = getBatchJobsConf()
   save(file=fn, conf)
 }
