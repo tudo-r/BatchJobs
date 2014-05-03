@@ -5,9 +5,9 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
         stop("File in place where dir should be created: ", path)
     } else {
       if (msg)
-        info("Creating dir: ", path)
+        info("Creating dir: %s", path)
       if (!dir.create(path))
-        stop("Could not create dir: ", path)
+        stopf("Could not create dir: %s", path)
     }
   }
 
@@ -81,7 +81,7 @@ makePathAbsolute = function(path) {
 makePathsAbsolute = function(paths) {
   vcapply(paths, makePathAbsolute)
 }
-  
+
 
 getJobDirs = function(reg, ids, unique=FALSE) {
   if (reg$sharding) {

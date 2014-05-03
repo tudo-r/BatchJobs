@@ -167,7 +167,7 @@ loadRegistry = function(file.dir, work.dir) {
   fn = getRegistryFilePath(file.dir)
   if (!file.exists(fn))
     stopf("No registry found in '%s'", file.dir)
-  info("Loading registry: ", fn)
+  info("Loading registry: %s", fn)
   reg = load2(fn, "reg")
 
   requirePackages(names(reg$packages), why=sprintf("registry %s", reg$id))
