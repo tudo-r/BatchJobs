@@ -13,7 +13,8 @@ test_that("doJob", {
     y = BatchJobs:::doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
   }, "BatchJobs job")
   waitForJobs(reg)
-  expect_equal(y, 123)
+  expect_equal(y, TRUE)
+  expect_equal(loadResult(reg, 1L), 123)
   df = BatchJobs:::dbGetJobStatusTable(reg)
   expect_true(!is.na(df$started) && !is.na(df$done) && is.na(df$error))
   y = loadResult(reg, id)
@@ -37,7 +38,8 @@ test_that("doJob", {
   expect_output({
     y = BatchJobs:::doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
   }, "BatchJobs job")
-  expect_equal(y, bar + 1)
+  expect_equal(y, TRUE)
+  expect_equal(loadResult(reg, 1L), bar + 1)
   expect_equal(getwd(), wd.now)
   unlink(file.path(wd.job, "foo.RData"))
 
