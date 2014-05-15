@@ -67,165 +67,111 @@ showStatus.  Returned invisibly.
 
 <pre><code class="r">
 reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), seed=123)
-</code></pre>
-
-<pre><code>## Creating dir: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5
-## Saving registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/registry.RData
-</code></pre>
-
-<pre><code class="r">f &lt;- function(x) x^2
+f &lt;- function(x) x^2
 batchMap(reg, f, 1:10)
+submitJobs(reg)
 </code></pre>
 
-<pre><code>## Adding 10 jobs to DB.
-</code></pre>
-
-<pre><code class="r">submitJobs(reg)
-</code></pre>
-
-<pre><code>## Saving conf: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/conf.RData
-## Submitting 10 chunks / 10 jobs.
-## Cluster functions: Interactive.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Writing 10 R scripts...
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:15: Starting job on node michels-macbook-air.fritz.box.
+<pre><code>## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=1 ##########
-## Timestamp: 2014-05-15 23:35:15
+## Timestamp: 2014-05-15 23:44:42
 ## Setting seed: 123
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/jobs/01/1-result.RData
-## 2014-05-15 23:35:15: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc355abe4e/jobs/01/1-result.RData
+## 2014-05-15 23:44:42: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:15: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=2 ##########
-## Timestamp: 2014-05-15 23:35:15
+## Timestamp: 2014-05-15 23:44:42
 ## Setting seed: 124
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/jobs/02/2-result.RData
-## 2014-05-15 23:35:15: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc355abe4e/jobs/02/2-result.RData
+## 2014-05-15 23:44:42: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:15: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=3 ##########
-## Timestamp: 2014-05-15 23:35:15
+## Timestamp: 2014-05-15 23:44:42
 ## Setting seed: 125
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/jobs/03/3-result.RData
-## 2014-05-15 23:35:15: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc355abe4e/jobs/03/3-result.RData
+## 2014-05-15 23:44:42: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:15: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=4 ##########
-## Timestamp: 2014-05-15 23:35:15
+## Timestamp: 2014-05-15 23:44:42
 ## Setting seed: 126
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/jobs/04/4-result.RData
-## 2014-05-15 23:35:15: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc355abe4e/jobs/04/4-result.RData
+## 2014-05-15 23:44:42: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:15: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:43: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=5 ##########
-## Timestamp: 2014-05-15 23:35:15
+## Timestamp: 2014-05-15 23:44:43
 ## Setting seed: 127
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/jobs/05/5-result.RData
-## 2014-05-15 23:35:15: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc355abe4e/jobs/05/5-result.RData
+## 2014-05-15 23:44:43: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:15: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:43: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=6 ##########
-## Timestamp: 2014-05-15 23:35:15
+## Timestamp: 2014-05-15 23:44:43
 ## Setting seed: 128
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/jobs/06/6-result.RData
-## 2014-05-15 23:35:15: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc355abe4e/jobs/06/6-result.RData
+## 2014-05-15 23:44:43: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:15: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:43: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=7 ##########
-## Timestamp: 2014-05-15 23:35:15
+## Timestamp: 2014-05-15 23:44:43
 ## Setting seed: 129
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/jobs/07/7-result.RData
-## 2014-05-15 23:35:16: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc355abe4e/jobs/07/7-result.RData
+## 2014-05-15 23:44:43: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:16: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:43: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=8 ##########
-## Timestamp: 2014-05-15 23:35:16
+## Timestamp: 2014-05-15 23:44:43
 ## Setting seed: 130
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/jobs/08/8-result.RData
-## 2014-05-15 23:35:16: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc355abe4e/jobs/08/8-result.RData
+## 2014-05-15 23:44:43: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:16: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:43: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=9 ##########
-## Timestamp: 2014-05-15 23:35:16
+## Timestamp: 2014-05-15 23:44:43
 ## Setting seed: 131
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/jobs/09/9-result.RData
-## 2014-05-15 23:35:16: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc355abe4e/jobs/09/9-result.RData
+## 2014-05-15 23:44:43: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:16: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:43: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=10 ##########
-## Timestamp: 2014-05-15 23:35:16
+## Timestamp: 2014-05-15 23:44:43
 ## Setting seed: 132
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8d4d3a5/jobs/10/10-result.RData
-## 2014-05-15 23:35:16: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc355abe4e/jobs/10/10-result.RData
+## 2014-05-15 23:44:43: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-</code></pre>
-
-<pre><code>## 
-SubmitJobs |+                                                |   0% (00:00:00)
-SubmitJobs |+++++                                            |  10% (00:00:00)
-SubmitJobs |++++++++++                                       |  20% (00:00:00)
-SubmitJobs |+++++++++++++++                                  |  30% (00:00:00)
-SubmitJobs |++++++++++++++++++++                             |  40% (00:00:00)
-SubmitJobs |++++++++++++++++++++++++                         |  50% (00:00:00)
-SubmitJobs |+++++++++++++++++++++++++++++                    |  60% (00:00:00)
-SubmitJobs |++++++++++++++++++++++++++++++++++               |  70% (00:00:00)
-SubmitJobs |+++++++++++++++++++++++++++++++++++++++          |  80% (00:00:00)
-SubmitJobs |++++++++++++++++++++++++++++++++++++++++++++     |  90% (00:00:00)
-SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
-</code></pre>
-
-<pre><code>## Sending 10 submit messages...
-## Might take some time, do not interrupt this!
 </code></pre>
 
 <pre><code class="r">
@@ -233,14 +179,14 @@ SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 showStatus(reg)
 </code></pre>
 
-<pre><code>## Status for 10 jobs at 2014-05-15 23:35:16
+<pre><code>## Status for 10 jobs at 2014-05-15 23:44:43
 ## Submitted: 10 (100.00%)
 ## Started:   10 (100.00%)
 ## Running:    0 (  0.00%)
 ## Done:      10 (100.00%)
 ## Errors:     0 (  0.00%)
 ## Expired:    0 (  0.00%)
-## Time: min=0.00s avg=0.10s max=1.00s
+## Time: min=0.00s avg=0.00s max=0.00s
 </code></pre>
 
 <pre><code class="r">

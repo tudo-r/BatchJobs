@@ -139,117 +139,66 @@ Default is <code>default.stringsAsFactors()</code>.</p>
 <pre><code class="r">
 # generate results:
 reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), seed=123)
-</code></pre>
-
-<pre><code>## Creating dir: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78
-## Saving registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/registry.RData
-</code></pre>
-
-<pre><code class="r">f &lt;- function(x) x^2
+f &lt;- function(x) x^2
 batchMap(reg, f, 1:5)
+submitJobs(reg)
 </code></pre>
 
-<pre><code>## Adding 5 jobs to DB.
-</code></pre>
-
-<pre><code class="r">submitJobs(reg)
-</code></pre>
-
-<pre><code>## Saving conf: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/conf.RData
-## Submitting 5 chunks / 5 jobs.
-## Cluster functions: Interactive.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Writing 5 R scripts...
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:14: Starting job on node michels-macbook-air.fritz.box.
+<pre><code>## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=1 ##########
-## Timestamp: 2014-05-15 23:35:14
+## Timestamp: 2014-05-15 23:44:41
 ## Setting seed: 123
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/jobs/01/1-result.RData
-## 2014-05-15 23:35:14: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc43b715c3/jobs/01/1-result.RData
+## 2014-05-15 23:44:41: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:14: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=2 ##########
-## Timestamp: 2014-05-15 23:35:14
+## Timestamp: 2014-05-15 23:44:41
 ## Setting seed: 124
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/jobs/02/2-result.RData
-## 2014-05-15 23:35:14: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc43b715c3/jobs/02/2-result.RData
+## 2014-05-15 23:44:41: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:14: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=3 ##########
-## Timestamp: 2014-05-15 23:35:14
+## Timestamp: 2014-05-15 23:44:41
 ## Setting seed: 125
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/jobs/03/3-result.RData
-## 2014-05-15 23:35:14: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc43b715c3/jobs/03/3-result.RData
+## 2014-05-15 23:44:41: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:14: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=4 ##########
-## Timestamp: 2014-05-15 23:35:14
+## Timestamp: 2014-05-15 23:44:41
 ## Setting seed: 126
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/jobs/04/4-result.RData
-## 2014-05-15 23:35:14: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc43b715c3/jobs/04/4-result.RData
+## 2014-05-15 23:44:41: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:14: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=5 ##########
-## Timestamp: 2014-05-15 23:35:14
+## Timestamp: 2014-05-15 23:44:41
 ## Setting seed: 127
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e84d504f78/jobs/05/5-result.RData
-## 2014-05-15 23:35:14: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc43b715c3/jobs/05/5-result.RData
+## 2014-05-15 23:44:41: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-</code></pre>
-
-<pre><code>## 
-SubmitJobs |+                                                |   0% (00:00:00)
-SubmitJobs |++++++++++                                       |  20% (00:00:00)
-SubmitJobs |++++++++++++++++++++                             |  40% (00:00:00)
-SubmitJobs |+++++++++++++++++++++++++++++                    |  60% (00:00:00)
-SubmitJobs |+++++++++++++++++++++++++++++++++++++++          |  80% (00:00:00)
-SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
-</code></pre>
-
-<pre><code>## Sending 5 submit messages...
-## Might take some time, do not interrupt this!
 </code></pre>
 
 <pre><code class="r">
 # reduce results to a vector
 reduceResultsVector(reg)
-</code></pre>
-
-<pre><code>## Reducing 5 results...
-</code></pre>
-
-<pre><code>## 
-reduceResults |+                                             |   0% (00:00:00)
-reduceResults |+++++++++                                     |  20% (00:00:00)
-reduceResults |++++++++++++++++++                            |  40% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
-reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 </code></pre>
 
 <pre><code>##  1  2  3  4  5 
@@ -260,134 +209,71 @@ reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 reduceResults(reg, fun=function(aggr, job, res) aggr+res)
 </code></pre>
 
-<pre><code>## Reducing
-</code></pre>
-
-<pre><code>## 
-reduceResults |+                                             |   0% (00:00:00)
-reduceResults |+++++++++                                     |  20% (00:00:00)
-reduceResults |++++++++++++++++++                            |  40% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
-reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
-</code></pre>
-
 <pre><code>## [1] 55
 </code></pre>
 
 <pre><code class="r">
 reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), seed=123)
-</code></pre>
-
-<pre><code>## Creating dir: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef
-## Saving registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/registry.RData
-</code></pre>
-
-<pre><code class="r">f &lt;- function(x) list(a=x, b=as.character(2*x), c=x^2)
+f &lt;- function(x) list(a=x, b=as.character(2*x), c=x^2)
 batchMap(reg, f, 1:5)
+submitJobs(reg)
 </code></pre>
 
-<pre><code>## Adding 5 jobs to DB.
-</code></pre>
-
-<pre><code class="r">submitJobs(reg)
-</code></pre>
-
-<pre><code>## Saving conf: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/conf.RData
-## Submitting 5 chunks / 5 jobs.
-## Cluster functions: Interactive.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Writing 5 R scripts...
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:14: Starting job on node michels-macbook-air.fritz.box.
+<pre><code>## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=1 ##########
-## Timestamp: 2014-05-15 23:35:14
+## Timestamp: 2014-05-15 23:44:41
 ## Setting seed: 123
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/jobs/01/1-result.RData
-## 2014-05-15 23:35:14: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc28f5d7f0/jobs/01/1-result.RData
+## 2014-05-15 23:44:41: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:14: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=2 ##########
-## Timestamp: 2014-05-15 23:35:14
+## Timestamp: 2014-05-15 23:44:42
 ## Setting seed: 124
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/jobs/02/2-result.RData
-## 2014-05-15 23:35:14: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc28f5d7f0/jobs/02/2-result.RData
+## 2014-05-15 23:44:42: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:14: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=3 ##########
-## Timestamp: 2014-05-15 23:35:14
+## Timestamp: 2014-05-15 23:44:42
 ## Setting seed: 125
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/jobs/03/3-result.RData
-## 2014-05-15 23:35:14: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc28f5d7f0/jobs/03/3-result.RData
+## 2014-05-15 23:44:42: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:14: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=4 ##########
-## Timestamp: 2014-05-15 23:35:14
+## Timestamp: 2014-05-15 23:44:42
 ## Setting seed: 126
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/jobs/04/4-result.RData
-## 2014-05-15 23:35:14: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc28f5d7f0/jobs/04/4-result.RData
+## 2014-05-15 23:44:42: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/registry.RData
-## Loading conf: 
-## 2014-05-15 23:35:15: Starting job on node michels-macbook-air.fritz.box.
+## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /private/tmp/pkgdocs
 ## ########## Executing jid=5 ##########
-## Timestamp: 2014-05-15 23:35:15
+## Timestamp: 2014-05-15 23:44:42
 ## Setting seed: 127
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e8539176ef/jobs/05/5-result.RData
-## 2014-05-15 23:35:15: All done.
+## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc28f5d7f0/jobs/05/5-result.RData
+## 2014-05-15 23:44:42: All done.
 ## Setting work back to: /private/tmp/pkgdocs
 ## Memory usage according to gc:
-</code></pre>
-
-<pre><code>## 
-SubmitJobs |+                                                |   0% (00:00:00)
-SubmitJobs |++++++++++                                       |  20% (00:00:00)
-SubmitJobs |++++++++++++++++++++                             |  40% (00:00:00)
-SubmitJobs |+++++++++++++++++++++++++++++                    |  60% (00:00:00)
-SubmitJobs |+++++++++++++++++++++++++++++++++++++++          |  80% (00:00:00)
-SubmitJobs |+++++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
-</code></pre>
-
-<pre><code>## Sending 5 submit messages...
-## Might take some time, do not interrupt this!
 </code></pre>
 
 <pre><code class="r">
 # reduce results to a vector
 reduceResultsVector(reg, fun=function(job, res) res$a)
-</code></pre>
-
-<pre><code>## Reducing 5 results...
-</code></pre>
-
-<pre><code>## 
-reduceResults |+                                             |   0% (00:00:00)
-reduceResults |+++++++++                                     |  20% (00:00:00)
-reduceResults |++++++++++++++++++                            |  40% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
-reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 </code></pre>
 
 <pre><code>## 1 2 3 4 5 
@@ -397,36 +283,12 @@ reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 <pre><code class="r">reduceResultsVector(reg, fun=function(job, res) res$b)
 </code></pre>
 
-<pre><code>## Reducing 5 results...
-</code></pre>
-
-<pre><code>## 
-reduceResults |+                                             |   0% (00:00:00)
-reduceResults |+++++++++                                     |  20% (00:00:00)
-reduceResults |++++++++++++++++++                            |  40% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
-reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
-</code></pre>
-
 <pre><code>##    1    2    3    4    5 
 ##  &quot;2&quot;  &quot;4&quot;  &quot;6&quot;  &quot;8&quot; &quot;10&quot;
 </code></pre>
 
 <pre><code class="r"># reduce results to a list
 reduceResultsList(reg)
-</code></pre>
-
-<pre><code>## Reducing 5 results...
-</code></pre>
-
-<pre><code>## 
-reduceResults |+                                             |   0% (00:00:00)
-reduceResults |+++++++++                                     |  20% (00:00:00)
-reduceResults |++++++++++++++++++                            |  40% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
-reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 </code></pre>
 
 <pre><code>## $`1`
@@ -488,18 +350,6 @@ reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 reduceResultsMatrix(reg, fun=function(job, res) res[c(1,3)])
 </code></pre>
 
-<pre><code>## Reducing 5 results...
-</code></pre>
-
-<pre><code>## 
-reduceResults |+                                             |   0% (00:00:00)
-reduceResults |+++++++++                                     |  20% (00:00:00)
-reduceResults |++++++++++++++++++                            |  40% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
-reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
-</code></pre>
-
 <pre><code>##   a  c
 ## 1 1  1
 ## 2 2  4
@@ -509,18 +359,6 @@ reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 </code></pre>
 
 <pre><code class="r">reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=TRUE)
-</code></pre>
-
-<pre><code>## Reducing 5 results...
-</code></pre>
-
-<pre><code>## 
-reduceResults |+                                             |   0% (00:00:00)
-reduceResults |+++++++++                                     |  20% (00:00:00)
-reduceResults |++++++++++++++++++                            |  40% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
-reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 </code></pre>
 
 <pre><code>##   foo bar
@@ -534,18 +372,6 @@ reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 <pre><code class="r">reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=FALSE)
 </code></pre>
 
-<pre><code>## Reducing 5 results...
-</code></pre>
-
-<pre><code>## 
-reduceResults |+                                             |   0% (00:00:00)
-reduceResults |+++++++++                                     |  20% (00:00:00)
-reduceResults |++++++++++++++++++                            |  40% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
-reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
-</code></pre>
-
 <pre><code>##     1 2 3  4  5
 ## foo 1 2 3  4  5
 ## bar 1 4 9 16 25
@@ -555,17 +381,7 @@ reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 print(str(reduceResultsDataFrame(reg)))
 </code></pre>
 
-<pre><code>## Reducing 5 results...
-</code></pre>
-
-<pre><code>## 
-reduceResults |+                                             |   0% (00:00:00)
-reduceResults |+++++++++                                     |  20% (00:00:00)
-reduceResults |++++++++++++++++++                            |  40% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
-reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
-## &#39;data.frame&#39;:    5 obs. of  3 variables:
+<pre><code>## &#39;data.frame&#39;:    5 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5
 ##  $ b: Factor w/ 5 levels &quot;10&quot;,&quot;2&quot;,&quot;4&quot;,&quot;6&quot;,..: 2 3 4 5 1
 ##  $ c: num  1 4 9 16 25
@@ -574,18 +390,6 @@ reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 
 <pre><code class="r"># reduce results to a sum
 reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
-</code></pre>
-
-<pre><code>## Reducing
-</code></pre>
-
-<pre><code>## 
-reduceResults |+                                             |   0% (00:00:00)
-reduceResults |+++++++++                                     |  20% (00:00:00)
-reduceResults |++++++++++++++++++                            |  40% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++                  |  60% (00:00:00)
-reduceResults |+++++++++++++++++++++++++++++++++++++         |  80% (00:00:00)
-reduceResults |++++++++++++++++++++++++++++++++++++++++++++++| 100% (00:00:00)
 </code></pre>
 
 <pre><code>## [1] 15
