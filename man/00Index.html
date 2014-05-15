@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Batch computing with R.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+<h1> Batch computing with R.
+<img class="toplogo" src="http://stat.ethz.ch/R-manual/R-devel/doc/html/logo.jpg" alt="[R logo]">
+</h1>
+<hr>
+<div align="center">
+<a href="http://stat.ethz.ch/R-manual/R-devel/doc/html/packages.html"><img src="http://stat.ethz.ch/R-manual/R-devel/doc/html/left.jpg" alt="[Up]" width="30" height="30" border="0"></a>
+<a href="http://stat.ethz.ch/R-manual/R-devel/doc/html/index.html"><img src="http://stat.ethz.ch/R-manual/R-devel/doc/html/up.jpg" alt="[Top]" width="30" height="30" border="0"></a>
+</div><h2>Documentation for package &lsquo;BatchJobs&rsquo; version 1.3</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../NEWS">Package NEWS</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td width="25%"><a href="BatchJobs.html">BatchJobs-package</a></td>
+<td>The BatchJobs package</td></tr>
+<tr><td width="25%"><a href="configuration.html">.BatchJobs.R</a></td>
+<td>BatchJobs configuration.</td></tr>
+<tr><td width="25%"><a href="batchExpandGrid.html">batchExpandGrid</a></td>
+<td>Map function over all combinations.</td></tr>
+<tr><td width="25%"><a href="BatchJobs.html">BatchJobs</a></td>
+<td>The BatchJobs package</td></tr>
+<tr><td width="25%"><a href="batchMap.html">batchMap</a></td>
+<td>Maps a function over lists or vectors, adding jobs to a registry.</td></tr>
+<tr><td width="25%"><a href="batchMapQuick.html">batchMapQuick</a></td>
+<td>Combination of makeRegistry, batchMap and submitJobs.</td></tr>
+<tr><td width="25%"><a href="batchMapResults.html">batchMapResults</a></td>
+<td>Maps a function over the results of a registry by using batchMap.</td></tr>
+<tr><td width="25%"><a href="batchReduce.html">batchReduce</a></td>
+<td>Reduces via a binary function over a list adding jobs to a registry.</td></tr>
+<tr><td width="25%"><a href="batchReduceResults.html">batchReduceResults</a></td>
+<td>Reduces results via a binary function and adds jobs for this to a registry.</td></tr>
+<tr><td width="25%"><a href="callFunctionOnSSHWorkers.html">callFunctionOnSSHWorkers</a></td>
+<td>Call an arbitrary function on specified SSH workers.</td></tr>
+<tr><td width="25%"><a href="cfBrewTemplate.html">cfBrewTemplate</a></td>
+<td>Cluster functions helper: Brew your template into a job description file.</td></tr>
+<tr><td width="25%"><a href="cfHandleUnknownSubmitError.html">cfHandleUnknownSubmitError</a></td>
+<td>Cluster functions helper: Handle an unknown error during job submission.</td></tr>
+<tr><td width="25%"><a href="cfKillBatchJob.html">cfKillBatchJob</a></td>
+<td>Cluster functions helper: Kill a batch job via OS command</td></tr>
+<tr><td width="25%"><a href="cfReadBrewTemplate.html">cfReadBrewTemplate</a></td>
+<td>Cluster functions helper: Read in your brew template file.</td></tr>
+<tr><td width="25%"><a href="makeClusterFunctions.html">ClusterFunctions</a></td>
+<td>Create a ClusterFuntions object.</td></tr>
+<tr><td width="25%"><a href="configuration.html">configuration</a></td>
+<td>BatchJobs configuration.</td></tr>
+<tr><td width="25%"><a href="debugMulticore.html">debugMulticore</a></td>
+<td>Helper function to debug multicore mode.</td></tr>
+<tr><td width="25%"><a href="debugSSH.html">debugSSH</a></td>
+<td>Helper function to debug SSH mode.</td></tr>
+<tr><td width="25%"><a href="filterResults.html">filterResults</a></td>
+<td>Find all results where a specific condition is true.</td></tr>
+<tr><td width="25%"><a href="findState.html">findDone</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findErrors</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findExpired</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findJobs.html">findJobs</a></td>
+<td>Finds ids of jobs that match a query.</td></tr>
+<tr><td width="25%"><a href="findState.html">findMissingResults</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findNotDone</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findNotErrors</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findNotOnSystem</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findNotRunning</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findNotStarted</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findNotSubmitted</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findNotTerminated</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findOnSystem</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findRunning</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findStarted</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findSubmitted</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="findState.html">findTerminated</a></td>
+<td>Find jobs depending on computional state.</td></tr>
+<tr><td width="25%"><a href="getConfig.html">getConfig</a></td>
+<td>Returns a list of BatchJobs configuration settings</td></tr>
+<tr><td width="25%"><a href="getErrorMessages.html">getErrorMessages</a></td>
+<td>Get error messages of jobs.</td></tr>
+<tr><td width="25%"><a href="getJob.html">getJob</a></td>
+<td>Get job from registry by id.</td></tr>
+<tr><td width="25%"><a href="getJobIds.html">getJobIds</a></td>
+<td>Get ids of jobs in registry.</td></tr>
+<tr><td width="25%"><a href="getJobInfo.html">getJobInfo</a></td>
+<td>Get computational information of jobs.</td></tr>
+<tr><td width="25%"><a href="getJobNr.html">getJobNr</a></td>
+<td>Get number of jobs in registry.</td></tr>
+<tr><td width="25%"><a href="getJobResources.html">getJobResources</a></td>
+<td>Function to get the resources that were submitted for some jobs.</td></tr>
+<tr><td width="25%"><a href="getJobs.html">getJobs</a></td>
+<td>Get jobs from registry by id.</td></tr>
+<tr><td width="25%"><a href="getLogFiles.html">getLogFiles</a></td>
+<td>Get log file paths for jobs.</td></tr>
+<tr><td width="25%"><a href="getResources.html">getResources</a></td>
+<td>Function to get job resources in job function.</td></tr>
+<tr><td width="25%"><a href="getSSHWorkersInfo.html">getSSHWorkersInfo</a></td>
+<td>Print and return R installation and other information for SSH workers.</td></tr>
+<tr><td width="25%"><a href="grepLogs.html">grepLogs</a></td>
+<td>Grep log files for a pattern.</td></tr>
+<tr><td width="25%"><a href="installPackagesOnSSHWorkers.html">installPackagesOnSSHWorkers</a></td>
+<td>Install packages on SSH workers.</td></tr>
+<tr><td width="25%"><a href="makeJob.html">Job</a></td>
+<td>Creates a job description.</td></tr>
+<tr><td width="25%"><a href="killJobs.html">killJobs</a></td>
+<td>Kill some jobs on the batch system.</td></tr>
+<tr><td width="25%"><a href="loadConfig.html">loadConfig</a></td>
+<td>Load a specific configuration file.</td></tr>
+<tr><td width="25%"><a href="loadExports.html">loadExports</a></td>
+<td>Load exported R data objects stored.</td></tr>
+<tr><td width="25%"><a href="loadRegistry.html">loadRegistry</a></td>
+<td>Load a previously saved registry.</td></tr>
+<tr><td width="25%"><a href="loadResult.html">loadResult</a></td>
+<td>Loads a specific result file.</td></tr>
+<tr><td width="25%"><a href="loadResults.html">loadResults</a></td>
+<td>Loads result files for id vector.</td></tr>
+<tr><td width="25%"><a href="makeClusterFunctions.html">makeClusterFunctions</a></td>
+<td>Create a ClusterFuntions object.</td></tr>
+<tr><td width="25%"><a href="makeClusterFunctionsInteractive.html">makeClusterFunctionsInteractive</a></td>
+<td>Create cluster functions for sequential execution in same session.</td></tr>
+<tr><td width="25%"><a href="makeClusterFunctionsLocal.html">makeClusterFunctionsLocal</a></td>
+<td>Create cluster functions for sequential execution on local host.</td></tr>
+<tr><td width="25%"><a href="makeClusterFunctionsLSF.html">makeClusterFunctionsLSF</a></td>
+<td>Create cluster functions for LSF systems.</td></tr>
+<tr><td width="25%"><a href="makeClusterFunctionsMulticore.html">makeClusterFunctionsMulticore</a></td>
+<td>Use multiple cores on local Linux machine to spawn parallel jobs.</td></tr>
+<tr><td width="25%"><a href="makeClusterFunctionsSGE.html">makeClusterFunctionsSGE</a></td>
+<td>Create cluster functions for Sun Grid Engine systems.</td></tr>
+<tr><td width="25%"><a href="makeClusterFunctionsSLURM.html">makeClusterFunctionsSLURM</a></td>
+<td>Create cluster functions for SLURM-based systems.</td></tr>
+<tr><td width="25%"><a href="makeClusterFunctionsSSH.html">makeClusterFunctionsSSH</a></td>
+<td>Create an SSH cluster to execute jobs.</td></tr>
+<tr><td width="25%"><a href="makeClusterFunctionsTorque.html">makeClusterFunctionsTorque</a></td>
+<td>Create cluster functions for torque-based systems.</td></tr>
+<tr><td width="25%"><a href="makeJob.html">makeJob</a></td>
+<td>Creates a job description.</td></tr>
+<tr><td width="25%"><a href="makeRegistry.html">makeRegistry</a></td>
+<td>Construct a registry object.</td></tr>
+<tr><td width="25%"><a href="makeSSHWorker.html">makeSSHWorker</a></td>
+<td>Create SSH worker for SSH cluster functions.</td></tr>
+<tr><td width="25%"><a href="makeSubmitJobResult.html">makeSubmitJobResult</a></td>
+<td>Create a SubmitJobResult object.</td></tr>
+<tr><td width="25%"><a href="reduceResults.html">reduceResults</a></td>
+<td>Reduce results from result directory.</td></tr>
+<tr><td width="25%"><a href="reduceResults.html">reduceResultsDataFrame</a></td>
+<td>Reduce results from result directory.</td></tr>
+<tr><td width="25%"><a href="reduceResults.html">reduceResultsList</a></td>
+<td>Reduce results from result directory.</td></tr>
+<tr><td width="25%"><a href="reduceResults.html">reduceResultsMatrix</a></td>
+<td>Reduce results from result directory.</td></tr>
+<tr><td width="25%"><a href="reduceResults.html">reduceResultsVector</a></td>
+<td>Reduce results from result directory.</td></tr>
+<tr><td width="25%"><a href="makeRegistry.html">Registry</a></td>
+<td>Construct a registry object.</td></tr>
+<tr><td width="25%"><a href="resetJobs.html">resetJobs</a></td>
+<td>Reset computational state of jobs.</td></tr>
+<tr><td width="25%"><a href="setConfig.html">setConfig</a></td>
+<td>Set and overwrite configuration settings</td></tr>
+<tr><td width="25%"><a href="setJobFunction.html">setJobFunction</a></td>
+<td>Sets the job function for already existing jobs.</td></tr>
+<tr><td width="25%"><a href="setJobNames.html">setJobNames</a></td>
+<td>Set job names.</td></tr>
+<tr><td width="25%"><a href="showClusterStatus.html">showClusterStatus</a></td>
+<td>Show information about available computational resources on cluster.</td></tr>
+<tr><td width="25%"><a href="showLog.html">showLog</a></td>
+<td>Display the contents of a log file.</td></tr>
+<tr><td width="25%"><a href="showStatus.html">showStatus</a></td>
+<td>Show status information about jobs.</td></tr>
+<tr><td width="25%"><a href="sourceRegistryFiles.html">sourceRegistryFiles</a></td>
+<td>Source registry files</td></tr>
+<tr><td width="25%"><a href="makeSSHWorker.html">SSHWorker</a></td>
+<td>Create SSH worker for SSH cluster functions.</td></tr>
+<tr><td width="25%"><a href="makeSubmitJobResult.html">SubmitJobResult</a></td>
+<td>Create a SubmitJobResult object.</td></tr>
+<tr><td width="25%"><a href="submitJobs.html">submitJobs</a></td>
+<td>Submit jobs or chunks of jobs to batch system via cluster function.</td></tr>
+<tr><td width="25%"><a href="sweepRegistry.html">sweepRegistry</a></td>
+<td>Sweep obsolete files from the file system</td></tr>
+<tr><td width="25%"><a href="testJob.html">testJob</a></td>
+<td>Tests a job by running it with Rscript in a new process.</td></tr>
+<tr><td width="25%"><a href="waitForJobs.html">waitForJobs</a></td>
+<td>Wait for termination of jobs on the batch system.</td></tr>
+</table>
+</body></html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Tests a job by running it with Rscript in a new process.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for testJob {BatchJobs}"><tr><td>testJob {BatchJobs}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Tests a job by running it with Rscript in a new process.</h2>
+
+<h3>Description</h3>
+
+<p>Useful for debugging. Note that neither the registry,
+database or file directory are changed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+testJob(reg, id, resources = list(), external = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>reg</code></td>
+<td>
+<p>[<code><a href="makeRegistry.html">Registry</a></code>]<br> Registry.</p>
+</td></tr>
+<tr valign="top"><td><code>id</code></td>
+<td>
+<p>[<code>integer(1)</code>]<br> Id of job to test.
+Default is first job id of registry.</p>
+</td></tr>
+<tr valign="top"><td><code>external</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> Run test in an
+independent external R session instead of current.  The
+former allows to uncover missing variable definitions
+(which may accidentially be defined in the current global
+environment) and the latter is useful to get traceable
+execeptions.  Default is <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>resources</code></td>
+<td>
+<p>[<code>list</code>]<br> Usually not needed,
+unless you call the function <code><a href="getResources.html">getResources</a></code>
+in your job.  See <code><a href="submitJobs.html">submitJobs</a></code>.  Default is
+empty list.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[any]. Result of job. If the job did not complete because
+of an error, NULL is returned.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="reduceResults.html">reduceResults</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">
+reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), seed=123)
+</code></pre>
+
+<pre><code>## Creating dir: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e85ccd2a1a
+## Saving registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/file23e85ccd2a1a/registry.RData
+</code></pre>
+
+<pre><code class="r">f &lt;- function(x) if (x==1) stop(&quot;oops&quot;) else x
+batchMap(reg, f, 1:2)
+</code></pre>
+
+<pre><code>## Adding 2 jobs to DB.
+</code></pre>
+
+<pre><code class="r">testJob(reg, 2)
+</code></pre>
+
+<pre><code>## Creating dir: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/23e82187408f
+## Saving registry: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/23e82187408f/registry.RData
+## Saving conf: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//Rtmp4xHpvc/23e82187408f/conf.RData
+## ### Output of new R process starts here ###
+## ### Output of new R process ends here ###
+## ### Approximate running time: 0.88 secs
+</code></pre>
+
+<pre><code>## [1] 2
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BatchJobs</em> version 1.3 <a href="00Index.html">Index</a>]</div>
+</body></html>

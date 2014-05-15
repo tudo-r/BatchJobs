@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Wait for termination of jobs on the batch system.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for waitForJobs {BatchJobs}"><tr><td>waitForJobs {BatchJobs}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Wait for termination of jobs on the batch system.</h2>
+
+<h3>Description</h3>
+
+<p>Waits for termination of jobs while displaying a progress
+bar containing summarizing informations of the jobs. The
+following abbreviations are used in the progress bar:
+&ldquo;S&rdquo; for number of jobs on system, &ldquo;D&rdquo; for
+number of jobs successfully terminated, &ldquo;E&rdquo; for
+number ofjobs terminated with an R exception and &ldquo;R&rdquo;
+for number of jobs currently running on the system.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+waitForJobs(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>reg</code></td>
+<td>
+<p>[<code><a href="makeRegistry.html">Registry</a></code>]<br> Registry.</p>
+</td></tr>
+<tr valign="top"><td><code>ids</code></td>
+<td>
+<p>[<code>integer</code>]<br> Vector of job ids.
+Default is all submitted jobs not yet terminated.</p>
+</td></tr>
+<tr valign="top"><td><code>sleep</code></td>
+<td>
+<p>[<code>numeric(1)</code>]<br> Seconds to sleep
+between status updates. Default is <code>10</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>timeout</code></td>
+<td>
+<p>[<code>numeric(1)</code>]<br> After waiting
+<code>timeout</code> seconds, show a message and return
+<code>FALSE</code>.  This argument may be required on some
+systems where, e.g., expired jobs or jobs on hold are
+problematic to detect. If you don't want a timeout, set
+this to <code>Inf</code>.  Default is <code>604800</code> (one
+week).</p>
+</td></tr>
+<tr valign="top"><td><code>stop.on.error</code></td>
+<td>
+<p>[<code>logical(1)</code>]<br> Immediately
+return if a job terminates with an error? Default is
+<code>FALSE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[<code>logical(1)</code>]. Returns <code>TRUE</code> if all jobs
+terminated successfully and <code>FALSE</code> if either an error
+occurred or the timeout is reached.
+</p>
+
+<hr><div align="center">[Package <em>BatchJobs</em> version 1.3 <a href="00Index.html">Index</a>]</div>
+</body></html>
