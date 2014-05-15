@@ -46,12 +46,6 @@ makeTestRegistry = function(packages=character(0L), ...) {
   )
 }
 
-in.dir = function(dir, expr) {
-  old = setwd(dir)
-  on.exit(setwd(old))
-  force(expr)
-}
-
 stopifnot(cleanup())
 
 # overloaded.index.obj = list(els = 3:1)

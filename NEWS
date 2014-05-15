@@ -1,6 +1,7 @@
 BatchJobs_1.3:
 - added option in Registry for absolute paths src.files and src.dirs
 - Added option "BatchJobs.verbose" for report generators like knitr
+- added "file.dir" option to batchMapQuick, removed option 'temporary' as this is now more flexible.
 - package 'methods' is always loaded on slaved to avoid problems with S4 code
 - some smaller fixes
 

@@ -4,8 +4,8 @@
 #' and \code{\link{submitJobs}}
 #' for quick computations on the cluster.
 #' Should only be used by skilled users who know what they are doing.
-#' Creates the file.dir in current directory under the name \dQuote{bmq_[random alphanumerics]},
-#' maps function, potentially chunks jobs and submits them.
+#' Creates the file.dir, maps function, potentially chunks jobs and submits them.
+#'
 #' @param fun [\code{function}]\cr
 #'   Function to map over \code{...}.
 #' @param ... [any]\cr
@@ -13,9 +13,12 @@
 #' @param more.args [\code{list}]\cr
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is empty list.
+#' @param file.dir [\code{character}]\cr
+#'   See \code{\link{makeRegistry}}.
+#'   Default is \code{NULL}, which means that it is created in the current directory under the name
+#'   \dQuote{bmq_[random alphanumerics]}.
 #' @param packages [\code{character}]\cr
-#'   Packages that will always be loaded on each node.
-#'   Default is \code{character(0)}.
+#'   See \code{\link{makeRegistry}}.
 #' @param chunk.size [\code{integer(1)}]\cr
 #'   Preferred number of jobs in each chunk.
 #'   Can not be used in combination with \code{n.chunks}.
@@ -35,29 +38,30 @@
 #' @param resources [\code{list}]\cr
 #'   Required resources for all batch jobs.
 #'   Default is empty list.
-#' @param temporary [\code{logical(1)}]\cr
-#'   Create the \code{file.dir} inside R's \code{tempdir}?
-#'   Default is \code{FALSE}.
 #' @return [\code{\link{Registry}}]
 #' @export
-batchMapQuick = function(fun, ..., more.args=list(), packages=character(0L),
-  chunk.size, n.chunks, chunks.as.arrayjobs = FALSE, inds, resources=list(), temporary=FALSE) {
-  checkArg(temporary, cl="logical", len=1L, na.ok=FALSE)
-  id = basename(tempfile(pattern="bmq_"))
-  fd = ifelse(temporary, file.path(tempdir(), id), id)
-  reg = makeRegistry(id=id, file.dir=fd, packages=packages)
+batchMapQuick = function(fun, ..., more.args = list(), file.dir = NULL, packages = character(0L),
+  chunk.size, n.chunks, chunks.as.arrayjobs = FALSE, inds, resources = list()) {
+  if (is.null(file.dir)) {
+    # create name for temp file dir in current dir
+    file.dir = tempfile(pattern = "bmq_", tmpdir = getwd())
+  } else {
+    checkArg(file.dir, "character", len = 1L, na.ok = FALSE) # more checks are done in makeRegistry
+  }
+  id = basename(file.dir)
+  reg = makeRegistry(id = id, file.dir = file.dir, packages = packages)
   on.exit(messagef("Interrupted. You can find your registry in %s.", reg$file.dir))
 
   # we want to return the reg in any case
   # otherwise we cannot look at it / do anything with it in case of errors
   try({
-    ids = batchMap(reg, fun, ..., more.args=more.args)
-    if (!missing(chunk.size) || !missing(n.chunks)) 
-      ids = chunk(ids, chunk.size=chunk.size, n.chunks=n.chunks, shuffle=TRUE)
+    ids = batchMap(reg, fun, ..., more.args = more.args)
+    if (!missing(chunk.size) || !missing(n.chunks))
+      ids = chunk(ids, chunk.size = chunk.size, n.chunks = n.chunks, shuffle = TRUE)
     if (!missing(inds))
       ids = ids[inds]
-    submitJobs(reg, ids, resources=resources)
-  }, silent=FALSE)
+    submitJobs(reg, ids, resources = resources)
+  }, silent = FALSE)
 
   on.exit(NULL)
   return(reg)

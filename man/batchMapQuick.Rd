@@ -2,9 +2,9 @@
 \alias{batchMapQuick}
 \title{Combination of makeRegistry, batchMap and submitJobs.}
 \usage{
-batchMapQuick(fun, ..., more.args = list(), packages = character(0L),
-  chunk.size, n.chunks, chunks.as.arrayjobs = FALSE, inds,
-  resources = list(), temporary = FALSE)
+batchMapQuick(fun, ..., more.args = list(), file.dir = NULL,
+  packages = character(0L), chunk.size, n.chunks,
+  chunks.as.arrayjobs = FALSE, inds, resources = list())
 }
 \arguments{
   \item{fun}{[\code{function}]\cr Function to map over
@@ -16,9 +16,13 @@ batchMapQuick(fun, ..., more.args = list(), packages = character(0L),
   \item{more.args}{[\code{list}]\cr A list of other
   arguments passed to \code{fun}.  Default is empty list.}
 
-  \item{packages}{[\code{character}]\cr Packages that will
-  always be loaded on each node.  Default is
-  \code{character(0)}.}
+  \item{file.dir}{[\code{character}]\cr See
+  \code{\link{makeRegistry}}.  Default is \code{NULL},
+  which means that it is created in the current directory
+  under the name \dQuote{bmq_[random alphanumerics]}.}
+
+  \item{packages}{[\code{character}]\cr See
+  \code{\link{makeRegistry}}.}
 
   \item{chunk.size}{[\code{integer(1)}]\cr Preferred number
   of jobs in each chunk.  Can not be used in combination
@@ -40,10 +44,6 @@ batchMapQuick(fun, ..., more.args = list(), packages = character(0L),
 
   \item{resources}{[\code{list}]\cr Required resources for
   all batch jobs.  Default is empty list.}
-
-  \item{temporary}{[\code{logical(1)}]\cr Create the
-  \code{file.dir} inside R's \code{tempdir}?  Default is
-  \code{FALSE}.}
 }
 \value{
 [\code{\link{Registry}}]
@@ -53,8 +53,7 @@ Combination of \code{\link{makeRegistry}},
 \code{\link{batchMap}} and \code{\link{submitJobs}} for
 quick computations on the cluster. Should only be used by
 skilled users who know what they are doing. Creates the
-file.dir in current directory under the name
-\dQuote{bmq_[random alphanumerics]}, maps function,
-potentially chunks jobs and submits them.
+file.dir, maps function, potentially chunks jobs and
+submits them.
 }
 
