@@ -81,71 +81,7 @@ batchExpandGrid(reg, f, x=1:2, y=1:3, more.args=list(z=10))
 </code></pre>
 
 <pre><code class="r">submitJobs(reg)
-</code></pre>
-
-<pre><code>## 2014-05-15 23:44:32: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=1 ##########
-## Timestamp: 2014-05-15 23:44:32
-## Setting seed: 123
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc3a21723c/jobs/01/1-result.RData
-## 2014-05-15 23:44:32: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:32: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=2 ##########
-## Timestamp: 2014-05-15 23:44:32
-## Setting seed: 124
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc3a21723c/jobs/02/2-result.RData
-## 2014-05-15 23:44:32: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:32: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=3 ##########
-## Timestamp: 2014-05-15 23:44:32
-## Setting seed: 125
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc3a21723c/jobs/03/3-result.RData
-## 2014-05-15 23:44:32: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:32: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=4 ##########
-## Timestamp: 2014-05-15 23:44:32
-## Setting seed: 126
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc3a21723c/jobs/04/4-result.RData
-## 2014-05-15 23:44:32: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:32: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=5 ##########
-## Timestamp: 2014-05-15 23:44:32
-## Setting seed: 127
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc3a21723c/jobs/05/5-result.RData
-## 2014-05-15 23:44:32: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:32: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=6 ##########
-## Timestamp: 2014-05-15 23:44:32
-## Setting seed: 128
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc3a21723c/jobs/06/6-result.RData
-## 2014-05-15 23:44:32: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-</code></pre>
-
-<pre><code class="r">reduceResultsMatrix(reg, fun=function(job, res) cbind(job$pars, res))
+reduceResultsMatrix(reg, fun=function(job, res) cbind(job$pars, res))
 </code></pre>
 
 <pre><code>##   [,1] [,2] [,3] [,4]

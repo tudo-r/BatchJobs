@@ -142,61 +142,7 @@ reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), see
 f &lt;- function(x) x^2
 batchMap(reg, f, 1:5)
 submitJobs(reg)
-</code></pre>
 
-<pre><code>## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=1 ##########
-## Timestamp: 2014-05-15 23:44:41
-## Setting seed: 123
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc43b715c3/jobs/01/1-result.RData
-## 2014-05-15 23:44:41: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=2 ##########
-## Timestamp: 2014-05-15 23:44:41
-## Setting seed: 124
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc43b715c3/jobs/02/2-result.RData
-## 2014-05-15 23:44:41: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=3 ##########
-## Timestamp: 2014-05-15 23:44:41
-## Setting seed: 125
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc43b715c3/jobs/03/3-result.RData
-## 2014-05-15 23:44:41: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=4 ##########
-## Timestamp: 2014-05-15 23:44:41
-## Setting seed: 126
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc43b715c3/jobs/04/4-result.RData
-## 2014-05-15 23:44:41: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=5 ##########
-## Timestamp: 2014-05-15 23:44:41
-## Setting seed: 127
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc43b715c3/jobs/05/5-result.RData
-## 2014-05-15 23:44:41: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-</code></pre>
-
-<pre><code class="r">
 # reduce results to a vector
 reduceResultsVector(reg)
 </code></pre>
@@ -217,61 +163,7 @@ reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), see
 f &lt;- function(x) list(a=x, b=as.character(2*x), c=x^2)
 batchMap(reg, f, 1:5)
 submitJobs(reg)
-</code></pre>
 
-<pre><code>## 2014-05-15 23:44:41: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=1 ##########
-## Timestamp: 2014-05-15 23:44:41
-## Setting seed: 123
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc28f5d7f0/jobs/01/1-result.RData
-## 2014-05-15 23:44:41: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=2 ##########
-## Timestamp: 2014-05-15 23:44:42
-## Setting seed: 124
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc28f5d7f0/jobs/02/2-result.RData
-## 2014-05-15 23:44:42: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=3 ##########
-## Timestamp: 2014-05-15 23:44:42
-## Setting seed: 125
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc28f5d7f0/jobs/03/3-result.RData
-## 2014-05-15 23:44:42: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=4 ##########
-## Timestamp: 2014-05-15 23:44:42
-## Setting seed: 126
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc28f5d7f0/jobs/04/4-result.RData
-## 2014-05-15 23:44:42: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-## 2014-05-15 23:44:42: Starting job on node michels-macbook-air.fritz.box.
-## Auto-mailer settings: start=none, done=none, error=none.
-## Setting work dir: /private/tmp/pkgdocs
-## ########## Executing jid=5 ##########
-## Timestamp: 2014-05-15 23:44:42
-## Setting seed: 127
-## Writing result file: /var/folders/pj/dcslzytj3t30v_ylpyyfyyl00000gn/T//RtmpWsyc0x/file2dfc28f5d7f0/jobs/05/5-result.RData
-## 2014-05-15 23:44:42: All done.
-## Setting work back to: /private/tmp/pkgdocs
-## Memory usage according to gc:
-</code></pre>
-
-<pre><code class="r">
 # reduce results to a vector
 reduceResultsVector(reg, fun=function(job, res) res$a)
 </code></pre>
