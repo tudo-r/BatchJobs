@@ -8,22 +8,24 @@
 #'   Environment to source the files into. Default is the global environment.
 #' @return Nothing.
 #' @export
-sourceRegistryFiles = function(reg, envir=.GlobalEnv) {
+sourceRegistryFiles = function(reg, envir = .GlobalEnv) {
   checkRegistry(reg)
   checkArg(envir, "environment")
-  sourceRegistryFilesInternal(reg$src.absolute.paths, reg$work.dir, reg$src.dirs, reg$src.files)
+  sourceRegistryFilesInternal(reg$work.dir, reg$src.dirs, reg$src.files)
 }
 
-sourceRegistryFilesInternal = function(abs.paths, work.dir, dirs, files, envir=.GlobalEnv) {
-  if (!abs.paths) {
-    dirs = file.path(work.dir, dirs)
-    files = file.path(work.dir, files)
+sourceRegistryFilesInternal = function(work.dir, dirs, files, envir = .GlobalEnv) {
+  # add work dir if not /foo/bar path
+  addWorkDir = function(path) {
+    ifelse(isPathFromRoot(path), path, file.path(work.dir, path))
   }
+  dirs = vcapply(dirs, addWorkDir)
+  files = vcapply(files, addWorkDir)
   dirs.files = getRScripts(dirs)
   ok = file.exists(files)
   if (any(!ok))
     stopf("Files to source not found, e.g. %s", head(files[!ok], 1L))
-  lapply(c(dirs.files, files), sys.source, envir=envir)
+  lapply(c(dirs.files, files), sys.source, envir = envir)
   invisible(NULL)
 }
 
@@ -32,7 +34,7 @@ getRScripts = function(dirs) {
     ok = isDirectory(dirs)
     if (any(!ok))
       stopf("Directories not found: %s", collapse(dirs[!ok]))
-    unlist(lapply(dirs, list.files, pattern = "\\.[Rr]$", full.names=TRUE))
+    unlist(lapply(dirs, list.files, pattern = "\\.[Rr]$", full.names = TRUE))
   } else {
     character(0L)
   }

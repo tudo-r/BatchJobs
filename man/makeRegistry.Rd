@@ -5,8 +5,7 @@
 \usage{
 makeRegistry(id, file.dir, sharding = TRUE, work.dir,
   multiple.result.files = FALSE, seed, packages = character(0L),
-  src.dirs = character(0L), src.files = character(0L),
-  src.absolute.paths = FALSE, skip = TRUE)
+  src.dirs = character(0L), src.files = character(0L), skip = TRUE)
 }
 \arguments{
   \item{id}{[\code{character(1)}]\cr Name of registry.
@@ -59,13 +58,15 @@ makeRegistry(id, file.dir, sharding = TRUE, work.dir,
   be sourced on registry load (both on slave and master).
   Useful if you have many helper functions that are needed
   during the execution of your jobs.  These files should
-  only contain function definitions and no executable code.
-  Default is \code{character(0)}.}
-
-  \item{src.absolute.paths}{[\code{logical(1)}]\cr Are the
-  paths of the two R arguments above considered to be
-  absolute or relative to your \code{work.dir}?  Default is
-  \code{FALSE}.}
+  only contain function and constant definitions and no
+  long running, executable code.  These paths are
+  considered to be relative to your \code{work.dir}.  As a
+  last remedy in problematic cases you can use absolute
+  paths, by passing paths that start with \dQuote{/}, see
+  the comment about \code{file.dir} and \code{work.dir}
+  above, where we allow the same thing.  Note that this is
+  a less portable approach and therefore usually a less
+  good idea.  Default is \code{character(0)}.}
 
   \item{skip}{[\code{logical(1)}]\cr Skip creation of a new
   registry if a registry is found in \code{file.dir}.
@@ -85,7 +86,7 @@ Every object is a list that contains the passed arguments
 of the constructor.
 }
 \examples{
-reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 print(reg)
 }
 

@@ -70,11 +70,14 @@ is.accessible = function(path) {
   return(file.access(path, mode=c(2L, 4L)) == 0L)
 }
 
-makePathAbsolute = function(path) {
-  if(substr(path, 1L, 1L) == "/")
-    return(path)
+isPathFromRoot = function(path) {
+  substr(path, 1L, 1L) == "/"
+}
 
-  # FIXME test this on windows
+makePathAbsolute = function(path) {
+  if (isPathFromRoot(path))
+    return(path)
+  # FIXME: test this on windows
   normalizePath(path, mustWork=FALSE, winslash = "/")
 }
 
