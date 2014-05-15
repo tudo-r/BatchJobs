@@ -1,3 +1,2 @@
 library(testthat)
-library(BatchJobs)
-test_package("BatchJobs")
+test_check("BatchJobs")

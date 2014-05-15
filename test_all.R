@@ -17,4 +17,4 @@ if (interactive()) {
   library("BatchJobs")
 }
 
-test_dir("inst/tests")
+test_dir("tests/testthat")
