@@ -13,7 +13,7 @@ Registry.}
 Job.}
 
 \item{cache}{[\code{FileCache}]\cr
-Instance of \code{\link[BBmisc]{FileCache}}.}
+Instance of \code{\link[BBmisc]{makeFileCache}}.}
 }
 \value{
 [any]. Result of job.
