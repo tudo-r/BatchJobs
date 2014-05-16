@@ -87,7 +87,7 @@ testJob = function(reg, id, resources=list(), external=TRUE) {
     on.exit(setOnSlave(FALSE))
     # FIXME: stuff we might need to store before: resources
     saveConf(reg)
-    res = applyJobFunction(reg, getJob(reg, id, load.fun=TRUE))
+    res = applyJobFunction(reg, getJob(reg, id), FileCache(FALSE))
   }
   return(res)
 }
@@ -108,8 +108,6 @@ copyRequiredJobFiles = function(reg1, reg2, id) {
 
 #' @S3method copyRequiredJobFiles Registry
 copyRequiredJobFiles.Registry = function(reg1, reg2, id) {
-  job = getJob(reg1, id, load.fun=TRUE, check.id=FALSE)
+  job = getJob(reg1, id, check.id=FALSE)
   file.copy(getFunFilePath(reg1, job$fun.id), getFunFilePath(reg2, job$fun.id))
 }
-
-

@@ -40,12 +40,13 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
   msg.buf = buffer("list", 2L * n + 1L, TRUE)
   last.flush = now()
   mail.extra.msg = ""
+  cache = FileCache(use.cache = n > 1L)
 
   # notify status
   sendMail(reg, ids, results, "", disable.mail, condition="start", first, last)
 
   for (i in seq_len(n)) {
-    job = getJob(reg, ids[i], load.fun = TRUE, check.id = FALSE)
+    job = getJob(reg, ids[i], check.id = FALSE)
     msg.buf$push(dbMakeMessageStarted(reg, job$id))
 
     messagef("########## Executing jid=%s ##########", job$id)
@@ -54,7 +55,7 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
 
     message("Setting seed: ", job$seed)
     seed = seeder(reg, job$seed)
-    result = try(applyJobFunction(reg, job), silent=TRUE)
+    result = try(applyJobFunction(reg, job, cache), silent=TRUE)
     seed$reset()
 
     catf("Result:")

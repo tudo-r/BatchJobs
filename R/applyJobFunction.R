@@ -3,15 +3,19 @@
 #'   Registry.
 #' @param job [\code{\link{Job}}]\cr
 #'   Job.
+#' @param cache [\code{FileCache}]\cr
+#'   Instance of \code{\link[BBmisc]{FileCache}}.
 #' @return [any]. Result of job.
 #' @keywords internal
 #' @export
-applyJobFunction = function(reg, job) {
+applyJobFunction = function(reg, job, cache) {
   UseMethod("applyJobFunction")
 }
 
 #' @method applyJobFunction Registry
 #' @S3method applyJobFunction Registry
-applyJobFunction.Registry = function(reg, job) {
-  do.call(job$fun, c(job$pars, job$more.args))
+applyJobFunction.Registry = function(reg, job, cache) {
+  fn = file.path(getFunDir(reg$file.dir), sprintf("%s.RData", job$fun.id))
+  stuff = cache(fn, parts = c("fun", "more.args"), simplify = FALSE)
+  do.call(stuff$fun, c(job$pars, stuff$more.args))
 }
