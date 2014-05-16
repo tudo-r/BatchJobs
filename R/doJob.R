@@ -40,7 +40,7 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
   msg.buf = buffer("list", 2L * n + 1L, TRUE)
   last.flush = now()
   mail.extra.msg = ""
-  cache = FileCache(use.cache = n > 1L)
+  cache = makeFileCache(use.cache = n > 1L)
 
   # notify status
   sendMail(reg, ids, results, "", disable.mail, condition="start", first, last)

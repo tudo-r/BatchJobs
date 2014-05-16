@@ -4,7 +4,7 @@
 #' @param job [\code{\link{Job}}]\cr
 #'   Job.
 #' @param cache [\code{FileCache}]\cr
-#'   Instance of \code{\link[BBmisc]{FileCache}}.
+#'   Instance of \code{\link[BBmisc]{makeFileCache}}.
 #' @return [any]. Result of job.
 #' @keywords internal
 #' @export
