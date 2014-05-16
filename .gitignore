@@ -1,4 +1,4 @@
-inst/tests/unittests-files
+tests/testthat/unittests-files
 
 BatchJobs_*.tar.gz
 BatchJobs.Rcheck

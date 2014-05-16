@@ -19,6 +19,7 @@ NULL
 #' @import DBI
 #' @import RSQLite
 #' @import fail
+#' @import methods
 #' @importFrom digest digest
 #' @importFrom brew brew
 #' @importFrom sendmailR sendmail

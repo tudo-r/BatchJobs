@@ -33,7 +33,7 @@ getJobs = function(reg, ids, check.ids=TRUE) {
 }
 
 #' @method getJobs Registry
-#' @S3method getJobs Registry
+#' @export
 getJobs.Registry = function(reg, ids, check.ids=TRUE) {
   if (! missing(ids) && check.ids) {
     ids = checkIds(reg, ids)

@@ -186,7 +186,7 @@ printableConf = function(conf) {
 }
 
 
-#' @S3method print Config
+#' @export
 print.Config = function(x, ...) {
   cat(printableConf(x))
 }

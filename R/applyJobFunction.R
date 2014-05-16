@@ -13,7 +13,7 @@ applyJobFunction = function(reg, job, cache) {
 }
 
 #' @method applyJobFunction Registry
-#' @S3method applyJobFunction Registry
+#' @export
 applyJobFunction.Registry = function(reg, job, cache) {
   fn = file.path(getFunDir(reg$file.dir), sprintf("%s.RData", job$fun.id))
   stuff = cache(fn, parts = c("fun", "more.args"), simplify = FALSE)

@@ -74,7 +74,7 @@ getJobInfo = function(reg, ids, pars=FALSE, prefix.pars=FALSE, select, unit="sec
 }
 
 #' @method getJobInfo Registry
-#' @S3method getJobInfo Registry
+#' @export
 getJobInfo.Registry = function(reg, ids, pars=FALSE, prefix.pars=FALSE, select, unit="seconds") {
   syncRegistry(reg)
   checkArg(pars, "logical", len=1L, na.ok=FALSE)

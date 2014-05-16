@@ -118,7 +118,7 @@ dbCreateJobDefTable = function(reg) {
   UseMethod("dbCreateJobDefTable")
 }
 
-#' @S3method dbCreateJobDefTable Registry
+#' @export
 dbCreateJobDefTable.Registry = function(reg) {
   query = sprintf("CREATE TABLE %s_job_def (job_def_id INTEGER PRIMARY KEY, fun_id TEXT, pars TEXT, jobname TEXT)", reg$id)
   dbDoQuery(reg, query, flags="rwc")
@@ -162,7 +162,7 @@ dbGetJobs = function(reg, ids) {
 
 # note that this does not load the job function from disk to increase speed
 #' @method dbGetJobs Registry
-#' @S3method dbGetJobs Registry
+#' @export
 dbGetJobs.Registry = function(reg, ids) {
   query = sprintf("SELECT job_id, fun_id, pars, jobname, seed FROM %s_expanded_jobs", reg$id)
   tab = dbSelectWithIds(reg, query, ids)

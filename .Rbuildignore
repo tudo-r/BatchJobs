@@ -1,7 +1,7 @@
 examples
 external_tests
 ^makeR
-inst/tests/unittests-files
+tests/testthat/unittests-files
 
 .git
 .gitignore

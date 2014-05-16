@@ -10,7 +10,7 @@ updateRegistry = function(reg) {
 
 
 #' @method updateRegistry Registry
-#' @S3method updateRegistry Registry
+#' @export
 updateRegistry.Registry = function(reg) {
   # Fix for missing package version (package versions < 1.0.527)
   if ("BatchJobs" %nin% names(reg$packages)) {

@@ -106,7 +106,7 @@ copyRequiredJobFiles = function(reg1, reg2, id) {
   UseMethod("copyRequiredJobFiles")
 }
 
-#' @S3method copyRequiredJobFiles Registry
+#' @export
 copyRequiredJobFiles.Registry = function(reg1, reg2, id) {
   job = getJob(reg1, id, check.id=FALSE)
   file.copy(getFunFilePath(reg1, job$fun.id), getFunFilePath(reg2, job$fun.id))

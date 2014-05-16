@@ -35,7 +35,7 @@ setJobFunction = function(reg, ids, fun, more.args=list(), reset=TRUE, force=FAL
   UseMethod("setJobFunction")
 }
 
-#' @S3method setJobFunction Registry
+#' @export
 setJobFunction.Registry = function(reg, ids, fun, more.args=list(), reset=TRUE, force=FALSE) {
   if (missing(ids)) {
     # nothing to do ...

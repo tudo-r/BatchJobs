@@ -139,7 +139,7 @@ makeRegistry = function(id, file.dir, sharding = TRUE, work.dir, multiple.result
   reg
 }
 
-#' @S3method print Registry
+#' @export
 print.Registry = function(x, ...) {
   cat("Job registry: ",  x$id, "\n")
   cat("  Number of jobs: ", dbGetJobCount(x), "\n")

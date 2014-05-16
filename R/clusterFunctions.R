@@ -31,7 +31,7 @@ makeSubmitJobResult = function(status, batch.job.id, msg,  ...) {
   setClasses(list(status=status, batch.job.id=batch.job.id, msg=msg), "SubmitJobResult")
 }
 
-#' @S3method print SubmitJobResult
+#' @export
 #' @method print SubmitJobResult
 print.SubmitJobResult = function(x, ...) {
   cat("Job submission result:\n")
@@ -102,7 +102,7 @@ makeClusterFunctions = function(name, submitJob, killJob, listJobs, getArrayEnvi
              c("ClusterFunctions", class))
 }
 
-#' @S3method print ClusterFunctions
+#' @export
 #' @method print ClusterFunctions
 print.ClusterFunctions = function(x, ...) {
   catf("%s cluster functions.", x$name)

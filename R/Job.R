@@ -43,7 +43,7 @@ getJobIds = function(reg) {
   dbGetJobIds(reg)
 }
 
-#' @S3method print Job
+#' @export
 print.Job = function(x, ...) {
   cat("BatchJobs job:\n")
   catf("  Job id: %s", x$id)
