@@ -1,4 +1,5 @@
 BatchJobs_1.3:
+- Reduced memory consumption and disk i/o if 'more.args' is used.
 - added option in Registry for absolute paths src.files and src.dirs
 - Added option "BatchJobs.verbose" for report generators like knitr
 - added "file.dir" option to batchMapQuick, removed option 'temporary' as this is now more flexible.
