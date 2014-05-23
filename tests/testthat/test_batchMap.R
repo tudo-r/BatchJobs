@@ -19,6 +19,9 @@ test_that("batchMap", {
   expect_equal(batchMap(reg, function(...) 1), integer(0L))
   expect_equal(batchMap(reg, function(...) 1, i = integer(0L)), integer(0L))
 
+
+  reg = makeTestRegistry()
+  expect_equal(batchMap(reg, function(...) 1, a = 1:3, b = 1:3, use.names = TRUE), 1:3)
 })
 
 

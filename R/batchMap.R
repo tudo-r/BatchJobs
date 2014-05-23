@@ -26,10 +26,10 @@
 batchMap = function(reg, fun, ..., more.args=list(), use.names=FALSE) {
   checkRegistry(reg, strict=TRUE)
   checkArg(fun, cl="function")
-  args = list(...)
-  if (length(args) == 0L)
+  ddd = list(...)
+  if (length(ddd) == 0L)
     return(invisible(integer(0L)))
-  n = unique(vapply(args, length, integer(1L)))
+  n = unique(vapply(ddd, length, integer(1L)))
   if(length(n) != 1L)
     stop("All args in '...' must be of the same length!")
   if (n == 0L)
@@ -55,7 +55,13 @@ batchMap = function(reg, fun, ..., more.args=list(), use.names=FALSE) {
   fun.id = saveFunction(reg, fun, more.args)
 
   # generate jobnames col
-  jobname = if (use.names) getArgNames(args) else rep.int(NA_character_, n)
+  if (use.names) {
+    jobname = getArgNames(ddd)
+    if (is.null(jobname))
+      jobname = rep.int(NA_character_, n)
+  } else {
+    jobname = rep.int(NA_character_, n)
+  }
 
   # add jobs to DB
   n = dbAddData(reg, "job_def", data = data.frame(fun_id=fun.id, pars=pars, jobname=jobname))
