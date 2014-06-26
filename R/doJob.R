@@ -37,17 +37,25 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
   n = length(ids)
   results = character(n)
   error = logical(n)
-  msg.buf = buffer("list", 2L * n + 1L, TRUE)
-  last.flush = now()
   mail.extra.msg = ""
   cache = makeFileCache(use.cache = n > 1L)
 
   # notify status
   sendMail(reg, ids, results, "", disable.mail, condition="start", first, last)
 
+  # create buffer of started messages
+  msg.buf = buffer(init = lapply(ids, dbMakeMessageStarted, reg = reg),
+    capacity = 2L * n, value = TRUE)
+  next.flush = 0L
+
   for (i in seq_len(n)) {
+    now = now()
+    if (now > next.flush) {
+      if (dbSendMessages(reg, msg.buf$get(), staged = staged))
+        msg.buf$clear()
+      next.flush = now + runif(1L, 300, 600)
+    }
     job = getJob(reg, ids[i], check.id = FALSE)
-    msg.buf$push(dbMakeMessageStarted(reg, job$id))
 
     messagef("########## Executing jid=%s ##########", job$id)
     messagef("Timestamp: %s" , Sys.time())
@@ -86,12 +94,6 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
       } else {
         saveOne(result, NA_character_)
       }
-    }
-
-    # if some minutes have passed since last flush, we can do it now
-    if (i != n && now() - last.flush >= round(runif(1L, 300, 600)) && dbSendMessages(reg, msg.buf$get(), staged=staged)) {
-      last.flush = now()
-      msg.buf$clear()
     }
   }
 

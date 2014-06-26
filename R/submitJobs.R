@@ -164,9 +164,9 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   staged = conf$staged.queries && !is.na(fs.timeout)
   interrupted = FALSE
 
-  submit.msgs = buffer("list", 1000L, dbSendMessages,
-                       reg=reg, max.retries=10000L, sleep=function(r) 5,
-                       staged=staged, fs.timeout=fs.timeout)
+  submit.msgs = buffer(type = "list", capacity = 1000L, value = dbSendMessages,
+                       reg = reg, max.retries = 10000L, sleep = function(r) 5,
+                       staged = staged, fs.timeout = fs.timeout)
 
   logger = makeSimpleFileLogger(file.path(reg$file.dir, "submit.log"), touch = FALSE, keep = 1L)
 

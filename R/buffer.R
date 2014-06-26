@@ -1,14 +1,18 @@
 # a simple preallocated stack.
-buffer = function(type, capacity, value=identity, ...) {
-  st = vector(type, capacity)
-  n = 0L
+buffer = function(type, capacity, value, init, ...) {
+  if (missing(init)) {
+    st = vector(type, capacity)
+    n = 0L
+  } else {
+    st = init
+    n = length(init)
+  }
 
   get = function() {
     head(st, n)
   }
 
   push = function(x) {
-    force(x)
     if (n == capacity)
       clear()
     n <<- n + 1L
