@@ -5,6 +5,7 @@
 # we must be quite restrictive here because we prefix
 # the table name with the registry name
 checkIdValid = function(id, allow.minus=TRUE) {
+  assertString(id)
   if (allow.minus)
     pattern = "^[0-9a-zA-Z]+[0-9a-zA-Z_-]*$"
   else

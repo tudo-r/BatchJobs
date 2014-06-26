@@ -1,6 +1,5 @@
 makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   multiple.result.files, seed, packages, src.dirs, src.files) {
-  assertString(id)
   checkIdValid(id, allow.minus = FALSE)
   assertString(file.dir)
   assertFlag(sharding)
@@ -9,7 +8,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   assertString(work.dir)
   assertFlag(multiple.result.files)
 
-  seed = if (missing(seed)) getRandomSeed() else asCount(seed, positive = TRUE)
+  seed = if (missing(seed)) getRandomSeed() else asInt(seed)
 
   assertCharacter(packages, any.missing = FALSE)
   packages = union(packages, "BatchJobs")
