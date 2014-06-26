@@ -15,8 +15,8 @@
 #' @return [\code{integer}]. Ids for jobs which match the query.
 #' @export
 #' @examples
-#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
-#' f <- function(x, y) x * y
+#' reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+#' f = function(x, y) x * y
 #' batchExpandGrid(reg, f, x = 1:2, y = 1:3)
 #' findJobs(reg, pars = (y > 2))
 findJobs = function(reg, ids, pars, jobnames) {

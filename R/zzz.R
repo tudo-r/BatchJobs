@@ -29,7 +29,7 @@ NULL
 #' @importFrom stringr str_trim
 NULL
 
-.BatchJobs.conf <- new.env()
+.BatchJobs.conf = new.env()
 
 .onAttach = function(libname, pkgname) {
   if (!isOnSlave()) {

@@ -51,8 +51,8 @@
 #' @export
 #' @examples
 #' # generate results:
-#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
-#' f <- function(x) x^2
+#' reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+#' f = function(x) x^2
 #' batchMap(reg, f, 1:5)
 #' submitJobs(reg)
 #'
@@ -61,8 +61,8 @@
 #' # reduce results to sum
 #' reduceResults(reg, fun = function(aggr, job, res) aggr+res)
 #'
-#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
-#' f <- function(x) list(a = x, b = as.character(2*x), c = x^2)
+#' reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+#' f = function(x) list(a = x, b = as.character(2*x), c = x^2)
 #' batchMap(reg, f, 1:5)
 #' submitJobs(reg)
 #'

@@ -11,8 +11,8 @@
 #' @return [\code{integer}]. Ids of jobs where \code{fun(job, result)} returns \code{TRUE}.
 #' @export
 #' @examples
-#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
-#' f <- function(x) x^2
+#' reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+#' f = function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
 #'

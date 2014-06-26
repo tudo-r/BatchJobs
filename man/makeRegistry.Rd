@@ -78,7 +78,7 @@ complete control over the way the path is used internally, pass an absolute path
 Every object is a list that contains the passed arguments of the constructor.
 }
 \examples{
-reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 print(reg)
 }
 

@@ -30,8 +30,8 @@ Vector of type \code{integer} with job ids.
 You can then submit these jobs to the batch system.
 }
 \examples{
-reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
-f <- function(x) x^2
+reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+f = function(x) x^2
 batchMap(reg, f, 1:10)
 print(reg)
 }

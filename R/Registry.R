@@ -114,7 +114,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
 #' @aliases Registry
 #' @export
 #' @examples
-#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+#' reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 #' print(reg)
 makeRegistry = function(id, file.dir, sharding = TRUE, work.dir, multiple.result.files = FALSE,
                         seed, packages = character(0L), src.dirs = character(0L), src.files = character(0L),

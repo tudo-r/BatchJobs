@@ -34,8 +34,8 @@ killed are reset in the DB.
 }
 \examples{
 \dontrun{
-reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
-f <- function(x) Sys.sleep(x)
+reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+f = function(x) Sys.sleep(x)
 batchMap(reg, f, 1:10 + 5)
 submitJobs(reg)
 

@@ -16,8 +16,8 @@
 #'   Default is \code{FALSE}.
 #' @return Vector of type \code{integer} with job ids.
 #' @examples
-#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
-#' f <- function(x) x^2
+#' reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+#' f = function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' print(reg)
 #' @export

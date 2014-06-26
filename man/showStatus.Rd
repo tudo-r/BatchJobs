@@ -31,8 +31,8 @@ Default is \code{TRUE}.}
 E.g.: How many there are, how many are done, any errors, etc.
 }
 \examples{
-reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
-f <- function(x) x^2
+reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+f = function(x) x^2
 batchMap(reg, f, 1:10)
 submitJobs(reg)
 

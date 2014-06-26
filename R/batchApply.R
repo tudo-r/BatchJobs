@@ -21,7 +21,7 @@
 #   Arguments to vectorize over (list or vector).
 # @return Vector of type \code{integer} with job ids.
 # @examples
-# reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+# reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 # X = matrix(1:16, 4)
 # # Define two jobs to calculate the row sums:
 # batchApply(reg, X, 1, sum, n.chunks = 2)
