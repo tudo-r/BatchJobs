@@ -1,12 +1,16 @@
 # a simple preallocated stack.
-buffer = function(type, capacity, value, init, ...) {
-  if (missing(init)) {
+buffer = function(type = "list", capacity = 0L, value = TRUE, init = NULL, ...) {
+  if (is.null(init)) {
     st = vector(type, capacity)
     n = 0L
   } else {
     st = init
     n = length(init)
   }
+  rm(type)
+  force(capacity)
+  force(value)
+  rm(init)
 
   get = function() {
     head(st, n)
