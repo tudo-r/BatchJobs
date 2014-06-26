@@ -11,13 +11,13 @@
 #' @return [\code{integer}]. Ids of jobs where \code{fun(job, result)} returns \code{TRUE}.
 #' @export
 #' @examples
-#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
 #'
 #' # which square numbers are even:
-#' filterResults(reg, fun=function(job, res) res %% 2 == 0)
+#' filterResults(reg, fun = function(job, res) res %% 2 == 0)
 filterResults = function(reg, ids, fun, ...) {
   checkRegistry(reg)
   syncRegistry(reg)
@@ -28,7 +28,7 @@ filterResults = function(reg, ids, fun, ...) {
     ids = checkIds(reg, ids)
 
   Filter(function(id) {
-    fun(job = getJob(reg, id, check.id=FALSE),
+    fun(job = getJob(reg, id, check.id = FALSE),
         res = getResult(reg, id),
         ...)
   }, ids)

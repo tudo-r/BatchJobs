@@ -21,15 +21,15 @@
 #   Arguments to vectorize over (list or vector).
 # @return Vector of type \code{integer} with job ids.
 # @examples
-# reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+# reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 # X = matrix(1:16, 4)
 # # Define two jobs to calculate the row sums:
 # batchApply(reg, X, 1, sum, n.chunks = 2)
 # submitJobs(reg)
-# reduceResultsVector(reg, use.names=FALSE) == rowSums(X)
+# reduceResultsVector(reg, use.names = FALSE) == rowSums(X)
 # @export
 # FIXME why is this not exported? test and export
-batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ..., use.names=FALSE) {
+batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ..., use.names = FALSE) {
   if (!is.matrix(X) && !is.array(X))
     stopf("Argument X must be of class matrix or array, not %s", class(X))
   dX = dim(X)
@@ -38,13 +38,13 @@ batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ..., use.names=
   if (missing(chunk.size) && missing(n.chunks))
     chunk.size = 1L
 
-  inds = chunk(seq_len(dX[margin]), chunk.size=chunk.size, n.chunks=n.chunks, shuffle=FALSE)
+  inds = chunk(seq_len(dX[margin]), chunk.size = chunk.size, n.chunks = n.chunks, shuffle = FALSE)
   if (use.names && !is.null(dimnames(X)[[margin]]))
     names(inds) = dimnames(X)[[margin]]
   wrapper = function(.X, .inds, .user.fun, ...) {
-    apply(.X[.inds,, drop=FALSE], 1L, .user.fun, ...)
+    apply(.X[.inds,, drop = FALSE], 1L, .user.fun, ...)
   }
 
   batchMap(reg, wrapper, .inds = inds,
-           more.args = list(..., .X = aperm(X, c(margin, seq_along(dX)[-margin])), .user.fun=fun))
+           more.args = list(..., .X = aperm(X, c(margin, seq_along(dX)[-margin])), .user.fun = fun))
 }

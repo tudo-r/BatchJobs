@@ -53,15 +53,15 @@
 #' @return [\code{integer}]. Vector of submitted job ids.
 #' @export
 #' @examples
-#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
 #'
 #' # Submit the 10 jobs again, now randomized into 2 chunks:
-#' chunked = chunk(getJobIds(reg), n.chunks=2, shuffle=TRUE)
+#' chunked = chunk(getJobIds(reg), n.chunks = 2, shuffle = TRUE)
 #' submitJobs(reg, chunked)
-submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.as.arrayjobs=FALSE, job.delay=FALSE) {
+submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chunks.as.arrayjobs = FALSE, job.delay = FALSE) {
   ### helper function to calculate the delay
   getDelays = function(cf, job.delay, n) {
     if (is.logical(job.delay)) {
@@ -70,21 +70,21 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
       }
       return(delays = rep.int(0, n))
     }
-    vapply(seq_along(ids), job.delay, numeric(1L), n=n)
+    vapply(seq_along(ids), job.delay, numeric(1L), n = n)
   }
 
   ### argument checks on registry and ids
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
-    ids = dbFindSubmitted(reg, negate=TRUE)
+    ids = dbFindSubmitted(reg, negate = TRUE)
     if (length(ids) == 0L) {
       info("All jobs submitted, nothing to do!")
       return(invisible(integer(0L)))
     }
   } else {
     if (is.list(ids)) {
-      ids = lapply(ids, checkIds, reg=reg, check.present = FALSE)
+      ids = lapply(ids, checkIds, reg = reg, check.present = FALSE)
       dbCheckJobIds(reg, unlist(ids))
     } else if(is.numeric(ids)) {
       ids = checkIds(reg, ids)
@@ -172,10 +172,10 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   ### set on exit handler to avoid inconsistencies caused by user interrupts
   on.exit({
     # we need the second case for errors in brew (e.g. resources)
-    if(interrupted && exists("batch.result", inherits=FALSE)) {
-      submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
-        batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
-        resources.timestamp=resources.timestamp))
+    if(interrupted && exists("batch.result", inherits = FALSE)) {
+      submit.msgs$push(dbMakeMessageSubmitted(reg, id, time = submit.time,
+        batch.job.id = batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
+        resources.timestamp = resources.timestamp))
     }
     # send remaining msgs now
     info("Sending %i submit messages...\nMight take some time, do not interrupt this!", submit.msgs$pos())
@@ -190,15 +190,15 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   ### write R scripts
   info("Writing %i R scripts...", n)
   resources.timestamp = saveResources(reg, resources)
-  rscripts = writeRscripts(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail=FALSE,
-    delays=getDelays(cf, job.delay, n))
-  waitForFiles(rscripts, timeout=fs.timeout)
+  rscripts = writeRscripts(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail = FALSE,
+    delays = getDelays(cf, job.delay, n))
+  waitForFiles(rscripts, timeout = fs.timeout)
 
   ### reset status of jobs: delete errors, done, ...
-  dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids), type="first"), staged=staged, fs.timeout=fs.timeout)
+  dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids), type = "first"), staged = staged, fs.timeout = fs.timeout)
 
   ### initialize progress bar
-  bar = makeProgressBar(max=n, label="SubmitJobs")
+  bar = makeProgressBar(max = n, label = "SubmitJobs")
   bar$set()
 
   tryCatch({
@@ -210,28 +210,28 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
       repeat { # max.retries may be Inf
         if (limit.concurrent.jobs && length(cf$listJobs(conf, reg)) >= conf$max.concurrent.jobs) {
           # emulate a temporary erroneous batch result
-          batch.result = makeSubmitJobResult(status=10L, batch.job.id=NA_character_, "Max concurrent jobs exhausted")
+          batch.result = makeSubmitJobResult(status = 10L, batch.job.id = NA_character_, "Max concurrent jobs exhausted")
         } else {
           # try to submit the job
           interrupted = TRUE
           submit.time = now()
           batch.result = cf$submitJob(
-            conf=conf,
-            reg=reg,
-            job.name=sprintf("%s-%i", reg$id, id1),
-            rscript=rscripts[i],
-            log.file=getLogFilePath(reg, id1),
-            job.dir=getJobDirs(reg, id1),
-            resources=resources,
-            arrayjobs=if(chunks.as.arrayjobs) length(id) else 1L
+            conf = conf,
+            reg = reg,
+            job.name = sprintf("%s-%i", reg$id, id1),
+            rscript = rscripts[i],
+            log.file = getLogFilePath(reg, id1),
+            job.dir = getJobDirs(reg, id1),
+            resources = resources,
+            arrayjobs = if(chunks.as.arrayjobs) length(id) else 1L
           )
         }
 
         ### validate status returned from cluster functions
         if (batch.result$status == 0L) {
-          submit.msgs$push(dbMakeMessageSubmitted(reg, id, time=submit.time,
-              batch.job.id=batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
-              resources.timestamp=resources.timestamp))
+          submit.msgs$push(dbMakeMessageSubmitted(reg, id, time = submit.time,
+              batch.job.id = batch.result$batch.job.id, first.job.in.chunk.id = if(is.chunked) id1 else NULL,
+              resources.timestamp = resources.timestamp))
           interrupted = FALSE
           bar$inc(1L)
           break
@@ -260,7 +260,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
         }
       }
     }
-  }, error=bar$error)
+  }, error = bar$error)
 
   ### return ids (on.exit handler kicks now in to submit the remaining messages)
   return(invisible(ids))

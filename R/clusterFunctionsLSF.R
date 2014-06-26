@@ -21,22 +21,22 @@
 #' @export
 makeClusterFunctionsLSF = function(template.file) {
   template = cfReadBrewTemplate(template.file)
-  # When LSB_BJOBS_CONSISTENT_EXIT_CODE=Y, the bjobs command exits with 0 only
+  # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
   # when unfinished jobs are found, and 255 when no jobs are found,
   # or a non-existent job ID is entered.
-  Sys.setenv(LSB_BJOBS_CONSISTENT_EXIT_CODE="Y")
+  Sys.setenv(LSB_BJOBS_CONSISTENT_EXIT_CODE = "Y")
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     outfile = cfBrewTemplate(conf, template, rscript, "job")
     # returns: "Job <128952> is submitted to default queue <s_amd>."
-    res = runOSCommandLinux("bsub", stdin=outfile, stop.on.exit.code=FALSE)
+    res = runOSCommandLinux("bsub", stdin = outfile, stop.on.exit.code = FALSE)
     # FIXME filled queues
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)
     } else {
       # collapse output strings and first number in string is batch.job.id
-      batch.job.id = str_extract(collapse(res$output, sep=" "), "\\d+")
-      makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
+      batch.job.id = str_extract(collapse(res$output, sep = " "), "\\d+")
+      makeSubmitJobResult(status = 0L, batch.job.id = batch.job.id)
     }
   }
 
@@ -47,8 +47,8 @@ makeClusterFunctionsLSF = function(template.file) {
   listJobs = function(conf, reg) {
     # JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME
     # 106560  rogon   UNKWN m_amd      hpc84       hpc25       QScript    Mar 19 12:18
-    res = runOSCommandLinux("bjobs", c("-u $USER", "-w"), stop.on.exit.code=FALSE)
-    if (res$exit.code == 255L && grepl("No unfinished job found", res$output, fixed=TRUE))
+    res = runOSCommandLinux("bjobs", c("-u $USER", "-w"), stop.on.exit.code = FALSE)
+    if (res$exit.code == 255L && grepl("No unfinished job found", res$output, fixed = TRUE))
       return(character(0L))
     if (res$exit.code > 0L)
       stopf("bjobs produced exit code %i; output %s", res$exit.code, res$output)
@@ -61,6 +61,6 @@ makeClusterFunctionsLSF = function(template.file) {
 
   getArrayEnvirName = function() "LSB_JOBINDEX"
 
-  makeClusterFunctions(name="LSF", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName)
+  makeClusterFunctions(name = "LSF", submitJob = submitJob, killJob = killJob,
+                       listJobs = listJobs, getArrayEnvirName = getArrayEnvirName)
 }

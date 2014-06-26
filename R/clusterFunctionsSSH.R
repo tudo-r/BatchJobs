@@ -38,8 +38,8 @@
 #' @return [\code{\link{SSHWorker}}].
 #' @export
 #' @aliases SSHWorker
-makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, nice,
-  r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {
+makeSSHWorker = function(nodename, rhome = "", ncpus, max.jobs, max.load, nice,
+  r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {
 
   worker = makeWorkerRemoteLinux(nodename, rhome, r.options, script, ncpus, max.jobs, max.load, nice)
   class(worker) = c("SSHWorker", class(worker))
@@ -71,9 +71,9 @@ makeSSHWorker = function(nodename, rhome="", ncpus, max.jobs, max.load, nice,
 #' # might look like this:
 #'
 #' cluster.functions = makeClusterFunctionsSSH(
-#'   makeSSHWorker(nodename="larry", rhome="/usr/local/R", max.jobs=2),
-#'   makeSSHWorker(nodename="curley", rhome="/opt/R/R-current"),
-#'   makeSSHWorker(nodename="moe", rhome="/opt/R/R-current"))
+#'   makeSSHWorker(nodename = "larry", rhome = "/usr/local/R", max.jobs = 2),
+#'   makeSSHWorker(nodename = "curley", rhome = "/opt/R/R-current"),
+#'   makeSSHWorker(nodename = "moe", rhome = "/opt/R/R-current"))
 #' }
 #' @export
 #' @seealso \link{ClusterFunctions} \code{\link{makeSSHWorker}}
@@ -94,22 +94,22 @@ makeClusterFunctionsSSH = function(..., workers) {
   rm(nodenames, dup)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
-    worker = findWorker(workers, reg$file.dir, tdiff=5L)
+    worker = findWorker(workers, reg$file.dir, tdiff = 5L)
     if (is.null(worker)) {
-      states = collapse(extractSubList(workers, "available", simplify=TRUE), sep="")
-      makeSubmitJobResult(status=1L, batch.job.id=NULL,
-        msg=sprintf("Workers busy: %s", states))
+      states = collapse(extractSubList(workers, "available", simplify = TRUE), sep = "")
+      makeSubmitJobResult(status = 1L, batch.job.id = NULL,
+        msg = sprintf("Workers busy: %s", states))
     } else {
       pid = try(startWorkerJob(worker, rscript, log.file))
       if (is.error(pid))
-        makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="Submit failed.")
+        makeSubmitJobResult(status = 101L, batch.job.id = NULL, msg = "Submit failed.")
       else
-        makeSubmitJobResult(status=0L,batch.job.id=paste0(worker$nodename, "#", pid))
+        makeSubmitJobResult(status = 0L,batch.job.id = paste0(worker$nodename, "#", pid))
     }
   }
 
   killJob = function(conf, reg, batch.job.id) {
-    parts = strsplit(batch.job.id, "#", fixed=TRUE)[[1L]]
+    parts = strsplit(batch.job.id, "#", fixed = TRUE)[[1L]]
     nodename = parts[1L]
     pid = parts[2L]
     worker = workers[[nodename]]
@@ -132,6 +132,6 @@ makeClusterFunctionsSSH = function(..., workers) {
 
   getArrayEnvirName = function() NA_character_
 
-  makeClusterFunctions(name="SSH", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName=getArrayEnvirName)
+  makeClusterFunctions(name = "SSH", submitJob = submitJob, killJob = killJob,
+                       listJobs = listJobs, getArrayEnvirName = getArrayEnvirName)
 }

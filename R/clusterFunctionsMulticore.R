@@ -33,21 +33,21 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
 makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, nice,
-  r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {
+  r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {
 
   worker = makeWorkerLocalLinux(r.options, script, ncpus, max.jobs, max.load, nice)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
-    updateWorker(worker, reg$file.dir, tdiff=0L)
+    updateWorker(worker, reg$file.dir, tdiff = 0L)
     s = worker$available
     if (s != "A") {
-      makeSubmitJobResult(status=1L, batch.job.id=NULL, msg=sprintf("Multicore busy: %s", s))
+      makeSubmitJobResult(status = 1L, batch.job.id = NULL, msg = sprintf("Multicore busy: %s", s))
     } else {
       pid = try(startWorkerJob(worker, rscript, log.file))
       if (is.error(pid))
-        makeSubmitJobResult(status=101L, batch.job.id=NULL, msg="Submit failed.")
+        makeSubmitJobResult(status = 101L, batch.job.id = NULL, msg = "Submit failed.")
       else
-        makeSubmitJobResult(status=0L, batch.job.id=pid)
+        makeSubmitJobResult(status = 0L, batch.job.id = pid)
     }
   }
 
@@ -61,6 +61,6 @@ makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, nice,
 
   getArrayEnvirName = function() NA_character_
 
-  makeClusterFunctions(name="Multicore", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName=getArrayEnvirName)
+  makeClusterFunctions(name = "Multicore", submitJob = submitJob, killJob = killJob,
+                       listJobs = listJobs, getArrayEnvirName = getArrayEnvirName)
 }

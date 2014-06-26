@@ -16,15 +16,15 @@
 #'   Default is \code{FALSE}.
 #' @return Vector of type \code{integer} with job ids.
 #' @examples
-#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' print(reg)
 #' @export
 #FIXME I did currently not check what was implemneted regarding unit test "batchmap not atomic"
 # but the test fails and the beavior is currently undocumented
-batchMap = function(reg, fun, ..., more.args=list(), use.names=FALSE) {
-  checkRegistry(reg, strict=TRUE)
+batchMap = function(reg, fun, ..., more.args = list(), use.names = FALSE) {
+  checkRegistry(reg, strict = TRUE)
   assertFunction(fun)
   ddd = list(...)
   if (length(ddd) == 0L)
@@ -47,10 +47,10 @@ batchMap = function(reg, fun, ..., more.args=list(), use.names=FALSE) {
 
   # serialize pars to char vector
   pars = mapply(function(...) {
-    rawToChar(serialize(list(...), connection=NULL, ascii=TRUE))
-  }, ..., USE.NAMES=FALSE)
+    rawToChar(serialize(list(...), connection = NULL, ascii = TRUE))
+  }, ..., USE.NAMES = FALSE)
   # pars = vapply(seq_len(n), function(i) {
-  #   rawToChar(serialize(lapply(args, "[[", i), connection=NULL, ascii=TRUE))
+  #   rawToChar(serialize(lapply(args, "[[", i), connection = NULL, ascii = TRUE))
   # }, character(1L))
   fun.id = saveFunction(reg, fun, more.args)
 
@@ -64,9 +64,9 @@ batchMap = function(reg, fun, ..., more.args=list(), use.names=FALSE) {
   }
 
   # add jobs to DB
-  n = dbAddData(reg, "job_def", data = data.frame(fun_id=fun.id, pars=pars, jobname=jobname))
+  n = dbAddData(reg, "job_def", data = data.frame(fun_id = fun.id, pars = pars, jobname = jobname))
   job.def.ids = dbGetLastAddedIds(reg, "job_def", "job_def_id", n)
-  n = dbAddData(reg, "job_status", data=data.frame(job_def_id=job.def.ids, seed=seeds))
+  n = dbAddData(reg, "job_status", data = data.frame(job_def_id = job.def.ids, seed = seeds))
   job.ids = dbGetLastAddedIds(reg, "job_status", "job_id", n)
 
   # we can only create the dir after we have obtained the ids from the DB

@@ -51,9 +51,9 @@ cfBrewTemplate = function(conf, template, rscript, extension) {
   }
   pf = parent.frame()
   old = getOption("show.error.messages")
-  on.exit(options(show.error.messages=old))
-  options(show.error.messages=FALSE)
-  z = suppressAll(try(brew(text=template, output=outfile, envir=pf), silent=TRUE))
+  on.exit(options(show.error.messages = old))
+  options(show.error.messages = FALSE)
+  z = suppressAll(try(brew(text = template, output = outfile, envir = pf), silent = TRUE))
   if (is.error(z))
     stopf("Error brewing template: %s", as.character(z))
   waitForFiles(outfile, conf$fs.timeout)
@@ -81,8 +81,8 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
   exit.code = asInt(exit.code)
   assertCharacter(output, any.missing = FALSE)
   msg = sprintf("%s produced exit code %i; output %s",
-    cmd, exit.code, collapse(output, sep="\n"))
-  makeSubmitJobResult(status=101L, batch.job.id=NA_character_, msg=msg)
+    cmd, exit.code, collapse(output, sep = "\n"))
+  makeSubmitJobResult(status = 101L, batch.job.id = NA_character_, msg = msg)
 }
 
 #' Cluster functions helper: Kill a batch job via OS command
@@ -103,18 +103,18 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 #'   Default is \code{3}.
 #' @return Nothing.
 #' @export
-cfKillBatchJob = function(cmd, batch.job.id, max.tries=3L) {
+cfKillBatchJob = function(cmd, batch.job.id, max.tries = 3L) {
   assertString(cmd)
   assertString(batch.job.id)
   max.tries = asCount(max.tries)
   assertCount(max.tries)
 
   for (tmp in seq_len(max.tries)) {
-    res = runOSCommandLinux(cmd, batch.job.id, stop.on.exit.code=FALSE)
+    res = runOSCommandLinux(cmd, batch.job.id, stop.on.exit.code = FALSE)
     if (res$exit.code == 0L)
       return()
     Sys.sleep(1)
   }
   stopf("Really tried to kill job, but could not do it. batch job id is %s.\nMessage: %s",
-        batch.job.id, collapse(res$output, sep="\n"))
+        batch.job.id, collapse(res$output, sep = "\n"))
 }

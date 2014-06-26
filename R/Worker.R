@@ -30,7 +30,7 @@
 #   Extra classes, more specific than dQuote{Worker}.
 #   Will be added to the class attribute of the object.
 # @return [\code{\link{Worker}}].
-makeWorker = function(ssh, nodename, rhome, r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
+makeWorker = function(ssh, nodename, rhome, r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
   script, ncpus, max.jobs, max.load, nice, classes) {
   assertFlag(ssh)
   assertString(nodename)

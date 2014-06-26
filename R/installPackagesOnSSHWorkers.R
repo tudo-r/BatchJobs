@@ -26,12 +26,12 @@
 #' @export
 #' @seealso \code{\link{callFunctionOnSSHWorkers}}
 installPackagesOnSSHWorkers = function(nodenames, pkgs,
-  repos=getOption("repos"), consecutive = TRUE, show.output = consecutive, ...) {
+  repos = getOption("repos"), consecutive = TRUE, show.output = consecutive, ...) {
 
   assertCharacter(pkgs, "character", min.len = 1L, any.missing = FALSE)
   if (repos == "@CRAN@")
     repos = chooseCRANmirror()
-  callFunctionOnSSHWorkers(nodenames, fun=install.packages,
-    pkgs=pkgs, repos=repos, consecutive=consecutive, show.output=show.output, ...)
+  callFunctionOnSSHWorkers(nodenames, fun = install.packages,
+    pkgs = pkgs, repos = repos, consecutive = consecutive, show.output = show.output, ...)
   invisible(NULL)
 }

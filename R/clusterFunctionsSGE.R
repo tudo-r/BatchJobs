@@ -25,14 +25,14 @@ makeClusterFunctionsSGE = function(template.file) {
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     outfile = cfBrewTemplate(conf, template, rscript, "job")
     # returns: "Your job 240933 (\"sleep 60\") has been submitted"
-    res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
+    res = runOSCommandLinux("qsub", outfile, stop.on.exit.code = FALSE)
     # FIXME filled queues
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
     } else {
       # collapse output strings and first number in string is batch.job.id
-      batch.job.id = str_extract(collapse(res$output, sep=" "), "\\d+")
-      makeSubmitJobResult(status=0L, batch.job.id=batch.job.id)
+      batch.job.id = str_extract(collapse(res$output, sep = " "), "\\d+")
+      makeSubmitJobResult(status = 0L, batch.job.id = batch.job.id)
     }
   }
 
@@ -57,6 +57,6 @@ makeClusterFunctionsSGE = function(template.file) {
 
   getArrayEnvirName = function() "SGE_TASK_ID"
 
-  makeClusterFunctions(name="SGE", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName)
+  makeClusterFunctions(name = "SGE", submitJob = submitJob, killJob = killJob,
+                       listJobs = listJobs, getArrayEnvirName = getArrayEnvirName)
 }

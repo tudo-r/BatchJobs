@@ -21,11 +21,11 @@
 #' @seealso \code{\link{reduceResults}}
 #' @export
 #' @examples
-#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 #' f <- function(x) if (x==1) stop("oops") else x
 #' batchMap(reg, f, 1:2)
 #' testJob(reg, 2)
-testJob = function(reg, id, resources=list(), external=TRUE) {
+testJob = function(reg, id, resources = list(), external = TRUE) {
   checkRegistry(reg)
   #syncRegistry(reg)
   if (missing(id)) {
@@ -46,16 +46,16 @@ testJob = function(reg, id, resources=list(), external=TRUE) {
     r = reg
 
     # get a unique, unused tempdir. tmpdir() always stays the same per session
-    td = tempfile(pattern="")
+    td = tempfile(pattern = "")
     construct = sprintf("make%s", class(r)[1L])
 
     # copy reg
-    reg = do.call(construct, list(id=reg$id, seed=r$seed, file.dir=td, work.dir=r$work.dir,
-      sharding=FALSE, multiple.result.files=r$multiple.result.files,
-      packages=names(reg$packages), src.dirs=reg$src.dirs, src.files=reg$src.files))
+    reg = do.call(construct, list(id = reg$id, seed = r$seed, file.dir = td, work.dir = r$work.dir,
+      sharding = FALSE, multiple.result.files = r$multiple.result.files,
+      packages = names(reg$packages), src.dirs = reg$src.dirs, src.files = reg$src.files))
 
     # copy DB
-    file.copy(from=file.path(r$file.dir, "BatchJobs.db"), to=file.path(td, "BatchJobs.db"), overwrite=TRUE)
+    file.copy(from = file.path(r$file.dir, "BatchJobs.db"), to = file.path(td, "BatchJobs.db"), overwrite = TRUE)
 
     # copy conf
     saveConf(reg)
@@ -64,17 +64,17 @@ testJob = function(reg, id, resources=list(), external=TRUE) {
     copyRequiredJobFiles(r, reg, id)
 
     # copy exports
-    file.copy(from=getExportDir(r$file.dir), to=td, recursive=TRUE)
+    file.copy(from = getExportDir(r$file.dir), to = td, recursive = TRUE)
 
     # write r script
     resources.timestamp = saveResources(reg, resources)
-    writeRscripts(reg, getClusterFunctions(getBatchJobsConf()), id, chunks.as.arrayjobs=FALSE,
-      resources.timestamp=resources.timestamp, disable.mail=TRUE, delays=0)
+    writeRscripts(reg, getClusterFunctions(getBatchJobsConf()), id, chunks.as.arrayjobs = FALSE,
+      resources.timestamp = resources.timestamp, disable.mail = TRUE, delays = 0)
 
     # execute
     now = Sys.time()
     message("### Output of new R process starts here ###")
-    system3(file.path(R.home("bin"), "Rscript"), getRScriptFilePath(reg, id), wait=TRUE)
+    system3(file.path(R.home("bin"), "Rscript"), getRScriptFilePath(reg, id), wait = TRUE)
     message("### Output of new R process ends here ###")
     dt = difftime(Sys.time(), now)
     messagef("### Approximate running time: %.2f %s", as.double(dt), units(dt))
@@ -108,6 +108,6 @@ copyRequiredJobFiles = function(reg1, reg2, id) {
 
 #' @export
 copyRequiredJobFiles.Registry = function(reg1, reg2, id) {
-  job = getJob(reg1, id, check.id=FALSE)
+  job = getJob(reg1, id, check.id = FALSE)
   file.copy(getFunFilePath(reg1, job$fun.id), getFunFilePath(reg2, job$fun.id))
 }

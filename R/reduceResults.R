@@ -51,7 +51,7 @@
 #' @export
 #' @examples
 #' # generate results:
-#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:5)
 #' submitJobs(reg)
@@ -59,28 +59,28 @@
 #' # reduce results to a vector
 #' reduceResultsVector(reg)
 #' # reduce results to sum
-#' reduceResults(reg, fun=function(aggr, job, res) aggr+res)
+#' reduceResults(reg, fun = function(aggr, job, res) aggr+res)
 #'
-#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
-#' f <- function(x) list(a=x, b=as.character(2*x), c=x^2)
+#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
+#' f <- function(x) list(a = x, b = as.character(2*x), c = x^2)
 #' batchMap(reg, f, 1:5)
 #' submitJobs(reg)
 #'
 #' # reduce results to a vector
-#' reduceResultsVector(reg, fun=function(job, res) res$a)
-#' reduceResultsVector(reg, fun=function(job, res) res$b)
+#' reduceResultsVector(reg, fun = function(job, res) res$a)
+#' reduceResultsVector(reg, fun = function(job, res) res$b)
 #' # reduce results to a list
 #' reduceResultsList(reg)
 #' # reduce results to a matrix
-#' reduceResultsMatrix(reg, fun=function(job, res) res[c(1,3)])
-#' reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=TRUE)
-#' reduceResultsMatrix(reg, fun=function(job, res) c(foo=res$a, bar=res$c), rows=FALSE)
+#' reduceResultsMatrix(reg, fun = function(job, res) res[c(1,3)])
+#' reduceResultsMatrix(reg, fun = function(job, res) c(foo = res$a, bar = res$c), rows = TRUE)
+#' reduceResultsMatrix(reg, fun = function(job, res) c(foo = res$a, bar = res$c), rows = FALSE)
 #' # reduce results to a data.frame
 #' print(str(reduceResultsDataFrame(reg)))
 #' # reduce results to a sum
-#' reduceResults(reg, fun=function(aggr, job, res) aggr+res$a, init=0)
+#' reduceResults(reg, fun = function(aggr, job, res) aggr+res$a, init = 0)
 # FIXME we need more documentation for reduceResultsReturnValue ...
-reduceResults = function(reg, ids, part=NA_character_, fun, init, impute.val, ...) {
+reduceResults = function(reg, ids, part = NA_character_, fun, init, impute.val, ...) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
@@ -105,7 +105,7 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, impute.val, ..
     return(init)
   }
 
-  bar = makeProgressBar(max=n, label="reduceResults")
+  bar = makeProgressBar(max = n, label = "reduceResults")
   bar$set()
 
   tryCatch({
@@ -127,13 +127,13 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, impute.val, ..
                  ...)
       bar$inc(1L)
     }
-  }, error=bar$error)
+  }, error = bar$error)
   return(aggr)
 }
 
 #' @export
 #' @rdname reduceResults
-reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names="ids", impute.val) {
+reduceResultsList = function(reg, ids, part = NA_character_, fun, ..., use.names = "ids", impute.val) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
@@ -166,7 +166,7 @@ reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names="
     it = seq_len(n)
   }
 
-  bar = makeProgressBar(max=n, label="reduceResults")
+  bar = makeProgressBar(max = n, label = "reduceResults")
   bar$set()
   tryCatch({
     for (i in it) {
@@ -176,7 +176,7 @@ reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names="
         res[[i]] = tmp
       bar$inc(1L)
     }
-  }, error=bar$error)
+  }, error = bar$error)
 
   names(res) = switch(use.names,
     "none" = NULL,
@@ -188,16 +188,16 @@ reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names="
 
 #' @export
 #' @rdname reduceResults
-reduceResultsVector = function(reg, ids, part=NA_character_, fun, ..., use.names="ids", impute.val) {
-  unlist(reduceResultsList(reg, ids, part, fun, ..., use.names=use.names, impute.val=impute.val))
+reduceResultsVector = function(reg, ids, part = NA_character_, fun, ..., use.names = "ids", impute.val) {
+  unlist(reduceResultsList(reg, ids, part, fun, ..., use.names = use.names, impute.val = impute.val))
 }
 
 #' @export
 #' @rdname reduceResults
-reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE, use.names="ids", impute.val) {
+reduceResultsMatrix = function(reg, ids, part = NA_character_, fun, ..., rows = TRUE, use.names = "ids", impute.val) {
   assertFlag(rows)
   use.names = convertUseNames(use.names)
-  res = reduceResultsList(reg, ids, part, fun, ..., use.names=use.names, impute.val=impute.val)
+  res = reduceResultsList(reg, ids, part, fun, ..., use.names = use.names, impute.val = impute.val)
 
   if (length(res) == 0L)
     return(matrix(0, nrow = 0L, ncol = 0L))
@@ -214,13 +214,13 @@ reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE
 
 #' @export
 #' @rdname reduceResults
-reduceResultsDataFrame = function(reg, ids, part=NA_character_, fun, ..., use.names="ids", impute.val,
-  strings.as.factors=default.stringsAsFactors()) {
+reduceResultsDataFrame = function(reg, ids, part = NA_character_, fun, ..., use.names = "ids", impute.val,
+  strings.as.factors = default.stringsAsFactors()) {
   assertFlag(strings.as.factors)
 
-  res = reduceResultsList(reg, ids, part, fun, ..., use.names=use.names, impute.val=impute.val)
+  res = reduceResultsList(reg, ids, part, fun, ..., use.names = use.names, impute.val = impute.val)
   if (!length(res))
     return(data.frame())
 
-  list2df(res, force.names=TRUE, strings.as.factors = strings.as.factors)
+  list2df(res, force.names = TRUE, strings.as.factors = strings.as.factors)
 }

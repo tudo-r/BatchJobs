@@ -19,8 +19,8 @@
 #'   Random seed for job.
 #' @aliases Job
 #' @export
-makeJob = function(id=NA_integer_, fun, fun.id=digest(fun), pars, name, seed) {
-  setClasses(list(id=id, fun=fun, fun.id=fun.id, pars=pars, name=name, seed=seed), "Job")
+makeJob = function(id = NA_integer_, fun, fun.id = digest(fun), pars, name, seed) {
+  setClasses(list(id = id, fun = fun, fun.id = fun.id, pars = pars, name = name, seed = seed), "Job")
 }
 
 #' Get number of jobs in registry.

@@ -21,7 +21,7 @@
 #' @return [\code{list}]. Results of jobs as list, possibly named by ids.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names="ids", missing.ok=FALSE) {
+loadResults = function(reg, ids, part = NA_character_, simplify = FALSE, use.names = "ids", missing.ok = FALSE) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
@@ -45,10 +45,10 @@ loadResults = function(reg, ids, part=NA_character_, simplify=FALSE, use.names="
   return(res)
 }
 
-getResults = function(reg, ids, part=NA_character_, missing.ok=FALSE) {
+getResults = function(reg, ids, part = NA_character_, missing.ok = FALSE) {
   if (reg$multiple.result.files) {
     read.files = function(id, dir, pattern) {
-      fns = list.files(dir, pattern, full.names=TRUE)
+      fns = list.files(dir, pattern, full.names = TRUE)
       found.parts = sub(".+-(.+)\\.RData$", "\\1", basename(fns))
       if(length(found.parts) == 0L) {
         if (missing.ok)
@@ -66,7 +66,7 @@ getResults = function(reg, ids, part=NA_character_, missing.ok=FALSE) {
       patterns = sprintf("^%i-result-(%s)\\.RData$", ids, collapse(part, "|"))
     }
 
-    return(mapply(read.files, id = ids, dir=dirs, pattern=patterns, SIMPLIFY=FALSE, USE.NAMES=FALSE))
+    return(mapply(read.files, id = ids, dir = dirs, pattern = patterns, SIMPLIFY = FALSE, USE.NAMES = FALSE))
   }
 
   fns = getResultFilePath(reg, ids, part)

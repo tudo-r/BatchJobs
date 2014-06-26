@@ -24,9 +24,9 @@ showClusterStatus = function(reg) {
   if (cf$name %nin% c("Multicore", "SSH"))
     stop("showWorkerStatus can only be used in multicore or SSH mode!")
   workers = environment(cf$submitJob)$workers
-  data = lapply(workers, getWorkerStatus, file.dir=file.dir)
+  data = lapply(workers, getWorkerStatus, file.dir = file.dir)
   data = do.call(rbind, lapply(data, as.data.frame))
-  data = cbind(ncpus=extractSubList(workers, "ncpus"), data)
+  data = cbind(ncpus = extractSubList(workers, "ncpus"), data)
   print(data)
   invisible(data)
 }

@@ -24,16 +24,16 @@ makeClusterFunctionsSLURM = function(template.file) {
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     outfile = cfBrewTemplate(conf, template, rscript, "sb")
-    res = runOSCommandLinux("sbatch", outfile, stop.on.exit.code=FALSE)
+    res = runOSCommandLinux("sbatch", outfile, stop.on.exit.code = FALSE)
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
-    output = collapse(res$output, sep="\n")
-    if (grepl(max.jobs.msg, output, fixed=TRUE)) {
-      makeSubmitJobResult(status=1L, batch.job.id=NA_character_, msg=max.jobs.msg)
+    output = collapse(res$output, sep = "\n")
+    if (grepl(max.jobs.msg, output, fixed = TRUE)) {
+      makeSubmitJobResult(status = 1L, batch.job.id = NA_character_, msg = max.jobs.msg)
     } else if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("sbatch", res$exit.code, res$output)
     } else {
-      makeSubmitJobResult(status=0L, batch.job.id=str_trim(strsplit(output, split=" ")[[1L]][4L]))
+      makeSubmitJobResult(status = 0L, batch.job.id = str_trim(strsplit(output, split = " ")[[1L]][4L]))
     }
   }
 
@@ -48,6 +48,6 @@ makeClusterFunctionsSLURM = function(template.file) {
 
   getArrayEnvirName = function() "SLURM_ARRAY_TASK_ID"
 
-  makeClusterFunctions(name="SLURM", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName)
+  makeClusterFunctions(name = "SLURM", submitJob = submitJob, killJob = killJob,
+                       listJobs = listJobs, getArrayEnvirName = getArrayEnvirName)
 }

@@ -9,11 +9,11 @@
 #' @export
 loadExports = function(reg) {
   checkRegistry(reg)
-  f = fail(getExportDir(reg$file.dir), extension="RData", simplify=FALSE)
+  f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE)
   keys = f$ls()
   if (length(keys)) {
     messagef("Loading %i RData files: %s", length(keys), collapse(keys))
-    f$assign(keys, envir=.GlobalEnv)
+    f$assign(keys, envir = .GlobalEnv)
   }
   invisible(sprintf("%s.RData", keys))
 }

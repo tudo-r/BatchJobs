@@ -25,7 +25,7 @@ syncRegistry = function(reg) {
 }
 
 readSQLFile = function(con) {
-  x = try(readLines(con), silent=TRUE)
+  x = try(readLines(con), silent = TRUE)
   n = length(x)
   if (is.error(x) || n == 0L || x[n] != "--EOF--")
     return(FALSE)

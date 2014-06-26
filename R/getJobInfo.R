@@ -69,27 +69,27 @@ getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
 #'   Default is \dQuote{seconds}.
 #' @return [\code{data.frame}].
 #' @export
-getJobInfo = function(reg, ids, pars=FALSE, prefix.pars=FALSE, select, unit="seconds") {
+getJobInfo = function(reg, ids, pars = FALSE, prefix.pars = FALSE, select, unit = "seconds") {
   UseMethod("getJobInfo")
 }
 
 #' @method getJobInfo Registry
 #' @export
-getJobInfo.Registry = function(reg, ids, pars=FALSE, prefix.pars=FALSE, select, unit="seconds") {
+getJobInfo.Registry = function(reg, ids, pars = FALSE, prefix.pars = FALSE, select, unit = "seconds") {
   syncRegistry(reg)
   assertFlag(pars)
-  columns = c(id="job_id")
+  columns = c(id = "job_id")
   if (pars)
-    columns = c(columns, c(pars="pars"))
+    columns = c(columns, c(pars = "pars"))
 
   tab = getJobInfoInternal(reg, ids, pars, select, unit, columns)
 
   # unserialize parameters
   if (pars && !is.null(tab$pars)) {
-    pars = list2df(lapply(tab$pars, function(x) unserialize(charToRaw(x))), force.names=TRUE)
+    pars = list2df(lapply(tab$pars, function(x) unserialize(charToRaw(x))), force.names = TRUE)
     if (prefix.pars)
       names(pars) = sprintf("job.par.%s", names(pars))
-    tab = cbind(subset(tab, select=-pars), pars)
+    tab = cbind(subset(tab, select = -pars), pars)
   }
   return(tab)
 }

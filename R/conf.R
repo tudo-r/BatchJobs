@@ -16,7 +16,7 @@ sourceConfFile = function(conffile) {
   if (getOption("BatchJobs.verbose", default = TRUE))
     packageStartupMessage(sprintf("Sourcing configuration file: '%s'", conffile))
   conf = new.env()
-  x = try(sys.source(conffile, envir=conf))
+  x = try(sys.source(conffile, envir = conf))
   if (is.error(x))
     stopf("There was an error in sourcing your configuration file '%s': %s!", conffile, as.character(x))
   checkConf(conf)
@@ -29,7 +29,7 @@ sourceConfFiles = function(conffiles) {
   conf = new.env()
   for (cf in conffiles) {
     conf2 = sourceConfFile(cf)
-    lapply(ls(conf2), function(x) assign(x, conf2[[x]], envir=conf))
+    lapply(ls(conf2), function(x) assign(x, conf2[[x]], envir = conf))
   }
   return(conf)
 }
@@ -37,7 +37,7 @@ sourceConfFiles = function(conffiles) {
 # assigns a conf to namespace
 assignConf = function(conf) {
   conf.in.ns = getBatchJobsConf()
-  lapply(ls(conf), function(x) assign(x, conf[[x]], envir=conf.in.ns))
+  lapply(ls(conf), function(x) assign(x, conf[[x]], envir = conf.in.ns))
 }
 
 # reads package conf, userhome conf, working dir conf
@@ -80,23 +80,23 @@ loadConf = function(reg) {
   fn = getConfFilePath(reg)
   info("Loading conf: ", fn)
   ee = new.env()
-  load(fn, envir=ee)
+  load(fn, envir = ee)
   ns = ls(ee$conf)
   # assign all stuff to conf in namespace
   conf = getBatchJobsConf()
-  lapply(ns, function(x) assign(x, ee$conf[[x]], envir=conf))
+  lapply(ns, function(x) assign(x, ee$conf[[x]], envir = conf))
   invisible(NULL)
 }
 
 getBatchJobsConf = function() {
-  get(".BatchJobs.conf", envir=getNamespace("BatchJobs"))
+  get(".BatchJobs.conf", envir = getNamespace("BatchJobs"))
 }
 
 saveConf = function(reg) {
   fn = getConfFilePath(reg)
   info("Saving conf: %s", fn)
   conf = getBatchJobsConf()
-  save(file=fn, conf)
+  save(file = fn, conf)
 }
 
 getConfNames = function() {
@@ -111,7 +111,7 @@ checkConf = function(conf) {
   ns2 = getConfNames()
   if (any(ns %nin% ns2))
     stopf("You are only allowed to define the following R variables in your config:\n%s\nBut you also had:\n%s",
-          collapse(ns2, sep=", "), collapse(setdiff(ns, ns2), sep=", "))
+          collapse(ns2, sep = ", "), collapse(setdiff(ns, ns2), sep = ", "))
 }
 
 checkConfElements = function(cluster.functions, mail.to, mail.from,

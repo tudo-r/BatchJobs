@@ -13,7 +13,7 @@
 #' @return [any]. Result of job.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-loadResult = function(reg, id, part=NA_character_, missing.ok=FALSE) {
+loadResult = function(reg, id, part = NA_character_, missing.ok = FALSE) {
   checkRegistry(reg)
   syncRegistry(reg)
   id = checkId(reg, id)
@@ -23,6 +23,6 @@ loadResult = function(reg, id, part=NA_character_, missing.ok=FALSE) {
   getResult(reg, id, part, missing.ok)
 }
 
-getResult = function(reg, id, part=NA_character_, missing.ok=FALSE) {
+getResult = function(reg, id, part = NA_character_, missing.ok = FALSE) {
   getResults(reg, id, part, missing.ok)[[1L]]
 }

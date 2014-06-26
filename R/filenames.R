@@ -1,4 +1,4 @@
-checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, msg=FALSE) {
+checkDir = function(path, create = FALSE, check.empty = FALSE, check.posix = FALSE, msg = FALSE) {
   if (create) {
     if (file.exists(path)) {
       if (!isDirectory(path))
@@ -17,7 +17,7 @@ checkDir = function(path, create=FALSE, check.empty=FALSE, check.posix=FALSE, ms
   if (!is.accessible(path))
     stopf("Directory '%s' is not readable/writable!", path)
 
-  if (check.empty && any(list.files(path, all.files=TRUE) %nin% c(".", "..")))
+  if (check.empty && any(list.files(path, all.files = TRUE) %nin% c(".", "..")))
     stopf("Directory '%s' does not seem to be empty!", path)
 
   if (check.posix && getOption("BatchJobs.check.posix", TRUE)) {
@@ -33,7 +33,7 @@ checkDirs = function(paths, ...) {
 
 createShardedDirs = function(reg, ids) {
   if (reg$sharding) {
-    lapply(getJobDirs(reg, ids, unique=TRUE), checkDir, create=TRUE)
+    lapply(getJobDirs(reg, ids, unique = TRUE), checkDir, create = TRUE)
   }
 }
 
@@ -49,14 +49,14 @@ is.accessible = function(path) {
     td2 = file.path(td1, "test_write_access_subdir")
 
     # on exit, try to clean up the mess we might have caused
-    on.exit(try(unlink(c(td1, td2, tf1, tf2), recursive=TRUE)))
+    on.exit(try(unlink(c(td1, td2, tf1, tf2), recursive = TRUE)))
 
     # perform the checks
     ok = try({
       file.create(tf1) && identical(readLines(tf1), character(0L)) && file.remove(tf1) &&
       dir.create(td1) && dir.create(td2) && length(list.files(td1)) == 1L &&
       file.create(tf2) && identical(readLines(tf2), character(0L)) && file.remove(tf2) &&
-      unlink(td1, recursive=TRUE) == 0L
+      unlink(td1, recursive = TRUE) == 0L
     })
 
     if (is.error(ok) || !isTRUE(ok))
@@ -67,7 +67,7 @@ is.accessible = function(path) {
     return(TRUE)
   }
 
-  return(file.access(path, mode=c(2L, 4L)) == 0L)
+  return(file.access(path, mode = c(2L, 4L)) == 0L)
 }
 
 isPathFromRoot = function(path) {
@@ -78,7 +78,7 @@ makePathAbsolute = function(path) {
   if (isPathFromRoot(path))
     return(path)
   # FIXME: test this on windows
-  normalizePath(path, mustWork=FALSE, winslash = "/")
+  normalizePath(path, mustWork = FALSE, winslash = "/")
 }
 
 makePathsAbsolute = function(paths) {
@@ -86,7 +86,7 @@ makePathsAbsolute = function(paths) {
 }
 
 
-getJobDirs = function(reg, ids, unique=FALSE) {
+getJobDirs = function(reg, ids, unique = FALSE) {
   if (reg$sharding) {
     shards = sprintf("%02i", ids %% 100L)
     if(unique)
@@ -122,7 +122,7 @@ getRScriptFilePath = function(reg, id)
 getLogFilePath = function(reg, id)
   getFilePaths(reg, id, NULL, "out")
 
-getResultFilePath = function(reg, id, part=NA_character_) {
+getResultFilePath = function(reg, id, part = NA_character_) {
   s = if (is.na(part)) "result" else paste0("result-", part)
   getFilePaths(reg, id, s, "RData")
 }

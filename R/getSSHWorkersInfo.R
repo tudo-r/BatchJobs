@@ -21,8 +21,8 @@ getSSHWorkersInfo = function(nodenames) {
       is.lib.path.writeable = is.accessible(head(lib.paths, 1L))
     )
   }
-  res = callFunctionOnSSHWorkers(nodenames, fun=fun,
-    consecutive=FALSE, show.output=FALSE, use.names=TRUE, simplify=FALSE)
+  res = callFunctionOnSSHWorkers(nodenames, fun = fun,
+    consecutive = FALSE, show.output = FALSE, use.names = TRUE, simplify = FALSE)
   for (nn in nodenames) {
     r = res[[nn]]
     messagef("Node: %s", nn)

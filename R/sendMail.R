@@ -1,4 +1,4 @@
-sendMail = function(reg, ids, result.str, extra.msg="",
+sendMail = function(reg, ids, result.str, extra.msg = "",
   disable.mail, condition, first, last, conf) {
 
   if (disable.mail)
@@ -7,7 +7,7 @@ sendMail = function(reg, ids, result.str, extra.msg="",
   ischunk = (length(ids) > 1L)
   first.id = if(ischunk) ids[[1L]] else ids
   # should we mail
-  mail.conds = list(start=conf$mail.start, done=conf$mail.done, error=conf$mail.error)
+  mail.conds = list(start = conf$mail.start, done = conf$mail.done, error = conf$mail.error)
   mail.cond = mail.conds[[condition]]
   if (mail.cond == "all" ||
     (mail.cond %in% c("first", "first+last") && first.id == first) ||
@@ -30,11 +30,11 @@ sendMail = function(reg, ids, result.str, extra.msg="",
         msg = paste0(msg, myformat("Message", extra.msg))
       msg = paste0(msg, myformat("Results", result.str))
       if(first.id == last)
-        msg = paste0(msg, myformat("Status", capture.output(showStatus(reg, run.and.exp=FALSE))))
+        msg = paste0(msg, myformat("Status", capture.output(showStatus(reg, run.and.exp = FALSE))))
     }
 
     # if a mail problem occurs, we only warn but do not terminate
-    ok = try (sendmail(conf$mail.from, conf$mail.to, subj, msg, control=conf$mail.control))
+    ok = try (sendmail(conf$mail.from, conf$mail.to, subj, msg, control = conf$mail.control))
     if (is.error(ok)) {
       warningf("Could not send mail to signal condition '%s'!\nFrom: %s\nTo: %s\nControl: %s\nError message: %s",
         condition, conf$mail.from, conf$mail.to, convertToShortString(conf$mail.control), as.character(ok))

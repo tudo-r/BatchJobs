@@ -24,16 +24,16 @@ makeClusterFunctionsTorque = function(template.file) {
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     outfile = cfBrewTemplate(conf, template, rscript, "pbs")
-    res = runOSCommandLinux("qsub", outfile, stop.on.exit.code=FALSE)
+    res = runOSCommandLinux("qsub", outfile, stop.on.exit.code = FALSE)
 
     max.jobs.msg = "Maximum number of jobs already in queue"
-    output = collapse(res$output, sep="\n")
-    if (grepl(max.jobs.msg, output, fixed=TRUE)) {
-      makeSubmitJobResult(status=1L, batch.job.id=NA_character_, msg=max.jobs.msg)
+    output = collapse(res$output, sep = "\n")
+    if (grepl(max.jobs.msg, output, fixed = TRUE)) {
+      makeSubmitJobResult(status = 1L, batch.job.id = NA_character_, msg = max.jobs.msg)
     } else if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
     } else {
-      makeSubmitJobResult(status=0L, batch.job.id=str_trim(output))
+      makeSubmitJobResult(status = 0L, batch.job.id = str_trim(output))
     }
   }
 
@@ -48,6 +48,6 @@ makeClusterFunctionsTorque = function(template.file) {
 
   getArrayEnvirName = function() "PBS_ARRAYID"
 
-  makeClusterFunctions(name="Torque", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName = getArrayEnvirName)
+  makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob,
+                       listJobs = listJobs, getArrayEnvirName = getArrayEnvirName)
 }

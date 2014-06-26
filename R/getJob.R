@@ -8,10 +8,10 @@
 #'   Default is \code{TRUE}.
 #' @return [\code{\link{Job}}].
 #' @export
-getJob = function(reg, id, check.id=TRUE) {
+getJob = function(reg, id, check.id = TRUE) {
   if (check.id)
     id = checkId(reg, id)
-  getJobs(reg, id, check.ids=FALSE)[[1L]]
+  getJobs(reg, id, check.ids = FALSE)[[1L]]
 }
 
 #' Get jobs from registry by id.
@@ -25,7 +25,7 @@ getJob = function(reg, id, check.id=TRUE) {
 #'   Default is \code{TRUE}.
 #' @return [list of \code{\link{Job}}].
 #' @export
-getJobs = function(reg, ids, check.ids=TRUE) {
+getJobs = function(reg, ids, check.ids = TRUE) {
   checkRegistry(reg)
   # syncRegistry(reg) NOT!
   assertFlag(check.ids)
@@ -34,7 +34,7 @@ getJobs = function(reg, ids, check.ids=TRUE) {
 
 #' @method getJobs Registry
 #' @export
-getJobs.Registry = function(reg, ids, check.ids=TRUE) {
+getJobs.Registry = function(reg, ids, check.ids = TRUE) {
   if (! missing(ids) && check.ids) {
     ids = checkIds(reg, ids)
   }

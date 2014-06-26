@@ -28,7 +28,7 @@ makeSubmitJobResult = function(status, batch.job.id, msg,  ...) {
     else
       "ERROR"
   }
-  setClasses(list(status=status, batch.job.id=batch.job.id, msg=msg), "SubmitJobResult")
+  setClasses(list(status = status, batch.job.id = batch.job.id, msg = msg), "SubmitJobResult")
 }
 
 #' @export
@@ -98,7 +98,7 @@ makeClusterFunctions = function(name, submitJob, killJob, listJobs, getArrayEnvi
     assertFunction(listJobs, c("conf", "reg"))
   if (!is.null(getArrayEnvirName))
     assertFunction(getArrayEnvirName, character(0L))
-  setClasses(list(name=name, submitJob=submitJob, killJob=killJob, listJobs=listJobs, getArrayEnvirName = getArrayEnvirName),
+  setClasses(list(name = name, submitJob = submitJob, killJob = killJob, listJobs = listJobs, getArrayEnvirName = getArrayEnvirName),
              c("ClusterFunctions", class))
 }
 

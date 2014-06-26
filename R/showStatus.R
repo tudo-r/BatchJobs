@@ -19,14 +19,14 @@
 #'   Returned invisibly.
 #' @export
 #' @examples
-#' reg <- makeRegistry(id="BatchJobsExample", file.dir=tempfile(), seed=123)
+#' reg <- makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 #' f <- function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
 #'
 #' # should show 10 submitted jobs, which are all done.
 #' showStatus(reg)
-showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
+showStatus = function(reg, ids, run.and.exp = TRUE, errors = 10L) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (!missing(ids))
@@ -34,7 +34,7 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
   errors = asCount(errors)
 
   run.and.exp = run.and.exp && !is.null(getListJobs())
-  stats = dbGetStats(reg, ids, running=run.and.exp, expired=run.and.exp, times=TRUE)
+  stats = dbGetStats(reg, ids, running = run.and.exp, expired = run.and.exp, times = TRUE)
 
   procent = function(x, n) {
     if(is.na(x))
@@ -59,7 +59,7 @@ showStatus = function(reg, ids, run.and.exp=TRUE, errors = 10L) {
 
   m = min(errors, stats$error)
   if(m > 0L) {
-    msgs = dbGetErrorMsgs(reg, ids, filter=TRUE, limit=m)
+    msgs = dbGetErrorMsgs(reg, ids, filter = TRUE, limit = m)
     catf("\nShowing first %i errors:", m)
     cat(sprintf("Error in %i: %s", msgs$job_id, msgs$error), sep = "\n")
   }

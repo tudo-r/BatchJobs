@@ -2,7 +2,7 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
   saveOne = function(result, name) {
     fn = getResultFilePath(reg, job$id, name)
     message("Writing result file: ", fn)
-    save2(file=fn, result = result)
+    save2(file = fn, result = result)
   }
 
   # Get the conf
@@ -40,7 +40,7 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
   cache = makeFileCache(use.cache = n > 1L)
 
   # notify status
-  sendMail(reg, ids, results, "", disable.mail, condition="start", first, last)
+  sendMail(reg, ids, results, "", disable.mail, condition = "start", first, last)
 
   # create buffer of started messages
   msg.buf = buffer(init = lapply(ids, dbMakeMessageStarted, reg = reg),
@@ -62,11 +62,11 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
 
     message("Setting seed: ", job$seed)
     seed = seeder(reg, job$seed)
-    result = try(applyJobFunction(reg, job, cache), silent=TRUE)
+    result = try(applyJobFunction(reg, job, cache), silent = TRUE)
     seed$reset()
 
     catf("Result:")
-    print(str(result, max.level=1L, list.len=5L))
+    print(str(result, max.level = 1L, list.len = 5L))
 
     error[i] = is.error(result)
     if (error[i]) {
@@ -82,14 +82,14 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
     }
 
     if (error[i]) {
-      msg.buf$push(dbMakeMessageError(reg, job$id, err.msg=results[i]))
+      msg.buf$push(dbMakeMessageError(reg, job$id, err.msg = results[i]))
       message("Error occurred: ", results[i])
     } else {
       results[i] = paste0(capture.output(str(result)), collapse = "\n")
       msg.buf$push(dbMakeMessageDone(reg, job$id))
 
       if (multiple.result.files) {
-        Map(saveOne, result=result, name=names(result))
+        Map(saveOne, result = result, name = names(result))
       } else {
         saveOne(result, NA_character_)
       }
@@ -98,7 +98,7 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
 
   # try to flush the remaining msgs at the end
   for (i in seq_len(10L)) {
-    if (dbSendMessages(reg, msg.buf$get(), staged=staged)) {
+    if (dbSendMessages(reg, msg.buf$get(), staged = staged)) {
       msg.buf$clear()
       break
     }

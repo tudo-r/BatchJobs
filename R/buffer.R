@@ -54,5 +54,5 @@ buffer = function(type = "list", capacity = 0L, value = TRUE, init = NULL, ...) 
     n == capacity
   }
 
-  list(get=get, push=push, pop=pop, top=top, clear=clear, pos=pos, empty=empty, full=full)
+  list(get = get, push = push, pop = pop, top = top, clear = clear, pos = pos, empty = empty, full = full)
 }

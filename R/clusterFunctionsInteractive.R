@@ -15,31 +15,31 @@
 #'   Default is \code{TRUE}.
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
-makeClusterFunctionsInteractive = function(write.logs=TRUE) {
+makeClusterFunctionsInteractive = function(write.logs = TRUE) {
   assertFlag(write.logs)
 
   submitJob = if(write.logs) {
     function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
       # open log file for writing
-      fn = file(log.file, open="wt")
-      sink(fn, type="output")
-      sink(fn, type="message")
+      fn = file(log.file, open = "wt")
+      sink(fn, type = "output")
+      sink(fn, type = "message")
       on.exit({
-        sink(NULL, type="output")
-        sink(NULL, type="message")
+        sink(NULL, type = "output")
+        sink(NULL, type = "message")
         close(fn)
       })
 
       # sink both output and message streams
-      try(sys.source(rscript, envir=new.env(), keep.source=FALSE))
+      try(sys.source(rscript, envir = new.env(), keep.source = FALSE))
 
       # return job result (always successful)
-      makeSubmitJobResult(status=0L, batch.job.id="cfInteractive", msg="")
+      makeSubmitJobResult(status = 0L, batch.job.id = "cfInteractive", msg = "")
     }
   } else {
     function(conf, reg, job.name, rscript, log.file, job.dir, resources) {
-      suppressAll(try(sys.source(rscript, envir=new.env(), keep.source=FALSE)))
-      makeSubmitJobResult(status=0L, batch.job.id="cfInteractive", msg="")
+      suppressAll(try(sys.source(rscript, envir = new.env(), keep.source = FALSE)))
+      makeSubmitJobResult(status = 0L, batch.job.id = "cfInteractive", msg = "")
     }
   }
 
@@ -49,6 +49,6 @@ makeClusterFunctionsInteractive = function(write.logs=TRUE) {
 
   getArrayEnvirName = function() NA_character_
 
-  makeClusterFunctions(name="Interactive", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName=getArrayEnvirName)
+  makeClusterFunctions(name = "Interactive", submitJob = submitJob, killJob = killJob,
+                       listJobs = listJobs, getArrayEnvirName = getArrayEnvirName)
 }

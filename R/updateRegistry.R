@@ -34,27 +34,27 @@ updateRegistry.Registry = function(reg) {
   if (version.reg < package_version("1.0.606")) {
     # create new resources dir
     resources.dir = getResourcesDir(reg$file.dir)
-    checkDir(resources.dir, create=TRUE, check.empty=TRUE)
+    checkDir(resources.dir, create = TRUE, check.empty = TRUE)
     query = sprintf("ALTER TABLE %s_job_status ADD COLUMN resources_timestamp INTEGER", reg$id)
-    dbDoQuery(reg, query, flags="rwc")
+    dbDoQuery(reg, query, flags = "rwc")
 
     # save dummy resources
-    query = sprintf("UPDATE %s_job_status SET resources_timestamp=0 WHERE submitted IS NOT NULL", reg$id)
-    dbDoQuery(reg, query, flags="rwc")
-    saveResources(reg, resources=list(), timestamp=0L)
+    query = sprintf("UPDATE %s_job_status SET resources_timestamp = 0 WHERE submitted IS NOT NULL", reg$id)
+    dbDoQuery(reg, query, flags = "rwc")
+    saveResources(reg, resources = list(), timestamp = 0L)
   }
 
   if (version.reg < package_version("1.0.723")) {
-    checkDir(getPendingDir(reg$file.dir), create=TRUE)
+    checkDir(getPendingDir(reg$file.dir), create = TRUE)
   }
 
   if (version.reg < package_version("1.0.1071")) {
-    checkDir(getExportDir(reg$file.dir), create=TRUE)
+    checkDir(getExportDir(reg$file.dir), create = TRUE)
   }
 
   if (version.reg < package_version("1.1")) {
     query = sprintf("ALTER TABLE %s_job_def ADD COLUMN jobname TEXT", reg$id)
-    dbDoQuery(reg, query, flags="rwc")
+    dbDoQuery(reg, query, flags = "rwc")
     reg$src.dirs = character(0L)
   }
 

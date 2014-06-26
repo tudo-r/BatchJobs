@@ -39,7 +39,7 @@ checkPart = function(reg, part) {
 }
 
 
-getListJobs = function(msg=NULL) {
+getListJobs = function(msg = NULL) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)
   fun = cf$listJobs
@@ -48,7 +48,7 @@ getListJobs = function(msg=NULL) {
   return(fun)
 }
 
-getKillJob = function(msg=NULL) {
+getKillJob = function(msg = NULL) {
   conf = getBatchJobsConf()
   cf = getClusterFunctions(conf)
   fun = cf$killJob
@@ -57,7 +57,7 @@ getKillJob = function(msg=NULL) {
   return(fun)
 }
 
-getBatchIds = function(reg, msg=NULL) {
+getBatchIds = function(reg, msg = NULL) {
   fun = getListJobs(msg)
   fun(getBatchJobsConf(), reg)
 }
@@ -71,12 +71,12 @@ seeder = function(reg, seed) {
      runif(1L)
   prev.seed = get(".Random.seed", envir = .GlobalEnv)
   prev.kind = RNGkind()
-  set.seed(seed, kind = reg$RNGkind[1L], normal.kind=reg$RNGkind[2L])
+  set.seed(seed, kind = reg$RNGkind[1L], normal.kind = reg$RNGkind[2L])
 
   return(list(
     reset = function() {
       RNGkind(kind = prev.kind[1L], normal.kind = prev.kind[2L])
-      assign(".Random.seed", prev.seed, envir=.GlobalEnv)
+      assign(".Random.seed", prev.seed, envir = .GlobalEnv)
     }))
 }
 
@@ -96,12 +96,12 @@ addIntModulo = function(x, y, mod = .Machine$integer.max) {
 }
 
 isOnSlave = function() {
-  getOption("BatchJobs.on.slave", default=FALSE)
+  getOption("BatchJobs.on.slave", default = FALSE)
 }
 
-setOnSlave = function(x, resources.path=as.character(NA)) {
-  options(BatchJobs.on.slave=x)
-  options(BatchJobs.resources.path=resources.path)
+setOnSlave = function(x, resources.path = as.character(NA)) {
+  options(BatchJobs.on.slave = x)
+  options(BatchJobs.resources.path = resources.path)
 }
 
 now = function() {
@@ -109,12 +109,12 @@ now = function() {
 }
 
 # FIXME BBmisc
-list2df = function(li, force.names=FALSE, strings.as.factors = default.stringsAsFactors()) {
+list2df = function(li, force.names = FALSE, strings.as.factors = default.stringsAsFactors()) {
   if (length(li) == 0L)
     return(makeDataFrame(0L, 0L))
 
   if (force.names) {
-    li = lapply(li, function(x) setNames(x, make.names(names2(x, ""), unique=TRUE)))
+    li = lapply(li, function(x) setNames(x, make.names(names2(x, ""), unique = TRUE)))
   }
 
   cols = unique(unlist(lapply(li, names)))
@@ -127,7 +127,7 @@ list2df = function(li, force.names=FALSE, strings.as.factors = default.stringsAs
     tmp = lapply(li, function(it) it[[col]])
     res[[col]] = simplify2array(replace(tmp, vapply(tmp, is.null, logical(1L)), NA))
   }
-  as.data.frame(res, stringsAsFactors=strings.as.factors)
+  as.data.frame(res, stringsAsFactors = strings.as.factors)
 }
 
 getArgNames = function(args) {
@@ -145,7 +145,7 @@ convertUseNames = function(use.names) {
   c("none", "ids")[use.names+1L]
 }
 
-waitForFiles = function(fn, timeout=NA_real_, sleep=1) {
+waitForFiles = function(fn, timeout = NA_real_, sleep = 1) {
   if (is.na(timeout))
     return(invisible(TRUE))
 
@@ -166,6 +166,6 @@ waitForFiles = function(fn, timeout=NA_real_, sleep=1) {
 }
 
 info = function(...) {
-  if (getOption("BatchJobs.verbose", default=TRUE))
+  if (getOption("BatchJobs.verbose", default = TRUE))
     message(sprintf(...))
 }

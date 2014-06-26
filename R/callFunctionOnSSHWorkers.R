@@ -47,8 +47,8 @@
 #' @return Results of function calls, either a list or simplified.
 #' @export
 callFunctionOnSSHWorkers = function(nodenames, fun, ...,
-  consecutive=FALSE, show.output=consecutive,
-  simplify = TRUE, use.names=TRUE, dir = getwd()) {
+  consecutive = FALSE, show.output = consecutive,
+  simplify = TRUE, use.names = TRUE, dir = getwd()) {
 
   assertCharacter(nodenames, any.missing = FALSE)
   assertFunction(fun)
@@ -57,7 +57,7 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
   assertFlag(simplify)
   assertFlag(use.names)
   if (!consecutive && show.output)
-    stop("show.output=TRUE can only be used in consecutive mode.")
+    stop("show.output = TRUE can only be used in consecutive mode.")
 
   conf = getBatchJobsConf()
   cf = conf$cluster.functions
@@ -97,14 +97,14 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
       for (ws in wsettings)
         workers[[wn]][[ws]] = old.worker.settings[[wn]][[ws]]
     }
-  }, add=TRUE)
+  }, add = TRUE)
 
   args = if (consecutive)
     args = list(fun)
   else
     replicate(length(nodenames), fun)
   suppressMessages({
-    reg = makeRegistry(regid, file.dir=regdir, sharding=FALSE)
+    reg = makeRegistry(regid, file.dir = regdir, sharding = FALSE)
     more.args = list(...)
     batchMap(reg, function(fun, ...) {
       print("###logstart###")
@@ -117,8 +117,8 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
     if (length(findOnSystem(reg)) > 0L)
       killJobs(reg, getJobIds(reg))
     if (file.exists(regdir))
-      unlink(regdir, recursive=TRUE)
-  }, add=TRUE)
+      unlink(regdir, recursive = TRUE)
+  }, add = TRUE)
   # read log as char string, get part between stamps and print only new chars
   printLog = function(log.old) {
     log.fn = getLogFiles(reg, 1L)
@@ -143,7 +143,7 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
   mysubmit = function(nodenames, reg) {
     messagef("Calling function on: %s.",
       collapse(nodenames))
-    conf$cluster.functions = makeClusterFunctionsSSH(workers=workers)
+    conf$cluster.functions = makeClusterFunctionsSSH(workers = workers)
     capture.output(suppressMessages(submitJobs(reg, getJobIds(reg))))
   }
 
@@ -184,7 +184,7 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
     })
   } else {
     doit(reg, nodenames)
-    results = loadResults(reg, simplify=FALSE, use.names=FALSE)
+    results = loadResults(reg, simplify = FALSE, use.names = FALSE)
   }
 
   if (use.names)

@@ -22,9 +22,9 @@
 #'   Default is current working directory.
 #' @return Nothing.
 #' @export
-debugSSH = function(nodename, rhome="",
-  r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
-  dir=getwd()) {
+debugSSH = function(nodename, rhome = "",
+  r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
+  dir = getwd()) {
 
   assertString(nodename)
   assertString(rhome)
@@ -39,27 +39,27 @@ debugSSH = function(nodename, rhome="",
   catf("\n")
 
   messagef("*** which R on slave: ***")
-  res = runOSCommandLinux(cmd="which", args="R", ssh=TRUE, nodename=nodename, stop.on.exit.code=TRUE)
+  res = runOSCommandLinux(cmd = "which", args = "R", ssh = TRUE, nodename = nodename, stop.on.exit.code = TRUE)
   messagef("which R result:")
   print(res)
   catf("\n")
 
   messagef("*** Find helper script on slave: ***")
-  res = findHelperScriptLinux(rhome, r.options, ssh=TRUE, nodename=nodename)
+  res = findHelperScriptLinux(rhome, r.options, ssh = TRUE, nodename = nodename)
   messagef("Find helper script result:")
   print(res)
   catf("\n")
 
   messagef("*** Auto-detecting ncpus for slave: ***")
-  worker = makeWorkerRemoteLinux(nodename=nodename, rhome=rhome, r.options=r.options, ncpus=1)
-  res = runWorkerCommand(worker=worker, command="number-of-cpus")
+  worker = makeWorkerRemoteLinux(nodename = nodename, rhome = rhome, r.options = r.options, ncpus = 1)
+  res = runWorkerCommand(worker = worker, command = "number-of-cpus")
   messagef("Auto-detecting ncpus result:")
   print(res)
   catf("\n")
 
   queryWorkerStatus = function() {
     messagef("*** Query worker status: ***")
-    res = runWorkerCommand(worker=worker, command="status", args="")
+    res = runWorkerCommand(worker = worker, command = "status", args = "")
     messagef("Query worker status result:")
     message("load n.rprocs n.rprocs.50 n.jobs")
     print(res)
@@ -69,10 +69,10 @@ debugSSH = function(nodename, rhome="",
   queryWorkerStatus()
 
   messagef("*** Submitting 1 job: ***")
-  ssh.workers = list(makeSSHWorker(nodename=nodename, rhome=rhome, r.options=r.options))
+  ssh.workers = list(makeSSHWorker(nodename = nodename, rhome = rhome, r.options = r.options))
   conf$cluster.functions = do.call(makeClusterFunctionsSSH, ssh.workers)
   id = "debug_ssh_1"
-  reg = makeRegistry(id=id, file.dir=file.path(dir, id), work.dir=wd, sharding=FALSE)
+  reg = makeRegistry(id = id, file.dir = file.path(dir, id), work.dir = wd, sharding = FALSE)
   batchMap(reg, identity, 1)
   submitJobs(reg)
   Sys.sleep(3)
@@ -81,7 +81,7 @@ debugSSH = function(nodename, rhome="",
 
   messagef("*** Killing 2 jobs: ***")
   id = "debug_ssh_2"
-  reg = makeRegistry(id=id, file.dir=file.path(dir, id), work.dir=wd, sharding=FALSE)
+  reg = makeRegistry(id = id, file.dir = file.path(dir, id), work.dir = wd, sharding = FALSE)
   f = function(i) if(i <= 1) i else f(i-1) + f(i-2)
   xs = 50 + seq(1,2)
   ids = 1:2

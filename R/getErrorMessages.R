@@ -16,6 +16,6 @@ getErrorMessages = function(reg, ids) {
   else
     ids = checkIds(reg, ids)
 
-  tab = dbGetErrorMsgs(reg, ids, filter=FALSE)
+  tab = dbGetErrorMsgs(reg, ids, filter = FALSE)
   setNames(tab$error, tab$job_id)
 }

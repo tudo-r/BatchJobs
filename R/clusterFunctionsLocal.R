@@ -13,12 +13,12 @@
 #' @export
 makeClusterFunctionsLocal = function() {
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
-    system2(command=file.path(R.home("bin"), "Rscript"), 
-            args=rscript, 
-            stdout=log.file, 
-            stderr=log.file, 
-            wait=TRUE)
-    makeSubmitJobResult(status=0L, batch.job.id="cfLocal")
+    system2(command = file.path(R.home("bin"), "Rscript"),
+            args = rscript,
+            stdout = log.file,
+            stderr = log.file,
+            wait = TRUE)
+    makeSubmitJobResult(status = 0L, batch.job.id = "cfLocal")
   }
 
   killJob = function(conf, reg, batch.job.id) NULL
@@ -27,6 +27,6 @@ makeClusterFunctionsLocal = function() {
 
   getArrayEnvirName = function() NA_character_
 
-  makeClusterFunctions(name="Local", submitJob=submitJob, killJob=killJob,
-                       listJobs=listJobs, getArrayEnvirName=getArrayEnvirName)
+  makeClusterFunctions(name = "Local", submitJob = submitJob, killJob = killJob,
+                       listJobs = listJobs, getArrayEnvirName = getArrayEnvirName)
 }

@@ -12,7 +12,7 @@
 #' @return Named vector of job ids.
 #' @export
 setJobNames = function(reg, ids, jobnames) {
-  checkRegistry(reg, strict=TRUE)
+  checkRegistry(reg, strict = TRUE)
   if (missing(ids))
     ids = dbGetJobIds(reg)
   else
