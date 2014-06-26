@@ -18,7 +18,7 @@ loadResult = function(reg, id, part=NA_character_, missing.ok=FALSE) {
   syncRegistry(reg)
   id = checkId(reg, id)
   checkPart(reg, part)
-  checkArg(missing.ok, "logical", len=1L, na.ok=FALSE)
+  assertFlag(missing.ok)
 
   getResult(reg, id, part, missing.ok)
 }

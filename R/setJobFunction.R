@@ -28,10 +28,10 @@
 setJobFunction = function(reg, ids, fun, more.args=list(), reset=TRUE, force=FALSE) {
   checkRegistry(reg, strict=TRUE)
   syncRegistry(reg)
-  checkArg(fun, cl="function")
+  assertFunction(fun)
   checkMoreArgs(more.args)
-  checkArg(reset, cl="logical", len=1L, na.ok=FALSE)
-  checkArg(force, cl="logical", len=1L, na.ok=FALSE)
+  assertFlag(reset)
+  assertFlag(force)
   UseMethod("setJobFunction")
 }
 

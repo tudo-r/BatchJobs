@@ -31,11 +31,10 @@
 batchReduce = function(reg, fun, xs, init, block.size, more.args=list()) {
   checkRegistry(reg, strict=TRUE)
   syncRegistry(reg)
-  checkArg(fun, formals=c("aggr", "x"))
+  assertFunction(fun, c("aggr", "x"))
   if (!is.vector(xs))
     stop("Argument xs must be a vector")
-  block.size = convertInteger(block.size)
-  checkArg(block.size, "integer", len=1L, lower=1L, na.ok=FALSE)
+  block.size = asCount(block.size, positive = TRUE)
   if (dbGetJobCount(reg) > 0L)
     stop("Registry is not empty!")
   checkMoreArgs(more.args, reserved=c(".fun", ".init"))

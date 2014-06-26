@@ -46,7 +46,7 @@ batchMapQuick = function(fun, ..., more.args = list(), file.dir = NULL, packages
     # create name for temp file dir in current dir
     file.dir = tempfile(pattern = "bmq_", tmpdir = getwd())
   } else {
-    checkArg(file.dir, "character", len = 1L, na.ok = FALSE) # more checks are done in makeRegistry
+    assertString(file.dir)
   }
   id = basename(file.dir)
   reg = makeRegistry(id = id, file.dir = file.dir, packages = packages)

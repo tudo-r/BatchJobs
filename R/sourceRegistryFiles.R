@@ -10,7 +10,7 @@
 #' @export
 sourceRegistryFiles = function(reg, envir = .GlobalEnv) {
   checkRegistry(reg)
-  checkArg(envir, "environment")
+  assertEnvironment(envir)
   sourceRegistryFilesInternal(reg$work.dir, reg$src.dirs, reg$src.files)
 }
 

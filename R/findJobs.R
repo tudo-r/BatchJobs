@@ -22,14 +22,14 @@
 findJobs = function(reg, ids, pars, jobnames) {
   checkRegistry(reg, strict=TRUE)
   syncRegistry(reg)
-  if (!missing(ids)) 
+  if (!missing(ids))
     checkIds(reg, ids)
 
   if (missing(pars) && missing(jobnames))
     return(getJobIds(reg))
 
   if (!missing(jobnames)) {
-    checkArg(jobnames, "character", na.ok=FALSE)
+    assertCharacter(jobnames, any.missing = FALSE)
     ids = dbMatchJobNames(reg, ids, jobnames)
   }
 

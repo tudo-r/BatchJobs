@@ -46,7 +46,7 @@ batchReduceResults = function(reg, reg2, fun, ids, part=NA_character_, init, blo
   checkRegistry(reg2)
   syncRegistry(reg)
   syncRegistry(reg2)
-  checkArg(fun, formals=c("aggr", "job", "res"))
+  assertFunction(fun, c("aggr", "job", "res"))
   if (missing(ids)) {
     ids = dbGetJobIdsIfAllDone(reg)
   } else {
@@ -54,8 +54,7 @@ batchReduceResults = function(reg, reg2, fun, ids, part=NA_character_, init, blo
     if (length(dbFindDone(reg, ids, negate=TRUE)) > 0L)
       stop("Not all jobs with corresponding ids finished (yet)!")
   }
-  block.size = convertInteger(block.size)
-  checkArg(block.size, "integer", len=1L, na.ok=FALSE)
+  block.size = asCount(block.size)
   checkMoreArgs(more.args, reserved=c("..reg", "..fun", "..part"))
 
   if (dbGetJobCount(reg2) > 0L)

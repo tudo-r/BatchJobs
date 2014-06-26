@@ -36,11 +36,11 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
     if (length(not.submitted))
       stopf("Not all jobs have been submitted, e.g. job with id %i", head(not.submitted, 1L))
   }
-  checkArg(sleep, "numeric", len=1L, lower=1, na.ok=FALSE)
+  assertNumber(sleep, lower = 1)
   if (is.infinite(sleep))
     stop("Argument 'sleep' must be finite")
-  checkArg(timeout, "numeric", len=1L, lower=sleep, na.ok=FALSE)
-  checkArg(stop.on.error, "logical", len=1L, na.ok=FALSE)
+  assertNumber(timeout, lower = sleep)
+  assertFlag(stop.on.error)
 
   n = length(ids)
   if (n == 0L)

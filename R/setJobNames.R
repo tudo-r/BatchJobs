@@ -7,7 +7,7 @@
 #'   Default is all jobs.
 #' @param jobnames [\code{character}]\cr
 #'   Character vector with length equal to \code{length(ids)}.
-#'   \code{NA} removes the names stored in the registry. 
+#'   \code{NA} removes the names stored in the registry.
 #'   A single \code{NA} is replicated to match the length of ids provided.
 #' @return Named vector of job ids.
 #' @export
@@ -18,10 +18,10 @@ setJobNames = function(reg, ids, jobnames) {
   else
     ids = checkIds(reg, ids)
 
-  if (isScalarNA(jobnames)) 
+  if (isScalarNA(jobnames))
     jobnames = rep.int(NA_character_, length(ids))
   else
-    checkArg(jobnames, "character", na.ok=FALSE)
+    assertCharacter(jobnames, any.missing = FALSE)
 
   if (length(ids) != length(jobnames))
     stop("Arguments 'ids' and 'jobnames' must have same length")

@@ -29,7 +29,7 @@ makeJob = function(id=NA_integer_, fun, fun.id=digest(fun), pars, name, seed) {
 #' @return [\code{integer(1)}].
 #' @export
 getJobNr = function(reg) {
-  checkArg(reg, "Registry")
+  checkRegistry(reg)
   dbGetJobCount(reg)
 }
 
@@ -39,7 +39,7 @@ getJobNr = function(reg) {
 #' @return [\code{character}].
 #' @export
 getJobIds = function(reg) {
-  checkArg(reg, "Registry")
+  checkRegistry(reg)
   dbGetJobIds(reg)
 }
 

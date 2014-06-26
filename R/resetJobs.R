@@ -30,7 +30,7 @@ resetJobs = function(reg, ids, force=FALSE) {
   if (missing(ids) || length(ids) == 0L)
     return(integer(0L))
   ids = checkIds(reg, ids)
-  checkArg(force, cl="logical", len=1L, na.ok=FALSE)
+  assertFlag(force)
 
   if (!force) {
     if(is.null(getListJobs()) || is.null(getKillJob())) {

@@ -90,14 +90,14 @@ print.SubmitJobResult = function(x, ...) {
 #' @aliases ClusterFunctions
 #' @seealso \code{\link{makeClusterFunctionsInteractive}}, \code{\link{makeClusterFunctionsLocal}}, \code{\link{makeClusterFunctionsMulticore}}, \code{\link{makeClusterFunctionsSSH}}, \code{\link{makeClusterFunctionsTorque}}, \code{\link{makeClusterFunctionsSGE}}, \code{\link{makeClusterFunctionsSLURM}}
 makeClusterFunctions = function(name, submitJob, killJob, listJobs, getArrayEnvirName, class = NULL, ...) {
-  checkArg(name, "character", len=1L)
-  checkArg(submitJob, "function", formals=c("conf", "reg", "job.name", "rscript", "log.file", "job.dir", "resources"))
+  assertString(name)
+  assertFunction(submitJob, c("conf", "reg", "job.name", "rscript", "log.file", "job.dir", "resources"))
   if (!is.null(killJob))
-    checkArg(killJob, "function", formals=c("conf", "reg", "batch.job.id"))
+    assertFunction(killJob, c("conf", "reg", "batch.job.id"))
   if (!is.null(listJobs))
-    checkArg(listJobs, "function", formals=c("conf", "reg"))
+    assertFunction(listJobs, c("conf", "reg"))
   if (!is.null(getArrayEnvirName))
-    checkArg(getArrayEnvirName, "function", formals=character(0L))
+    assertFunction(getArrayEnvirName, character(0L))
   setClasses(list(name=name, submitJob=submitJob, killJob=killJob, listJobs=listJobs, getArrayEnvirName = getArrayEnvirName),
              c("ClusterFunctions", class))
 }

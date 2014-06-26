@@ -36,9 +36,9 @@ testJob = function(reg, id, resources=list(), external=TRUE) {
   } else {
     id = checkId(reg, id)
   }
-  checkArg(resources, "list")
+  assertList(resources)
   resources = resrc(resources)
-  checkArg(external, "logical", len=1L, na.ok=FALSE)
+  assertFlag(external)
 
   if (external) {
     # we dont want to change anything in the true registry / file dir / DB

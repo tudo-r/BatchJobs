@@ -16,7 +16,7 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @export
 makeClusterFunctionsInteractive = function(write.logs=TRUE) {
-  checkArg(write.logs, "logical", len=1L, na.ok=FALSE)
+  assertFlag(write.logs)
 
   submitJob = if(write.logs) {
     function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {

@@ -24,7 +24,7 @@
 #' @export
 batchExpandGrid = function(reg, fun, ..., more.args=list()) {
   checkRegistry(reg, strict=TRUE)
-  checkArg(fun, cl="function")
+  assertFunction(fun)
   args = list(...)
   ns = names(args)
   if (length(args) == 0L)

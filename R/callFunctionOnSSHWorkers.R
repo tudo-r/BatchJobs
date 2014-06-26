@@ -50,12 +50,12 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
   consecutive=FALSE, show.output=consecutive,
   simplify = TRUE, use.names=TRUE, dir = getwd()) {
 
-  checkArg(nodenames, "character", na.ok=FALSE)
-  checkArg(fun, "function")
-  checkArg(consecutive, "logical", len=1L, na.ok=FALSE)
-  checkArg(show.output, "logical", len=1L, na.ok=FALSE)
-  checkArg(simplify, "logical", len=1L, na.ok=FALSE)
-  checkArg(use.names, "logical", len=1L, na.ok=FALSE)
+  assertCharacter(nodenames, any.missing = FALSE)
+  assertFunction(fun)
+  assertFlag(consecutive)
+  assertFlag(show.output)
+  assertFlag(simplify)
+  assertFlag(use.names)
   if (!consecutive && show.output)
     stop("show.output=TRUE can only be used in consecutive mode.")
 

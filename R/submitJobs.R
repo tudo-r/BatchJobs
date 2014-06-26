@@ -74,7 +74,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   }
 
   ### argument checks on registry and ids
-  checkArg(reg, cl="Registry")
+  checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = dbFindSubmitted(reg, negate=TRUE)
@@ -84,7 +84,7 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
     }
   } else {
     if (is.list(ids)) {
-      ids = lapply(ids, checkIds, reg=reg, check.present=FALSE)
+      ids = lapply(ids, checkIds, reg=reg, check.present = FALSE)
       dbCheckJobIds(reg, unlist(ids))
     } else if(is.numeric(ids)) {
       ids = checkIds(reg, ids)
@@ -100,26 +100,25 @@ submitJobs = function(reg, ids, resources=list(), wait, max.retries=10L, chunks.
   n = length(ids)
 
   ### argument checks for other parameters
-  checkArg(resources, "list")
+  assertList(resources)
   resources = resrc(resources)
 
   if (missing(wait))
     wait = function(retries) 10 * 2^retries
   else
-    checkArg(wait, formals="retries")
+    assertFunction(wait, "retries")
 
   if (is.logical(job.delay)) {
-    checkArg(job.delay, "logical", len=1L, na.ok=FALSE)
+    assertFlag(job.delay)
   } else {
-    checkArg(job.delay, formals=c("n", "i"))
+    checkFunction(job.delay, c("n", "i"))
   }
 
-  if (is.finite(max.retries)) {
-    max.retries = convertInteger(max.retries)
-    checkArg(max.retries, "integer", len=1L, na.ok=FALSE)
-  }
+  if (is.finite(max.retries))
+    max.retries = asCount(max.retries)
 
-  checkArg(chunks.as.arrayjobs, "logical", na.ok = FALSE)
+
+  assertFlag(chunks.as.arrayjobs)
   if (chunks.as.arrayjobs && is.na(cf$getArrayEnvirName())) {
     warningf("Cluster functions '%s' do not support array jobs, falling back on chunks", cf$name)
     chunks.as.arrayjobs = FALSE

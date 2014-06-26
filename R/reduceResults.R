@@ -95,7 +95,7 @@ reduceResults = function(reg, ids, part=NA_character_, fun, init, impute.val, ..
         stopf("No results available for jobs with ids: %s", collapse(setdiff(ids, done)))
     }
   }
-  checkArg(fun, formals=c("aggr", "job", "res"))
+  assertFunction(fun, c("aggr", "job", "res"))
 
   n = length(ids)
   info("Reducing ", n, " results...")
@@ -151,7 +151,7 @@ reduceResultsList = function(reg, ids, part=NA_character_, fun, ..., use.names="
   if (missing(fun))
     fun = function(job, res) res
   else
-    checkArg(fun, formals=c("job", "res"))
+    assertFunction(fun, c("job", "res"))
   use.names = convertUseNames(use.names)
 
   n = length(ids)
@@ -195,7 +195,7 @@ reduceResultsVector = function(reg, ids, part=NA_character_, fun, ..., use.names
 #' @export
 #' @rdname reduceResults
 reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE, use.names="ids", impute.val) {
-  checkArg(rows, "logical", len=1L, na.ok=FALSE)
+  assertFlag(rows)
   use.names = convertUseNames(use.names)
   res = reduceResultsList(reg, ids, part, fun, ..., use.names=use.names, impute.val=impute.val)
 
@@ -216,7 +216,7 @@ reduceResultsMatrix = function(reg, ids, part=NA_character_, fun, ..., rows=TRUE
 #' @rdname reduceResults
 reduceResultsDataFrame = function(reg, ids, part=NA_character_, fun, ..., use.names="ids", impute.val,
   strings.as.factors=default.stringsAsFactors()) {
-  checkArg(strings.as.factors, "logical", len=1L, na.ok=FALSE)
+  assertFlag(strings.as.factors)
 
   res = reduceResultsList(reg, ids, part, fun, ..., use.names=use.names, impute.val=impute.val)
   if (!length(res))

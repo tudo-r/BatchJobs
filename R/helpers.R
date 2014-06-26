@@ -1,25 +1,19 @@
-checkIds = function(reg, ids, check.present=TRUE) {
-  ids = convertIntegers(ids)
-  checkArg(ids, cl="integer", na.ok=FALSE)
-  if (anyDuplicated(ids) > 0L) {
-    dup = ids[duplicated(ids)]
-    stopf("You have duplicated entries in your id vector: %s", collapse(dup))
-  }
+checkIds = function(reg, ids, check.present = TRUE) {
+  ids = asInteger(ids, any.missing = FALSE, unique = TRUE)
   if (check.present)
     dbCheckJobIds(reg, ids)
   return(ids)
 }
 
-checkId = function(reg, id, check.present=TRUE) {
-  id = convertInteger(id)
-  checkArg(id, cl="integer", na.ok=FALSE, len=1L)
+checkId = function(reg, id, check.present = TRUE) {
+  id = asInt(id)
   if (check.present)
     dbCheckJobIds(reg, id)
   return(id)
 }
 
 checkMoreArgs = function(more.args, reserved) {
-  checkArg(more.args, cl="list")
+  assertList(more.args)
   n = names(more.args)
   if(is.null(n) || missing(reserved))
     return(invisible(TRUE))
@@ -106,8 +100,6 @@ isOnSlave = function() {
 }
 
 setOnSlave = function(x, resources.path=as.character(NA)) {
-  checkArg(x, "logical", len=1L, na.ok=FALSE)
-  checkArg(resources.path, "character", len=1L, na.ok=TRUE)
   options(BatchJobs.on.slave=x)
   options(BatchJobs.resources.path=resources.path)
 }
@@ -149,10 +141,7 @@ getArgNames = function(args) {
 convertUseNames = function(use.names) {
   if (is.character(use.names) && length(use.names) == 1L && use.names %in% c("none", "ids", "names"))
     return(use.names)
-
-  # FIXME re-add this for the next release
-  # warning("Logical values for 'use.names' is deprecated and will be removed in a future version. Use 'none', 'ids' or 'names' instead.")
-  checkArg(use.names, "logical", len=1L, na.ok=FALSE)
+  assertFlag(use.names)
   c("none", "ids")[use.names+1L]
 }
 

@@ -33,9 +33,8 @@ batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ..., use.names=
   if (!is.matrix(X) && !is.array(X))
     stopf("Argument X must be of class matrix or array, not %s", class(X))
   dX = dim(X)
-  margin = convertInteger(margin)
-  checkArg(margin, "integer", len=1L, lower=1L, upper=length(dX), na.ok=FALSE)
-  checkArg(fun, cl="function")
+  margin = asInt(margin, lower = 1L, upper = length(dX))
+  assertFunction(fun)
   if (missing(chunk.size) && missing(n.chunks))
     chunk.size = 1L
 

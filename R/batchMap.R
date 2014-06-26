@@ -25,7 +25,7 @@
 # but the test fails and the beavior is currently undocumented
 batchMap = function(reg, fun, ..., more.args=list(), use.names=FALSE) {
   checkRegistry(reg, strict=TRUE)
-  checkArg(fun, cl="function")
+  assertFunction(fun)
   ddd = list(...)
   if (length(ddd) == 0L)
     return(invisible(integer(0L)))
@@ -35,7 +35,7 @@ batchMap = function(reg, fun, ..., more.args=list(), use.names=FALSE) {
   if (n == 0L)
     return(invisible(integer(0L)))
   checkMoreArgs(more.args)
-  checkArg(use.names, "logical", len=1L, na.ok=FALSE)
+  assertFlag(use.names)
 
   if (dbGetJobCount(reg) > 0L)
     stop("Registry is not empty!")

@@ -11,9 +11,7 @@
 #' @return [\code{character}].
 #' @export
 cfReadBrewTemplate = function(template.file) {
-  checkArg(template.file, "character", len=1L, na.ok=FALSE)
-  if (!file.exists(template.file) || isDirectory(template.file))
-    stopf("Template file '%s' not found", template.file)
+  assertFile(template.file, "r")
   tmpl = readLines(template.file)
   if (length(tmpl) == 0L)
     stopf("Error reading template '%s' or empty template", template.file)
@@ -41,10 +39,10 @@ cfReadBrewTemplate = function(template.file) {
 #' @return [\code{character(1)}]. File path of result.
 #' @export
 cfBrewTemplate = function(conf, template, rscript, extension) {
-  checkArg(conf, "environment")
-  checkArg(template, "character", len=1L, na.ok=FALSE)
-  checkArg(rscript, "character", len=1L, na.ok=FALSE)
-  checkArg(extension, "character", len=1L, na.ok=FALSE)
+  assertEnvironment(conf)
+  assertString(template)
+  assertString(rscript)
+  assertString(extension)
   if (conf$debug) {
     # if debug, place in jobs dir
     outfile = sub("\\.R$", sprintf(".%s", extension), rscript)
@@ -79,10 +77,9 @@ cfBrewTemplate = function(conf, template, rscript, extension) {
 #' @return [\code{\link{SubmitJobResult}}].
 #' @export
 cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
-  checkArg(cmd, "character", len=1L, na.ok=FALSE)
-  exit.code = convertInteger(exit.code)
-  checkArg(exit.code, "integer", len=1L, na.ok=FALSE)
-  checkArg(output, "character", na.ok=FALSE)
+  assertString(cmd)
+  exit.code = asInt(exit.code)
+  assertCharacter(output, any.missing = FALSE)
   msg = sprintf("%s produced exit code %i; output %s",
     cmd, exit.code, collapse(output, sep="\n"))
   makeSubmitJobResult(status=101L, batch.job.id=NA_character_, msg=msg)
@@ -107,10 +104,10 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 #' @return Nothing.
 #' @export
 cfKillBatchJob = function(cmd, batch.job.id, max.tries=3L) {
-  checkArg(cmd, "character", len=1L, na.ok=FALSE)
-  checkArg(batch.job.id, "character", len=1L, na.ok=FALSE)
-  max.tries = convertInteger(max.tries)
-  checkArg(max.tries, "integer", len=1L, na.ok=FALSE)
+  assertString(cmd)
+  assertString(batch.job.id)
+  max.tries = asCount(max.tries)
+  assertCount(max.tries)
 
   for (tmp in seq_len(max.tries)) {
     res = runOSCommandLinux(cmd, batch.job.id, stop.on.exit.code=FALSE)

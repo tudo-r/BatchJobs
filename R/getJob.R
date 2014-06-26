@@ -28,7 +28,7 @@ getJob = function(reg, id, check.id=TRUE) {
 getJobs = function(reg, ids, check.ids=TRUE) {
   checkRegistry(reg)
   # syncRegistry(reg) NOT!
-  checkArg(check.ids, "logical", len=1L, na.ok=FALSE)
+  assertFlag(check.ids)
   UseMethod("getJobs")
 }
 

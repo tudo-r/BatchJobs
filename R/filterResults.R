@@ -21,7 +21,7 @@
 filterResults = function(reg, ids, fun, ...) {
   checkRegistry(reg)
   syncRegistry(reg)
-  checkArg(fun, formals=c("job", "res"))
+  assertFunction(fun, c("job", "res"))
   if (missing(ids))
     ids = dbFindDone(reg)
   else

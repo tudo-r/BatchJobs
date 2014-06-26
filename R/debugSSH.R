@@ -26,9 +26,9 @@ debugSSH = function(nodename, rhome="",
   r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
   dir=getwd()) {
 
-  checkArg(nodename, "character", len=1L, na.ok=FALSE)
-  checkArg(rhome, "character", len=1L, na.ok=FALSE)
-  checkArg(dir, "character", len=1L, na.ok=FALSE)
+  assertString(nodename)
+  assertString(rhome)
+  assertString(dir)
   conf = getBatchJobsConf()
   conf$debug = TRUE
   conf$mail.start = conf$mail.done = conf$mail.error = "none"

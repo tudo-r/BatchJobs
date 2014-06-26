@@ -1,25 +1,21 @@
 makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   multiple.result.files, seed, packages, src.dirs, src.files) {
-  checkArg(id, cl = "character", len = 1L, na.ok = FALSE)
+  assertString(id)
   checkIdValid(id, allow.minus = FALSE)
-  checkArg(file.dir, cl = "character", len = 1L, na.ok = FALSE)
-  checkArg(sharding, cl = "logical", len = 1L, na.ok = FALSE)
+  assertString(file.dir)
+  assertFlag(sharding)
   if (missing(work.dir))
     work.dir = getwd()
-  checkArg(work.dir, cl = "character", len = 1L, na.ok = FALSE)
-  checkArg(multiple.result.files, cl = "logical", len = 1L, na.ok = FALSE)
+  assertString(work.dir)
+  assertFlag(multiple.result.files)
 
-  if (missing(seed)) {
-    seed = getRandomSeed()
-  } else {
-    seed = convertInteger(seed)
-    checkArg(seed, cl = "integer", len = 1L, lower = 1L, na.ok = FALSE)
-  }
-  checkArg(packages, cl = "character", na.ok = FALSE)
+  seed = if (missing(seed)) getRandomSeed() else asCount(seed, positive = TRUE)
+
+  assertCharacter(packages, any.missing = FALSE)
   packages = union(packages, "BatchJobs")
   requirePackages(packages, stop = TRUE, suppress.warnings = TRUE)
-  checkArg(src.dirs, cl = "character", na.ok = FALSE)
-  checkArg(src.files, cl = "character", na.ok = FALSE)
+  assertCharacter(src.dirs, any.missing = FALSE)
+  assertCharacter(src.files, any.missing = FALSE)
 
   # make paths absolute to be sure. otherwise cfSSH wont work for example
   # also check the dirs
@@ -126,7 +122,7 @@ makeRegistry = function(id, file.dir, sharding = TRUE, work.dir, multiple.result
                         skip = TRUE) {
   if (missing(file.dir))
     file.dir = file.path(getwd(), paste0(id, "-files"))
-  checkArg(skip, "logical", len = 1L, na.ok = FALSE)
+  assertFlag(skip)
   if (skip && isRegistryDir(file.dir))
     return(loadRegistry(file.dir = file.dir))
 

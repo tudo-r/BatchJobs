@@ -32,15 +32,15 @@
 # @return [\code{\link{Worker}}].
 makeWorker = function(ssh, nodename, rhome, r.options=c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
   script, ncpus, max.jobs, max.load, nice, classes) {
-  checkArg(ssh, "logical", len=1L, na.ok=FALSE)
-  checkArg(nodename, "character", len=1L, na.ok=FALSE)
-  checkArg(rhome, "character", len=1L, na.ok=FALSE)
-  checkArg(r.options, "character", na.ok=FALSE)
+  assertFlag(ssh)
+  assertString(nodename)
+  assertString(rhome)
+  assertCharacter(r.options, any.missing = FALSE)
   if (missing(script)) {
     # FIXME dont use linux specific in base class
     script = findHelperScriptLinux(rhome, r.options, ssh, nodename)
   } else {
-    checkArg(script, "character", len=1L, na.ok=FALSE)
+    assertString(script)
   }
 
   # construct object partially so we can query ncpus
@@ -59,29 +59,26 @@ makeWorker = function(ssh, nodename, rhome, r.options=c("--no-save", "--no-resto
     ncpus = getWorkerNumberOfCPUs(w)
     messagef("Setting for worker %s: ncpus=%i", w$nodename, ncpus)
   } else {
-    ncpus = convertInteger(ncpus)
-    checkArg(ncpus, "integer", len=1L, na.ok=FALSE)
+    ncpus = asCount(ncpus)
   }
   if (missing(max.jobs)) {
     max.jobs = ncpus
   } else {
-    max.jobs = convertInteger(max.jobs)
-    checkArg(max.jobs, "integer", len=1L, na.ok=FALSE)
+    max.jobs = asCount(max.jobs)
     if (max.jobs > ncpus)
       stopf("max.jobs must be <= ncpus = %i!", ncpus)
   }
   if (missing(max.load)) {
     max.load = ncpus-1L
   } else {
-    checkArg(max.load, "numeric", len=1L, na.ok=FALSE)
+    assertNumber(max.load)
     if (max.load > ncpus)
       stopf("max.load must be <= ncpus = %i!", ncpus)
   }
   if (missing(nice)) {
     nice = ""
   } else {
-    nice = convertInteger(nice)
-    checkArg(nice, "integer", len=1L, na.ok=FALSE, lower=-20, upper=19)
+    nice = asInt(nice, lower = -20, upper = 19)
   }
 
   w$ncpus = ncpus

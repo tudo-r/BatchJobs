@@ -39,7 +39,7 @@ test_that("getJobInfo", {
 
   expect_error(
     getJobInfo(reg, select = "fooo"),
-    "must be subset of"
+    "subset"
   )
 })
 

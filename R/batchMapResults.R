@@ -50,7 +50,7 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part=NA_character_, more.a
   syncRegistry(reg)
   checkRegistry(reg2)
   syncRegistry(reg2)
-  checkArg(fun, formals=c("job", "res"))
+  assertFunction(fun, c("job", "res"))
   if (missing(ids)) {
     ids = dbGetJobIdsIfAllDone(reg)
   } else {

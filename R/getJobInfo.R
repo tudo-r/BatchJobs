@@ -1,14 +1,14 @@
 getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
   if (!missing(ids))
     ids = checkIds(reg, ids)
-  checkArg(unit, choices=c("seconds", "minutes", "hours", "days", "weeks"))
+  assertChoice(unit, c("seconds", "minutes", "hours", "days", "weeks"))
 
   select.db   = c("submitted",      "started",      "done",       "done - started AS time_running", "started - submitted AS time_queued", "error",      "node",     "batch_job_id", "r_pid", "seed")
   select.cns  = c("time.submitted", "time.started", "time.done",  "time.running",                  "time.queued",                        "error.msg",   "nodename", "batch.id",     "r.pid", "seed")
   columns = c(columns, setNames(select.db, select.cns))
 
   if (!missing(select)) {
-    checkArg(select, subset=c("id", select.cns))
+    assertSubset(select, c("id", select.cns))
     columns = columns[names(columns) %in% c("id", select)]
   }
 
@@ -77,7 +77,7 @@ getJobInfo = function(reg, ids, pars=FALSE, prefix.pars=FALSE, select, unit="sec
 #' @export
 getJobInfo.Registry = function(reg, ids, pars=FALSE, prefix.pars=FALSE, select, unit="seconds") {
   syncRegistry(reg)
-  checkArg(pars, "logical", len=1L, na.ok=FALSE)
+  assertFlag(pars)
   columns = c(id="job_id")
   if (pars)
     columns = c(columns, c(pars="pars"))

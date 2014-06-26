@@ -30,7 +30,7 @@ sweepRegistry = function(reg, sweep = c("scripts", "conf")) {
   checkRegistry(reg)
   syncRegistry(reg)
 
-  checkArg(sweep, subset = c("scripts", "logs", "resources", "conf"))
+  assertSubset(sweep, c("scripts", "logs", "resources", "conf"))
 
   if (length(dbFindRunning(reg)) > 0L)
     stop("Can't sweep registry while jobs are running")

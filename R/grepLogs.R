@@ -34,11 +34,10 @@ grepLogs = function(reg, ids, pattern="warn", ignore.case=TRUE, verbose=FALSE, r
       stopf("Not all jobs with provided ids have finished yet and therefore possess no log file, e.g. id=%i.",
             nterminated[1L])
   }
-  checkArg(pattern, "character", len=1L, na.ok=FALSE)
-  checkArg(ignore.case, "logical", len=1L, na.ok=FALSE)
-  checkArg(verbose, "logical", len=1L, na.ok=FALSE)
-  range = convertInteger(range)
-  checkArg(range, "integer", len=1L, lower=0L, na.ok=FALSE)
+  assertString(pattern)
+  assertFlag(ignore.case)
+  assertFlag(verbose)
+  range = asCount(range)
 
   fids = dbGetFirstJobInChunkIds(reg, ids)
   fns = getLogFilePath(reg, ifelse(is.na(fids), ids, fids))

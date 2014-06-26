@@ -14,6 +14,7 @@
 NULL
 
 #' @import BBmisc
+#' @import checkmate
 #' @import utils
 #' @import stats
 #' @import DBI
