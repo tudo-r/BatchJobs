@@ -10,53 +10,39 @@ conf$max.concurrent.jobs = Inf
 setConfig(conf = conf)
 rm(conf)
 
-
-cleanup = function() {
-  dir = "unittests-files"
-  if (!file.exists(dir))
-    return(TRUE)
-
-  i = 1L
-  repeat {
-    if(unlink(dir, recursive=TRUE) == 0L)
-      return(TRUE)
-    if (i == 6L)
-      return(FALSE)
-
-    i = i + 1L
-    Sys.sleep(5)
-  }
+getWorkDir = function() {
+  work.dir = "unittests-files"
+  # if env var is set we do the tests in the current wd,
+  # if not, we do everything in a subdir of tempdir()
+  # required for debians autopkgtest
+  if (isExpensiveExampleOk())
+    file.path(getwd(), work.dir)
+  else
+    file.path(tempdir(), work.dir)
 }
 
-tf = function() {
-  file.path("unittests-files", basename(tempfile("unittest")))
+getTempDir = function() {
+  file.path(getWorkDir(), basename(tempfile("tmp")))
 }
 
 makeTestRegistry = function(packages=character(0L), ...) {
-  fd = tf()
-  rd = file.path(fd, "registry")
-  dir.create(fd, recursive=TRUE, showWarning=FALSE)
+  work.dir = getWorkDir()
+  file.dir = getTempDir()
+  dir.create(file.dir, recursive=TRUE, showWarning=FALSE)
   makeRegistry(
     id = "unittests",
-    seed = 1,
+    seed = 1L,
     packages=packages,
-    file.dir=rd,
-    work.dir="unittests-files",
+    file.dir=file.dir,
+    work.dir=work.dir,
     ...
   )
 }
 
-stopifnot(cleanup())
-
-# overloaded.index.obj = list(els = 3:1)
-# class(overloaded.index.obj) = "OverloadedIndex"
-#
-# length.OverloadedIndex = function(x) length(x$els)
-#
-# `[.OverloadedIndex` = function(x, ..., drop = TRUE) {
-#   x$els[...]
-# }
-#
-# `[[.OverloadedIndex` = function(x, ..., drop = TRUE) {
-#   x$els[[...]]
-# }
+# cleanup stray files
+cleanup = function() {
+  unittests.dir = getWorkDir()
+  if (file.exists(unittests.dir))
+    return(unlink(unittests.dir, recursive = TRUE) == 0L)
+  return(TRUE)
+}
