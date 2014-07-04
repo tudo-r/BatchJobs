@@ -14,10 +14,10 @@ writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp,
     "\tarray.id = %s)",
     "BatchJobs:::setOnSlave(FALSE)",
     sep = "\n")
-  fids = vapply(ids, head, integer(1L), 1L) # first job id in chunk
+  fids = viapply(ids, head, 1L) # first job id in chunk
   first = head(fids, 1L)
   last = tail(fids, 1L)
-  ids = vapply(ids, function(id) collapse(paste0(id, "L")), character(1L)) # ids as collapsed strings
+  ids = vcapply(ids, function(id) collapse(paste0(id, "L"))) # ids as collapsed strings
 
   # print the constant arguments (of length 1) into the template
   resources.path = getResourcesFilePath(reg, resources.timestamp)

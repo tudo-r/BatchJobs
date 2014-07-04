@@ -31,6 +31,6 @@ updateWorker = function(worker, file.dir, tdiff) {
 # multiple workers available
 findWorker = function(workers, file.dir, tdiff) {
   lapply(workers, updateWorker, file.dir = file.dir, tdiff = tdiff)
-  rload = vapply(workers, function(w) w$status$load / w$ncpus, numeric(1L))
+  rload = vnapply(workers, function(w) w$status$load / w$ncpus)
   Find(function(w) w$available=="A", sample(workers, prob = 1 / (rload + 0.1)), nomatch = NULL)
 }

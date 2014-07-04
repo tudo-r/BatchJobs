@@ -46,8 +46,8 @@ findJobs = function(reg, ids, pars, jobnames) {
       setNames(pars, ns)
     }
 
-    ind = vapply(jobs, function(job, pars, ee) eval(pars, rename(job$pars), ee),
-                 logical(1L), pars = substitute(pars), ee = parent.frame())
+    ind = vlapply(jobs, function(job, pars, ee) eval(pars, rename(job$pars), ee),
+      pars = substitute(pars), ee = parent.frame())
     ids = extractSubList(jobs[!is.na(ind) & ind], "id", element.value = integer(1L))
   }
 

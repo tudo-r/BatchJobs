@@ -29,7 +29,7 @@ batchMap = function(reg, fun, ..., more.args = list(), use.names = FALSE) {
   ddd = list(...)
   if (length(ddd) == 0L)
     return(invisible(integer(0L)))
-  n = unique(vapply(ddd, length, integer(1L)))
+  n = unique(viapply(ddd, length))
   if(length(n) != 1L)
     stop("All args in '...' must be of the same length!")
   if (n == 0L)
@@ -49,9 +49,6 @@ batchMap = function(reg, fun, ..., more.args = list(), use.names = FALSE) {
   pars = mapply(function(...) {
     rawToChar(serialize(list(...), connection = NULL, ascii = TRUE))
   }, ..., USE.NAMES = FALSE)
-  # pars = vapply(seq_len(n), function(i) {
-  #   rawToChar(serialize(lapply(args, "[[", i), connection = NULL, ascii = TRUE))
-  # }, character(1L))
   fun.id = saveFunction(reg, fun, more.args)
 
   # generate jobnames col

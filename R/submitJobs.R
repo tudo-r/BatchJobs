@@ -70,7 +70,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
       }
       return(delays = rep.int(0, n))
     }
-    vapply(seq_along(ids), job.delay, numeric(1L), n = n)
+    vnapply(seq_along(ids), job.delay, n = n)
   }
 
   ### argument checks on registry and ids
@@ -152,7 +152,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
   ### save config, start the work
   saveConf(reg)
   is.chunked = is.list(ids)
-  info("Submitting %i chunks / %i jobs.", n, if(is.chunked) sum(vapply(ids, length, integer(1L))) else n)
+  info("Submitting %i chunks / %i jobs.", n, if(is.chunked) sum(viapply(ids, length)) else n)
   info("Cluster functions: %s.", cf$name)
   info("Auto-mailer settings: start=%s, done=%s, error=%s.", conf$mail.start, conf$mail.done, conf$mail.error)
 

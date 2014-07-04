@@ -29,7 +29,7 @@ batchExpandGrid = function(reg, fun, ..., more.args = list()) {
   ns = names(args)
   if (length(args) == 0L)
     return(invisible(integer(0L)))
-  if(!all(vapply(args, is.vector, logical(1L))))
+  if(!all(vlapply(args, is.vector)))
     stop("All args in '...' must be vectors!")
   checkMoreArgs(more.args)
   reserved = c("KEEP.OUT.ATTRS", "stringsAsFactors")

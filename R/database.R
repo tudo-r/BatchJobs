@@ -374,12 +374,12 @@ dbSendMessages = function(reg, msgs, max.retries = 200L, sleep = function(r) 1.0
     msgs = split(msgs, extractSubList(msgs, "type"))
     msgs = msgs[order(match(names(msgs), names(chars)))]
 
-    fns = vapply(msgs, function(cur) {
+    fns = vcapply(msgs, function(cur) {
       first = cur[[1L]]
       fn = getPendingFile(reg, first$type, first$ids[1L], chars[first$type])
       writeSQLFile(extractSubList(cur, "msg"), fn)
       fn
-    }, character(1L))
+    })
     waitForFiles(fns, timeout = fs.timeout)
   } else {
     ok = try(dbDoQueries(reg, extractSubList(msgs, "msg"), flags = "rw", max.retries, sleep))

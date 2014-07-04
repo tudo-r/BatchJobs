@@ -11,7 +11,7 @@ syncRegistry = function(reg) {
     info("Syncing registry ...")
 
     queries = lapply(fns, readSQLFile)
-    ok = !vapply(queries, isFALSE, TRUE)
+    ok = !vlapply(queries, isFALSE)
     tryCatch(dbDoQueries(reg, unlist(queries[ok]), "rw"),
              error = function(e) stopf("Error syncing registry (%s)", e))
 

@@ -66,8 +66,7 @@ grepLogs = function(reg, ids, pattern = "warn", ignore.case = TRUE, verbose = FA
     if (verbose && matched[i]) {
       messagef("\n##### Matches for job with id=%i (%s) #####",
                ids[i], basename(fns[i]))
-      message(collapse(vapply(matches, getLines, character(1L), lines = lines, range = range),
-                       "\n---\n"))
+      message(collapse(vcapply(matches, getLines, lines = lines, range = range), "\n---\n"))
     }
   }
 

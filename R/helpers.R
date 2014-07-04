@@ -125,7 +125,7 @@ list2df = function(li, force.names = FALSE, strings.as.factors = default.strings
   res = namedList(cols)
   for(col in cols) {
     tmp = lapply(li, function(it) it[[col]])
-    res[[col]] = simplify2array(replace(tmp, vapply(tmp, is.null, logical(1L)), NA))
+    res[[col]] = simplify2array(replace(tmp, vlapply(tmp, is.null), NA))
   }
   as.data.frame(res, stringsAsFactors = strings.as.factors)
 }
