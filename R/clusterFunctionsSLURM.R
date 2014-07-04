@@ -1,5 +1,6 @@
-#' Create cluster functions for SLURM-based systems.
+#' @title Create cluster functions for SLURM-based systems.
 #'
+#' @description
 #' Job files are created based on the brew template
 #' \code{template.file}. This file is processed with brew and then
 #' submitted to the queue using the \code{sbatch} command. Jobs are
@@ -15,11 +16,12 @@
 #' Examples can be found on
 #' \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfSLURM}.
 #'
-#' @param template.file [\code{character(1)}]\cr
-#'   Path to a brew template file that is used for the SLURM job file.
-#' @return [\code{\link{ClusterFunctions}}].
+#' @template arg_template
+#' @template arg_list_jobs_cmd
+#' @template ret_cf
 #' @export
-makeClusterFunctionsSLURM = function(template.file) {
+makeClusterFunctionsSLURM = function(template.file, list.jobs.cmd = "squeue -h -o %i -u $USER") {
+  assertString(list.jobs.cmd)
   template = cfReadBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
@@ -43,7 +45,7 @@ makeClusterFunctionsSLURM = function(template.file) {
 
   listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
-    runOSCommandLinux("squeue", "-h -o %i -u $USER")$output
+    runOSCommandLinux(list.jobs.cmd)$output
   }
 
   getArrayEnvirName = function() "SLURM_ARRAY_TASK_ID"

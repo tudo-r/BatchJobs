@@ -1,5 +1,6 @@
-#' Create cluster functions for Sun Grid Engine systems.
+#' @title Create cluster functions for Sun Grid Engine systems.
 #'
+#' @description
 #' Job files are created based on the brew template
 #' \code{template.file}. This file is processed with brew and then
 #' submitted to the queue using the \code{qsub} command. Jobs are
@@ -15,11 +16,12 @@
 #' Examples can be found on
 #' \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfSGE}.
 #'
-#' @param template.file [\code{character(1)}]\cr
-#'   Path to a brew template file that is used for the job file.
-#' @return [\code{\link{ClusterFunctions}}].
+#' @template arg_template
+#' @template arg_list_jobs_cmd
+#' @template ret_cf
 #' @export
-makeClusterFunctionsSGE = function(template.file) {
+makeClusterFunctionsSGE = function(template.file, list.jobs.cmd = "qstat -u $USER") {
+  assertString(list.jobs.cmd)
   template = cfReadBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
@@ -45,7 +47,8 @@ makeClusterFunctionsSGE = function(template.file) {
     # job-ID  prior   name       user         state submit/start at     queue                          slots ja-task-ID
     #-----------------------------------------------------------------------------------------------------------------
     #  240935 0.00000 sleep 60   matthias     qw    04/03/2012 15:45:54                                    1
-    res = runOSCommandLinux("qstat", "-u $USER")
+    # res = runOSCommandLinux("qstat", "-u $USER")
+    res = runOSCommandLinux(list.jobs.cmd)$output
     if (res$exit.code > 0L)
       stopf("qstat produced exit code %i; output %s", res$exit.code, res$output)
 

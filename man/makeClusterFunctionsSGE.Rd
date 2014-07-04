@@ -3,11 +3,14 @@
 \alias{makeClusterFunctionsSGE}
 \title{Create cluster functions for Sun Grid Engine systems.}
 \usage{
-makeClusterFunctionsSGE(template.file)
+makeClusterFunctionsSGE(template.file, list.jobs.cmd = "qstat -u $USER")
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
-Path to a brew template file that is used for the job file.}
+Path to a brew template file that is used for the PBS job file.}
+
+\item{list.jobs.cmd}{[\code{character(1)}]\cr
+Change default system command / options to list jobs.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
@@ -20,8 +23,7 @@ killed using the \code{qdel} command and the list of running jobs
 is retrieved using \code{qselect}. The user must have the
 appropriate privileges to submit, delete and list jobs on the
 cluster (this is usually the case).
-}
-\details{
+
 The template file can access all arguments passed to the
 \code{submitJob} function, see here \code{\link{ClusterFunctions}}.
 It is the template file's job to choose a queue for the job

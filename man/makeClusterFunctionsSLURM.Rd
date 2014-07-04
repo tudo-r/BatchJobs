@@ -3,11 +3,15 @@
 \alias{makeClusterFunctionsSLURM}
 \title{Create cluster functions for SLURM-based systems.}
 \usage{
-makeClusterFunctionsSLURM(template.file)
+makeClusterFunctionsSLURM(template.file,
+  list.jobs.cmd = "squeue -h -o \%i -u $USER")
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
-Path to a brew template file that is used for the SLURM job file.}
+Path to a brew template file that is used for the PBS job file.}
+
+\item{list.jobs.cmd}{[\code{character(1)}]\cr
+Change default system command / options to list jobs.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
@@ -20,8 +24,7 @@ killed using the \code{scancel} command and the list of running jobs
 is retrieved using \code{squeue}. The user must have the
 appropriate privileges to submit, delete and list jobs on the
 cluster (this is usually the case).
-}
-\details{
+
 The template file can access all arguments passed to the
 \code{submitJob} function, see here \code{\link{ClusterFunctions}}.
 It is the template file's job to choose a queue for the job

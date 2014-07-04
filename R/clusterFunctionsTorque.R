@@ -1,5 +1,6 @@
-#' Create cluster functions for torque-based systems.
+#' @title Create cluster functions for torque-based systems.
 #'
+#' @description
 #' Job files are created based on the brew template
 #' \code{template.file}. This file is processed with brew and then
 #' submitted to the queue using the \code{qsub} command. Jobs are
@@ -15,11 +16,12 @@
 #' Examples can be found on
 #' \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfTorque}.
 #'
-#' @param template.file [\code{character(1)}]\cr
-#'   Path to a brew template file that is used for the PBS job file.
-#' @return [\code{\link{ClusterFunctions}}].
+#' @template arg_template
+#' @template arg_list_jobs_cmd
+#' @template ret_cf
 #' @export
-makeClusterFunctionsTorque = function(template.file) {
+makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = "qselect -u $USER -s EHQRTW") {
+  assertString(list.jobs.cmd)
   template = cfReadBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
@@ -43,7 +45,7 @@ makeClusterFunctionsTorque = function(template.file) {
 
   listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
-    runOSCommandLinux("qselect", c("-u $USER", "-s EHQRTW"))$output
+    runOSCommandLinux(list.jobs.cmd)$output
   }
 
   getArrayEnvirName = function() "PBS_ARRAYID"

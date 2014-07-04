@@ -1,5 +1,6 @@
-#' Create cluster functions for LSF systems.
+#' @title Create cluster functions for LSF systems.
 #'
+#' @description
 #' Job files are created based on the brew template
 #' \code{template.file}. This file is processed with brew and then
 #' submitted to the queue using the \code{bsub} command. Jobs are
@@ -15,12 +16,14 @@
 #' Examples can be found on
 #' \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfLSF}.
 #'
-#' @param template.file [\code{character(1)}]\cr
-#'   Path to a brew template file that is used for the job file.
-#' @return [\code{\link{ClusterFunctions}}].
+#' @template arg_template
+#' @template arg_list_jobs_cmd
+#' @template ret_cf
 #' @export
-makeClusterFunctionsLSF = function(template.file) {
+makeClusterFunctionsLSF = function(template.file, list.jobs.cmd = "bjobs -u $USER -w") {
+  assertString(list.jobs.cmd)
   template = cfReadBrewTemplate(template.file)
+
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
   # when unfinished jobs are found, and 255 when no jobs are found,
   # or a non-existent job ID is entered.
@@ -47,7 +50,8 @@ makeClusterFunctionsLSF = function(template.file) {
   listJobs = function(conf, reg) {
     # JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME
     # 106560  rogon   UNKWN m_amd      hpc84       hpc25       QScript    Mar 19 12:18
-    res = runOSCommandLinux("bjobs", c("-u $USER", "-w"), stop.on.exit.code = FALSE)
+    # res = runOSyyCommandLinux("bjobs", c("-u $USER", "-w"), stop.on.exit.code = FALSE)
+    res = runOSCommandLinux(list.jobs.cmd, stop.on.exit.code = FALSE)
     if (res$exit.code == 255L && grepl("No unfinished job found", res$output, fixed = TRUE))
       return(character(0L))
     if (res$exit.code > 0L)
