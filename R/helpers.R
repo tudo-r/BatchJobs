@@ -27,13 +27,10 @@ checkMoreArgs = function(more.args, reserved) {
 
 checkPart = function(reg, part) {
   if (reg$multiple.result.files) {
-    if (!(
-      (is.atomic(part) && length(part) == 1L && is.na(part)) ||
-      (is.character(part) && !any(is.na(part)))
-    ))
+    if (!testScalarNA(part) && !testCharacter(part, any.missing = FALSE))
       stop("'part' must be NA or a character vector without NAs!")
   } else {
-    if (!is.atomic(part) || length(part) != 1L || !is.na(part))
+    if (!testScalarNA(part))
       stop("'part' must be NA because multiple.result.files is FALSE!")
   }
 }
