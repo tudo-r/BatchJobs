@@ -20,8 +20,8 @@
 #' @template arg_list_jobs_cmd
 #' @template ret_cf
 #' @export
-makeClusterFunctionsSGE = function(template.file, list.jobs.cmd = "qstat -u $USER") {
-  assertString(list.jobs.cmd)
+makeClusterFunctionsSGE = function(template.file, list.jobs.cmd = c("qstat",  "-u $USER")) {
+  assertCharacter(list.jobs.cmd, min.len = 1L, any.missing = FALSE)
   template = cfReadBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {

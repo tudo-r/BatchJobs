@@ -3,15 +3,17 @@
 \alias{makeClusterFunctionsTorque}
 \title{Create cluster functions for torque-based systems.}
 \usage{
-makeClusterFunctionsTorque(template.file,
-  list.jobs.cmd = "qselect -u $USER -s EHQRTW")
+makeClusterFunctionsTorque(template.file, list.jobs.cmd = c("qselect",
+  "-u $USER", "-s EHQRTW"))
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
 Path to a brew template file that is used for the PBS job file.}
 
-\item{list.jobs.cmd}{[\code{character(1)}]\cr
-Change default system command / options to list jobs.}
+\item{list.jobs.cmd}{[\code{character}]\cr
+Change default system command / options to list jobs.
+The first entry is the command, the following the options.
+See \code{\link[BBmisc]{system3}}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

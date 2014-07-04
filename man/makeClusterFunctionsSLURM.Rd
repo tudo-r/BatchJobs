@@ -3,15 +3,17 @@
 \alias{makeClusterFunctionsSLURM}
 \title{Create cluster functions for SLURM-based systems.}
 \usage{
-makeClusterFunctionsSLURM(template.file,
-  list.jobs.cmd = "squeue -h -o \%i -u $USER")
+makeClusterFunctionsSLURM(template.file, list.jobs.cmd = c("squeue", "-h",
+  "-o \%i", "-u $USER"))
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
 Path to a brew template file that is used for the PBS job file.}
 
-\item{list.jobs.cmd}{[\code{character(1)}]\cr
-Change default system command / options to list jobs.}
+\item{list.jobs.cmd}{[\code{character}]\cr
+Change default system command / options to list jobs.
+The first entry is the command, the following the options.
+See \code{\link[BBmisc]{system3}}.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].

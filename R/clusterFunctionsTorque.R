@@ -20,8 +20,8 @@
 #' @template arg_list_jobs_cmd
 #' @template ret_cf
 #' @export
-makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = "qselect -u $USER -s EHQRTW") {
-  assertString(list.jobs.cmd)
+makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect", "-u $USER", "-s EHQRTW")) {
+  assertCharacter(list.jobs.cmd, min.len = 1L, any.missing = FALSE)
   template = cfReadBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {

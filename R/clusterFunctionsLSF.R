@@ -20,8 +20,8 @@
 #' @template arg_list_jobs_cmd
 #' @template ret_cf
 #' @export
-makeClusterFunctionsLSF = function(template.file, list.jobs.cmd = "bjobs -u $USER -w") {
-  assertString(list.jobs.cmd)
+makeClusterFunctionsLSF = function(template.file, list.jobs.cmd = c("bjobs", "-u $USER", "-w")) {
+  assertCharacter(list.jobs.cmd, min.len = 1L, any.missing = FALSE)
   template = cfReadBrewTemplate(template.file)
 
   # When LSB_BJOBS_CONSISTENT_EXIT_CODE = Y, the bjobs command exits with 0 only
