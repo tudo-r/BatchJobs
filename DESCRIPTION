@@ -26,7 +26,6 @@ Imports:
     RSQLite,
     sendmailR,
     brew,
-    plyr,
     stringr,
     fail (>= 1.2)
 Suggests:

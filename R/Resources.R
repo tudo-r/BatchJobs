@@ -36,8 +36,7 @@ getResources = function() {
 #'   Ids of jobs.
 #'   Default is all submitted jobs.
 #' @param as.list [\code{integer(1)}]\cr
-#'   If \code{FALSE}, \code{rbind.fill} is called on the result to
-#'   convert it to a data.frame.
+#'   If \code{FALSE} a data.frame will be returned.
 #'   Default is \code{TRUE}.
 #' @return [\code{list} | \code{data.frame}]. List (or data.frame) of resource lists as passed to \code{\link{submitJobs}}.
 #' @export
@@ -59,6 +58,6 @@ getJobResources = function(reg, ids, as.list = TRUE) {
     res[df$resources_timestamp == ts] = load2(getResourcesFilePath(reg, ts), simplify = FALSE)
   }
   if (!as.list)
-    res = do.call(rbind.fill, lapply(res, as.data.frame))
+    res = list2df(res)
   return(res)
 }

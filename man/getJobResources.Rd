@@ -14,8 +14,7 @@ Ids of jobs.
 Default is all submitted jobs.}
 
 \item{as.list}{[\code{integer(1)}]\cr
-If \code{FALSE}, \code{rbind.fill} is called on the result to
-convert it to a data.frame.
+If \code{FALSE} a data.frame will be returned.
 Default is \code{TRUE}.}
 }
 \value{
