@@ -48,7 +48,7 @@ makeClusterFunctionsSGE = function(template.file, list.jobs.cmd = c("qstat",  "-
     #-----------------------------------------------------------------------------------------------------------------
     #  240935 0.00000 sleep 60   matthias     qw    04/03/2012 15:45:54                                    1
     # res = runOSCommandLinux("qstat", "-u $USER")
-    res = runOSCommandLinux(list.jobs.cmd)$output
+    runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L])$output
     if (res$exit.code > 0L)
       stopf("qstat produced exit code %i; output %s", res$exit.code, res$output)
 

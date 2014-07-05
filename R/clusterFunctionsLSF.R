@@ -51,7 +51,7 @@ makeClusterFunctionsLSF = function(template.file, list.jobs.cmd = c("bjobs", "-u
     # JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME
     # 106560  rogon   UNKWN m_amd      hpc84       hpc25       QScript    Mar 19 12:18
     # res = runOSyyCommandLinux("bjobs", c("-u $USER", "-w"), stop.on.exit.code = FALSE)
-    res = runOSCommandLinux(list.jobs.cmd, stop.on.exit.code = FALSE)
+    res = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L], stop.on.exit.code = FALSE)
     if (res$exit.code == 255L && grepl("No unfinished job found", res$output, fixed = TRUE))
       return(character(0L))
     if (res$exit.code > 0L)

@@ -45,7 +45,7 @@ makeClusterFunctionsSLURM = function(template.file, list.jobs.cmd = c("squeue", 
 
   listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
-    runOSCommandLinux(list.jobs.cmd)$output
+    runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L])$output
   }
 
   getArrayEnvirName = function() "SLURM_ARRAY_TASK_ID"
