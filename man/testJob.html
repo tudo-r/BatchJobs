@@ -15,8 +15,8 @@
 
 <h3>Description</h3>
 
-<p>Useful for debugging. Note that neither the registry,
-database or file directory are changed.
+<p>Useful for debugging.
+Note that neither the registry, database or file directory are changed.
 </p>
 
 
@@ -32,36 +32,37 @@ testJob(reg, id, resources = list(), external = TRUE)
 <table summary="R argblock">
 <tr valign="top"><td><code>reg</code></td>
 <td>
-<p>[<code><a href="makeRegistry.html">Registry</a></code>]<br> Registry.</p>
+<p>[<code><a href="makeRegistry.html">Registry</a></code>]<br>
+Registry.</p>
 </td></tr>
 <tr valign="top"><td><code>id</code></td>
 <td>
-<p>[<code>integer(1)</code>]<br> Id of job to test.
+<p>[<code>integer(1)</code>]<br>
+Id of job to test.
 Default is first job id of registry.</p>
 </td></tr>
 <tr valign="top"><td><code>external</code></td>
 <td>
-<p>[<code>logical(1)</code>]<br> Run test in an
-independent external R session instead of current.  The
-former allows to uncover missing variable definitions
-(which may accidentially be defined in the current global
-environment) and the latter is useful to get traceable
-execeptions.  Default is <code>TRUE</code>.</p>
+<p>[<code>logical(1)</code>]<br>
+Run test in an independent external R session instead of current.
+The former allows to uncover missing variable definitions (which may
+accidentially be defined in the current global environment) and the latter
+is useful to get traceable execeptions.
+Default is <code>TRUE</code>.</p>
 </td></tr>
 <tr valign="top"><td><code>resources</code></td>
 <td>
-<p>[<code>list</code>]<br> Usually not needed,
-unless you call the function <code><a href="getResources.html">getResources</a></code>
-in your job.  See <code><a href="submitJobs.html">submitJobs</a></code>.  Default is
-empty list.</p>
+<p>[<code>list</code>]<br>
+Usually not needed, unless you call the function <code><a href="getResources.html">getResources</a></code> in your job.
+See  <code><a href="submitJobs.html">submitJobs</a></code>.
+Default is empty list.</p>
 </td></tr>
 </table>
 
 
 <h3>Value</h3>
 
-<p>[any]. Result of job. If the job did not complete because
-of an error, NULL is returned.
+<p>[any]. Result of job. If the job did not complete because of an error, NULL is returned.
 </p>
 
 
@@ -73,15 +74,14 @@ of an error, NULL is returned.
 
 <h3>Examples</h3>
 
-<pre><code class="r">
-reg &lt;- makeRegistry(id=&quot;BatchJobsExample&quot;, file.dir=tempfile(), seed=123)
+<pre><code class="r">reg = makeRegistry(id = &quot;BatchJobsExample&quot;, file.dir = tempfile(), seed = 123)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/Rtmp14EkvD/file3d4b227a4580
-## Saving registry: /tmp/Rtmp14EkvD/file3d4b227a4580/registry.RData
+<pre><code>## Creating dir: /tmp/RtmpdPOzrX/file6eba5497ba6a
+## Saving registry: /tmp/RtmpdPOzrX/file6eba5497ba6a/registry.RData
 </code></pre>
 
-<pre><code class="r">f &lt;- function(x) if (x==1) stop(&quot;oops&quot;) else x
+<pre><code class="r">f = function(x) if (x==1) stop(&quot;oops&quot;) else x
 batchMap(reg, f, 1:2)
 </code></pre>
 
@@ -91,20 +91,17 @@ batchMap(reg, f, 1:2)
 <pre><code class="r">testJob(reg, 2)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/Rtmp14EkvD/3d4b4058ab7b
-## Saving registry: /tmp/Rtmp14EkvD/3d4b4058ab7b/registry.RData
-## Saving conf: /tmp/Rtmp14EkvD/3d4b4058ab7b/conf.RData
+<pre><code>## Creating dir: /tmp/RtmpdPOzrX/6eba51008ba1
+## Saving registry: /tmp/RtmpdPOzrX/6eba51008ba1/registry.RData
+## Saving conf: /tmp/RtmpdPOzrX/6eba51008ba1/conf.RData
 ## ### Output of new R process starts here ###
 ## ### Output of new R process ends here ###
-## ### Approximate running time: 1.75 secs
+## ### Approximate running time: 0.56 secs
 </code></pre>
 
 <pre><code>## [1] 2
 </code></pre>
 
-<pre><code class="r">
-</code></pre>
 
-
-<hr><div align="center">[Package <em>BatchJobs</em> version 1.2 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>BatchJobs</em> version 1.3 <a href="00Index.html">Index</a>]</div>
 </body></html>

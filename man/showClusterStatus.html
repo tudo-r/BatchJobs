@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Show information about available computational resources on...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for showClusterStatus {BatchJobs}"><tr><td>showClusterStatus {BatchJobs}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Show information about available computational resources on cluster.</h2>
+
+<h3>Description</h3>
+
+<p>Currently only supported for multicore and SSH mode.
+Displays: Name of node, current load, number of running R processes, number of R processes
+with more than 50
+The latter counts either jobs belonging to <code>reg</code> or all BatchJobs jobs if reg was not passed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+showClusterStatus(reg)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>reg</code></td>
+<td>
+<p>[<code><a href="makeRegistry.html">Registry</a></code>]<br>
+Registry.
+Must not be passed and this is the default.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[<code>data.frame</code>]. Returns the displayed table invisibly.
+</p>
+
+<hr><div align="center">[Package <em>BatchJobs</em> version 1.3 <a href="00Index.html">Index</a>]</div>
+</body></html>

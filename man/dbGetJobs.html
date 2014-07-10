@@ -4,7 +4,7 @@
 <link rel="stylesheet" type="text/css" href="R.css">
 </head><body>
 
-<table width="100%" summary="page for updateRegistry {BatchJobs}"><tr><td>updateRegistry {BatchJobs}</td><td align="right">R Documentation</td></tr></table>
+<table width="100%" summary="page for dbGetJobs {BatchJobs}"><tr><td>dbGetJobs {BatchJobs}</td><td align="right">R Documentation</td></tr></table>
 
 <h2>ONLY FOR INTERNAL USAGE.</h2>
 
@@ -17,7 +17,7 @@
 <h3>Usage</h3>
 
 <pre>
-updateRegistry(reg)
+dbGetJobs(reg, ids)
 </pre>
 
 
@@ -29,12 +29,17 @@ updateRegistry(reg)
 <p>[<code><a href="makeRegistry.html">Registry</a></code>]<br>
 Registry.</p>
 </td></tr>
+<tr valign="top"><td><code>ids</code></td>
+<td>
+<p>[<code>integer</code>]<br>
+Ids of selected jobs.</p>
+</td></tr>
 </table>
 
 
 <h3>Value</h3>
 
-<p>[any]. Updated <code><a href="makeRegistry.html">Registry</a></code> or <code>FALSE</code> if no updates were performed.
+<p>[list of <code><a href="makeJob.html">Job</a></code>]. Retrieved jobs from DB.
 </p>
 
 <hr><div align="center">[Package <em>BatchJobs</em> version 1.3 <a href="00Index.html">Index</a>]</div>

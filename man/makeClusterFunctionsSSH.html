@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Create an SSH cluster to execute jobs.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for makeClusterFunctionsSSH {BatchJobs}"><tr><td>makeClusterFunctionsSSH {BatchJobs}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>Create an SSH cluster to execute jobs.</h2>
+
+<h3>Description</h3>
+
+<p>Worker nodes must share the same file system and be accessible by ssh
+without manually entering passwords (e.g. by ssh-agent or passwordless pubkey).
+Note that you can also use this function to parallelize on multiple cores on your local machine.
+But you still have to run an ssh server and provide passwordless access to
+localhost.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+makeClusterFunctionsSSH(..., workers)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>[<code><a href="makeSSHWorker.html">SSHWorker</a></code>]<br>
+Worker objects, all created with <code><a href="makeSSHWorker.html">makeSSHWorker</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>workers</code></td>
+<td>
+<p>[list of <code><a href="makeSSHWorker.html">SSHWorker</a></code>]<br>
+Alternative way to pass workers.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>[<code>ClusterFunctions</code>].
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="makeClusterFunctions.html">ClusterFunctions</a> <code><a href="makeSSHWorker.html">makeSSHWorker</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">## Not run: 
+##D 
+##D # Assume you have three nodes larry, curley and moe. All have 6
+##D # cpu cores. On curley and moe R is installed under
+##D # &quot;/opt/R/R-current&quot; and on larry R is installed under
+##D # &quot;/usr/local/R/&quot;. larry should not be used extensively because
+##D # somebody else wants to compute there as well.
+##D # Then a call to &#39;makeClusterFunctionsSSH&#39;
+##D # might look like this:
+##D 
+##D cluster.functions = makeClusterFunctionsSSH(
+##D   makeSSHWorker(nodename = &quot;larry&quot;, rhome = &quot;/usr/local/R&quot;, max.jobs = 2),
+##D   makeSSHWorker(nodename = &quot;curley&quot;, rhome = &quot;/opt/R/R-current&quot;),
+##D   makeSSHWorker(nodename = &quot;moe&quot;, rhome = &quot;/opt/R/R-current&quot;))
+## End(Not run)
+</code></pre>
+
+
+<hr><div align="center">[Package <em>BatchJobs</em> version 1.3 <a href="00Index.html">Index</a>]</div>
+</body></html>
