@@ -70,8 +70,8 @@ Default is <code>FALSE</code>.</p>
 <pre><code class="r">reg = makeRegistry(id = &quot;BatchJobsExample&quot;, file.dir = tempfile(), seed = 123)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/RtmpdPOzrX/file6eba42e48eb2
-## Saving registry: /tmp/RtmpdPOzrX/file6eba42e48eb2/registry.RData
+<pre><code>## Creating dir: /tmp/RtmpxaPSRM/file709f48078488
+## Saving registry: /tmp/RtmpxaPSRM/file709f48078488/registry.RData
 </code></pre>
 
 <pre><code class="r">f = function(x) x^2
@@ -86,7 +86,7 @@ batchMap(reg, f, 1:10)
 
 <pre><code>## Job registry:  BatchJobsExample 
 ##   Number of jobs:  10 
-##   Files dir: /tmp/RtmpdPOzrX/file6eba42e48eb2 
+##   Files dir: /tmp/RtmpxaPSRM/file709f48078488 
 ##   Work dir: /tmp/pkgdocs 
 ##   Multiple result files: FALSE 
 ##   Seed: 123 

@@ -77,8 +77,8 @@ Default is empty list.</p>
 <pre><code class="r">reg = makeRegistry(id = &quot;BatchJobsExample&quot;, file.dir = tempfile(), seed = 123)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/RtmpdPOzrX/file6eba5497ba6a
-## Saving registry: /tmp/RtmpdPOzrX/file6eba5497ba6a/registry.RData
+<pre><code>## Creating dir: /tmp/RtmpxaPSRM/file709f1f0e0152
+## Saving registry: /tmp/RtmpxaPSRM/file709f1f0e0152/registry.RData
 </code></pre>
 
 <pre><code class="r">f = function(x) if (x==1) stop(&quot;oops&quot;) else x
@@ -91,12 +91,12 @@ batchMap(reg, f, 1:2)
 <pre><code class="r">testJob(reg, 2)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/RtmpdPOzrX/6eba51008ba1
-## Saving registry: /tmp/RtmpdPOzrX/6eba51008ba1/registry.RData
-## Saving conf: /tmp/RtmpdPOzrX/6eba51008ba1/conf.RData
+<pre><code>## Creating dir: /tmp/RtmpxaPSRM/709f6cb8ebf9
+## Saving registry: /tmp/RtmpxaPSRM/709f6cb8ebf9/registry.RData
+## Saving conf: /tmp/RtmpxaPSRM/709f6cb8ebf9/conf.RData
 ## ### Output of new R process starts here ###
 ## ### Output of new R process ends here ###
-## ### Approximate running time: 0.56 secs
+## ### Approximate running time: 0.57 secs
 </code></pre>
 
 <pre><code>## [1] 2

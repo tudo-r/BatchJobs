@@ -67,8 +67,8 @@ Default is empty list.</p>
 <pre><code class="r">reg = makeRegistry(id = &quot;BatchJobsExample&quot;, file.dir = tempfile(), seed = 123)
 </code></pre>
 
-<pre><code>## Creating dir: /tmp/RtmpdPOzrX/file6eba3b1474fb
-## Saving registry: /tmp/RtmpdPOzrX/file6eba3b1474fb/registry.RData
+<pre><code>## Creating dir: /tmp/RtmpxaPSRM/file709f395c5ef6
+## Saving registry: /tmp/RtmpxaPSRM/file709f395c5ef6/registry.RData
 </code></pre>
 
 <pre><code class="r">f = function(x, y, z) x * y  + z
@@ -90,81 +90,81 @@ batchExpandGrid(reg, f, x = 1:2, y = 1:3, more.args = list(z = 10))
 <pre><code class="r">submitJobs(reg)
 </code></pre>
 
-<pre><code>## Saving conf: /tmp/RtmpdPOzrX/file6eba3b1474fb/conf.RData
+<pre><code>## Saving conf: /tmp/RtmpxaPSRM/file709f395c5ef6/conf.RData
 ## Submitting 6 chunks / 6 jobs.
 ## Cluster functions: Interactive.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Writing 6 R scripts...
-## Loading registry: /tmp/RtmpdPOzrX/file6eba3b1474fb/registry.RData
+## Loading registry: /tmp/RtmpxaPSRM/file709f395c5ef6/registry.RData
 ## Loading conf: 
-## 2014-07-10 07:45:17: Starting job on node bischl-x1.
+## 2014-07-10 07:49:34: Starting job on node bischl-x1.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=1 ##########
-## Timestamp: 2014-07-10 07:45:17
+## Timestamp: 2014-07-10 07:49:34
 ## Setting seed: 123
-## Writing result file: /tmp/RtmpdPOzrX/file6eba3b1474fb/jobs/01/1-result.RData
-## 2014-07-10 07:45:17: All done.
+## Writing result file: /tmp/RtmpxaPSRM/file709f395c5ef6/jobs/01/1-result.RData
+## 2014-07-10 07:49:34: All done.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /tmp/RtmpdPOzrX/file6eba3b1474fb/registry.RData
+## Loading registry: /tmp/RtmpxaPSRM/file709f395c5ef6/registry.RData
 ## Loading conf: 
-## 2014-07-10 07:45:17: Starting job on node bischl-x1.
+## 2014-07-10 07:49:34: Starting job on node bischl-x1.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=2 ##########
-## Timestamp: 2014-07-10 07:45:17
+## Timestamp: 2014-07-10 07:49:34
 ## Setting seed: 124
-## Writing result file: /tmp/RtmpdPOzrX/file6eba3b1474fb/jobs/02/2-result.RData
-## 2014-07-10 07:45:17: All done.
+## Writing result file: /tmp/RtmpxaPSRM/file709f395c5ef6/jobs/02/2-result.RData
+## 2014-07-10 07:49:34: All done.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /tmp/RtmpdPOzrX/file6eba3b1474fb/registry.RData
+## Loading registry: /tmp/RtmpxaPSRM/file709f395c5ef6/registry.RData
 ## Loading conf: 
-## 2014-07-10 07:45:17: Starting job on node bischl-x1.
+## 2014-07-10 07:49:34: Starting job on node bischl-x1.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=3 ##########
-## Timestamp: 2014-07-10 07:45:17
+## Timestamp: 2014-07-10 07:49:34
 ## Setting seed: 125
-## Writing result file: /tmp/RtmpdPOzrX/file6eba3b1474fb/jobs/03/3-result.RData
-## 2014-07-10 07:45:17: All done.
+## Writing result file: /tmp/RtmpxaPSRM/file709f395c5ef6/jobs/03/3-result.RData
+## 2014-07-10 07:49:34: All done.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /tmp/RtmpdPOzrX/file6eba3b1474fb/registry.RData
+## Loading registry: /tmp/RtmpxaPSRM/file709f395c5ef6/registry.RData
 ## Loading conf: 
-## 2014-07-10 07:45:17: Starting job on node bischl-x1.
+## 2014-07-10 07:49:34: Starting job on node bischl-x1.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=4 ##########
-## Timestamp: 2014-07-10 07:45:17
+## Timestamp: 2014-07-10 07:49:34
 ## Setting seed: 126
-## Writing result file: /tmp/RtmpdPOzrX/file6eba3b1474fb/jobs/04/4-result.RData
-## 2014-07-10 07:45:17: All done.
+## Writing result file: /tmp/RtmpxaPSRM/file709f395c5ef6/jobs/04/4-result.RData
+## 2014-07-10 07:49:34: All done.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /tmp/RtmpdPOzrX/file6eba3b1474fb/registry.RData
+## Loading registry: /tmp/RtmpxaPSRM/file709f395c5ef6/registry.RData
 ## Loading conf: 
-## 2014-07-10 07:45:18: Starting job on node bischl-x1.
+## 2014-07-10 07:49:34: Starting job on node bischl-x1.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=5 ##########
-## Timestamp: 2014-07-10 07:45:18
+## Timestamp: 2014-07-10 07:49:34
 ## Setting seed: 127
-## Writing result file: /tmp/RtmpdPOzrX/file6eba3b1474fb/jobs/05/5-result.RData
-## 2014-07-10 07:45:18: All done.
+## Writing result file: /tmp/RtmpxaPSRM/file709f395c5ef6/jobs/05/5-result.RData
+## 2014-07-10 07:49:34: All done.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
-## Loading registry: /tmp/RtmpdPOzrX/file6eba3b1474fb/registry.RData
+## Loading registry: /tmp/RtmpxaPSRM/file709f395c5ef6/registry.RData
 ## Loading conf: 
-## 2014-07-10 07:45:18: Starting job on node bischl-x1.
+## 2014-07-10 07:49:34: Starting job on node bischl-x1.
 ## Auto-mailer settings: start=none, done=none, error=none.
 ## Setting work dir: /tmp/pkgdocs
 ## ########## Executing jid=6 ##########
-## Timestamp: 2014-07-10 07:45:18
+## Timestamp: 2014-07-10 07:49:34
 ## Setting seed: 128
-## Writing result file: /tmp/RtmpdPOzrX/file6eba3b1474fb/jobs/06/6-result.RData
-## 2014-07-10 07:45:18: All done.
+## Writing result file: /tmp/RtmpxaPSRM/file709f395c5ef6/jobs/06/6-result.RData
+## 2014-07-10 07:49:34: All done.
 ## Setting work back to: /tmp/pkgdocs
 ## Memory usage according to gc:
 ## Sending 6 submit messages...
