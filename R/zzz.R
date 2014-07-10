@@ -44,7 +44,8 @@ NULL
 }
 
 .onLoad = function(libname, pkgname) {
-  options(BatchJobs.check.posix = getOption("BatchJobs.check.posix", default = TRUE))
+# checking for posix might create problem in windwos tests
+  options(BatchJobs.check.posix = getOption("BatchJobs.check.posix", default = !isWindows()))
   if (!isOnSlave()) {
     assignConfDefaults()
   }
