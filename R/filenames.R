@@ -86,7 +86,6 @@ makePathsAbsolute = function(paths) {
   vcapply(paths, makePathAbsolute)
 }
 
-
 getJobDirs = function(reg, ids, unique = FALSE) {
   if (reg$sharding) {
     shards = sprintf("%02i", ids %% 100L)
@@ -139,7 +138,6 @@ getPendingDir = function(file.dir)
 
 getExportDir = function(file.dir)
   file.path(file.dir, "exports")
-
 
 getPendingFile = function(reg, type, id, char = .OrderChars[type]) {
   file.path(getPendingDir(reg$file.dir), sprintf("pending_%s_%s_%i.sql", char, type, id))

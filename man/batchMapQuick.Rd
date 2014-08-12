@@ -44,7 +44,7 @@ Default is \code{FALSE}.}
 
 \item{inds}{[\code{integer}]\cr
 Indices of ids / chunks to submit.
-Default is all.}
+Default is all. If ids get chunked, this subsets the list of shuffled ids.}
 
 \item{resources}{[\code{list}]\cr
 Required resources for all batch jobs.

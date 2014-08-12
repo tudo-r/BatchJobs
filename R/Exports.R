@@ -1,19 +1,81 @@
-#' Load exported R data objects stored.
+#' Load exported R data objects.
 #'
 #' Loads all \code{RData} files in the \dQuote{exports} subdirectory of your \code{file.dir}
 #' and assigns the objects to the global environment.
 #'
 #' @param reg [\code{Registry}]\cr
-#'   Location of the file.dir to load the registry from.
-#' @return [\code{character}]. Invisibly returns a character vector of loaded file names.
+#'   Registry.
+#' @return [\code{character}]. Invisibly returns a character vector of loaded objects.
+#' @family exports
 #' @export
 loadExports = function(reg) {
   checkRegistry(reg)
   f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE)
   keys = f$ls()
   if (length(keys)) {
-    messagef("Loading %i RData files: %s", length(keys), collapse(keys))
+    messagef("Loading RData files: %s", collapse(keys))
     f$assign(keys, envir = .GlobalEnv)
   }
-  invisible(sprintf("%s.RData", keys))
+  invisible(keys)
+}
+
+#' Export R object to be available on the slaves.
+#'
+#' Saves objects as \code{RData} files in the \dQuote{exports} subdirectory of your \code{file.dir}
+#' to be later loaded on the slaves.
+#'
+#' @param reg [\code{Registry}]\cr
+#'   Registry.
+#' @param ... [any]\cr
+#'   Objects to export. You must provide a valid name.
+#' @param li [\code{list}]\cr
+#'   More objects to export provided as a named list.
+#' @param overwrite [\code{logical(1)}]\cr
+#'   If set to \code{FALSE} (default), exported objects are protected from being overwritten
+#'   by multiple calls of this function. Setting this to \code{TRUE} disables this check.
+#' @return [\code{character}]. Invisibly returns a character vector of exported objects.
+#' @family exports
+#' @export
+batchExport = function(reg, ..., li = list(), overwrite = FALSE) {
+  checkRegistry(reg)
+  ddd = list(...)
+  assertList(li, names = "strict")
+  assertList(ddd, names = "strict")
+  assertFlag(overwrite)
+  keys = c(names(li), names(ddd))
+  dup = anyDuplicated(keys)
+  if (dup > 0L)
+    stopf("Object for export provided more than once: '%s'", keys[dups])
+
+  f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE)
+
+  if (!overwrite) {
+    collision = which.first(keys %in% f$ls())
+    if (length(collision) > 0L)
+      stopf("Object named '%s' already exported and 'overwrite' is set to FALSE", keys[collision])
+  }
+
+  f$put(li = li)
+  f$put(li = ddd)
+  invisible(keys)
+}
+
+#' Unload exported R objects.
+#'
+#' Removes \code{RData} files from the \dQuote{exports} subdirectory of your \code{file.dir}
+#' and thereby prevents loading on the slave.
+#'
+#' @param reg [\code{Registry}]\cr
+#'   Location of the file.dir to load the registry from.
+#' @return [\code{character}]. Invisibly returns a character vector of unexported objects.
+#' @family exports
+#' @export
+batchUnexport = function(reg, what) {
+  checkRegistry(reg)
+  assertCharacter(what, any.missing = FALSE)
+
+  f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE)
+  keys = intersect(f$ls(), what)
+  f$remove(keys)
+  invisible(keys)
 }

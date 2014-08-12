@@ -15,12 +15,31 @@ test_that("exports", {
   expect_equal(res, 1:3)
 })
 
+test_that("exports with batchExport and batchUnexport", {
+  reg = makeTestRegistry()
+  expect_equal(batchExport(reg, a = 1, b = 99), c("a", "b"))
+  batchMap(reg, function(x) x + a + b, 1)
+  submitJobs(reg)
+  waitForJobs(reg)
+  expect_equal(loadResult(reg, 1), 101)
+  if (interactive()) {
+    expect_equal(testJob(reg, 1), 101)
+    expect_equal(testJob(reg, 1, external = FALSE), 101)
+  }
+  expect_equal(batchUnexport(reg, "a"), "a")
+  suppressWarnings(rm(list = "a", envir = .GlobalEnv))
+  submitJobs(reg, 1)
+  waitForJobs(reg)
+  expect_equal(length(findErrors(reg)), 1)
+  expect_true(grepl("not found", getErrorMessages(reg, 1), fixed = TRUE))
+})
 
-#FIXME: 
+
+#FIXME:
 # I currently do not know how to run this test so it does not break R CMD Check
 # I get
 # >  cannot open file 'startup.Rs': No such file or directory
-# 'make test' would work 
+# 'make test' would work
 # --> run it only in interactive tests for now
 if (interactive()) {
 test_that("exports work with external testJob", {
