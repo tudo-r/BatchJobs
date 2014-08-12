@@ -1,5 +1,4 @@
 writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail, delays) {
-  # force loading 'methods' on slave to avoid package trouble there for some jobs
   template = paste(
     "Sys.sleep(%%f)",
     "options(BatchJobs.on.slave = TRUE, BatchJobs.resources.path = '%s')",
