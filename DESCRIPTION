@@ -32,4 +32,4 @@ Suggests:
     MASS
 LazyData: yes
 ByteCompile: yes
-Version: 1.3
+Version: 1.4

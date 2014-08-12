@@ -1,3 +1,6 @@
+BatchJobs_1.4:
+- Added functions batchExport and batchUnexport
+
 BatchJobs_1.3:
 - Reduced memory consumption and disk i/o if 'more.args' is used.
 - added option in Registry for absolute paths src.files and src.dirs
