@@ -71,13 +71,14 @@ is.accessible = function(path) {
 }
 
 isPathFromRoot = function(path) {
+  if (isWindows())
+    return(grepl("^[[:alpha:]]:", path))
   substr(path, 1L, 1L) == "/"
 }
 
 makePathAbsolute = function(path) {
   if (isPathFromRoot(path))
     return(path)
-  # FIXME: test this on windows
   normalizePath(path, mustWork = FALSE, winslash = "/")
 }
 
