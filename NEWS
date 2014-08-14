@@ -1,5 +1,5 @@
 BatchJobs_1.4:
-- Added functions batchExport and batchUnexport
+- Added functions batchExport, batchUnexport, loadExports
 - version 1.3 introduced a mini bug in the SGE interface (via new list.jobs.cmd option). Fixed.
 
 BatchJobs_1.3:
@@ -10,7 +10,7 @@ BatchJobs_1.3:
 - package 'methods' is always loaded on slaved to avoid problems with S4 code
 - some smaller fixes
 - in makeClusterFunctions* it is now to configurable via what command jobs are listed on the system
-- default for BatchJobs.posix.checks is now: OS != Windows
+- default for BatchJobs.check.posix is now: OS != Windows
 
 BatchJobs_1.2:
 - Fixed a bug where too many running jobs were queried on some Torque systems

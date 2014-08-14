@@ -34,6 +34,7 @@ Provides Map, Reduce and Filter variants to generate jobs on batch computing sys
 ## Configuration
 A fresh installation defaults to a local execution mode.
 Proceed to [Configuration](../../wiki/Configuration) to set up cluster execution.
+The package also allows a few R options to be set, see [here](http://www.rdocumentation.org/packages/BatchJobs/functions/BatchJobs).
 
 ## Documentation
 Probably the best way to get started in 5 minutes is to read Henrik Bengtsson [intro slides](http://goo.gl/s1eqBz).
