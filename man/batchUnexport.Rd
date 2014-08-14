@@ -8,6 +8,9 @@ batchUnexport(reg, what)
 \arguments{
 \item{reg}{[\code{Registry}]\cr
 Location of the file.dir to load the registry from.}
+
+\item{what}{[\code{character}]\cr
+Names of objects to remove.}
 }
 \value{
 [\code{character}]. Invisibly returns a character vector of unexported objects.

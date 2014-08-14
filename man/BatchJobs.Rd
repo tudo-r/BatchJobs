@@ -25,12 +25,14 @@ either in your R profile file or a script via \code{\link{options}}:
     console output of the package operations. Usually you want to see this output in interactive
     work, but when you  use the package in e.g. knitr documents,
     it clutters the resulting document too much.}
-  \item{BatchJobs.check.posix}{In its default setting, the package checks you registry file dir
-  (and related user-defined directories) quite strictly to be POSIX compliant. Usually this a good
-  idea, you do not want to have strange chars in your file paths, as this might results in problems
-  when these paths get passed to the scheduler or other command-line tools that the package
-  interoperates with. But on some OS this check might be too strict and cause problems.
-  This boolean flag allows to disable the check entirely.}
+  \item{BatchJobs.check.posix}{If this boolean flag is enabled, the package checks your
+  registry file dir (and related user-defined directories) quite strictly to be POSIX compliant.
+  Usually this is a good idea, you do not want to have strange chars in your file paths,
+  as this might results in problems  when these paths get passed to the scheduler or other
+  command-line tools that the package interoperates with.
+  But on some OS this check might be too strict and cause problems.
+  Setting the flag to \code{FALSE} allows to disable the check entirely.
+  The default is \code{FALSE} on Windows systems and \code{TRUE} else.}
 }
 }
 

@@ -17,6 +17,7 @@ test_that("exports", {
 
 test_that("exports with batchExport and batchUnexport", {
   reg = makeTestRegistry()
+  expect_error(batchExport(reg, a = 1, li = list(a = 2)), "more than once")
   expect_equal(batchExport(reg, a = 1, b = 99), c("a", "b"))
   batchMap(reg, function(x) x + a + b, 1)
   submitJobs(reg)

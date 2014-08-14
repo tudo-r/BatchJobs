@@ -1,5 +1,6 @@
-#' Load exported R data objects.
+#' @title Load exported R data objects.
 #'
+#' @description
 #' Loads all \code{RData} files in the \dQuote{exports} subdirectory of your \code{file.dir}
 #' and assigns the objects to the global environment.
 #'
@@ -19,8 +20,9 @@ loadExports = function(reg) {
   invisible(keys)
 }
 
-#' Export R object to be available on the slaves.
+#' @title Export R object to be available on the slaves.
 #'
+#' @description
 #' Saves objects as \code{RData} files in the \dQuote{exports} subdirectory of your \code{file.dir}
 #' to be later loaded on the slaves.
 #'
@@ -45,7 +47,7 @@ batchExport = function(reg, ..., li = list(), overwrite = FALSE) {
   keys = c(names(li), names(ddd))
   dup = anyDuplicated(keys)
   if (dup > 0L)
-    stopf("Object for export provided more than once: '%s'", keys[dups])
+    stopf("Object for export provided more than once: '%s'", keys[dup])
 
   f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE)
 
@@ -60,13 +62,16 @@ batchExport = function(reg, ..., li = list(), overwrite = FALSE) {
   invisible(keys)
 }
 
-#' Unload exported R objects.
+#' @title Unload exported R objects.
 #'
+#' @description
 #' Removes \code{RData} files from the \dQuote{exports} subdirectory of your \code{file.dir}
 #' and thereby prevents loading on the slave.
 #'
 #' @param reg [\code{Registry}]\cr
 #'   Location of the file.dir to load the registry from.
+#' @param what [\code{character}]\cr
+#'   Names of objects to remove.
 #' @return [\code{character}]. Invisibly returns a character vector of unexported objects.
 #' @family exports
 #' @export
