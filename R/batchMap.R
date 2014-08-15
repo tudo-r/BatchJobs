@@ -1,5 +1,6 @@
-#' Maps a function over lists or vectors, adding jobs to a registry.
+#' @title Maps a function over lists or vectors, adding jobs to a registry.
 #'
+#' @description
 #' You can then submit these jobs to the batch system.
 #'
 #' @param reg [\code{\link{Registry}}]\cr
@@ -21,8 +22,6 @@
 #' batchMap(reg, f, 1:10)
 #' print(reg)
 #' @export
-#FIXME I did currently not check what was implemneted regarding unit test "batchmap not atomic"
-# but the test fails and the beavior is currently undocumented
 batchMap = function(reg, fun, ..., more.args = list(), use.names = FALSE) {
   checkRegistry(reg, strict = TRUE)
   assertFunction(fun)
