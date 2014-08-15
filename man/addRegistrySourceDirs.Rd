@@ -3,7 +3,7 @@
 \alias{addRegistrySourceDirs}
 \title{Add source dirs to registry.}
 \usage{
-addRegistrySourceDirs(reg, src.dirs)
+addRegistrySourceDirs(reg, src.dirs, src.now = TRUE)
 }
 \arguments{
 \item{reg}{[\code{Registry}]\cr
@@ -12,6 +12,10 @@ Registry.}
 \item{src.dirs}{[\code{character}]\cr
 Paths to add to registry.
 See \code{\link{makeRegistry}}.}
+
+\item{src.now}{[\code{logical(1)}]
+Source files now on master?
+Default is \code{TRUE}.}
 }
 \value{
 [\code{\link{Registry}}]. Changed registry.

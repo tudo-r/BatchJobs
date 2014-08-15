@@ -3,7 +3,7 @@
 \alias{addRegistrySourceFiles}
 \title{Add source files to registry.}
 \usage{
-addRegistrySourceFiles(reg, src.files)
+addRegistrySourceFiles(reg, src.files, src.now = TRUE)
 }
 \arguments{
 \item{reg}{[\code{Registry}]\cr
@@ -12,6 +12,10 @@ Registry.}
 \item{src.files}{[\code{character}]\cr
 Paths to add to registry.
 See \code{\link{makeRegistry}}.}
+
+\item{src.now}{[\code{logical(1)}]
+Source files now on master?
+Default is \code{TRUE}.}
 }
 \value{
 [\code{\link{Registry}}]. Changed registry.
