@@ -4,8 +4,7 @@
 #' Loads all \code{RData} files in the \dQuote{exports} subdirectory of your \code{file.dir}
 #' and assigns the objects to the global environment.
 #'
-#' @param reg [\code{Registry}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @return [\code{character}]. Invisibly returns a character vector of loaded objects.
 #' @family exports
 #' @export
@@ -26,8 +25,7 @@ loadExports = function(reg) {
 #' Saves objects as \code{RData} files in the \dQuote{exports} subdirectory of your \code{file.dir}
 #' to be later loaded on the slaves.
 #'
-#' @param reg [\code{Registry}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ... [any]\cr
 #'   Objects to export. You must provide a valid name.
 #' @param li [\code{list}]\cr
@@ -68,8 +66,7 @@ batchExport = function(reg, ..., li = list(), overwrite = FALSE) {
 #' Removes \code{RData} files from the \dQuote{exports} subdirectory of your \code{file.dir}
 #' and thereby prevents loading on the slave.
 #'
-#' @param reg [\code{Registry}]\cr
-#'   Location of the file.dir to load the registry from.
+#' @template arg_reg
 #' @param what [\code{character}]\cr
 #'   Names of objects to remove.
 #' @return [\code{character}]. Invisibly returns a character vector of unexported objects.

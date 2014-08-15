@@ -7,7 +7,7 @@ batchUnexport(reg, what)
 }
 \arguments{
 \item{reg}{[\code{Registry}]\cr
-Location of the file.dir to load the registry from.}
+Registry.}
 
 \item{what}{[\code{character}]\cr
 Names of objects to remove.}
@@ -20,7 +20,8 @@ Removes \code{RData} files from the \dQuote{exports} subdirectory of your \code{
 and thereby prevents loading on the slave.
 }
 \seealso{
-Other exports: \code{\link{batchExport}};
-  \code{\link{loadExports}}
+Other exports: \code{\link{addRegistryPackages}};
+  \code{\link{batchExport}}; \code{\link{loadExports}};
+  \code{\link{removeRegistryPackages}}
 }
 

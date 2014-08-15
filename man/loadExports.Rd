@@ -17,7 +17,8 @@ Loads all \code{RData} files in the \dQuote{exports} subdirectory of your \code{
 and assigns the objects to the global environment.
 }
 \seealso{
-Other exports: \code{\link{batchExport}};
-  \code{\link{batchUnexport}}
+Other exports: \code{\link{addRegistryPackages}};
+  \code{\link{batchExport}}; \code{\link{batchUnexport}};
+  \code{\link{removeRegistryPackages}}
 }
 

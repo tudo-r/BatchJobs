@@ -27,7 +27,8 @@ Saves objects as \code{RData} files in the \dQuote{exports} subdirectory of your
 to be later loaded on the slaves.
 }
 \seealso{
-Other exports: \code{\link{batchUnexport}};
-  \code{\link{loadExports}}
+Other exports: \code{\link{addRegistryPackages}};
+  \code{\link{batchUnexport}}; \code{\link{loadExports}};
+  \code{\link{removeRegistryPackages}}
 }
 
