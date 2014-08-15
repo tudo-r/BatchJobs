@@ -222,5 +222,5 @@ reduceResultsDataFrame = function(reg, ids, part = NA_character_, fun, ..., use.
   if (!length(res))
     return(data.frame())
 
-  list2df(res, force.names = TRUE, strings.as.factors = strings.as.factors)
+  convertListOfRowsToDataFrame(res, strings.as.factors = strings.as.factors)
 }

@@ -86,7 +86,8 @@ getJobInfo.Registry = function(reg, ids, pars = FALSE, prefix.pars = FALSE, sele
 
   # unserialize parameters
   if (pars && !is.null(tab$pars)) {
-    pars = list2df(lapply(tab$pars, function(x) unserialize(charToRaw(x))), force.names = TRUE)
+    pars = convertListOfRowsToDataFrame(lapply(tab$pars,
+      function(x) unserialize(charToRaw(x))))
     if (prefix.pars)
       names(pars) = sprintf("job.par.%s", names(pars))
     tab = cbind(subset(tab, select = -pars), pars)
