@@ -70,10 +70,9 @@ is.accessible = function(path) {
   return(file.access(path, mode = c(2L, 4L)) == 0L)
 }
 
+# on windows, we start with either c: or C: or / or \; on all other systems with / or \
 isPathFromRoot = function(path) {
-  if (isWindows())
-    return(grepl("^[[:alpha:]]:", path))
-  substr(path, 1L, 1L) == "/"
+  (isWindows() && grepl("^[[:alpha:]]:", path)) || substr(path, 1L, 1L) %in% c("/", "\\")
 }
 
 makePathAbsolute = function(path) {
