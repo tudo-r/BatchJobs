@@ -1,7 +1,6 @@
-#FIXME: write tests
-
-#' Sweep obsolete files from the file system
+#' @title Sweep obsolete files from the file system.
 #'
+#' @description
 #' Removes R scripts, log files, resource informations and temporarily stored configuration files
 #' from the registry's file directory. Assuming all your jobs completed successfully, none of these are needed
 #' for further work. This operation potentially releases quite a lot of disk space, depending on the number of your jobs.
@@ -10,8 +9,7 @@
 #' Only do this at your own risk and when you are sure that you have successfully completed a project and only
 #' want to archive your produced experiments and results.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param sweep [\code{character}]\cr
 #'   Possible choices:
 #'   Temporary R scripts of jobs,

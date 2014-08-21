@@ -58,6 +58,6 @@ getJobResources = function(reg, ids, as.list = TRUE) {
     res[df$resources_timestamp == ts] = load2(getResourcesFilePath(reg, ts), simplify = FALSE)
   }
   if (!as.list)
-    res = list2df(res)
+    res = convertListOfRowsToDataFrame(res)
   return(res)
 }
