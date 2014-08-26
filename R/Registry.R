@@ -1,26 +1,35 @@
 makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   multiple.result.files, seed, packages, src.dirs, src.files) {
+
   checkIdValid(id, allow.minus = FALSE)
+
   assertString(file.dir)
-  assertFlag(sharding)
+  checkDir(file.dir, create = TRUE, check.empty = TRUE, check.posix = TRUE, msg = TRUE)
+  file.dir = sanitizePath(file.dir)
+
   if (missing(work.dir))
     work.dir = getwd()
-  assertString(work.dir)
-  assertFlag(multiple.result.files)
+  else
+    assertString(work.dir)
+  checkDir(work.dir, check.posix = TRUE)
+  work.dir = sanitizePath(work.dir)
 
+  assertFlag(sharding)
+  assertFlag(multiple.result.files)
   seed = if (missing(seed)) getRandomSeed() else asInt(seed)
 
   assertCharacter(packages, any.missing = FALSE)
   packages = union(packages, "BatchJobs")
   requirePackages(packages, stop = TRUE, suppress.warnings = TRUE)
+
   assertCharacter(src.dirs, any.missing = FALSE)
+  src.dirs = sanitizePath(src.dirs)
   assertCharacter(src.files, any.missing = FALSE)
+  src.files = sanitizePath(src.files)
 
   # make paths absolute to be sure. otherwise cfSSH wont work for example
   # also check the dirs
   # file dir
-  checkDir(file.dir, create = TRUE, check.empty = TRUE, check.posix = TRUE, msg = TRUE)
-  file.dir = makePathAbsolute(file.dir)
   # job dir
   job.dir = getJobParentDir(file.dir)
   checkDir(job.dir, create = TRUE, check.empty = TRUE)
@@ -31,8 +40,6 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   checkDir(getResourcesDir(file.dir), create = TRUE, check.empty = TRUE)
   checkDir(getPendingDir(file.dir), create = TRUE, check.empty = TRUE)
   checkDir(getExportDir(file.dir), create = TRUE, check.empty = TRUE)
-  checkDir(work.dir, check.posix = TRUE)
-  work.dir = makePathAbsolute(work.dir)
   sourceRegistryFilesInternal(work.dir, src.dirs, src.files)
 
   packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
@@ -131,7 +138,6 @@ makeRegistry = function(id, file.dir, sharding = TRUE, work.dir, multiple.result
   dbCreateJobStatusTable(reg)
   dbCreateJobDefTable(reg)
   saveRegistry(reg)
-  reg
 }
 
 #' @export
@@ -186,6 +192,7 @@ saveRegistry = function(reg) {
   fn = getRegistryFilePath(reg$file.dir)
   info("Saving registry: %s", fn)
   save(file = fn, reg)
+  reg
 }
 
 isRegistryDir = function(dir) {

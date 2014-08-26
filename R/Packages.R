@@ -17,7 +17,6 @@ addRegistryPackages = function(reg, packages) {
   p = p[unique(names(p))]
   reg$packages = p
   saveRegistry(reg)
-  return(reg)
 }
 
 #' @title Remove packages from registry.
@@ -36,6 +35,4 @@ removeRegistryPackages = function(reg, packages) {
   assertCharacter(packages, any.missing = FALSE)
   reg$packages = reg$packages[setdiff(names(reg$packages), packages)]
   saveRegistry(reg)
-  return(reg)
 }
-

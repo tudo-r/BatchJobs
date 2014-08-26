@@ -4,7 +4,7 @@ test_that("source registry files", {
   reg = makeTestRegistry()
   p1 = "unittest-sources"
   p2 = file.path(getWorkDir(), p1)
-  dir.create(p2, recursive = TRUE)
+  dir.create(p2, recursive = TRUE, showWarnings = FALSE)
   cat("xxx = 123", file = file.path(p2, "test.R"))
   reg = makeTestRegistry(src.dir = p1)
 
@@ -38,7 +38,7 @@ test_that("source registry files", {
 test_that("source registry mutators work", {
   p1 = "unittest-sources"
   p2 = file.path(getWorkDir(), p1)
-  dir.create(p2, recursive = TRUE)
+  dir.create(p2, recursive = TRUE, showWarnings = FALSE)
   cat("xxx = 123", file = file.path(p2, "test.R"))
   p3 = file.path(p1, "test.R")
 

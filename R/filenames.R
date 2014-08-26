@@ -21,7 +21,7 @@ checkDir = function(path, create = FALSE, check.empty = FALSE, check.posix = FAL
     stopf("Directory '%s' does not seem to be empty!", path)
 
   if (check.posix && getOption("BatchJobs.check.posix", TRUE)) {
-    path.abs = makePathAbsolute(path)
+    path.abs = sanitizePath(path)
     if(! grepl("^[[:alnum:]:/_.-]+$", path.abs))
       stopf("Directory '%s' contains characters that are not fully portable according to POSIX standards. Allowed: a-z A-Z 0-9 : / . - _", path.abs)
   }
@@ -70,18 +70,8 @@ is.accessible = function(path) {
   return(file.access(path, mode = c(2L, 4L)) == 0L)
 }
 
-# on windows, we start with either c: or C: or / or \; on all other systems with / or \
 isPathFromRoot = function(path) {
-  (isWindows() && grepl("^[[:alpha:]]:", path)) || substr(path, 1L, 1L) %in% c("/", "\\")
-}
-
-makePathAbsolute = function(path) {
-  if (isPathFromRoot(path)) {
-    if (isWindows())
-      return(gsub("\\", "/", path, fixed = TRUE))
-    return(path)
-  }
-  normalizePath(path, mustWork = FALSE, winslash = "/")
+  (isWindows() & grepl("^[[:alpha:]]:", path)) | grepl("^[/\\]", path)
 }
 
 getJobDirs = function(reg, ids, unique = FALSE) {
