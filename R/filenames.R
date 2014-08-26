@@ -76,13 +76,12 @@ isPathFromRoot = function(path) {
 }
 
 makePathAbsolute = function(path) {
-  if (isPathFromRoot(path))
-    return(gsub("\\", "/", fixed = TRUE, path))
+  if (isPathFromRoot(path)) {
+    if (isWindows())
+      return(gsub("\\", "/", path, fixed = TRUE))
+    return(path)
+  }
   normalizePath(path, mustWork = FALSE, winslash = "/")
-}
-
-makePathsAbsolute = function(paths) {
-  vcapply(paths, makePathAbsolute)
 }
 
 getJobDirs = function(reg, ids, unique = FALSE) {

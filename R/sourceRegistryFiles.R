@@ -16,11 +16,11 @@ sourceRegistryFiles = function(reg, envir = .GlobalEnv) {
 
 sourceRegistryFilesInternal = function(work.dir, dirs, files, envir = .GlobalEnv) {
   # add work dir if not /foo/bar path
-  addWorkDir = function(path) {
-    ifelse(isPathFromRoot(path), path, file.path(work.dir, path))
+  if (isPathFromRoot(path)) {
+    addWorkDir = function(path) file.path(work.dir, path)
+    dirs = vcapply(dirs, file.path)
+    files = vcapply(files, addWorkDir)
   }
-  dirs = vcapply(dirs, addWorkDir)
-  files = vcapply(files, addWorkDir)
   dirs.files = getRScripts(dirs)
   ok = file.exists(files)
   if (any(!ok))
