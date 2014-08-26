@@ -77,7 +77,7 @@ isPathFromRoot = function(path) {
 
 makePathAbsolute = function(path) {
   if (isPathFromRoot(path))
-    return(path)
+    return(gsub("\\", "/", fixed = TRUE, path))
   normalizePath(path, mustWork = FALSE, winslash = "/")
 }
 
