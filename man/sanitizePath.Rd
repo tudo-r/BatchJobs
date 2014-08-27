@@ -12,7 +12,7 @@ Vector of paths to sanitize.}
 \item{normalize}{[\code{logical}]\cr
 Do call \code{\link[base]{normalizePath}} on \code{path}.
 Default is \code{NULL} which will only normalize if the path
-is already an absolute path, i.e. relative paths will remain unchanged.}
+is not an absolute path, i.e. relative paths will be converted to absolute paths.}
 }
 \value{
 \code{character} with sanitized paths.

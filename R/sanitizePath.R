@@ -8,13 +8,13 @@
 #' @param normalize [\code{logical}]\cr
 #'  Do call \code{\link[base]{normalizePath}} on \code{path}.
 #'  Default is \code{NULL} which will only normalize if the path
-#'  is already an absolute path, i.e. relative paths will remain unchanged.
+#'  is not an absolute path, i.e. relative paths will be converted to absolute paths.
 #' @return \code{character} with sanitized paths.
 #' @export
 sanitizePath = function(path, normalize = NULL) {
   assertCharacter(path, any.missing = FALSE)
   if (is.null(normalize)) {
-    normalize = isPathFromRoot(path)
+    normalize = !isPathFromRoot(path)
   } else {
     assert(checkFlag(normalize), checkLogical(normalize, len = length(path)))
     if (length(normalize) == 1L)
