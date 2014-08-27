@@ -37,10 +37,10 @@ test_that("source registry files", {
 
 test_that("source registry mutators work", {
   p1 = "unittest-sources"
-  p2 = file.path(getWorkDir(), p1)
+  p2 = sanitizePath(file.path(getWorkDir(), p1))
   dir.create(p2, recursive = TRUE, showWarnings = FALSE)
   cat("xxx = 123", file = file.path(p2, "test.R"))
-  p3 = file.path(p1, "test.R")
+  p3 = sanitizePath(file.path(p1, "test.R", fsep = "/"))
 
   reg = makeTestRegistry()
   expect_equal(reg$src.files, character(0L))
