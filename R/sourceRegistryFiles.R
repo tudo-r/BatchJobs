@@ -18,12 +18,15 @@ sourceRegistryFilesInternal = function(work.dir, dirs, files, envir = .GlobalEnv
   # add work dir if not /foo/bar path
   w = !isPathFromRoot(files)
   files[w] = file.path(work.dir, files[w])
-  ok = file.exists(files)
-  if (any(!ok))
-    stopf("Files to source not found, e.g. %s", head(files[!ok], 1L))
+  w = which.first(!file.exists(files))
+  if (length(w))
+    stopf("Files to source not found, e.g. %s", files[!w])
 
   w = !isPathFromRoot(dirs)
   dirs[w] = file.path(work.dir, dirs[w])
+  w = which.first(!isDirectory(dirs))
+  if (length(w))
+    stopf("Directories to source not found, e.g. %s", dirs[w])
 
   lapply(c(getRScripts(dirs), files), sys.source, envir = envir)
   invisible(TRUE)

@@ -42,7 +42,6 @@ test_that("source registry mutators work", {
   cat("xxx = 123", file = file.path(p2, "test.R"))
   p3 = file.path(p1, "test.R")
 
-  reg = makeTestRegistry(src.dir = p1)
   reg = makeTestRegistry()
   expect_equal(reg$src.files, character(0L))
   expect_equal(reg$src.dirs, character(0L))
@@ -59,5 +58,3 @@ test_that("source registry mutators work", {
   expect_equal(reg$src.files, character(0L))
   expect_equal(reg$src.dirs, character(0L))
 })
-
-
