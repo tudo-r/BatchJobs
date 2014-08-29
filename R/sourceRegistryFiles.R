@@ -20,7 +20,7 @@ sourceRegistryFilesInternal = function(work.dir, dirs, files, envir = .GlobalEnv
   files[w] = file.path(work.dir, files[w])
   w = which.first(!file.exists(files))
   if (length(w))
-    stopf("Files to source not found, e.g. %s", files[!w])
+    stopf("Files to source not found, e.g. %s", files[w])
 
   w = !isPathFromRoot(dirs)
   dirs[w] = file.path(work.dir, dirs[w])
