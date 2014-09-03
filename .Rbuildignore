@@ -12,3 +12,4 @@ man-roxygen
 Makefile
 README.md
 test_all.R
+^.editorconfig$
