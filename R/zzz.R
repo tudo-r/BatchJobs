@@ -18,13 +18,13 @@
 #'     work, but when you  use the package in e.g. knitr documents,
 #'     it clutters the resulting document too much.}
 #'   \item{BatchJobs.check.posix}{If this boolean flag is enabled, the package checks your
-#'   registry file dir (and related user-defined directories) quite strictly to be POSIX compliant.
-#'   Usually this is a good idea, you do not want to have strange chars in your file paths,
-#'   as this might results in problems  when these paths get passed to the scheduler or other
-#'   command-line tools that the package interoperates with.
-#'   But on some OS this check might be too strict and cause problems.
-#'   Setting the flag to \code{FALSE} allows to disable the check entirely.
-#'   The default is \code{FALSE} on Windows systems and \code{TRUE} else.}
+#'     registry file dir (and related user-defined directories) quite strictly to be POSIX compliant.
+#'     Usually this is a good idea, you do not want to have strange chars in your file paths,
+#'     as this might results in problems  when these paths get passed to the scheduler or other
+#'     command-line tools that the package interoperates with.
+#'     But on some OS this check might be too strict and cause problems.
+#'     Setting the flag to \code{FALSE} allows to disable the check entirely.
+#'     The default is \code{FALSE} on Windows systems and \code{TRUE} else.}
 #' }
 #'
 #' @docType package
@@ -64,6 +64,7 @@ NULL
 .onLoad = function(libname, pkgname) {
 # checking for posix might create problem in windwos tests
   options(BatchJobs.check.posix = getOption("BatchJobs.check.posix", default = !isWindows()))
+  options(BatchJobs.clear.function.env = getOption("BatchJobs.clear.function.env", default = FALSE))
   if (!isOnSlave()) {
     assignConfDefaults()
   }
