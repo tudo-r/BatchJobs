@@ -35,6 +35,9 @@
 makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, nice,
   r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {
 
+  if (isWindows())
+    stop("ClusterFunctionsMulticore do not work in Windows")
+
   worker = makeWorkerLocalLinux(r.options, script, ncpus, max.jobs, max.load, nice)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
