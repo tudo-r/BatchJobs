@@ -1,5 +1,5 @@
-context("doJob")
 
+context("doJob")
 test_that("doJob", {
   reg = makeTestRegistry()
   id = 1L

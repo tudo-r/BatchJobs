@@ -1,60 +1,85 @@
 context("source registry files")
 
 test_that("source registry files", {
-  reg = makeTestRegistry()
-  p1 = "unittest-sources"
-  p2 = file.path(getWorkDir(), p1)
-  dir.create(p2, recursive = TRUE, showWarnings = FALSE)
-  cat("xxx = 123", file = file.path(p2, "test.R"))
-  reg = makeTestRegistry(src.dir = p2)
+  mywd = file.path(getWorkDir(), "myworkdir")
+  dir.create(mywd, recursive = TRUE, showWarnings = FALSE)
+  setwd(mywd)
+  src.dir.subdir = c(file.path(mywd, "unittest-sources-subdir"), "unittest-sources-subdir-relative")
+  x = lapply(src.dir.subdir, dir.create, recursive = TRUE, showWarnings = FALSE)
+  src.dir.parent = c(file.path(dirname(mywd), "unittest-sources-parent"), "../unittest-sources-parent-relative")
+  x = lapply(src.dir.parent, dir.create, recursive = TRUE, showWarnings = FALSE)
 
-  expect_true(exists("xxx", envir = .GlobalEnv))
+  for (src.dir in c(src.dir.subdir, src.dir.parent)) {
+    cat("xxx = 123", file = file.path(src.dir, "test.R"))
+    reg = makeTestRegistry(src.dir = src.dir, work.dir = mywd)
+    expect_true(exists("xxx", envir = .GlobalEnv))
+    rm(list = "xxx", envir = .GlobalEnv)
+    loadRegistry(reg$file.dir)
+    expect_true(exists("xxx", envir = .GlobalEnv))
+    rm(list = "xxx", envir = .GlobalEnv)
 
-  rm(list = "xxx", envir = .GlobalEnv)
-  loadRegistry(reg$file.dir)
-  expect_true(exists("xxx", envir = .GlobalEnv))
+    batchMap(reg, function(i) i + xxx, i = 1:3)
+    submitJobs(reg)
+    waitForJobs(reg)
+    res = loadResults(reg, simplify = TRUE, use.names = "none")
+    expect_equal(res, 123 + 1:3)
+  }
 
-  batchMap(reg, function(i) i + xxx, i = 1:3)
-  submitJobs(reg)
-  waitForJobs(reg)
-  res = loadResults(reg, simplify = TRUE, use.names = "none")
-  expect_equal(res, 123 + 1:3)
 
-  reg = makeTestRegistry(src.files = file.path(p1, "test.R"))
-  expect_true(exists("xxx", envir = .GlobalEnv))
+  src.files.subdir = file.path(src.dir.subdir, "test.R")
+  src.files.parent = file.path(src.dir.parent, "test.R")
 
-  rm(list = "xxx", envir = .GlobalEnv)
-  loadRegistry(reg$file.dir)
-  expect_true(exists("xxx", envir = .GlobalEnv))
+  for (src.files in c(src.files.subdir, src.files.parent)) {
+    reg = makeTestRegistry(src.files = src.files, work.dir = mywd)
+    expect_true(exists("xxx", envir = .GlobalEnv))
+    rm(list = "xxx", envir = .GlobalEnv)
 
-  batchMap(reg, function(i) i + xxx, i = 1:3)
-  submitJobs(reg)
-  waitForJobs(reg)
-  res = loadResults(reg, simplify = TRUE, use.names = "none")
-  expect_equal(res, 123 + 1:3)
+    loadRegistry(reg$file.dir)
+    expect_true(exists("xxx", envir = .GlobalEnv))
+    rm(list = "xxx", envir = .GlobalEnv)
+
+    batchMap(reg, function(i) i + xxx, i = 1:3)
+    submitJobs(reg)
+    waitForJobs(reg)
+    res = loadResults(reg, simplify = TRUE, use.names = "none")
+    expect_equal(res, 123 + 1:3)
+  }
 })
 
 
 test_that("source registry mutators work", {
-  p1 = "unittest-sources"
-  p2 = sanitizePath(file.path(getWorkDir(), p1))
-  dir.create(p2, recursive = TRUE, showWarnings = FALSE)
-  cat("xxx = 123", file = file.path(p2, "test.R"))
-  p3 = sanitizePath(file.path(p1, "test.R", fsep = "/"))
+  mywd = file.path(getWorkDir(), "myworkdir")
+  dir.create(mywd, recursive = TRUE, showWarnings = FALSE)
+  setwd(mywd)
+  src.dir.subdir = c(file.path(mywd, "unittest-sources-subdir"), "unittest-sources-subdir-relative")
+  x = lapply(src.dir.subdir, dir.create, recursive = TRUE, showWarnings = FALSE)
+  src.dir.parent = c(file.path(dirname(mywd), "unittest-sources-parent"), "../unittest-sources-parent-relative")
+  x = lapply(src.dir.parent, dir.create, recursive = TRUE, showWarnings = FALSE)
+  src.files.subdir = file.path(src.dir.subdir, "test.R")
+  src.files.parent = file.path(src.dir.parent, "test.R")
+
 
   reg = makeTestRegistry()
   expect_equal(reg$src.files, character(0L))
   expect_equal(reg$src.dirs, character(0L))
-  reg = addRegistrySourceFiles(reg, p3, src.now = FALSE)
-  expect_equal(reg$src.files, p3)
+
+  reg = addRegistrySourceFiles(reg, src.files.subdir, src.now = FALSE)
+  expect_equal(reg$src.files, sanitizePath(src.files.subdir, make.absolute = FALSE))
   expect_equal(reg$src.dirs, character(0L))
-  reg = addRegistrySourceDirs(reg, p1, src.now = FALSE)
-  expect_equal(reg$src.files, p3)
-  expect_equal(reg$src.dirs, p1)
-  reg = removeRegistrySourceFiles(reg, p3)
+
+  reg = addRegistrySourceFiles(reg, src.files.subdir, src.now = FALSE)
+  expect_equal(reg$src.files, sanitizePath(src.files.subdir, make.absolute = FALSE))
+  expect_equal(reg$src.dirs, character(0L))
+
+  reg = addRegistrySourceDirs(reg, src.dir.parent, src.now = FALSE)
+  expect_equal(reg$src.files, sanitizePath(src.files.subdir))
+  expect_equal(reg$src.dirs, sanitizePath(src.dir.parent, make.absolute = FALSE))
+
+  reg = removeRegistrySourceFiles(reg, reg$src.files)
   expect_equal(reg$src.files, character(0L))
-  expect_equal(reg$src.dirs, p1)
-  reg = removeRegistrySourceDirs(reg, p1)
+  expect_equal(reg$src.dirs, sanitizePath(src.dir.parent, make.absolute = FALSE))
+
+  reg = removeRegistrySourceDirs(reg, reg$src.dirs)
   expect_equal(reg$src.files, character(0L))
   expect_equal(reg$src.dirs, character(0L))
 })

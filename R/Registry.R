@@ -5,14 +5,14 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
 
   assertString(file.dir)
   checkDir(file.dir, create = TRUE, check.empty = TRUE, check.posix = TRUE, msg = TRUE)
-  file.dir = sanitizePath(file.dir)
+  file.dir = sanitizePath(file.dir, make.absolute = TRUE)
 
   if (missing(work.dir))
     work.dir = getwd()
   else
     assertString(work.dir)
   checkDir(work.dir, check.posix = TRUE)
-  work.dir = sanitizePath(work.dir)
+  work.dir = sanitizePath(work.dir, make.absolute = TRUE)
 
   assertFlag(sharding)
   assertFlag(multiple.result.files)
@@ -23,9 +23,9 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   requirePackages(packages, stop = TRUE, suppress.warnings = TRUE)
 
   assertCharacter(src.dirs, any.missing = FALSE)
-  src.dirs = sanitizePath(src.dirs)
+  src.dirs = sanitizePath(src.dirs, make.absolute = FALSE)
   assertCharacter(src.files, any.missing = FALSE)
-  src.files = sanitizePath(src.files)
+  src.files = sanitizePath(src.files, make.absolute = FALSE)
 
   # make paths absolute to be sure. otherwise cfSSH wont work for example
   # also check the dirs
@@ -138,6 +138,7 @@ makeRegistry = function(id, file.dir, sharding = TRUE, work.dir, multiple.result
   dbCreateJobStatusTable(reg)
   dbCreateJobDefTable(reg)
   saveRegistry(reg)
+  reg
 }
 
 #' @export

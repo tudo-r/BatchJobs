@@ -6,8 +6,8 @@ test_that("sanitizePath", {
   if (!isWindows()) {
     setwd(tempdir())
     paths = c(tempfile(), "..", "~")
-    expect_identical(sanitizePath(paths), c(paths[1], dirname(tempdir()), path.expand("~")))
-    expect_equal(sanitizePath(paths, normalize = TRUE) == paths, c(TRUE, FALSE, FALSE))
+    expect_identical(sanitizePath(paths, make.absolute = TRUE), c(paths[1], dirname(tempdir()), path.expand("~")))
+    expect_equal(sanitizePath(paths, make.absolute = TRUE) == paths, c(TRUE, FALSE, FALSE))
   } else {
     setwd(tempdir())
     paths = c(tempfile(), "..")
@@ -16,12 +16,12 @@ test_that("sanitizePath", {
   }
 
   path = "c:\\temp"
-  expect_false(sanitizePath(path, normalize = FALSE) == path)
-  expect_identical(sanitizePath(path, normalize = FALSE), cS(path))
-  expect_identical(sanitizePath(path, normalize = TRUE), cS(path))
+  expect_false(sanitizePath(path, make.absolute = FALSE) == path)
+  expect_identical(sanitizePath(path, make.absolute = FALSE), cS(path))
+  expect_identical(sanitizePath(path, make.absolute = TRUE), cS(path))
 
   path = file.path(tempdir(), "..", fsep = "/")
-  expect_false(sanitizePath(path, normalize = TRUE) == cS(path))
-  expect_identical(sanitizePath(path, normalize = FALSE), cS(path))
-  expect_identical(sanitizePath(path, normalize = TRUE), cS(dirname(dirname(path))))
+  expect_false(sanitizePath(path, make.absolute = TRUE, normalize.absolute = TRUE) == cS(path))
+  expect_identical(sanitizePath(path, make.absolute = FALSE), cS(path))
+  expect_identical(sanitizePath(path, make.absolute = TRUE, normalize.absolute = TRUE), cS(dirname(dirname(path))))
 })

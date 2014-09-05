@@ -25,9 +25,7 @@ getTempDir = function() {
   file.path(getWorkDir(), basename(tempfile("tmp")))
 }
 
-makeTestRegistry = function(packages = character(0L), ...) {
-  work.dir = getWorkDir()
-  file.dir = getTempDir()
+makeTestRegistry = function(packages = character(0L), work.dir = getWorkDir(), file.dir = getTempDir(), ...) {
   dir.create(file.dir, recursive = TRUE, showWarning = FALSE)
   makeRegistry(
     id = "unittests",

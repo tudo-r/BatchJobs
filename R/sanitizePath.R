@@ -5,21 +5,20 @@
 #'
 #' @param path [\code{character}]\cr
 #'  Vector of paths to sanitize.
-#' @param normalize [\code{logical}]\cr
-#'  Do call \code{\link[base]{normalizePath}} on \code{path}.
-#'  Default is \code{NULL} which will only normalize if the path
-#'  is not an absolute path, i.e. relative paths will be converted to absolute paths.
+#' @param make.absolute [\code{logical}]\cr
+#'  If \code{TRUE} convert to an absolute path.
+#' @param normalize.absolute [\code{logical}]\cr
+#'  Also call \code{\link[base]{normalizePath}} on absolute paths?
+#'  This will immediately resolve symlinks.
 #' @return \code{character} with sanitized paths.
 #' @export
-sanitizePath = function(path, normalize = NULL) {
+sanitizePath = function(path, make.absolute = TRUE, normalize.absolute = FALSE) {
   assertCharacter(path, any.missing = FALSE)
-  if (is.null(normalize)) {
-    normalize = !isPathFromRoot(path)
-  } else {
-    assert(checkFlag(normalize), checkLogical(normalize, len = length(path)))
-    if (length(normalize) == 1L)
-      normalize = rep.int(normalize, length(path))
+  assertFlag(make.absolute)
+  assertFlag(normalize.absolute)
+  if (make.absolute) {
+    normalize = if (normalize.absolute) rep.int(TRUE, length(path)) else !isPathFromRoot(path)
+    path[normalize] = normalizePath(path[normalize], mustWork = FALSE, winslash = "/")
   }
-  path[normalize] = normalizePath(path[normalize], mustWork = FALSE, winslash = "/")
   gsub("\\", "/", path, fixed = TRUE)
 }

@@ -62,7 +62,7 @@ addRegistrySourceFiles = function(reg, src.files, src.now = TRUE) {
   checkRegistry(reg)
   assertCharacter(src.files, any.missing = FALSE)
   assertFlag(src.now)
-  src.files = sanitizePath(src.files)
+  src.files = sanitizePath(src.files, make.absolute = FALSE)
   if (src.now)
     sourceRegistryFilesInternal(reg$work.dir, character(0L), src.files)
   reg$src.files = union(reg$src.files, src.files)
@@ -87,6 +87,7 @@ addRegistrySourceFiles = function(reg, src.files, src.now = TRUE) {
 addRegistrySourceDirs = function(reg, src.dirs, src.now = TRUE) {
   checkRegistry(reg)
   assertCharacter(src.dirs, any.missing = FALSE)
+  src.dirs = sanitizePath(src.dirs, make.absolute = FALSE)
   if (src.now)
     sourceRegistryFilesInternal(reg$work.dir, src.dirs, character(0L))
   reg$src.dirs = c(reg$src.dirs, src.dirs)

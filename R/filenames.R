@@ -21,7 +21,7 @@ checkDir = function(path, create = FALSE, check.empty = FALSE, check.posix = FAL
     stopf("Directory '%s' does not seem to be empty!", path)
 
   if (check.posix && getOption("BatchJobs.check.posix", TRUE)) {
-    path.abs = sanitizePath(path)
+    path.abs = sanitizePath(path, make.absolute = TRUE)
     if(! grepl("^[[:alnum:]:/_.-]+$", path.abs))
       stopf("Directory '%s' contains characters that are not fully portable according to POSIX standards. Allowed: a-z A-Z 0-9 : / . - _", path.abs)
   }
