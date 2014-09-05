@@ -3,16 +3,18 @@
 \alias{sanitizePath}
 \title{Sanitize a path}
 \usage{
-sanitizePath(path, normalize = NULL)
+sanitizePath(path, make.absolute = TRUE, normalize.absolute = FALSE)
 }
 \arguments{
 \item{path}{[\code{character}]\cr
 Vector of paths to sanitize.}
 
-\item{normalize}{[\code{logical}]\cr
-Do call \code{\link[base]{normalizePath}} on \code{path}.
-Default is \code{NULL} which will only normalize if the path
-is not an absolute path, i.e. relative paths will be converted to absolute paths.}
+\item{make.absolute}{[\code{logical}]\cr
+If \code{TRUE} convert to an absolute path.}
+
+\item{normalize.absolute}{[\code{logical}]\cr
+Also call \code{\link[base]{normalizePath}} on absolute paths?
+This will immediately resolve symlinks.}
 }
 \value{
 \code{character} with sanitized paths.
