@@ -19,6 +19,8 @@ Invisibly returns a list of configuration settings.
 Set and overwrite configuration settings
 }
 \seealso{
-\code{\link{getConfig}}, \code{\link{loadConfig}}
+Other conf: \code{\link{.BatchJobs.R}},
+  \code{\link{configuration}}; \code{\link{getConfig}};
+  \code{\link{loadConfig}}
 }
 

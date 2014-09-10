@@ -6,6 +6,7 @@
 #'
 #' @name configuration
 #' @rdname configuration
+#' @family conf
 #' @aliases .BatchJobs.R
 NULL
 
@@ -193,7 +194,7 @@ print.Config = function(x, ...) {
 #'   Location of the configuration file to load.
 #'   Default is \dQuote{.BatchJobs.conf} in the current working directory.
 #' @return Invisibly returns a list of configuration settings.
-#' @seealso \code{\link{getConfig}}, \code{\link{setConfig}}
+#' @family conf
 #' @export
 loadConfig = function(conffile = ".BatchJobs.R") {
   # checks are done in sourceConfFile
@@ -209,7 +210,7 @@ loadConfig = function(conffile = ".BatchJobs.R") {
 #' @param ... [\code{ANY}]\cr
 #'   Named configuration parameters. Overwrites parameters in \code{conf}, if provided.
 #' @return Invisibly returns a list of configuration settings.
-#' @seealso \code{\link{getConfig}}, \code{\link{loadConfig}}
+#' @family conf
 #' @export
 setConfig = function(conf = list(), ...) {
   if (!is.list(conf) && !inherits(conf, "Config"))
@@ -228,7 +229,7 @@ setConfig = function(conf = list(), ...) {
 #' Returns a list of BatchJobs configuration settings
 #'
 #' @return \code{list} of current configuration variables with classs \dQuote{Config}.
-#' @seealso \code{\link{loadConfig}}, \code{\link{setConfig}}
+#' @family conf
 #' @export
 getConfig = function() {
   setClasses(as.list(getBatchJobsConf()), "Config")

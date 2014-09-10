@@ -8,4 +8,8 @@ In order to understand how the package should be configured
 please read
 \url{https://github.com/tudo-r/BatchJobs/wiki/Configuration}.
 }
+\seealso{
+Other conf: \code{\link{getConfig}};
+  \code{\link{loadConfig}}; \code{\link{setConfig}}
+}
 

@@ -17,6 +17,8 @@ Invisibly returns a list of configuration settings.
 Load a specific configuration file.
 }
 \seealso{
-\code{\link{getConfig}}, \code{\link{setConfig}}
+Other conf: \code{\link{.BatchJobs.R}},
+  \code{\link{configuration}}; \code{\link{getConfig}};
+  \code{\link{setConfig}}
 }
 
