@@ -8,6 +8,8 @@ BatchJobs_1.4:
   issued if the environment exceeds 10Mb in size.
 - version 1.3 introduced a mini bug in the SGE interface
   (via new list.jobs.cmd option). Fixed.
+- Memory usage is now stored in the database and can be queried using
+  getJobInfo().
 
 BatchJobs_1.3:
 - Reduced memory consumption and disk i/o if 'more.args' is used.
