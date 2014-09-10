@@ -19,6 +19,7 @@
 #' @template arg_template
 #' @template arg_list_jobs_cmd
 #' @template ret_cf
+#' @family clusterFunctions
 #' @export
 makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect", "-u $USER", "-s EHQRTW")) {
   assertCharacter(list.jobs.cmd, min.len = 1L, any.missing = FALSE)

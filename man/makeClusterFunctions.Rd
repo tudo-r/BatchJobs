@@ -62,6 +62,13 @@ Use this funtion when you implement a backend for a batch system.
 You must define the functions specified in the arguments.
 }
 \seealso{
-\code{\link{makeClusterFunctionsInteractive}}, \code{\link{makeClusterFunctionsLocal}}, \code{\link{makeClusterFunctionsMulticore}}, \code{\link{makeClusterFunctionsSSH}}, \code{\link{makeClusterFunctionsTorque}}, \code{\link{makeClusterFunctionsSGE}}, \code{\link{makeClusterFunctionsSLURM}}
+Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}};
+  \code{\link{makeClusterFunctionsLSF}};
+  \code{\link{makeClusterFunctionsLocal}};
+  \code{\link{makeClusterFunctionsMulticore}};
+  \code{\link{makeClusterFunctionsSGE}};
+  \code{\link{makeClusterFunctionsSLURM}};
+  \code{\link{makeClusterFunctionsSSH}};
+  \code{\link{makeClusterFunctionsTorque}}
 }
 

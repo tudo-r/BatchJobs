@@ -24,6 +24,7 @@
 #'   See \code{\link{resetJobs}}.
 #'   Default is \code{FALSE}.
 #' @return Nothing.
+#' @family debug
 #' @export
 setJobFunction = function(reg, ids, fun, more.args = list(), reset = TRUE, force = FALSE) {
   checkRegistry(reg, strict = TRUE)

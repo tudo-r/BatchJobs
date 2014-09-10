@@ -33,6 +33,11 @@ of the old, failed job as well. \code{showLog} tries to jump to the correct part
 of the new log file with a supported pager.
 }
 \seealso{
-\code{\link{grepLogs}}, \code{\link{getErrorMessages}}
+Other debug: \code{\link{debugMulticore}};
+  \code{\link{debugSSH}}; \code{\link{getErrorMessages}};
+  \code{\link{getJobInfo}}; \code{\link{getLogFiles}};
+  \code{\link{grepLogs}}; \code{\link{killJobs}};
+  \code{\link{resetJobs}}; \code{\link{setJobFunction}};
+  \code{\link{testJob}}
 }
 

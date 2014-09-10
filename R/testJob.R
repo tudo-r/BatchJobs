@@ -18,7 +18,7 @@
 #'   See  \code{\link{submitJobs}}.
 #'   Default is empty list.
 #' @return [any]. Result of job. If the job did not complete because of an error, NULL is returned.
-#' @seealso \code{\link{reduceResults}}
+#' @family debug
 #' @export
 #' @examples
 #' reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)

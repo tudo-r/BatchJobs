@@ -88,7 +88,7 @@ print.SubmitJobResult = function(x, ...) {
 #'   Currently ignored.
 #' @export
 #' @aliases ClusterFunctions
-#' @seealso \code{\link{makeClusterFunctionsInteractive}}, \code{\link{makeClusterFunctionsLocal}}, \code{\link{makeClusterFunctionsMulticore}}, \code{\link{makeClusterFunctionsSSH}}, \code{\link{makeClusterFunctionsTorque}}, \code{\link{makeClusterFunctionsSGE}}, \code{\link{makeClusterFunctionsSLURM}}
+#' @family clusterFunctions
 makeClusterFunctions = function(name, submitJob, killJob, listJobs, getArrayEnvirName, class = NULL, ...) {
   assertString(name)
   assertFunction(submitJob, c("conf", "reg", "job.name", "rscript", "log.file", "job.dir", "resources"))

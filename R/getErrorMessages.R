@@ -6,8 +6,8 @@
 #'   Default is all jobs with errors.
 #' @return [\code{character}]. Error messages for jobs as character vector\cr
 #'   \code{NA} if job has terminated successfully.
+#' @family debug
 #' @export
-#' @seealso \code{\link{showLog}} for more contextual error informations.
 getErrorMessages = function(reg, ids) {
   checkRegistry(reg)
   syncRegistry(reg)

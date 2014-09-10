@@ -31,6 +31,7 @@
 #'   \url{https://github.com/tudo-r/BatchJobs/blob/master/inst/bin/linux-helper}
 #'   Default means to take it from package directory.
 #' @return [\code{\link{ClusterFunctions}}].
+#' @family clusterFunctions
 #' @export
 makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, nice,
   r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {

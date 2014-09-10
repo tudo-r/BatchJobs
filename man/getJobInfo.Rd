@@ -43,4 +43,12 @@ Returns time stamps (submitted, started, done), time running, time in queue,
 error messages (shortened, see \code{\link{showLog}} for detailed error messages),
 hostname of the host the job was executed, the assigned batch ID, the R PID and the seed of the job.
 }
+\seealso{
+Other debug: \code{\link{debugMulticore}};
+  \code{\link{debugSSH}}; \code{\link{getErrorMessages}};
+  \code{\link{getLogFiles}}; \code{\link{grepLogs}};
+  \code{\link{killJobs}}; \code{\link{resetJobs}};
+  \code{\link{setJobFunction}}; \code{\link{showLog}};
+  \code{\link{testJob}}
+}
 

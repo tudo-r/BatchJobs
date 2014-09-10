@@ -48,4 +48,15 @@ Jobs are spawned by starting multiple R sessions on the commandline
 (similar like on true batch systems).
 Packages \code{parallel} or \code{multicore} are not used in any way.
 }
+\seealso{
+Other clusterFunctions: \code{\link{ClusterFunctions}},
+  \code{\link{makeClusterFunctions}};
+  \code{\link{makeClusterFunctionsInteractive}};
+  \code{\link{makeClusterFunctionsLSF}};
+  \code{\link{makeClusterFunctionsLocal}};
+  \code{\link{makeClusterFunctionsSGE}};
+  \code{\link{makeClusterFunctionsSLURM}};
+  \code{\link{makeClusterFunctionsSSH}};
+  \code{\link{makeClusterFunctionsTorque}}
+}
 

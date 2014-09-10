@@ -10,6 +10,7 @@
 #' and \code{killJob} returns at once (for the same reason).
 #'
 #' @return [\code{\link{ClusterFunctions}}].
+#' @family clusterFunctions
 #' @export
 makeClusterFunctionsLocal = function() {
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {

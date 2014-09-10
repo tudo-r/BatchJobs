@@ -68,6 +68,7 @@ getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
 #'   \dQuote{days} and \dQuote{weeks}.
 #'   Default is \dQuote{seconds}.
 #' @return [\code{data.frame}].
+#' @family debug
 #' @export
 getJobInfo = function(reg, ids, pars = FALSE, prefix.pars = FALSE, select, unit = "seconds") {
   UseMethod("getJobInfo")

@@ -34,4 +34,15 @@ and handle the desired resource allocations.
 Examples can be found on
 \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfSLURM}.
 }
+\seealso{
+Other clusterFunctions: \code{\link{ClusterFunctions}},
+  \code{\link{makeClusterFunctions}};
+  \code{\link{makeClusterFunctionsInteractive}};
+  \code{\link{makeClusterFunctionsLSF}};
+  \code{\link{makeClusterFunctionsLocal}};
+  \code{\link{makeClusterFunctionsMulticore}};
+  \code{\link{makeClusterFunctionsSGE}};
+  \code{\link{makeClusterFunctionsSSH}};
+  \code{\link{makeClusterFunctionsTorque}}
+}
 

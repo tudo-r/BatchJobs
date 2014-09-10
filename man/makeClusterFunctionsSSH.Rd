@@ -40,6 +40,16 @@ cluster.functions = makeClusterFunctionsSSH(
 }
 }
 \seealso{
-\link{ClusterFunctions} \code{\link{makeSSHWorker}}
+\code{\link{makeSSHWorker}}
+
+Other clusterFunctions: \code{\link{ClusterFunctions}},
+  \code{\link{makeClusterFunctions}};
+  \code{\link{makeClusterFunctionsInteractive}};
+  \code{\link{makeClusterFunctionsLSF}};
+  \code{\link{makeClusterFunctionsLocal}};
+  \code{\link{makeClusterFunctionsMulticore}};
+  \code{\link{makeClusterFunctionsSGE}};
+  \code{\link{makeClusterFunctionsSLURM}};
+  \code{\link{makeClusterFunctionsTorque}}
 }
 

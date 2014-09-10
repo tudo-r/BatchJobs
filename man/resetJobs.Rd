@@ -36,4 +36,12 @@ Note that this is a dangerous operation to perform which may harm
 the database integrity. In this case you HAVE to make externally sure that none of the jobs
 you want to reset are still running.
 }
+\seealso{
+Other debug: \code{\link{debugMulticore}};
+  \code{\link{debugSSH}}; \code{\link{getErrorMessages}};
+  \code{\link{getJobInfo}}; \code{\link{getLogFiles}};
+  \code{\link{grepLogs}}; \code{\link{killJobs}};
+  \code{\link{setJobFunction}}; \code{\link{showLog}};
+  \code{\link{testJob}}
+}
 

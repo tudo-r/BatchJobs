@@ -23,6 +23,7 @@
 #'   READ THE DETAILS SECTION!
 #'   Default is \code{FALSE}.
 #' @return Vector of reseted job ids.
+#' @family debug
 #' @export
 resetJobs = function(reg, ids, force = FALSE) {
   checkRegistry(reg)

@@ -9,6 +9,7 @@
 #'   a la \dQuote{--vanilla}.
 #'   Default is \code{c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")}.
 #' @return Nothing.
+#' @family debug
 #' @export
 debugMulticore = function(r.options) {
   if (missing(r.options))

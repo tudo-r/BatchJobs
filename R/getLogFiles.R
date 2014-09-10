@@ -5,6 +5,7 @@
 #'   Ids of jobs.
 #'   Default is all jobs.
 #' @return [\code{character}]. Vector of file paths to log files.
+#' @family debug
 #' @export
 getLogFiles = function(reg, ids) {
   checkRegistry(reg)

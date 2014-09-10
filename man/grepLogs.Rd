@@ -38,6 +38,11 @@ Default is \code{2}.}
 Searches for occurence of \code{pattern} in log files.
 }
 \seealso{
-\code{\link{showLog}}, \code{\link{getErrorMessages}}
+Other debug: \code{\link{debugMulticore}};
+  \code{\link{debugSSH}}; \code{\link{getErrorMessages}};
+  \code{\link{getJobInfo}}; \code{\link{getLogFiles}};
+  \code{\link{killJobs}}; \code{\link{resetJobs}};
+  \code{\link{setJobFunction}}; \code{\link{showLog}};
+  \code{\link{testJob}}
 }
 

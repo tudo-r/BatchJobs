@@ -35,4 +35,12 @@ Useful in case of configuration problems.
 Tries different operations of increasing difficulty
 and provides debug output on the console.
 }
+\seealso{
+Other debug: \code{\link{debugMulticore}};
+  \code{\link{getErrorMessages}}; \code{\link{getJobInfo}};
+  \code{\link{getLogFiles}}; \code{\link{grepLogs}};
+  \code{\link{killJobs}}; \code{\link{resetJobs}};
+  \code{\link{setJobFunction}}; \code{\link{showLog}};
+  \code{\link{testJob}}
+}
 

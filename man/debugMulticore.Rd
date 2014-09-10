@@ -19,4 +19,12 @@ Useful in case of severe errors.
 Tries different operations of increasing difficulty
 and provides debug output on the console
 }
+\seealso{
+Other debug: \code{\link{debugSSH}};
+  \code{\link{getErrorMessages}}; \code{\link{getJobInfo}};
+  \code{\link{getLogFiles}}; \code{\link{grepLogs}};
+  \code{\link{killJobs}}; \code{\link{resetJobs}};
+  \code{\link{setJobFunction}}; \code{\link{showLog}};
+  \code{\link{testJob}}
+}
 

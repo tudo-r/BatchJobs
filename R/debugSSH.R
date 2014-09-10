@@ -21,6 +21,7 @@
 #'   Note that this must be shared for the worker.
 #'   Default is current working directory.
 #' @return Nothing.
+#' @family debug
 #' @export
 debugSSH = function(nodename, rhome = "",
   r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),

@@ -19,6 +19,7 @@
 #' @template arg_template
 #' @template arg_list_jobs_cmd
 #' @template ret_cf
+#' @family clusterFunctions
 #' @export
 makeClusterFunctionsSGE = function(template.file, list.jobs.cmd = c("qstat",  "-u $USER")) {
   assertCharacter(list.jobs.cmd, min.len = 1L, any.missing = FALSE)

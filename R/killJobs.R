@@ -21,6 +21,7 @@
 #'   Default is none.
 #' @return [\code{integer}]. Ids of killed jobs.
 #' @export
+#' @family debug
 #' @examples
 #' \dontrun{
 #' reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)

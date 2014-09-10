@@ -19,8 +19,8 @@
 #'   or \dQuote{vim}, the correct part of the log file will be shown.
 #'   Otherwise you find information about the correct part in the beginning of the displayed file.
 #' @return [\code{character(1)}]. Invisibly returns path to log file.
+#' @family debug
 #' @export
-#' @seealso \code{\link{grepLogs}}, \code{\link{getErrorMessages}}
 showLog = function(reg, id, pager = getOption("pager")) {
   checkRegistry(reg)
   syncRegistry(reg)
