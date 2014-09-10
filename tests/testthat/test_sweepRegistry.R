@@ -3,8 +3,8 @@ context("sweepRegistry")
 test_that("sweepRegistry", {
   countFiles = function(reg, type) {
     fun = switch(type,
-      scripts = getRScriptFilePath,
-      logs = getLogFilePath
+      scripts = BatchJobs:::getRScriptFilePath,
+      logs = BatchJobs:::getLogFilePath
     )
     fs = sapply(getJobIds(reg), fun, reg = reg)
     sum(sapply(fs, file.exists))
