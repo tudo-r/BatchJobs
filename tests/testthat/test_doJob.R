@@ -1,11 +1,10 @@
-
 context("doJob")
 test_that("doJob", {
   reg = makeTestRegistry()
   id = 1L
   batchMap(reg, identity, 123)
   df = BatchJobs:::dbGetJobStatusTable(reg)
-  expect_true(is.data.frame(df) && nrow(df) == 1 && ncol(df) == 12)
+  expect_true(is.data.frame(df) && nrow(df) == 1 && ncol(df) == 13)
   ids = findNotDone(reg)
   expect_equal(ids, id)
   BatchJobs:::saveConf(reg)

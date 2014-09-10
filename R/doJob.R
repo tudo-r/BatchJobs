@@ -5,6 +5,10 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
     save2(file = fn, result = result)
   }
 
+  getMemoryUsage = function() {
+    sum(gc()[, 6L])
+  }
+
   # Get the conf
   loadConf(reg)
   conf = getBatchJobsConf()
@@ -21,7 +25,7 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
   wd = switchWd(reg)
   on.exit({
     wd$reset()
-    messagef("Memory usage according to gc:")
+    message("Memory usage according to gc:")
     print(gc())
   })
 
@@ -62,7 +66,9 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
 
     message("Setting seed: ", job$seed)
     seed = seeder(reg, job$seed)
+    gc(reset = TRUE)
     result = try(applyJobFunction(reg, job, cache), silent = TRUE)
+    mem.used = getMemoryUsage()
     seed$reset()
 
     catf("Result:")
@@ -82,11 +88,11 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
     }
 
     if (error[i]) {
-      msg.buf$push(dbMakeMessageError(reg, job$id, err.msg = results[i]))
+      msg.buf$push(dbMakeMessageError(reg, job$id, err.msg = results[i], memory = mem.used))
       message("Error occurred: ", results[i])
     } else {
       results[i] = paste0(capture.output(str(result)), collapse = "\n")
-      msg.buf$push(dbMakeMessageDone(reg, job$id))
+      msg.buf$push(dbMakeMessageDone(reg, job$id, memory = mem.used))
 
       if (multiple.result.files) {
         Map(saveOne, result = result, name = names(result))

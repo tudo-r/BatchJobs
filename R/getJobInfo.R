@@ -3,8 +3,8 @@ getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
     ids = checkIds(reg, ids)
   assertChoice(unit, c("seconds", "minutes", "hours", "days", "weeks"))
 
-  select.db   = c("submitted",      "started",      "done",       "done - started AS time_running", "started - submitted AS time_queued", "error",      "node",     "batch_job_id", "r_pid", "seed")
-  select.cns  = c("time.submitted", "time.started", "time.done",  "time.running",                  "time.queued",                        "error.msg",   "nodename", "batch.id",     "r.pid", "seed")
+  select.db   = c("submitted",      "started",      "done",       "done - started AS time_running", "memory", "started - submitted AS time_queued", "error",      "node",     "batch_job_id", "r_pid", "seed")
+  select.cns  = c("time.submitted", "time.started", "time.done",  "time.running",                   "memory", "time.queued",                        "error.msg",   "nodename", "batch.id",     "r.pid", "seed")
   columns = c(columns, setNames(select.db, select.cns))
 
   if (!missing(select)) {
@@ -41,9 +41,12 @@ getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
 
 #' Get computational information of jobs.
 #'
-#' Returns time stamps (submitted, started, done), time running, time in queue,
 #' error messages (shortened, see \code{\link{showLog}} for detailed error messages),
-#' hostname of the host the job was executed, the assigned batch ID, the R PID and the seed of the job.
+#' Returns time stamps (submitted, started, done), time running, approximate memory usage (in Mb, see note)
+#' time in queue, hostname of the host the job was executed,
+#' assigned batch ID, the R PID and the seed of the job.
+#'
+#' @note To estimate memory usage the sum of the last column of \code{\link[base]{gc}} is used.
 #'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.

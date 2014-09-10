@@ -39,9 +39,13 @@ Default is \dQuote{seconds}.}
 [\code{data.frame}].
 }
 \description{
-Returns time stamps (submitted, started, done), time running, time in queue,
 error messages (shortened, see \code{\link{showLog}} for detailed error messages),
-hostname of the host the job was executed, the assigned batch ID, the R PID and the seed of the job.
+Returns time stamps (submitted, started, done), time running, approximate memory usage (in Mb, see note)
+time in queue, hostname of the host the job was executed,
+assigned batch ID, the R PID and the seed of the job.
+}
+\note{
+To estimate memory usage the sum of the last column of \code{\link[base]{gc}} is used.
 }
 \seealso{
 Other debug: \code{\link{debugMulticore}};

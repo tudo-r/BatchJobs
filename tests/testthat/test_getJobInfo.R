@@ -2,7 +2,7 @@ context("getJobInfo")
 
 test_that("getJobInfo", {
   reg = makeTestRegistry()
-  batchMap(reg,  function(x, i) x^i, 1:3, i = rep(2, 3))
+  batchMap(reg, function(x, i) x^i, 1:3, i = rep(2, 3))
   mycheck = function(tab) {
     expect_true(is.data.frame(tab))
     expect_equal(tab$id, 1:3)
@@ -10,8 +10,9 @@ test_that("getJobInfo", {
     expect_true(is(tab$time.submitted, "POSIXt"))
     expect_true(is(tab$time.started, "POSIXt"))
     expect_true(is(tab$time.done, "POSIXt"))
-    expect_true(is.numeric(tab$time.queued))
     expect_true(is.numeric(tab$time.running))
+    expect_true(is.numeric(tab$memory))
+    expect_true(is.numeric(tab$time.queued))
     expect_true(all(is.na(tab$error.msg)))
     expect_true(is.integer(tab$r.pid))
     expect_true(is.integer(tab$seed))
@@ -37,9 +38,19 @@ test_that("getJobInfo", {
   tab = getJobInfo(reg, select = c("id", "time.running"))
   expect_true(ncol(tab) == 2)
 
-  expect_error(
-    getJobInfo(reg, select = "fooo"),
-    "subset"
-  )
+  expect_error(getJobInfo(reg, select = "fooo"), "subset")
 })
 
+test_that("getJobInfo: memory correctly reported", {
+  if (!isWindows() && isExpensiveExampleOk()) {
+    reg = makeTestRegistry()
+    conf = getConfig()
+    on.exit(setConfig(conf = conf))
+    setConfig(cluster.functions = makeClusterFunctionsLocal())
+    ids = batchMap(reg, function(n) { x = 1:(10^n); x + rev(x) }, n = c(1, 6))
+    submitJobs(reg, ids)
+    waitForJobs(reg, ids)
+    mem = getJobInfo(reg, select = "memory")$memory
+    expect_true(mem[1] < mem[2])
+  }
+})

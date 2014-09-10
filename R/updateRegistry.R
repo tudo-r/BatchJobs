@@ -62,6 +62,11 @@ updateRegistry.Registry = function(reg) {
     reg$src.files = character(0L)
   }
 
+  if (version.reg < package_version("1.4")) {
+    query = sprintf("ALTER TABLE %s_job_status ADD COLUMN memory REAL", reg$id)
+    dbDoQuery(reg, query, flags = "rwc")
+  }
+
   reg$packages$BatchJobs$version = version.pkg
   reg
 }

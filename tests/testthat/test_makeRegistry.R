@@ -8,7 +8,7 @@ test_that("makeRegistry", {
   expect_true(file.exists(file.path(reg$file.dir, "BatchJobs.db")))
   expect_output(print(reg), "Job registry")
   df = BatchJobs:::dbGetJobStatusTable(reg)
-  expect_true(is.data.frame(df) && nrow(df) == 0 && ncol(df) == 12)
+  expect_true(is.data.frame(df) && nrow(df) == 0 && ncol(df) == 13)
 })
 
 
