@@ -46,7 +46,9 @@ dbDoQueries = function(reg, queries, flags = "ro", max.retries = 200L, sleep = f
       # catch known temporary errors:
       # - database is still locked
       # - disk I/O error
-      if(!grepl("(lock|i/o)", tolower(ok)))
+      # - disk I/O error
+      # - database is only readable
+      if(!grepl("(lock|i/o|readonly)", tolower(ok)))
         stopf("Error in dbDoQueries. Displaying only 1st query. %s (%s)", ok, queries[1L])
     }
     # if we reach this here, DB was locked or temporary I/O error
@@ -63,7 +65,7 @@ dbDoQuery = function(reg, query, flags = "ro", max.retries = 200L, sleep = funct
     if (! is.error(res))
       return(res)
     res = as.character(res)
-    if(grepl("(lock|i/o)", tolower(res))) {
+    if(grepl("(lock|i/o|readonly)", tolower(res))) {
       Sys.sleep(runif(1L, min = 1, max = sleep(i)))
     } else {
       print(res)
