@@ -72,7 +72,7 @@ test_that("source registry mutators work", {
   expect_equal(reg$src.dirs, character(0L))
 
   reg = addRegistrySourceDirs(reg, src.dir.parent, src.now = FALSE)
-  expect_equal(reg$src.files, sanitizePath(src.files.subdir))
+  expect_equal(reg$src.files, sanitizePath(src.files.subdir, make.absolute = FALSE))
   expect_equal(reg$src.dirs, sanitizePath(src.dir.parent, make.absolute = FALSE))
 
   reg = removeRegistrySourceFiles(reg, reg$src.files)
