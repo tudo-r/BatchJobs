@@ -12,8 +12,7 @@ dbGetConnection = function(drv, ...) {
 
 dbGetConnection.SQLiteDriver = function(drv, reg, flags = "ro", ...) {
   flags = switch(flags, "ro" = SQLITE_RO, "rw" = SQLITE_RW, "rwc" = SQLITE_RWC)
-  opts = list(dbname = file.path(reg$file.dir, "BatchJobs.db"),
-              flags = flags, drv = drv)
+  opts = list(dbname = file.path(reg$file.dir, "BatchJobs.db"), flags = flags, drv = drv)
   do.call(dbConnect, args = c(reg$db.options, opts))
 }
 
@@ -68,8 +67,6 @@ dbDoQuery = function(reg, query, flags = "ro", max.retries = 200L, sleep = funct
     if(grepl("(lock|i/o|readonly)", tolower(res))) {
       Sys.sleep(runif(1L, min = 1, max = sleep(i)))
     } else {
-      print(res)
-      print(query)
       stopf("Error in dbDoQuery. %s (%s)", res, query)
     }
   }
