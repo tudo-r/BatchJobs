@@ -17,7 +17,7 @@ Depends:
     BBmisc (>= 1.7),
     methods
 Imports:
-    checkmate (>= 1.1),
+    checkmate (>= 1.4),
     utils,
     stats,
     digest,
