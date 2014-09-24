@@ -51,6 +51,6 @@ test_that("getJobInfo: memory correctly reported", {
     submitJobs(reg, ids)
     waitForJobs(reg, ids)
     mem = getJobInfo(reg, select = "memory")$memory
-    expect_true(mem[1] < mem[2])
+    expect_true(testNumeric(mem, any.missing = FALSE))
   }
 })
