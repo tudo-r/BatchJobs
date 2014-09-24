@@ -1,6 +1,8 @@
 library(methods)
 library(devtools)
 library(testthat)
+library(checkmate)
+
 
 if (interactive()) {
   library(BBmisc)
