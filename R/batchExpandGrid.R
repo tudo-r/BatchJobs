@@ -1,5 +1,6 @@
 #' Map function over all combinations.
 #'
+#' @description
 #' Maps an n-ary-function over a list of all combinations which are given by some vectors.
 #' Internally \code{\link{expand.grid}} is used to compute the combinations, then
 #' \code{\link{batchMap}} is called.

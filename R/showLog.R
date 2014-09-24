@@ -1,5 +1,6 @@
 #' Display the contents of a log file.
 #'
+#' @description
 #' Display the contents of a log file, useful in case of errors.
 #'
 #' Note this rare special case: When you use chunking, submit some jobs, some jobs fail,

@@ -1,5 +1,6 @@
 #' Reset computational state of jobs.
 #'
+#' @description
 #' Reset state of jobs in the database. Useful under two circumstances:
 #' Either to re-submit them because of changes in e.g. external
 #' data or to resolve rare issues when jobs are killed in an unfortunate state

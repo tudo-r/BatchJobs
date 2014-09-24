@@ -1,5 +1,6 @@
 #' Grep log files for a pattern.
 #'
+#' @description
 #' Searches for occurence of \code{pattern} in log files.
 #'
 #' @param reg [\code{\link{Registry}}]\cr

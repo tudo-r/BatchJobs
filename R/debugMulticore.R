@@ -1,5 +1,6 @@
 #' Helper function to debug multicore mode.
 #'
+#' @description
 #' Useful in case of severe errors.
 #' Tries different operations of increasing difficulty
 #' and provides debug output on the console

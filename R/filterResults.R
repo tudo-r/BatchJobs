@@ -1,4 +1,5 @@
 #' Find all results where a specific condition is true.
+#'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 #' @param ids [\code{integer}]\cr

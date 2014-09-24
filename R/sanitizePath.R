@@ -1,5 +1,6 @@
 #' Sanitize a path
 #'
+#' @description
 #' Replaces backward slashes with forward slashes and optionally
 #' normalizes the path.
 #'

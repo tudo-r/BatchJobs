@@ -1,5 +1,6 @@
 #' Combination of makeRegistry, batchMap and submitJobs.
 #'
+#' @description
 #' Combination of \code{\link{makeRegistry}}, \code{\link{batchMap}}
 #' and \code{\link{submitJobs}}
 #' for quick computations on the cluster.

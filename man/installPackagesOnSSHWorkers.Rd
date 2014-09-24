@@ -34,8 +34,7 @@ Nothing.
 \description{
 Installation is done via \code{\link{callFunctionOnSSHWorkers}}
 and \code{\link{install.packages}}.
-}
-\details{
+
 Note that as usual the function tries to install
 the packages into the first path of \code{.libPaths()}
 of each each worker.

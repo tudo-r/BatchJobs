@@ -1,5 +1,6 @@
 #' Sets the job function for already existing jobs.
 #'
+#' @description
 #' Use this function only as last measure when there is a bug
 #' in a part of your job function and you have already computed a large number
 #' of (unaffected) results. This function allows you to fix the error and to

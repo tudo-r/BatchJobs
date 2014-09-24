@@ -1,3 +1,4 @@
+#' applyJobFunction
 #' ONLY FOR INTERNAL USAGE.
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.

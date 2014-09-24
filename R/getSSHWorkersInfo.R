@@ -1,5 +1,6 @@
 #' Print and return R installation and other information for SSH workers.
 #'
+#' @description
 #' Workers are queried in parallel via \code{\link{callFunctionOnSSHWorkers}}.
 #'
 #' The function will display a warning if the first lib path on the worker

@@ -1,3 +1,4 @@
+# batchApply
 # A simple wrapper to batchMap to define jobs as an application of a function.
 # on margins of matrices.
 #

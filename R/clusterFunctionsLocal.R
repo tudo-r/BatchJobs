@@ -1,5 +1,6 @@
 #' Create cluster functions for sequential execution on local host.
 #'
+#' @description
 #' All jobs executed under these cluster functions are executed
 #' sequentially, but in an independent, new R session.
 #' That is, \code{submitJob} does not return until the

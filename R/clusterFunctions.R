@@ -1,5 +1,6 @@
 #' Create a SubmitJobResult object.
 #'
+#' @description
 #' Use this function in your implementation of \code{\link{makeClusterFunctions}}
 #' to create a return value for the \code{submitJob} function.
 #' @param status [\code{integer(1)}]\cr

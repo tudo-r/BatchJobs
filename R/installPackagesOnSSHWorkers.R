@@ -1,5 +1,6 @@
 #' Install packages on SSH workers.
 #'
+#' @description
 #' Installation is done via \code{\link{callFunctionOnSSHWorkers}}
 #' and \code{\link{install.packages}}.
 #'

@@ -24,8 +24,7 @@ Extension for the job description file, e.g. \dQuote{pbs}.}
 }
 \description{
 This function is only intended for use in your own cluster functions implementation.
-}
-\details{
+
 Calls brew silently on your template, any error will lead to an exception.
 If debug mode is turned on in the configuration, the file is stored at the same place as the
 corresponding R script in the \dQuote{jobs}-subdir of your files directory,

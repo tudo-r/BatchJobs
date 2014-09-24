@@ -1,5 +1,6 @@
 #' Reduce results from result directory.
 #'
+#' @description
 #' The following functions provide ways to reduce result files into either specific R objects (like
 #' vectors, lists, matrices or data.frames) or to arbitrarily aggregate them, which is a more general
 #' operation.

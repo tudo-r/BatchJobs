@@ -1,5 +1,6 @@
 #' Call an arbitrary function on specified SSH workers.
 #'
+#' @description
 #' Calls can be made in parallel or consecutively,
 #' the function waits until all calls have finished and
 #' returns call results.

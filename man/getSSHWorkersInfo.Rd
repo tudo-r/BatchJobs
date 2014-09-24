@@ -14,8 +14,7 @@ Nodenames of workers.}
 }
 \description{
 Workers are queried in parallel via \code{\link{callFunctionOnSSHWorkers}}.
-}
-\details{
+
 The function will display a warning if the first lib path on the worker
 is not writable as this indicates potential problems in the configuration
 and \code{\link{installPackagesOnSSHWorkers}} will not work.

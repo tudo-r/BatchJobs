@@ -1,5 +1,6 @@
 #' Helper function to debug SSH mode.
 #'
+#' @description
 #' Useful in case of configuration problems.
 #' Tries different operations of increasing difficulty
 #' and provides debug output on the console.

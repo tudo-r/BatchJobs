@@ -1,5 +1,6 @@
 #' Cluster functions helper: Read in your brew template file.
 #'
+#' @description
 #' This function is only intended for use in your own cluster functions implementation.
 #'
 #' Simply reads your template and returns it as a character vector.
@@ -20,6 +21,7 @@ cfReadBrewTemplate = function(template.file) {
 
 #' Cluster functions helper: Brew your template into a job description file.
 #'
+#' @description
 #' This function is only intended for use in your own cluster functions implementation.
 #'
 #' Calls brew silently on your template, any error will lead to an exception.
@@ -62,6 +64,7 @@ cfBrewTemplate = function(conf, template, rscript, extension) {
 
 #' Cluster functions helper: Handle an unknown error during job submission.
 #'
+#' @description
 #' This function is only intended for use in your own cluster functions implementation.
 #'
 #' Simply constructs a \code{\link{SubmitJobResult}} object with status code 101,
@@ -87,6 +90,7 @@ cfHandleUnknownSubmitError = function(cmd, exit.code, output) {
 
 #' Cluster functions helper: Kill a batch job via OS command
 #'
+#' @description
 #' This function is only intended for use in your own cluster functions implementation.
 #'
 #' Calls the OS command to kill a job via \code{system} like this: \dQuote{cmd batch.job.id}.

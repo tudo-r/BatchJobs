@@ -25,8 +25,7 @@ Otherwise you find information about the correct part in the beginning of the di
 }
 \description{
 Display the contents of a log file, useful in case of errors.
-}
-\details{
+
 Note this rare special case: When you use chunking, submit some jobs, some jobs fail,
 then you resubmit these jobs again in different chunks, the log files will contain the log
 of the old, failed job as well. \code{showLog} tries to jump to the correct part

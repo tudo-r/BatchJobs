@@ -1,5 +1,6 @@
 #' Use multiple cores on local Linux machine to spawn parallel jobs.
 #'
+#' @description
 #' Jobs are spawned by starting multiple R sessions on the commandline
 #' (similar like on true batch systems).
 #' Packages \code{parallel} or \code{multicore} are not used in any way.

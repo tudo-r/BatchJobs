@@ -1,5 +1,6 @@
 #' Show information about available computational resources on cluster.
 #'
+#' @description
 #' Currently only supported for multicore and SSH mode.
 #' Displays: Name of node, current load, number of running R processes, number of R processes
 #' with more than 50% load, number of BatchJobs jobs running.

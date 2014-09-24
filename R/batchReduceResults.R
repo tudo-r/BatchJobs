@@ -1,5 +1,6 @@
 #' Reduces results via a binary function and adds jobs for this to a registry.
 #'
+#' @description
 #' Each jobs reduces a certain number of results on one slave.
 #' You can then submit these jobs to the batch system.
 #' Later, you can do a final reduction with \code{\link{reduceResults}} on the master.

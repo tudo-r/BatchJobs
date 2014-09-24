@@ -53,8 +53,7 @@ the function waits until all calls have finished and
 returns call results.
 In consecutive mode the output on the workers can also be shown on the master
 during computation.
-}
-\details{
+
 Please read and understand the comments for argument \code{dir}.
 
 Note that this function should only be used for short administrative

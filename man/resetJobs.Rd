@@ -26,8 +26,7 @@ Reset state of jobs in the database. Useful under two circumstances:
 Either to re-submit them because of changes in e.g. external
 data or to resolve rare issues when jobs are killed in an unfortunate state
 and therefore blocking your registry.
-}
-\details{
+
 The function internally lists all jobs on the batch system and
 if those include some of the jobs you want to reset, it informs you to kill them first by raising
 an exception.

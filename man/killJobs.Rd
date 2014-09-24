@@ -19,8 +19,7 @@ Default is none.}
 \description{
 Kill jobs which have already been submitted to the batch system.
 If a job is killed its internal state is reset as if it had not been submitted at all.
-}
-\details{
+
 The function informs if
 (a) the job you want to kill has not been submitted,
 (b) the job has already terminated,

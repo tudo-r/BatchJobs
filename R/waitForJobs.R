@@ -1,5 +1,6 @@
 #' Wait for termination of jobs on the batch system.
 #'
+#' @description
 #' Waits for termination of jobs while displaying a progress bar
 #' containing summarizing informations of the jobs.
 #' The following abbreviations are used in the progress bar:
