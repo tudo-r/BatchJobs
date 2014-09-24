@@ -28,5 +28,12 @@ test_that("batchMap", {
   submitJobs(reg)
   waitForJobs(reg)
   expect_equal(loadResults(reg, simplify = TRUE), setNames(factor(letters[1:5]), 1:5))
+
+  # primitive functions
+  reg = makeTestRegistry()
+  ids = batchMap(reg, sin, 1:2)
+  submitJobs(reg)
+  waitForJobs(reg)
+  expect_equal(as.numeric(loadResults(reg, simplify = TRUE)), sin(1:2))
 })
 
