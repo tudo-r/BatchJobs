@@ -1,8 +1,12 @@
-#' Helper function to debug SSH mode.
+#' @title Helper function to debug SSH mode.
 #'
+#' @description
 #' Useful in case of configuration problems.
 #' Tries different operations of increasing difficulty
 #' and provides debug output on the console.
+#'
+#' Note that this function does not access nor use information specified for
+#' your cluster functions in your configuration.
 #'
 #' @param nodename [\code{character(1)}]\cr
 #'   Node on which worker should be constructed for the test.

@@ -34,6 +34,9 @@ Nothing.
 Useful in case of configuration problems.
 Tries different operations of increasing difficulty
 and provides debug output on the console.
+
+Note that this function does not access nor use information specified for
+your cluster functions in your configuration.
 }
 \seealso{
 Other debug: \code{\link{debugMulticore}};
