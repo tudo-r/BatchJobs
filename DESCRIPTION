@@ -10,7 +10,7 @@ Maintainer: Bernd Bischl <bernd_bischl@gmx.net>
 URL: https://github.com/tudo-r/BatchJobs
 BugReports: https://github.com/tudo-r/BatchJobs/issues
 MailingList: batchjobs@googlegroups.com
-License: BSD_3_clause + file LICENSE
+License: BSD_2_clause + file LICENSE
 Roxygen: list(wrap = FALSE)
 Depends:
     R (>= 2.15.0),
