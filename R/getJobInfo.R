@@ -1,4 +1,4 @@
-getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
+getJobInfoInternal = function(reg, ids, select, unit = "seconds", columns) {
   if (!missing(ids))
     ids = checkIds(reg, ids)
   assertChoice(unit, c("seconds", "minutes", "hours", "days", "weeks"))
@@ -48,11 +48,8 @@ getJobInfoInternal = function(reg, ids, pars, select, unit, columns) {
 #'
 #' @note To estimate memory usage the sum of the last column of \code{\link[base]{gc}} is used.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
-#' @param ids [\code{integer}]\cr
-#'   Ids of jobs.
-#'   Default is all jobs.
+#' @template arg_reg
+#' @template arg_ids
 #' @param pars [\code{logical(1)}]\cr
 #'   Include job parameters in the output?
 #'   Default is \code{FALSE}.
@@ -86,7 +83,7 @@ getJobInfo.Registry = function(reg, ids, pars = FALSE, prefix.pars = FALSE, sele
   if (pars)
     columns = c(columns, c(pars = "pars"))
 
-  tab = getJobInfoInternal(reg, ids, pars, select, unit, columns)
+  tab = getJobInfoInternal(reg, ids, select, unit, columns)
 
   # unserialize parameters
   if (pars && !is.null(tab$pars)) {

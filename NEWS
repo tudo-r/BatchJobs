@@ -3,6 +3,7 @@ BatchJobs_1.4:
 - Added functions: addRegistryPackages, removeRegistryPackages
 - Added functions: addRegistrySourceFiles, addRegistrySourceDirs,
   removeRegistrySourceFiles, removeRegistrySourceDirs
+- Added functions: getJobParamDf 
 - New option: "BatchJobs.clear.function.env". If TRUE the function environment
   will be erased prior to writing it to the file system. Otherwise a warning is
   issued if the environment exceeds 10Mb in size.

@@ -31,8 +31,12 @@ Internally \code{\link{expand.grid}} is used to compute the combinations, then
 \examples{
 reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 f = function(x, y, z) x * y  + z
-batchExpandGrid(reg, f, x = 1:2, y = 1:3, more.args = list(z = 10))
+# lets store the param grid
+grid = batchExpandGrid(reg, f, x = 1:2, y = 1:3, more.args = list(z = 10))
 submitJobs(reg)
-reduceResultsMatrix(reg, fun = function(job, res) cbind(job$pars, res))
+y = reduceResultsVector(reg)
+# later, we can always access the param grid like this
+grid = getJobParamDf(reg)
+cbind(grid, y = y)
 }
 

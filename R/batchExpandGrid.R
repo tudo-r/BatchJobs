@@ -1,9 +1,10 @@
-#' Map function over all combinations.
+#' @title Map function over all combinations.
 #'
 #' @description
 #' Maps an n-ary-function over a list of all combinations which are given by some vectors.
 #' Internally \code{\link{expand.grid}} is used to compute the combinations, then
 #' \code{\link{batchMap}} is called.
+#'
 #'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Empty Registry that will store jobs for the mapping.
@@ -16,13 +17,17 @@
 #'   A list of other arguments passed to \code{fun}.
 #'   Default is empty list.
 #' @return [\code{data.frame}]. Expanded grid of combinations produced by \code{\link{expand.grid}}.
+#' @export
 #' @examples
 #' reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 #' f = function(x, y, z) x * y  + z
-#' batchExpandGrid(reg, f, x = 1:2, y = 1:3, more.args = list(z = 10))
+#' # lets store the param grid
+#' grid = batchExpandGrid(reg, f, x = 1:2, y = 1:3, more.args = list(z = 10))
 #' submitJobs(reg)
-#' reduceResultsMatrix(reg, fun = function(job, res) cbind(job$pars, res))
-#' @export
+#' y = reduceResultsVector(reg)
+#' # later, we can always access the param grid like this
+#' grid = getJobParamDf(reg)
+#' cbind(grid, y = y)
 batchExpandGrid = function(reg, fun, ..., more.args = list()) {
   checkRegistry(reg, strict = TRUE)
   assertFunction(fun)
@@ -43,5 +48,5 @@ batchExpandGrid = function(reg, fun, ..., more.args = list()) {
   if (is.null(ns))
     colnames(grid) = NULL
   do.call(batchMap, c(as.list(grid), list(reg = reg, fun = fun, more.args = more.args)))
-  return(grid)
+  return(setRowNames(grid, as.character(getJobIds(reg))))
 }

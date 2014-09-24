@@ -7,7 +7,7 @@ getJobInfo(reg, ids, pars = FALSE, prefix.pars = FALSE, select,
   unit = "seconds")
 }
 \arguments{
-\item{reg}{[\code{\link{Registry}}]\cr
+\item{reg}{[\code{Registry}]\cr
 Registry.}
 
 \item{ids}{[\code{integer}]\cr
