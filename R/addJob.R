@@ -4,7 +4,7 @@ saveFunction = function(reg, fun, more.args) {
     environment(fun) = .GlobalEnv
   } else {
     ee = environment(fun)
-    if (!isNamespace(ee)) {
+    if (!is.null(ee) && !isNamespace(ee)) {
       nn = ls(ee, all.names = TRUE)
       if (sum(vnapply(nn, function(nn) object.size(ee[[nn]])) / 1024^2) > 10)
         warning("The environment of provided function exceeds 10Mb.")
