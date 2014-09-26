@@ -75,8 +75,11 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
       # check if there are still jobs on the system and none has mystically disappeared
       # NOTE it seems like some schedulers are "laggy", we should not do this operation
       # in the first loop w/o a sleep
-      if(!length(dbFindOnSystem(reg, ids, batch.ids = batch.ids)))
+      if (length(dbFindOnSystem(reg, ids, batch.ids = batch.ids)) == 0L) {
+        if (length(dbFindDisappeared(reg, ids, batch.ids = batch.ids)) > 0L)
+          stop("Some jobs have dispeared, i.e. where submitted but are now gone. Check your configuration and template file.")
         return(stats$error == 0L)
+      }
     }
 
     if (is.finite(timeout) && now() > timeout) {

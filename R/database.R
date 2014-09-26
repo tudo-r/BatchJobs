@@ -282,6 +282,14 @@ dbFindExpiredJobs = function(reg, ids, negate = FALSE, batch.ids) {
   dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
 }
 
+dbFindDisappeared = function(reg, ids, negate = FALSE, batch.ids) {
+  if (missing(batch.ids))
+    batch.ids = getBatchIds(reg, "Cannot find jobs on system")
+  query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (submitted IS NOT NULL AND started IS NULL AND batch_job_id NOT IN (%s))",
+                  reg$id, if (negate) "NOT" else "", collapse(sqlQuote(batch.ids)))
+  dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
+}
+
 dbGetFirstJobInChunkIds = function(reg, ids){
   query = sprintf("SELECT job_id, first_job_in_chunk_id FROM %s_job_status", reg$id)
   dbSelectWithIds(reg, query, ids)$first_job_in_chunk_id
