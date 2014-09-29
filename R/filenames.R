@@ -6,7 +6,7 @@ checkDir = function(path, create = FALSE, check.empty = FALSE, check.posix = FAL
     } else {
       if (msg)
         info("Creating dir: %s", path)
-      if (!dir.create(path))
+      if (!dir.create(path, recursive = TRUE))
         stopf("Could not create dir: %s", path)
     }
   }
