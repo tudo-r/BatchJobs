@@ -3,7 +3,8 @@
 \alias{waitForJobs}
 \title{Wait for termination of jobs on the batch system.}
 \usage{
-waitForJobs(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE)
+waitForJobs(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE,
+  progress.bar = TRUE)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -24,6 +25,10 @@ Default is \code{604800} (one week).}
 
 \item{stop.on.error}{[\code{logical(1)}]\cr
 Immediately return if a job terminates with an error? Default is \code{FALSE}.}
+
+\item{progress.bar}{[\code{logical(1)}]\cr
+Set to \code{FALSE} to disable the progress bar.
+To disable all progress bars, see \code{\link[BBmisc]{makeProgressBar}}.}
 }
 \value{
 [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated successfully

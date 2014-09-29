@@ -50,6 +50,7 @@
 #'   The default function used with \code{job.delay} set to \code{TRUE} is no delay for
 #'   100 jobs or less and otherwise \code{runif(1, 0.1*n, 0.2*n)}.
 #'   If set to \code{FALSE} (the default) delaying jobs is disabled.
+#' @template arg_progress_bar
 #' @return [\code{integer}]. Vector of submitted job ids.
 #' @export
 #' @examples
@@ -61,7 +62,8 @@
 #' # Submit the 10 jobs again, now randomized into 2 chunks:
 #' chunked = chunk(getJobIds(reg), n.chunks = 2, shuffle = TRUE)
 #' submitJobs(reg, chunked)
-submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chunks.as.arrayjobs = FALSE, job.delay = FALSE) {
+submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chunks.as.arrayjobs = FALSE,
+  job.delay = FALSE, progress.bar = TRUE) {
   ### helper function to calculate the delay
   getDelays = function(cf, job.delay, n) {
     if (is.logical(job.delay)) {
@@ -107,22 +109,16 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
     wait = function(retries) 10 * 2^retries
   else
     assertFunction(wait, "retries")
-
-  if (is.logical(job.delay)) {
-    assertFlag(job.delay)
-  } else {
-    checkFunction(job.delay, c("n", "i"))
-  }
-
   if (is.finite(max.retries))
     max.retries = asCount(max.retries)
-
-
   assertFlag(chunks.as.arrayjobs)
   if (chunks.as.arrayjobs && is.na(cf$getArrayEnvirName())) {
     warningf("Cluster functions '%s' do not support array jobs, falling back on chunks", cf$name)
     chunks.as.arrayjobs = FALSE
   }
+  assert(checkFlag(job.delay), checkFunction(job.delay, c("n", "i")))
+  assertFlag(progress.bar)
+
 
   if (!is.null(cf$listJobs)) {
     ### check for running jobs
@@ -198,7 +194,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
   dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids), type = "first"), staged = staged, fs.timeout = fs.timeout)
 
   ### initialize progress bar
-  bar = makeProgressBar(max = n, label = "SubmitJobs")
+  bar = getProgressBar(progress.bar, max = n, label = "SubmitJobs")
   bar$set()
 
   tryCatch({

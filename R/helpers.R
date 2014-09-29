@@ -144,3 +144,13 @@ info = function(...) {
   if (getOption("BatchJobs.verbose", default = TRUE))
     message(sprintf(...))
 }
+
+getProgressBar = function(condition, ...) {
+  if (condition) {
+    pb = makeProgressBar(...)
+    pb$set()
+  } else {
+    pb = makeProgressBar(style = "off")
+  }
+  pb
+}

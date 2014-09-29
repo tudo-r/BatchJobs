@@ -4,7 +4,7 @@
 \title{Submit jobs or chunks of jobs to batch system via cluster function.}
 \usage{
 submitJobs(reg, ids, resources = list(), wait, max.retries = 10L,
-  chunks.as.arrayjobs = FALSE, job.delay = FALSE)
+  chunks.as.arrayjobs = FALSE, job.delay = FALSE, progress.bar = TRUE)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -46,6 +46,10 @@ early as possible to avoid writer starvation.
 The default function used with \code{job.delay} set to \code{TRUE} is no delay for
 100 jobs or less and otherwise \code{runif(1, 0.1*n, 0.2*n)}.
 If set to \code{FALSE} (the default) delaying jobs is disabled.}
+
+\item{progress.bar}{[\code{logical(1)}]\cr
+Set to \code{FALSE} to disable the progress bar.
+To disable all progress bars, see \code{\link[BBmisc]{makeProgressBar}}.}
 }
 \value{
 [\code{integer}]. Vector of submitted job ids.

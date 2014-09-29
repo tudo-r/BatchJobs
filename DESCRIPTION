@@ -14,7 +14,7 @@ License: BSD_2_clause + file LICENSE
 Roxygen: list(wrap = FALSE)
 Depends:
     R (>= 2.15.0),
-    BBmisc (>= 1.7),
+    BBmisc (>= 1.8),
     methods
 Imports:
     checkmate (>= 1.4),

@@ -20,6 +20,9 @@
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs to kill.
 #'   Default is none.
+#' @param progress.bar [\code{logical(1)}]\cr
+#'   Set to \code{FALSE} to disable the progress bar.
+#'   To disable all progress bars, see \code{\link[BBmisc]{makeProgressBar}}.
 #' @return [\code{integer}]. Ids of killed jobs.
 #' @export
 #' @family debug
@@ -35,13 +38,14 @@
 #' # kill all jobs queued or running
 #' killJobs(reg, findNotTerminated(reg))
 #' }
-killJobs = function(reg, ids) {
+killJobs = function(reg, ids, progress.bar) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids))
     return(invisible(integer(0L)))
   else
     ids = checkIds(reg, ids)
+  assertFlag(progress.bar)
 
   conf = getBatchJobsConf()
   killfun = getKillJob("Cannot kill jobs")
@@ -77,7 +81,7 @@ killJobs = function(reg, ids) {
   doKill = function(bjids) {
     n = length(bjids)
     old.warn = getOption("warn")
-    bar = makeProgressBar(min = 0L, max = n, label = "killJobs")
+    bar = getProgressBar(progress.bar, min = 0L, max = n, label = "killJobs")
     on.exit({ options(warn = old.warn); bar$kill() })
 
     options(warn = 0L)

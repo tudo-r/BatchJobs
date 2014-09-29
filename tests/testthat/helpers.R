@@ -1,5 +1,6 @@
 library(BBmisc)
 options(BBmisc.ProgressBar.style = "off")
+options(BatchJobs.verbose = FALSE)
 
 conf = getConfig()
 conf$default.resources$walltime = 120

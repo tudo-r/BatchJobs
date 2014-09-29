@@ -1,2 +1,2 @@
 library(testthat)
-test_check("BatchJobs", filter = "Info")
+test_check("BatchJobs")
