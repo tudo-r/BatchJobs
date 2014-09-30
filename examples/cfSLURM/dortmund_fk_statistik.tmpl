@@ -40,7 +40,7 @@ if (is.null(ntasks))
   ntasks = parcpus
 checkArg(ncpus, "integer", len=1L, na.ok=FALSE, lower=1L, upper=12L)
 
-cmd = "Rxxx CMD BATCH --no-save --no-restore"
+cmd = "R CMD BATCH --no-save --no-restore"
 mincpus = 1L
 
 if(ntasks > 1L){
