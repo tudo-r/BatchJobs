@@ -8,10 +8,10 @@
 \title{Reduce results from result directory.}
 \usage{
 reduceResults(reg, ids, part = NA_character_, fun, init, impute.val,
-  progress.bar = TRUE, ...)
+  progressbar = TRUE, ...)
 
 reduceResultsList(reg, ids, part = NA_character_, fun, ...,
-  use.names = "ids", impute.val, progress.bar = TRUE)
+  use.names = "ids", impute.val, progressbar = TRUE)
 
 reduceResultsVector(reg, ids, part = NA_character_, fun, ...,
   use.names = "ids", impute.val)
@@ -58,7 +58,7 @@ as argument \code{res} for jobs with missing results.\cr
 For the specialized reduction functions \code{reduceResults[Type]}: If not missing, \code{impute.val} is
 used as a replacement for the return value of \code{fun} on missing results.}
 
-\item{progress.bar}{[\code{logical(1)}]\cr
+\item{progressbar}{[\code{logical(1)}]\cr
 Set to \code{FALSE} to disable the progress bar.
 To disable all progress bars, see \code{\link[BBmisc]{makeProgressBar}}.}
 

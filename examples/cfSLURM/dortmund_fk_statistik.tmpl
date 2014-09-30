@@ -37,10 +37,10 @@ if (is.null(ntasks) && is.null(parcpus))
 if (!is.null(ntasks) && !is.null(parcpus))
   stopf("You cannot set both 'ntasks' and 'parcpus'!")
 if (is.null(ntasks))
-  ntasks = parcpus  
+  ntasks = parcpus
 checkArg(ncpus, "integer", len=1L, na.ok=FALSE, lower=1L, upper=12L)
 
-cmd = "R CMD BATCH --no-save --no-restore"
+cmd = "Rxxx CMD BATCH --no-save --no-restore"
 mincpus = 1L
 
 if(ntasks > 1L){

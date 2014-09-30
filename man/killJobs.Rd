@@ -3,7 +3,7 @@
 \alias{killJobs}
 \title{Kill some jobs on the batch system.}
 \usage{
-killJobs(reg, ids, progress.bar)
+killJobs(reg, ids, progressbar)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -13,7 +13,7 @@ Registry.}
 Ids of jobs to kill.
 Default is none.}
 
-\item{progress.bar}{[\code{logical(1)}]\cr
+\item{progressbar}{[\code{logical(1)}]\cr
 Set to \code{FALSE} to disable the progress bar.
 To disable all progress bars, see \code{\link[BBmisc]{makeProgressBar}}.}
 }

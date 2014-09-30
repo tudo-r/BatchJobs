@@ -50,7 +50,7 @@
 #'   The default function used with \code{job.delay} set to \code{TRUE} is no delay for
 #'   100 jobs or less and otherwise \code{runif(1, 0.1*n, 0.2*n)}.
 #'   If set to \code{FALSE} (the default) delaying jobs is disabled.
-#' @template arg_progress_bar
+#' @template arg_progressbar
 #' @return [\code{integer}]. Vector of submitted job ids.
 #' @export
 #' @examples
@@ -63,7 +63,7 @@
 #' chunked = chunk(getJobIds(reg), n.chunks = 2, shuffle = TRUE)
 #' submitJobs(reg, chunked)
 submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chunks.as.arrayjobs = FALSE,
-  job.delay = FALSE, progress.bar = TRUE) {
+  job.delay = FALSE, progressbar = TRUE) {
   ### helper function to calculate the delay
   getDelays = function(cf, job.delay, n) {
     if (is.logical(job.delay)) {
@@ -117,7 +117,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
     chunks.as.arrayjobs = FALSE
   }
   assert(checkFlag(job.delay), checkFunction(job.delay, c("n", "i")))
-  assertFlag(progress.bar)
+  assertFlag(progressbar)
 
 
   if (!is.null(cf$listJobs)) {
@@ -194,7 +194,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
   dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids), type = "first"), staged = staged, fs.timeout = fs.timeout)
 
   ### initialize progress bar
-  bar = getProgressBar(progress.bar, max = n, label = "SubmitJobs")
+  bar = getProgressBar(progressbar, max = n, label = "SubmitJobs")
   bar$set()
 
   tryCatch({

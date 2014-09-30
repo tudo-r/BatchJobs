@@ -23,12 +23,12 @@
 #'   Default is \code{604800} (one week).
 #' @param stop.on.error [\code{logical(1)}]\cr
 #'   Immediately return if a job terminates with an error? Default is \code{FALSE}.
-#' @template arg_progress_bar
+#' @template arg_progressbar
 #' @return [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated successfully
 #'   and \code{FALSE} if either an error occurred or the timeout is reached.
 #' @export
 waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE,
-  progress.bar = TRUE) {
+  progressbar = TRUE) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
@@ -44,7 +44,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
     stop("Argument 'sleep' must be finite")
   assertNumber(timeout, lower = sleep)
   assertFlag(stop.on.error)
-  assertFlag(progress.bar)
+  assertFlag(progressbar)
 
   n = length(ids)
   if (n == 0L)
@@ -53,7 +53,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
   batch.ids = getBatchIds(reg, "Cannot find jobs on system")
   i = 1L
 
-  bar = getProgressBar(progress.bar, min = 0L, max = n, label = "Waiting                  ")
+  bar = getProgressBar(progressbar, min = 0L, max = n, label = "Waiting                  ")
   on.exit(bar$kill())
 
   repeat {

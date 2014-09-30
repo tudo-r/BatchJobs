@@ -39,7 +39,7 @@
 #'   as argument \code{res} for jobs with missing results.\cr
 #'   For the specialized reduction functions \code{reduceResults[Type]}: If not missing, \code{impute.val} is
 #'   used as a replacement for the return value of \code{fun} on missing results.
-#' @template arg_progress_bar
+#' @template arg_progressbar
 #' @param rows [\code{logical(1)}]\cr
 #'   Should the selected vectors be used as rows (or columns) in the result matrix?
 #'   Default is \code{TRUE}.
@@ -81,7 +81,7 @@
 #' print(str(reduceResultsDataFrame(reg)))
 #' # reduce results to a sum
 #' reduceResults(reg, fun = function(aggr, job, res) aggr+res$a, init = 0)
-reduceResults = function(reg, ids, part = NA_character_, fun, init, impute.val, progress.bar = TRUE, ...) {
+reduceResults = function(reg, ids, part = NA_character_, fun, init, impute.val, progressbar = TRUE, ...) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
@@ -97,7 +97,7 @@ reduceResults = function(reg, ids, part = NA_character_, fun, init, impute.val, 
     }
   }
   assertFunction(fun, c("aggr", "job", "res"))
-  assertFlag(progress.bar)
+  assertFlag(progressbar)
 
   n = length(ids)
   info("Reducing ", n, " results...")
@@ -107,7 +107,7 @@ reduceResults = function(reg, ids, part = NA_character_, fun, init, impute.val, 
     return(init)
   }
 
-  bar = getProgressBar(progress.bar, max = n, label = "reduceResults")
+  bar = getProgressBar(progressbar, max = n, label = "reduceResults")
 
   tryCatch({
     if (missing(init)) {
@@ -135,7 +135,7 @@ reduceResults = function(reg, ids, part = NA_character_, fun, init, impute.val, 
 #' @export
 #' @rdname reduceResults
 reduceResultsList = function(reg, ids, part = NA_character_, fun, ..., use.names = "ids",
-  impute.val, progress.bar = TRUE) {
+  impute.val, progressbar = TRUE) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
@@ -155,7 +155,7 @@ reduceResultsList = function(reg, ids, part = NA_character_, fun, ..., use.names
   else
     assertFunction(fun, c("job", "res"))
   use.names = convertUseNames(use.names)
-  assertFlag(progress.bar)
+  assertFlag(progressbar)
 
   n = length(ids)
   info("Reducing %i results...", n)
@@ -169,7 +169,7 @@ reduceResultsList = function(reg, ids, part = NA_character_, fun, ..., use.names
     it = seq_len(n)
   }
 
-  bar = getProgressBar(progress.bar, max = n, label = "reduceResults")
+  bar = getProgressBar(progressbar, max = n, label = "reduceResults")
   tryCatch({
     for (i in it) {
       # use lazy evaluation!
