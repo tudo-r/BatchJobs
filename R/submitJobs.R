@@ -58,6 +58,7 @@
 #' f = function(x) x^2
 #' batchMap(reg, f, 1:10)
 #' submitJobs(reg)
+#' waitForJobs(reg)
 #'
 #' # Submit the 10 jobs again, now randomized into 2 chunks:
 #' chunked = chunk(getJobIds(reg), n.chunks = 2, shuffle = TRUE)

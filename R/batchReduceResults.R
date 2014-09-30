@@ -31,6 +31,7 @@
 #' f = function(x) x^2
 #' batchMap(reg1, f, 1:20)
 #' submitJobs(reg1)
+#' waitForJobs(reg)
 #'
 #' # define function to reduce on slave, we want to sum the squares
 #' myreduce = function(aggr, job, res) aggr + res
@@ -39,6 +40,7 @@
 #' reg2 = makeRegistry(id = "BatchJobsExample2", file.dir = tempfile(), seed = 123)
 #' batchReduceResults(reg1, reg2, fun = myreduce, init = 0, block.size = 5)
 #' submitJobs(reg2)
+#' waitForJobs(reg)
 #'
 #' # now reduce one final time on master
 #' reduceResults(reg2, fun = myreduce)

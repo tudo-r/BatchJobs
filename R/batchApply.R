@@ -27,6 +27,7 @@
 # # Define two jobs to calculate the row sums:
 # batchApply(reg, X, 1, sum, n.chunks = 2)
 # submitJobs(reg)
+# waitForJobs(reg)
 # reduceResultsVector(reg, use.names = FALSE) == rowSums(X)
 # @export
 # FIXME why is this not exported? test and export

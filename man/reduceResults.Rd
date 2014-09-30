@@ -95,6 +95,7 @@ reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 f = function(x) x^2
 batchMap(reg, f, 1:5)
 submitJobs(reg)
+waitForJobs(reg)
 
 # reduce results to a vector
 reduceResultsVector(reg)
@@ -105,6 +106,7 @@ reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
 f = function(x) list(a = x, b = as.character(2*x), c = x^2)
 batchMap(reg, f, 1:5)
 submitJobs(reg)
+waitForJobs(reg)
 
 # reduce results to a vector
 reduceResultsVector(reg, fun = function(job, res) res$a)

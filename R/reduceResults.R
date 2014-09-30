@@ -57,6 +57,7 @@
 #' f = function(x) x^2
 #' batchMap(reg, f, 1:5)
 #' submitJobs(reg)
+#' waitForJobs(reg)
 #'
 #' # reduce results to a vector
 #' reduceResultsVector(reg)
@@ -67,6 +68,7 @@
 #' f = function(x) list(a = x, b = as.character(2*x), c = x^2)
 #' batchMap(reg, f, 1:5)
 #' submitJobs(reg)
+#' waitForJobs(reg)
 #'
 #' # reduce results to a vector
 #' reduceResultsVector(reg, fun = function(job, res) res$a)
