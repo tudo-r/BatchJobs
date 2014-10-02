@@ -1,5 +1,7 @@
 BatchJobs_1.5:
 - Fixed a bug in waitForJobs().
+- Argument 'progressbar' added to multiple functions to suppress displaying the
+  progress bars.
 
 BatchJobs_1.4:
 - Added functions: batchExport, batchUnexport, loadExports
