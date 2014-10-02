@@ -80,7 +80,7 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
       # in the first loop w/o a sleep
       if (length(dbFindOnSystem(reg, ids, batch.ids = batch.ids)) == 0L) {
         if (length(dbFindDisappeared(reg, ids, batch.ids = batch.ids)) > 0L)
-          stop("Some jobs disappeared, i.e. were submitted but are now gone. Check your configuration and template file.")
+          bar$error(stop("Some jobs disappeared, i.e. were submitted but are now gone. Check your configuration and template file."))
         return(stats$error == 0L)
       }
     }
