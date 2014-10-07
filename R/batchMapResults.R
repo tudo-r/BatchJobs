@@ -29,7 +29,7 @@
 #'
 #' # submit jobs and wait for the jobs to finish
 #' submitJobs(reg1)
-#' waitForJobs(reg)
+#' waitForJobs(reg1)
 #'
 #' # look at results
 #' reduceResults(reg1, fun = function(aggr,job,res) c(aggr, res))
@@ -42,7 +42,7 @@
 #'
 #' # submit jobs and wait for the jobs to finish
 #' submitJobs(reg2)
-#' waitForJobs(reg)
+#' waitForJobs(reg2)
 #'
 #' # check results
 #' reduceResults(reg2, fun = function(aggr,job,res) c(aggr, res))
