@@ -28,8 +28,11 @@ test_that("batchMapQuick", {
 })
 
 test_that("batchMapQuick chunks properly", {
+  prev = getOption("BatchJobs.verbose", TRUE)
+  options(BatchJobs.verbose = TRUE)
   expect_message({
     reg = batchMapQuick(identity, 1:4, chunk.size = 2, file.dir = getTempDir())
   }, "Submitting 2 chunks / 4 jobs")
+  options(BatchJobs.verbose = prev)
   waitForJobs(reg)
 })
