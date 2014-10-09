@@ -74,6 +74,8 @@ assignConfDefaults = function() {
   conf$staged.queries = FALSE
   conf$max.concurrent.jobs = Inf
   conf$fs.timeout = NA_real_
+  conf$ssh = FALSE
+  conf$node = "none"
 }
 
 # loads conf into namespace on slave
@@ -104,7 +106,7 @@ getConfNames = function() {
   c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options",
     "default.resources", "debug", "raise.warnings", "staged.queries",
-    "max.concurrent.jobs", "fs.timeout")
+    "max.concurrent.jobs", "fs.timeout", "ssh", "node")
 }
 
 checkConf = function(conf) {
@@ -117,7 +119,7 @@ checkConf = function(conf) {
 
 checkConfElements = function(cluster.functions, mail.to, mail.from,
   mail.start, mail.done, mail.error, mail.control, db.driver, db.options, default.resources, debug,
-  raise.warnings, staged.queries, max.concurrent.jobs, fs.timeout) {
+  raise.warnings, staged.queries, max.concurrent.jobs, fs.timeout, ssh, node) {
 
   mail.choices = c("none", "first", "last", "first+last", "all")
 
@@ -151,6 +153,10 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
     assertCount(max.concurrent.jobs)
   if (!missing(fs.timeout))
     assertNumber(fs.timeout)
+  if (!missing(ssh))
+    assertFlag(ssh)
+  if (!missing(node))
+    assertString(node)
 }
 
 getClusterFunctions = function(conf) {
@@ -176,10 +182,12 @@ printableConf = function(conf) {
     "  staged.queries: %s",
     "  max.concurrent.jobs: %s",
     "  fs.timeout: %s\n",
+    "  ssh: %s",
+    "  node: %s",
     sep = "\n")
   sprintf(fmt, x$cluster.functions$name, x$mail.from, x$mail.to, x$mail.start, x$mail.done,
           x$mail.error, convertToShortString(x$default.resources), x$debug, x$raise.warnings,
-          x$staged.queries, x$max.concurrent.jobs, x$fs.timeout)
+          x$staged.queries, x$max.concurrent.jobs, x$fs.timeout, x$ssh, x$node)
 }
 
 

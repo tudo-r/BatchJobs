@@ -21,19 +21,13 @@
 #' @template ret_cf
 #' @family clusterFunctions
 #' @export
-makeClusterFunctionsTorque = function(template.file, ssh = FALSE, loginnode, list.jobs.cmd = c("qselect", "-u $USER", "-s EHQRTW")) {
-  assertLogical(ssh, any.missing = FALSE)
-  if(ssh) {
-    assertCharacter(loginnode, len = 1L, any.missing = FALSE)
-  } else {
-    loginnode = NULL
-  }
+makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect", "-u $USER", "-s EHQRTW")) {
   assertCharacter(list.jobs.cmd, min.len = 1L, any.missing = FALSE)
   template = cfReadBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     outfile = cfBrewTemplate(conf, template, rscript, "pbs")
-    res = runOSCommandLinux("qsub", outfile, stop.on.exit.code = FALSE, ssh = ssh, nodename = loginnode)
+    res = runOSCommandLinux("qsub", outfile, stop.on.exit.code = FALSE, ssh = conf$ssh, nodename = conf$node)
 
     max.jobs.msg = "Maximum number of jobs already in queue"
     output = collapse(res$output, sep = "\n")
@@ -52,7 +46,7 @@ makeClusterFunctionsTorque = function(template.file, ssh = FALSE, loginnode, lis
 
   listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
-    batch.jobs = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L], ssh = ssh, nodename = loginnode)$output
+    batch.jobs = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L], ssh = conf$ssh, nodename = conf$node)$output
     if(any(grepl('\\[\\d+\\]', batch.jobs))) {
       batch.jobs = unique(c(batch.jobs, gsub('(.+\\[)\\d+(\\].login)', '\\1\\2', batch.jobs)))
     }

@@ -45,8 +45,8 @@ cfBrewTemplate = function(conf, template, rscript, extension) {
   assertString(template)
   assertString(rscript)
   assertString(extension)
-  if (conf$debug) {
-    # if debug, place in jobs dir
+  if (conf$debug | conf$ssh) {
+    # if debug or job node over ssh, place in jobs dir
     outfile = sub("\\.R$", sprintf(".%s", extension), rscript)
   } else {
     outfile = tempfile("template")
