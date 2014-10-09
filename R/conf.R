@@ -181,9 +181,9 @@ printableConf = function(conf) {
     "  raise.warnings: %s",
     "  staged.queries: %s",
     "  max.concurrent.jobs: %s",
-    "  fs.timeout: %s\n",
+    "  fs.timeout: %s",
     "  ssh: %s",
-    "  node: %s",
+    "  node: %s\n",
     sep = "\n")
   sprintf(fmt, x$cluster.functions$name, x$mail.from, x$mail.to, x$mail.start, x$mail.done,
           x$mail.error, convertToShortString(x$default.resources), x$debug, x$raise.warnings,
