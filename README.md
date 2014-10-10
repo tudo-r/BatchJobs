@@ -10,7 +10,7 @@ Provides Map, Reduce and Filter variants to generate jobs on batch computing sys
 
 * Run this in R to install the current GitHub version:
   ```splus
-  devtools::install_github(""tudo-r/BatchJobs")
+  devtools::install_github("tudo-r/BatchJobs")
   ```
 
 * [Further installation instructions](https://github.com/tudo-r/PackagesInfo/wiki/Installation-Information)
