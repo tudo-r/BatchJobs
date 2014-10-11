@@ -7,7 +7,7 @@
 ##    R-2.15.3-gcc-4.8.0,     From R-2.15.1-gcc-4.7.1 on all R versions should have gotoblas support and should in general be
 ##    R-3.0.1-gcc-4.8.1-base, faster for linear algebra operations, otherwise complain!
 ##    R-3.1.0-gcc-4.8.2-base]
-##                            
+##
 ## modules [character]:       Extra modules you would like to load on slaves. Please note that the following
 ##                            modules are handled automatically by the previous argument "R" and should not be
 ##                            passed manually: R, icc, gcc, binutils, gotoblas, openmpi, torque, maui.
@@ -23,10 +23,10 @@
 ##                            (i.e., nodes = 1) directly mapped to vmem on Lido.
 ##                            In this case it is simply the amount of memory required for each R job.
 ##                            If you use multiple nodes with MPI, vmem = 4 * memory,
-##                            as at most 4 jobs can potentially be scheduled to the cores of the same node.  
+##                            as at most 4 jobs can potentially be scheduled to the cores of the same node.
 ##                            Here, you set the memory of each MPI job.
 ##
-## 'walltime' and 'memory' settings automatically determine the correct queue, you don't have to 
+## 'walltime' and 'memory' settings automatically determine the correct queue, you don't have to
 ## select the queue yourself.
 ## Default resources can be set in your .BatchJobs.R by defining the variable
 ## 'default.resources' as a named list.
@@ -36,32 +36,30 @@ d = setdiff(names(resources), c("walltime", "memory", "nodes", "parcpus", "R", "
 if (length(d) > 0)
   stopf("Illegal resources used: %s", collapse(d))
 
-walltime = convertInteger(resources$walltime)
-memory = convertInteger(resources$memory)
-nodes = convertInteger(resources$nodes)
-parcpus = convertInteger(resources$parcpus)
+nodes = resources$nodes
+parcpus = resources$parcpus
 R = resources$R
 modules = resources$modules
+walltime = asInt(resources$walltime, lower = 60L, upper = 60L * 60L * 24L * 28L)
+memory = asInt(resources$memory, lower = 100L, upper = 64L * 1024L)
 
-checkArg(walltime, "integer", len=1L, na.ok=FALSE, lower=60, upper=60*60*24*28)
-checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=100, upper=64*1024)
 if (!is.null(nodes))
-  checkArg(nodes, "integer", len=1L, na.ok=FALSE, lower=1)
+  nodes = asInt(nodes, lower = 1L)
 if (!is.null(parcpus))
-  checkArg(parcpus, "integer", len=1L, na.ok=FALSE, lower=1)
+  parcpus = asInt(parcpus, lower = 1)
 if (is.null(nodes) && is.null(parcpus))
   stopf("You must set either 'nodes' or 'parcpus'!")
 if (!is.null(nodes) && !is.null(parcpus))
   stopf("You cannot set both 'nodes' and 'parcpus'!")
 if (is.null(nodes))
-  nodes = parcpus  
-checkArg(R, choices=c(
-  "R-2.14.1-icc-11.1", "R-2.15.1-gcc-4.3.5", 
+  nodes = parcpus
+assertChoice(R, choices = c(
+  "R-2.14.1-icc-11.1", "R-2.15.1-gcc-4.3.5",
   "R-2.15.1-gcc-4.7.1", "R-2.15.3-gcc-4.7.2", "R-2.15.3-gcc-4.8.0",
   "R-3.0.1-gcc-4.8.1-base",
   "R-3.1.0-gcc-4.8.2-base"
 ))
-checkArg(modules, "character", na.ok=FALSE)
+assertCharacter(modules, any.missing = FALSE)
 
 cmd = "R CMD BATCH --no-save --no-restore"
 
@@ -81,14 +79,14 @@ queue.max.mem = c(eth = 15000, quad = 61440)
 if (nodes == 1L)  {
   vmem = memory
 } else {
-  # for MPI jobs at most 4 jobs get scheduled on the cores of one node 
+  # for MPI jobs at most 4 jobs get scheduled on the cores of one node
   vmem = 4 * memory
   cmd = paste("mpirun -np 1", cmd)
 }
-if (vmem <= queue.max.mem["eth"]) { 
-  s2 = "eth" 
-} else if (vmem <= queue.max.mem["quad"]) { 
-  s2 = "quad" 
+if (vmem <= queue.max.mem["eth"]) {
+  s2 = "eth"
+} else if (vmem <= queue.max.mem["quad"]) {
+  s2 = "quad"
 } else {
   stop("You are requesting too much memory, there is no queue for this!")
 }
@@ -147,4 +145,4 @@ mkdir /scratch/${USER}-${PBS_JOBID}
 export TMPDIR=/scratch/${USER}-${PBS_JOBID}
 ## run R
 <%= cmd %> "<%= rscript %>" /dev/stdout
-rm -fR /scratch/${USER}-${PBS_JOBID} 
+rm -fR /scratch/${USER}-${PBS_JOBID}

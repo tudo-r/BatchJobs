@@ -13,10 +13,8 @@ d = setdiff(names(resources), c("walltime", "memory"))
 if (length(d) > 0L)
   stopf("Illegal resources used: %s", collapse(d))
 
-walltime = convertInteger(resources$walltime)
-memory = convertInteger(resources$memory)
-checkArg(walltime, "integer", len=1L, na.ok=FALSE, lower=1L, upper=172800L)
-checkArg(memory, "integer", len=1L, na.ok=FALSE, lower=100L, upper=64000L)
+walltime = asInt(resources$walltime, lower = 1L, upper = 172800L)
+memory = asInt(resources$memory, lower = 100L, upper = 64000L)
 
 cmd = "R CMD BATCH --no-save --no-restore"
 
