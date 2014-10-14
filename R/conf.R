@@ -71,7 +71,7 @@ assignConfDefaults = function() {
   conf$default.resources = list()
   conf$debug = FALSE
   conf$raise.warnings = FALSE
-  conf$staged.queries = FALSE
+  conf$staged.queries = TRUE
   conf$max.concurrent.jobs = Inf
   conf$fs.timeout = NA_real_
 }
