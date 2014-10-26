@@ -25,7 +25,7 @@ dbDoQueries = function(reg, queries, flags = "ro", max.retries = 200L, sleep = f
   for (i in seq_len(max.retries)) {
     con = dbConnectToJobsDB(reg, flags)
     ok = try ({
-      dbBeginTransaction(con)
+      dbBegin(con)
       ress = lapply(queries, dbGetQuery, con = con)
     }, silent = TRUE)
     if (!is.error(ok)) {
@@ -79,7 +79,7 @@ dbAddData = function(reg, tab, data) {
                   collapse(colnames(data)), collapse(rep.int("?", ncol(data))))
   con = dbConnectToJobsDB(reg, flags = "rw")
   on.exit(dbDisconnect(con))
-  dbBeginTransaction(con)
+  dbBegin(con)
   ok = try(dbGetPreparedQuery(con, query, bind.data = data))
   if(is.error(ok)) {
     dbRollback(con)

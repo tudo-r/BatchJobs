@@ -1,5 +1,7 @@
 BatchJobs_1.5:
+- Updated to use RSQLite >=1.0.0
 - Fixed a bug in waitForJobs().
+- Fixed a regression parsing array job ids.
 - Argument 'progressbar' added to multiple functions to suppress displaying the
   progress bars.
 - Configuration option 'staged.queries' is now enabled per default.
