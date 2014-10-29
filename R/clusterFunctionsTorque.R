@@ -46,7 +46,7 @@ makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect"
 
   listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
-    batch.ids = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L])$output
+    batch.ids = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L], ssh = conf$ssh, nodename = conf$node)$output
     # simplify batch ids of array jobs, i.e. remove the array id from the batch id
     unique(gsub("\\[[[:digit:]]\\]", "[]", batch.ids))
   }
