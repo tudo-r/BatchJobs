@@ -48,7 +48,10 @@ makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect"
     # Result is lines of fully quantified batch.job.ids
     batch.ids = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L], ssh = conf$ssh, nodename = conf$node)$output
     # simplify batch ids of array jobs, i.e. remove the array id from the batch id
-    unique(gsub("\\[[[:digit:]]\\]", "[]", batch.ids))
+    if(any(grepl('\\[\\d+\\]', batch.jobs))) {
+      batch.jobs = unique(c(batch.jobs, gsub('(.+\\[)\\d+(\\].?)', '\\1\\2', batch.jobs)))
+    }
+    return(batch.jobs)
   }
 
   getArrayEnvirName = function() {
