@@ -17,12 +17,12 @@ Depends:
     BBmisc (>= 1.8),
     methods
 Imports:
-    checkmate (>= 1.4),
+    checkmate (>= 1.5),
     utils,
     stats,
     digest,
     DBI,
-    RSQLite,
+    RSQLite (>= 1.0.0),
     sendmailR,
     brew,
     stringr,

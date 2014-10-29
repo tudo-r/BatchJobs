@@ -2,6 +2,7 @@ writeRscripts = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp,
   template = paste(
     "Sys.sleep(%%f)",
     "options(BatchJobs.on.slave = TRUE, BatchJobs.resources.path = '%s')",
+    "library(checkmate)",
     "library(BatchJobs)",
     "res = BatchJobs:::doJob(",
     "\treg = loadRegistry('%s'),",
