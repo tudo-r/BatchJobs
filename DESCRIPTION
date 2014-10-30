@@ -17,19 +17,19 @@ Depends:
     BBmisc (>= 1.8),
     methods
 Imports:
+    brew,
     checkmate (>= 1.5),
-    utils,
-    stats,
-    digest,
     DBI,
+    digest,
+    fail (>= 1.2),
     RSQLite (>= 1.0.0),
     sendmailR,
-    brew,
+    stats,
     stringr,
-    fail (>= 1.2)
+    utils
 Suggests:
-    testthat,
-    MASS
+    MASS,
+    testthat
 LazyData: yes
 ByteCompile: yes
 Version: 1.5
