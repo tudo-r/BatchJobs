@@ -3,7 +3,7 @@
 \alias{killJobs}
 \title{Kill some jobs on the batch system.}
 \usage{
-killJobs(reg, ids, progressbar)
+killJobs(reg, ids, progressbar = TRUE)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr

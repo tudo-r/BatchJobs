@@ -1,3 +1,7 @@
+BatchJobs_1.5.1:
+- Fixed missing default for argument 'progressbar' in killJobs()
+
+
 BatchJobs_1.5:
 - Updated to use RSQLite >=1.0.0
 - Fixed a bug in waitForJobs().

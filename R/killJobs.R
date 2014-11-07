@@ -37,7 +37,7 @@
 #' # kill all jobs queued or running
 #' killJobs(reg, findNotTerminated(reg))
 #' }
-killJobs = function(reg, ids, progressbar) {
+killJobs = function(reg, ids, progressbar = TRUE) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids))
