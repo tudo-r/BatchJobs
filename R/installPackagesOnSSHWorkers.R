@@ -29,7 +29,7 @@
 installPackagesOnSSHWorkers = function(nodenames, pkgs,
   repos = getOption("repos"), consecutive = TRUE, show.output = consecutive, ...) {
 
-  assertCharacter(pkgs, "character", min.len = 1L, any.missing = FALSE)
+  assertCharacter(pkgs, min.len = 1L, any.missing = FALSE)
   if (repos == "@CRAN@")
     repos = chooseCRANmirror()
   callFunctionOnSSHWorkers(nodenames, fun = install.packages,
