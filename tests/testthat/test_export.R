@@ -26,6 +26,7 @@ test_that("exports with batchExport and batchUnexport", {
   if (interactive()) {
     expect_equal(testJob(reg, 1), 101)
     expect_equal(testJob(reg, 1, external = FALSE), 101)
+    expect_equal(testJob(reg, 1, external = TRUE), 101)
   }
   expect_equal(batchUnexport(reg, "a"), "a")
   suppressWarnings(rm(list = "a", envir = .GlobalEnv))

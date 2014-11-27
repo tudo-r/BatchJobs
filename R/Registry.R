@@ -180,10 +180,8 @@ loadRegistry = function(file.dir, work.dir) {
 
     if (!isFALSE(adjusted) || !isFALSE(updated))
       saveRegistry(reg)
-  } else {
-    loadExports(reg)
   }
-
+  loadExports(reg)
   sourceRegistryFiles(reg)
 
   return(reg)
