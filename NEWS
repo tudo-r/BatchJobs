@@ -1,5 +1,6 @@
 BatchJobs_1.5.1:
 - Fixed missing default for argument 'progressbar' in killJobs()
+- All find* function now support a 'limit' argument (default unlimited)
 
 
 BatchJobs_1.5:
