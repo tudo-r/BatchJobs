@@ -37,7 +37,7 @@ makeWorker = function(ssh, nodename, rhome, r.options = c("--no-save", "--no-res
   assertString(rhome)
   assertCharacter(r.options, any.missing = FALSE)
   if (missing(script)) {
-    # FIXME dont use linux specific in base class
+    # FIXME: dont use linux specific in base class
     script = findHelperScriptLinux(rhome, r.options, ssh, nodename)
   } else {
     assertString(script)
@@ -65,15 +65,11 @@ makeWorker = function(ssh, nodename, rhome, r.options = c("--no-save", "--no-res
     max.jobs = ncpus
   } else {
     max.jobs = asCount(max.jobs)
-    if (max.jobs > ncpus)
-      stopf("max.jobs must be <= ncpus = %i!", ncpus)
   }
   if (missing(max.load)) {
     max.load = ncpus-1L
   } else {
-    assertNumber(max.load)
-    if (max.load > ncpus)
-      stopf("max.load must be <= ncpus = %i!", ncpus)
+    assertNumber(max.load, lower = 0)
   }
   if (missing(nice)) {
     nice = ""

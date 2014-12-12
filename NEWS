@@ -1,6 +1,7 @@
 BatchJobs_1.5.1:
 - Fixed missing default for argument 'progressbar' in killJobs()
 - All find* function now support a 'limit' argument (default unlimited)
+- We are less strict in arg checks of makeSSHWorker, so you can set a load higher than ncpus
 
 
 BatchJobs_1.5:
