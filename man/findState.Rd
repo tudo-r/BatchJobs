@@ -18,37 +18,37 @@
 \alias{findTerminated}
 \title{Find jobs depending on computional state.}
 \usage{
-findDone(reg, ids)
+findDone(reg, ids, limit = NULL)
 
-findNotDone(reg, ids)
+findNotDone(reg, ids, limit = NULL)
 
-findMissingResults(reg, ids)
+findMissingResults(reg, ids, limit = NULL)
 
-findErrors(reg, ids)
+findErrors(reg, ids, limit = NULL)
 
-findNotErrors(reg, ids)
+findNotErrors(reg, ids, limit = NULL)
 
-findTerminated(reg, ids)
+findTerminated(reg, ids, limit = NULL)
 
-findNotTerminated(reg, ids)
+findNotTerminated(reg, ids, limit = NULL)
 
-findSubmitted(reg, ids)
+findSubmitted(reg, ids, limit = NULL)
 
-findNotSubmitted(reg, ids)
+findNotSubmitted(reg, ids, limit = NULL)
 
-findOnSystem(reg, ids)
+findOnSystem(reg, ids, limit = NULL)
 
-findNotOnSystem(reg, ids)
+findNotOnSystem(reg, ids, limit = NULL)
 
-findRunning(reg, ids)
+findRunning(reg, ids, limit = NULL)
 
-findNotRunning(reg, ids)
+findNotRunning(reg, ids, limit = NULL)
 
-findStarted(reg, ids)
+findStarted(reg, ids, limit = NULL)
 
-findNotStarted(reg, ids)
+findNotStarted(reg, ids, limit = NULL)
 
-findExpired(reg, ids)
+findExpired(reg, ids, limit = NULL)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -57,6 +57,10 @@ Registry.}
 \item{ids}{[\code{integer}]\cr
 Subset of job ids to restrict the result to.
 Default is all jobs.}
+
+\item{limit}{[\code{integer}]\cr
+Limit the number of returned ids.
+Default is all ids}
 }
 \value{
 [\code{integer}]. Ids of jobs.
