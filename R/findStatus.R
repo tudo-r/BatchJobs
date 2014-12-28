@@ -126,12 +126,23 @@ findStarted = function(reg, ids, limit = NULL) {
 findNotStarted = function(reg, ids, limit = NULL) {
   findState(reg, ids, dbFindStarted, TRUE, limit)
 }
+
 #' \code{findExpired}: Find jobs where walltime was probably hit.
 #' Right now the heuristic is as follows:
-#' Find all jobs that have submitted, did not abort with an error,
+#' Find all jobs that have started, did not abort with an error,
 #' did not complete with a result and are not submitted or running anymore.
+#' Note that this heuristic does not include jobs the scheduler looses before starting.
 #' @export
 #' @rdname findState
 findExpired = function(reg, ids, limit = NULL) {
   findState(reg, ids, dbFindExpiredJobs, FALSE, limit)
+}
+
+#' \code{findDisappeared}: Find jobs which disappeared from the system.
+#' Right now the heuristic is as follows:
+#' Find all jobs that are submitted but not started nor on the system anymore.
+#' @export
+#' @rdname findState
+findDisappeared = function(reg, ids, limit = NULL) {
+  findState(reg, ids, dbFindDisappeared, FALSE, limit)
 }
