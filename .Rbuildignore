@@ -13,3 +13,5 @@ Makefile
 README.md
 test_all.R
 ^.editorconfig$
+^.*\.Rproj$
+^\.Rproj\.user$
