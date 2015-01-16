@@ -13,7 +13,7 @@ checkId = function(reg, id, check.present = TRUE) {
 }
 
 checkMoreArgs = function(more.args, reserved) {
-  assertList(more.args)
+  assertList(more.args, names = "strict")
   n = names(more.args)
   if(is.null(n) || missing(reserved))
     return(invisible(TRUE))
@@ -153,4 +153,19 @@ getProgressBar = function(condition, ...) {
     pb = makeProgressBar(style = "off")
   }
   pb
+}
+
+checkUserFunction = function(fun) {
+  fun = match.fun(fun)
+  if (getOption("BatchJobs.clear.function.env")) {
+    environment(fun) = .GlobalEnv
+  } else {
+    ee = environment(fun)
+    if (!is.null(ee) && !isNamespace(ee)) {
+      nn = ls(ee, all.names = TRUE)
+      if (sum(vnapply(nn, function(nn) object.size(ee[[nn]])) / 1024^2) > 10)
+        warning("The environment of provided function exceeds 10Mb.")
+    }
+  }
+  fun
 }
