@@ -20,7 +20,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
 
   assertCharacter(packages, any.missing = FALSE)
   packages = union(packages, "BatchJobs")
-  requirePackages(paste0("!", packages), stop = TRUE, suppress.warnings = TRUE)
+  requirePackages(packages, stop = TRUE, suppress.warnings = TRUE, default.method = "attach")
 
   assertCharacter(src.dirs, any.missing = FALSE)
   src.dirs = sanitizePath(src.dirs, make.absolute = FALSE)
@@ -166,7 +166,7 @@ loadRegistry = function(file.dir, work.dir) {
   info("Loading registry: %s", fn)
   reg = load2(fn, "reg")
 
-  requirePackages(paste0("!", names(reg$packages)), why = sprintf("registry %s", reg$id))
+  requirePackages(names(reg$packages), why = sprintf("registry %s", reg$id), default.method = "attach")
 
   if (!isOnSlave()) {
     # FIXME: check that no jobs are running, if possible, before updating
