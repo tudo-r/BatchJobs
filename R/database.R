@@ -23,32 +23,37 @@ dbConnectToJobsDB = function(reg, flags = "ro") {
 
 dbDoQueries = function(reg, queries, flags = "ro", max.retries = 200L, sleep = function(r) 1.025^r) {
   for (i in seq_len(max.retries)) {
-    con = dbConnectToJobsDB(reg, flags)
-    ok = try ({
-      dbBegin(con)
-      ress = lapply(queries, dbGetQuery, con = con)
-    }, silent = TRUE)
-    if (!is.error(ok)) {
-      # this can fail because DB is locked
-      ok2 = dbCommit(con)
-      if (ok2) {
-        dbDisconnect(con)
-        return(ress)
+    con = try(dbConnectToJobsDB(reg, flags), silent = TRUE)
+    if (is.error(con)) {
+      if (!grepl("(lock|i/o|readonly)", tolower(con)))
+        stopf("Error while etablishing the connection: %s", as.character(con))
+    } else {
+      ok = try ({
+        dbBegin(con)
+        ress = lapply(queries, dbGetQuery, con = con)
+      }, silent = TRUE)
+      if (!is.error(ok)) {
+        # this can fail because DB is locked
+        ok2 = dbCommit(con)
+        if (ok2) {
+          dbDisconnect(con)
+          return(ress)
+        } else {
+          dbRollback(con)
+          dbDisconnect(con)
+        }
       } else {
+        ok = as.character(ok)
         dbRollback(con)
         dbDisconnect(con)
+        # catch known temporary errors:
+        # - database is still locked
+        # - disk I/O error
+        # - disk I/O error
+        # - database is only readable
+        if(!grepl("(lock|i/o|readonly)", tolower(ok)))
+          stopf("Error in dbDoQueries. Displaying only 1st query. %s (%s)", ok, queries[1L])
       }
-    } else {
-      ok = as.character(ok)
-      dbRollback(con)
-      dbDisconnect(con)
-      # catch known temporary errors:
-      # - database is still locked
-      # - disk I/O error
-      # - disk I/O error
-      # - database is only readable
-      if(!grepl("(lock|i/o|readonly)", tolower(ok)))
-        stopf("Error in dbDoQueries. Displaying only 1st query. %s (%s)", ok, queries[1L])
     }
     # if we reach this here, DB was locked or temporary I/O error
     Sys.sleep(runif(1L, min = 1, max = sleep(i)))
@@ -58,17 +63,24 @@ dbDoQueries = function(reg, queries, flags = "ro", max.retries = 200L, sleep = f
 
 dbDoQuery = function(reg, query, flags = "ro", max.retries = 200L, sleep = function(r) 1.025^r) {
   for (i in seq_len(max.retries)) {
-    con = dbConnectToJobsDB(reg, flags)
-    res = try(dbGetQuery(con, query), silent = TRUE)
-    dbDisconnect(con)
-    if (! is.error(res))
-      return(res)
-    res = as.character(res)
-    if(grepl("(lock|i/o|readonly)", tolower(res))) {
-      Sys.sleep(runif(1L, min = 1, max = sleep(i)))
+    con = try(dbConnectToJobsDB(reg, flags), silent = TRUE)
+    if (is.error(con)) {
+      if (!grepl("(lock|i/o|readonly)", tolower(con)))
+        stopf("Error while etablishing the connection: %s", as.character(con))
     } else {
-      stopf("Error in dbDoQuery. %s (%s)", res, query)
+      res = try(dbGetQuery(con, query), silent = TRUE)
+      dbDisconnect(con)
+      if (! is.error(res))
+        return(res)
+      res = as.character(res)
+      if(grepl("(lock|i/o|readonly)", tolower(res))) {
+        Sys.sleep(runif(1L, min = 1, max = sleep(i)))
+      } else {
+        stopf("Error in dbDoQuery. %s (%s)", res, query)
+      }
     }
+    # if we reach this here, DB was locked or temporary I/O error
+    Sys.sleep(runif(1L, min = 1, max = sleep(i)))
   }
   stopf("dbDoQuery: max retries (%i) reached, database is still locked!", max.retries)
 }
