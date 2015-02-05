@@ -13,7 +13,10 @@ dbGetConnection = function(drv, ...) {
 dbGetConnection.SQLiteDriver = function(drv, reg, flags = "ro", ...) {
   flags = switch(flags, "ro" = SQLITE_RO, "rw" = SQLITE_RW, "rwc" = SQLITE_RWC)
   opts = list(dbname = file.path(reg$file.dir, "BatchJobs.db"), flags = flags, drv = drv)
-  do.call(dbConnect, args = c(reg$db.options, opts))
+  con = do.call(dbConnect, args = c(reg$db.options, opts))
+  res = dbSendQuery(con, "PRAGMA busy_timeout=5000")
+  dbClearResult(res)
+  return(con)
 }
 
 dbConnectToJobsDB = function(reg, flags = "ro") {
@@ -21,7 +24,7 @@ dbConnectToJobsDB = function(reg, flags = "ro") {
   dbGetConnection(drv, reg, flags)
 }
 
-dbDoQueries = function(reg, queries, flags = "ro", max.retries = 200L, sleep = function(r) 1.025^r) {
+dbDoQueries = function(reg, queries, flags = "ro", max.retries = 100L, sleep = function(r) 1.025^r) {
   for (i in seq_len(max.retries)) {
     con = try(dbConnectToJobsDB(reg, flags), silent = TRUE)
     if (is.error(con)) {
@@ -61,7 +64,7 @@ dbDoQueries = function(reg, queries, flags = "ro", max.retries = 200L, sleep = f
   stopf("dbDoQueries: max retries (%i) reached, database is still locked!", max.retries)
 }
 
-dbDoQuery = function(reg, query, flags = "ro", max.retries = 200L, sleep = function(r) 1.025^r) {
+dbDoQuery = function(reg, query, flags = "ro", max.retries = 100L, sleep = function(r) 1.025^r) {
   for (i in seq_len(max.retries)) {
     con = try(dbConnectToJobsDB(reg, flags), silent = TRUE)
     if (is.error(con)) {
@@ -70,12 +73,10 @@ dbDoQuery = function(reg, query, flags = "ro", max.retries = 200L, sleep = funct
     } else {
       res = try(dbGetQuery(con, query), silent = TRUE)
       dbDisconnect(con)
-      if (! is.error(res))
+      if (!is.error(res))
         return(res)
       res = as.character(res)
-      if(grepl("(lock|i/o|readonly)", tolower(res))) {
-        Sys.sleep(runif(1L, min = 1, max = sleep(i)))
-      } else {
+      if(!grepl("(lock|i/o|readonly)", tolower(res))) {
         stopf("Error in dbDoQuery. %s (%s)", res, query)
       }
     }
