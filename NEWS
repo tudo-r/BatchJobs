@@ -4,6 +4,7 @@ BatchJobs_1.5.1:
 - We are less strict in arg checks of makeSSHWorker, so you can set a load higher than ncpus
 - Exported findDisapperead() heuristic to identify jobs the scheduler simply
   "forgot" about
+- loadExports: added argument "what"
 
 
 BatchJobs_1.5:

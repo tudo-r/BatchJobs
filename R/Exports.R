@@ -1,24 +1,25 @@
 #' @title Load exported R data objects.
 #'
 #' @description
-#' Loads all or defined \code{RData} files in the \dQuote{exports} subdirectory of your \code{file.dir}
+#' Loads exported \code{RData} object files in the \dQuote{exports} subdirectory of your \code{file.dir}
 #' and assigns the objects to the global environment.
 #'
 #' @template arg_reg
-#' @param what [\code{character(n)}]\cr
-#'   Defines \code{RData} files which should be loaded. Default \code{character(0)} loads all files.
+#' @param what [\code{character}]\cr
+#'   Names of objects and corresponding \dQuote{RData} files which should be loaded.
+#'   Default \code{NULL} loads all files.
 #' @return [\code{character}]. Invisibly returns a character vector of loaded objects.
 #' @family exports
 #' @export
-loadExports = function(reg, what = character(0)) {
+loadExports = function(reg, what = NULL) {
   checkRegistry(reg)
-  checkArg(what, "character")
+  if (!is.null(what))
+    assertCharacter(what, any.missing = FALSE)
   f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE)
   keys = f$ls()
-  if (length(what) > 0) {
-    keys = keys[keys %in% what]
-  }
-  if (length(keys)) {
+  if (!is.null(what))
+    keys = intersect(keys, what)
+  if (length(keys) > 0L) {
     messagef("Loading RData files: %s", collapse(keys))
     f$assign(keys, envir = .GlobalEnv)
   }
