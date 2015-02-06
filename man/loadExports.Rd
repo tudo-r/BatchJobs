@@ -4,17 +4,20 @@
 \alias{loadExports}
 \title{Load exported R data objects.}
 \usage{
-loadExports(reg)
+loadExports(reg, what = character(0))
 }
 \arguments{
 \item{reg}{[\code{Registry}]\cr
 Registry.}
+
+\item{what}{[\code{character(n)}]\cr
+Defines \code{RData} files which should be loaded. Default \code{character(0)} loads all files.}
 }
 \value{
 [\code{character}]. Invisibly returns a character vector of loaded objects.
 }
 \description{
-Loads all \code{RData} files in the \dQuote{exports} subdirectory of your \code{file.dir}
+Loads all or defined \code{RData} files in the \dQuote{exports} subdirectory of your \code{file.dir}
 and assigns the objects to the global environment.
 }
 \seealso{

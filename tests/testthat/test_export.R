@@ -36,6 +36,16 @@ test_that("exports with batchExport and batchUnexport", {
   expect_true(grepl("not found", getErrorMessages(reg, 1), fixed = TRUE))
 })
 
+test_that("export: load defined files with loadExports", {
+  reg = makeTestRegistry()
+  batchExport(reg, x.1 = 4, x.2 = 3, x.3 = 2, x.4 = 1)
+  loadExports(reg, paste0("x.", seq(2, 6, 2)))
+  expect_false(exists("x.1", where = .GlobalEnv))
+  expect_true(exists("x.2", where = .GlobalEnv))
+  expect_false(exists("x.3", where = .GlobalEnv))
+  expect_true(exists("x.4", where = .GlobalEnv))
+  expect_false(exists("x.6", where = .GlobalEnv))
+})
 
 #FIXME:
 # I currently do not know how to run this test so it does not break R CMD Check
