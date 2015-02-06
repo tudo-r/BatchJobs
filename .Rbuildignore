@@ -14,3 +14,5 @@ README.md
 test_all.R
 ^\.editorconfig$
 ^appveyor\.yml$
+^.*\.Rproj$
+^\.Rproj\.user$
