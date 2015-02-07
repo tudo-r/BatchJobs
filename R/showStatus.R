@@ -28,15 +28,13 @@
 #'
 #' # should show 10 submitted jobs, which are all done.
 #' showStatus(reg)
+#'
+#' @aliases getStatus
+#' @export getStatus
 showStatus = function(reg, ids, run.and.exp = TRUE, errors = 10L) {
-  checkRegistry(reg)
-  syncRegistry(reg)
-  if (!missing(ids))
-    ids = checkIds(reg, ids)
   errors = asCount(errors)
 
-  run.and.exp = run.and.exp && !is.null(getListJobs())
-  stats = dbGetStats(reg, ids, running = run.and.exp, expired = run.and.exp, times = TRUE)
+  stats <- getStatus(reg, ids = ids, run.and.exp = run.and.exp)
 
   procent = function(x, n) {
     if(is.na(x))
@@ -67,4 +65,17 @@ showStatus = function(reg, ids, run.and.exp = TRUE, errors = 10L) {
   }
 
   return(invisible(stats))
+}
+
+
+getStatus = function(reg, ids, run.and.exp = TRUE) {
+  checkRegistry(reg)
+  syncRegistry(reg)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+
+  run.and.exp = run.and.exp && !is.null(getListJobs())
+  stats = dbGetStats(reg, ids, running = run.and.exp, expired = run.and.exp, times = TRUE)
+
+  stats
 }
