@@ -37,6 +37,8 @@ test_that("torturing makeRegistry to create registries over and over works", {
   ## using Sys.setenv("R_EXPENSIVE_EXAMPLE_OK"=TRUE).
   removeDirs <- BatchJobs:::removeDirs
 
+  before <- dir(path=getWorkDir())
+
   for (ii in 1:50) {
     messagef("torture: %02d", ii)
     reg = makeTestRegistry()
@@ -46,4 +48,7 @@ test_that("torturing makeRegistry to create registries over and over works", {
     rm(list="reg"); gc()
     removeDirs(path, recursive=TRUE, mustWork=TRUE)
   }
+
+  after <- dir(path=getWorkDir())
+  stopifnot(length(setdiff(after, before)) == 0L)
 })

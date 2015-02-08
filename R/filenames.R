@@ -49,14 +49,22 @@ is.accessible = function(path) {
     td2 = file.path(td1, "test_write_access_subdir")
 
     # on exit, try to clean up the mess we might have caused
-    on.exit(try(removeDirs(c(td1, td2, tf1, tf2), recursive = TRUE)))
+    on.exit(try(removeDirs(c(tf2, td2, tf1, td1), recursive = TRUE)))
+
+    fileCreate = function(pathname) {
+      if (!file.create(pathname)) return(FALSE)
+      msg0 = "Hello world!"
+      cat(file=pathname, msg0)
+      msg = readLines(pathname, warn=FALSE)
+      if (identical(msg, msg0)) return(TRUE)
+      stop(sprintf("Created test file does not contain expected content ('%s'): '%s'", msg, msg0))
+    }
 
     # perform the checks
     ok = try({
-      file.create(tf1) && identical(readLines(tf1), character(0L)) && file.remove(tf1) &&
-      dir.create(td1) && dir.create(td2) && length(list.files(td1)) == 1L &&
-      file.create(tf2) && identical(readLines(tf2), character(0L)) && file.remove(tf2) &&
-      removeDirs(td1, recursive = TRUE)
+      fileCreate(tf1) && dir.create(td1) &&
+      dir.create(td2) && length(list.files(td1)) == 1L && fileCreate(tf2) &&
+      removeDirs(c(tf2, td2, tf1, td1), recursive = TRUE)
     })
 
     if (is.error(ok) || !isTRUE(ok))
@@ -70,22 +78,35 @@ is.accessible = function(path) {
   return(file.access(path, mode = c(2L, 4L)) == 0L)
 }
 
-removeDirs = function(paths, recursive=FALSE, ..., mustWork=FALSE, maxTries=30L, interval=0.2) {
-  res = !file_test("-d", paths)
-  for (ii in which(!res)) {
+# a more trusty version than file.exists()
+fileExists = function(path) {
+  if (file.exists(path)) return(TRUE)
+  ## Double check with what dir() reports, because (at least) on Windows
+  ## there seems to be a delay between a file/directory being removed
+  ## and the directory listings being updated. /HB 2015-02-08
+  filename = basename(path)
+  dirs = dir(path=dirname(path), all.files=TRUE, include.dirs = TRUE)
+  (filename %in% dirs)
+}
+
+# a more robust and insisting version than unlink()
+removeDirs = function(paths, recursive=FALSE, ..., mustWork=TRUE, maxTries=30L, interval=0.2) {
+
+  exists = sapply(paths, FUN=fileExists)
+  for (ii in which(exists)) {
     path = paths[ii]
     for (kk in seq_len(maxTries)) {
       unlink(path, recursive=recursive, ...)
-      res[ii] = !file_test("-d", path)
-      if (res[ii]) return(TRUE)
+      exists[ii] = fileExists(path)
+      if (!exists[ii]) break
       if (kk < maxTries) Sys.sleep(interval)
     }
   }
-  res = !file_test("-d", paths)
-  failed = path[!res]
+  exists = sapply(paths, FUN=fileExists)
+  failed = path[exists]
   if (mustWork && length(failed) > 0L)
-    stop("Failed to remove directories: ", paste(sQuote(path), collapse=", "))
-  res
+    stop("Failed to remove files/directories: ", paste(sQuote(path), collapse=", "))
+  !exists
 }
 
 isPathFromRoot = function(path) {
