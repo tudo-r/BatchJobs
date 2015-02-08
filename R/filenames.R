@@ -70,7 +70,7 @@ is.accessible = function(path) {
   return(file.access(path, mode = c(2L, 4L)) == 0L)
 }
 
-removeDirs = function(paths, recursive=FALSE, ..., maxTries=25L, interval=0.1) {
+removeDirs = function(paths, recursive=FALSE, ..., mustWork=FALSE, maxTries=30L, interval=0.2) {
   res = !file_test("-d", paths)
   for (ii in which(!res)) {
     path = paths[ii]
@@ -78,12 +78,12 @@ removeDirs = function(paths, recursive=FALSE, ..., maxTries=25L, interval=0.1) {
       unlink(path, recursive=recursive, ...)
       res[ii] = !file_test("-d", path)
       if (res[ii]) return(TRUE)
-      Sys.sleep(interval)
+      if (kk < maxTries) Sys.sleep(interval)
     }
   }
   res = !file_test("-d", paths)
   failed = path[!res]
-  if (length(failed) > 0L)
+  if (mustWork && length(failed) > 0L)
     stop("Failed to remove directories: ", paste(sQuote(path), collapse=", "))
   res
 }
