@@ -210,3 +210,54 @@ checkRegistry = function(reg, strict = FALSE) {
   }
   invisible(TRUE)
 }
+
+
+#' Remove a registry object.
+#'
+#' If there are no live/running jobs, the registry will be closed
+#' and all of its files will be removed from the file system.
+#' If there are live/running jobs, an informative error is generated.
+#' The default is to prompt the user for confirmation.
+#'
+#' @param reg [\code{\link{Registry}}]\cr
+#'   Registry.
+#' @param ask [\code{character(1)}]\cr
+#'   If \code{"yes"} the user is prompted to confirm the action.
+#'   If trying to prompt the user this way in a non-interactive
+#'   session, then an informative error is generated.
+#'   If \code{"no"}, the registry will be removed without
+#'   further confirmation.
+#'
+#' @return [\code{logical[1]}]
+#'
+#' @export
+removeRegistry = function(reg, ask = c("yes", "no")) {
+  ask = match.arg(ask)
+
+  if (ask == "yes") {
+    if (!interactive())
+      stopf("removeRegistry(..., ask = \"yes\") only works in interactive sessions.")
+    prompt = sprintf("Are you sure you wish to delete BatchJobs registry '%s' and all of it's files in directory '%s'? [y/N]: ", reg$id, reg$file.dir)
+    ans = 2L
+    repeat {
+      ans = tolower(readline(prompt))
+      ans = gsub("[ ]", "", ans)
+      if (ans == "") ans <- "no"
+      ans = pmatch(ans, table=c("yes", "no"), nomatch=0L)
+      if (ans > 0L) break
+    }
+    if (ans != 1L) return(invisible(FALSE))
+  }
+
+
+  checkRegistry(reg)
+  syncRegistry(reg)
+
+  running = findOnSystem(reg)
+  if (length(running) > 0L)
+    stopf("Can't remove registry, because there are %d live jobs on the system.", length(running))
+
+  ## FIXME: Close database first?
+
+  removeDirs(reg$file.dir, recursive=TRUE, mustWork=TRUE)
+}

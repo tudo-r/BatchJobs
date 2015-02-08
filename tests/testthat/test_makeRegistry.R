@@ -31,24 +31,18 @@ test_that("loadRegistry works", {
 })
 
 
-test_that("torturing makeRegistry to create registries over and over works", {
+test_that("torturing makeRegistry/removeRegistry to create registries over and over works", {
   ## This fails (at least) on Windows if we set the working directory
   ## to be the current working directory, i.e. ".".  This can be achieve
   ## using Sys.setenv("R_EXPENSIVE_EXAMPLE_OK"=TRUE).
-  removeDirs <- BatchJobs:::removeDirs
-
-  before <- dir(path=getWorkDir())
+  pb = makeProgressBar(max=50L, style="text")
+  pb$set()
 
   for (ii in 1:50) {
-    messagef("torture: %02d", ii)
+    pb$set(ii)
     reg = makeTestRegistry()
-    ## FIXME: Is there a better way to remove a Registry?
-    path = reg$file.dir
-    messagef("path: %s", path)
-    rm(list="reg"); gc()
-    removeDirs(path, recursive=TRUE, mustWork=TRUE)
+    removeRegistry(reg, ask = "no")
   }
 
-  after <- dir(path=getWorkDir())
-  stopifnot(length(setdiff(after, before)) == 0L)
+  pb$kill()
 })
