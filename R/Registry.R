@@ -242,7 +242,7 @@ removeRegistry = function(reg, ask = c("yes", "no")) {
     repeat {
       ans = tolower(readline(prompt))
       ans = gsub("[ ]", "", ans)
-      if (ans == "") ans <- "no"
+      if (ans == "") ans = "no"
       ans = pmatch(ans, table=c("yes", "no"), nomatch=0L)
       if (ans > 0L) break
     }
