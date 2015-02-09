@@ -67,6 +67,12 @@ updateRegistry.Registry = function(reg) {
     dbDoQuery(reg, query, flags = "rwc")
   }
 
+  if (version.reg < package_version("1.6")) {
+    reg$packages = Map(function(name, x) { x$req = name; x },
+      name = names(reg$packages),
+      x = reg$packages)
+  }
+
   reg$packages$BatchJobs$version = version.pkg
   reg
 }
