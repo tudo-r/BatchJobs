@@ -3,9 +3,11 @@
 \name{showStatus}
 \alias{getStatus}
 \alias{showStatus}
-\title{Show status information about jobs.}
+\title{Retrieve or show status information about jobs.}
 \usage{
 showStatus(reg, ids, run.and.exp = TRUE, errors = 10L)
+
+getStatus(reg, ids, run.and.exp = TRUE)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -26,11 +28,13 @@ How many of the error messages should be displayed if any errors occured in the 
 Default is 10.}
 }
 \value{
-[\code{list}] List of absolute job numbers as printed by showStatus.
-  Returned invisibly.
+[\code{list}]. List of absolute job numbers. \code{showStatus} returns them
+  invisibly.
 }
 \description{
 E.g.: How many there are, how many are done, any errors, etc.
+\code{showStatus} displays on the console, \code{getStatus} returns an informative result
+without console output.
 }
 \examples{
 reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)

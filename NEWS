@@ -5,7 +5,7 @@ BatchJobs_1.5.1:
 - Exported findDisapperead() heuristic to identify jobs the scheduler simply
   "forgot" about
 - loadExports: added argument "what"
-
+- Added functions: getStatus
 
 BatchJobs_1.5:
 - Updated to use RSQLite >=1.0.0

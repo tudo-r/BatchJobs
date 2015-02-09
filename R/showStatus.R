@@ -1,7 +1,9 @@
-#' Show status information about jobs.
+#' @title Retrieve or show status information about jobs.
 #'
 #' @description
 #' E.g.: How many there are, how many are done, any errors, etc.
+#' \code{showStatus} displays on the console, \code{getStatus} returns an informative result
+#' without console output.
 #
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
@@ -16,8 +18,8 @@
 #'   Requires to list the job on the batch system. If not possible, because
 #'   that cluster function is not avilable, this option is ignored anyway.
 #'   Default is \code{TRUE}.
-#' @return [\code{list}] List of absolute job numbers as printed by showStatus.
-#'   Returned invisibly.
+#' @return [\code{list}]. List of absolute job numbers. \code{showStatus} returns them
+#'   invisibly.
 #' @export
 #' @examples
 #' reg = makeRegistry(id = "BatchJobsExample", file.dir = tempfile(), seed = 123)
@@ -28,13 +30,10 @@
 #'
 #' # should show 10 submitted jobs, which are all done.
 #' showStatus(reg)
-#'
-#' @aliases getStatus
-#' @export getStatus
 showStatus = function(reg, ids, run.and.exp = TRUE, errors = 10L) {
   errors = asCount(errors)
 
-  stats <- getStatus(reg, ids = ids, run.and.exp = run.and.exp)
+  stats = getStatus(reg, ids = ids, run.and.exp = run.and.exp)
 
   procent = function(x, n) {
     if(is.na(x))
@@ -68,6 +67,8 @@ showStatus = function(reg, ids, run.and.exp = TRUE, errors = 10L) {
 }
 
 
+#' @rdname showStatus
+#' @export getStatus
 getStatus = function(reg, ids, run.and.exp = TRUE) {
   checkRegistry(reg)
   syncRegistry(reg)
@@ -75,7 +76,5 @@ getStatus = function(reg, ids, run.and.exp = TRUE) {
     ids = checkIds(reg, ids)
 
   run.and.exp = run.and.exp && !is.null(getListJobs())
-  stats = dbGetStats(reg, ids, running = run.and.exp, expired = run.and.exp, times = TRUE)
-
-  stats
+  dbGetStats(reg, ids, running = run.and.exp, expired = run.and.exp, times = TRUE)
 }
