@@ -153,7 +153,14 @@ print.Registry = function(x, ...) {
   cat("  Required packages:", collapse(names(x$packages), ", "), "\n")
 }
 
-#' Load a previously saved registry.
+#' @title Load a previously saved registry.
+#'
+#' @details
+#' Loads a previously created registry from the file system.
+#' The \code{file.dir} is automatically updated upon load, so be careful
+#' if you use the registry on multiple machines simultaneously, e.g.
+#' via sshfs or a samba share.
+#'
 #' @param file.dir [\code{character(1)}]\cr
 #'   Location of the file.dir to load the registry from.
 #' @param work.dir [\code{character(1)}]\cr

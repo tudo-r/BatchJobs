@@ -19,4 +19,10 @@ Location of the work. Unchanged if missing.}
 \description{
 Load a previously saved registry.
 }
+\details{
+Loads a previously created registry from the file system.
+The \code{file.dir} is automatically updated upon load, so be careful
+if you use the registry on multiple machines simultaneously, e.g.
+via sshfs or a samba share.
+}
 
