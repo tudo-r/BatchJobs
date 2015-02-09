@@ -16,3 +16,4 @@ test_all.R
 ^appveyor\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+BatchJobs.*.tar.gz
