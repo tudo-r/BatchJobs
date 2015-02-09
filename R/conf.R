@@ -41,13 +41,17 @@ assignConf = function(conf) {
   lapply(ls(conf), function(x) assign(x, conf[[x]], envir = conf.in.ns))
 }
 
-# reads package conf, userhome conf, working dir conf
-# then assigns them to namespace
-readConfs = function(path) {
+# locates package conf, userhome conf, working dir conf
+findConfigs = function(path=find.package("BatchJobs")) {
   fn.pack = file.path(path, "etc", "BatchJobs_global_config.R")
   fn.user = path.expand("~/.BatchJobs.R")
   fn.wd = suppressWarnings(normalizePath(".BatchJobs.R"))
-  conffiles = Filter(file.exists, unique(c(fn.pack, fn.user, fn.wd)))
+  Filter(file.exists, unique(c(fn.pack, fn.user, fn.wd)))
+}
+
+# reads available config files and assigns them to namespace
+readConfs = function(path=find.package("BatchJobs")) {
+  conffiles = findConfigs(path)
   if (length(conffiles) == 0L) {
     warning("No configuation found at all. Not in package, not in user.home, not in work dir!")
     assignConfDefaults()
