@@ -22,6 +22,7 @@ Imports:
     DBI,
     digest,
     fail (>= 1.2),
+    parallel,
     RSQLite (>= 1.0.0),
     sendmailR,
     stats,
