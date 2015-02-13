@@ -4,15 +4,17 @@
 \alias{makeClusterFunctionsMulticore}
 \title{Use multiple cores on local Linux machine to spawn parallel jobs.}
 \usage{
-makeClusterFunctionsMulticore(ncpus = max(detectCores() - 1, 1), max.jobs,
-  max.load, nice, r.options = c("--no-save", "--no-restore", "--no-init-file",
-  "--no-site-file"), script)
+makeClusterFunctionsMulticore(ncpus = max(getOption("mc.cores", detectCores())
+  - 1, 1), max.jobs, max.load, nice, r.options = c("--no-save",
+  "--no-restore", "--no-init-file", "--no-site-file"), script)
 }
 \arguments{
 \item{ncpus}{[\code{integer(1)}]\cr
 Number of VPUs of worker.
-Default is to use all cores but one, where number of cores
-available is inferred by \code{\link[parallel]{detectCores}}.}
+Default is to use all cores but one, where total number of cores
+"available" is given by option \code{\link[base:options]{mc.cores}}
+and if that is not set it is inferred by
+\code{\link[parallel]{detectCores}}.}
 
 \item{max.jobs}{[\code{integer(1)}]\cr
 Maximal number of jobs that can run concurrently for the current registry.
