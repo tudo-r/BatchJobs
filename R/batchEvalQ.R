@@ -14,8 +14,8 @@
 #'
 #' @export
 batchEvalQ <- function(reg, exprs, ...) {
-  fun <- function(expr, ..., envir=parent.frame()) {
-    eval(expr, envir=envir)
+  fun <- function(expr, ..., envir=globalenv()) {
+    eval(substitute(expr), envir=envir)
   }
   batchMap(reg, fun=fun, exprs, ...)
 }
