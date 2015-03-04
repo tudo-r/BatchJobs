@@ -16,6 +16,8 @@ dbGetConnection.SQLiteDriver = function(drv, reg, flags = "ro", ...) {
   con = do.call(dbConnect, args = c(reg$db.options, opts))
   res = dbSendQuery(con, "PRAGMA busy_timeout=5000")
   dbClearResult(res)
+  res = dbSendQuery(con, "PRAGMA journal_mode=WAL")
+  dbClearResult(res)
   return(con)
 }
 
