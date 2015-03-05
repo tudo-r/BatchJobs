@@ -110,7 +110,7 @@ removeDirs = function(paths, recursive=FALSE, ..., mustWork=TRUE, maxTries=30L, 
 }
 
 isPathFromRoot = function(path) {
-  (isWindows() & grepl("^[[:alpha:]]:", path)) | grepl("^[/\\]", path)
+  (isWindows() & grepl("^[[:alpha:]]:", path)) | grepl("^[~/\\]", path)
 }
 
 getJobDirs = function(reg, ids, unique = FALSE) {
