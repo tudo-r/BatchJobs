@@ -30,19 +30,21 @@ sourceRegistryFilesInternal = function(work.dir, dirs, files, envir = .GlobalEnv
     stopf("Directories to source not found, e.g. %s", dirs[w])
 
   # detect source package directories
-  wpkg <- which(sapply(file.path(dirs, 'DESCRIPTION'), file.exists))
-  if( length(wpkg) ){
-    # setup temporary directory to hold package loading script
-    tmpdir <- tempfile('BatchJobs_load_all_')
-    dir.create(tmpdir)
-    on.exit( unlink(tmpdir, recursive = TRUE) )
-    # generate loading scripts
-    lapply(dirs[wpkg], function(d){
-        cat(sprintf("# load source package\ndevtools::load_all('%s', reset = TRUE)\n", d)
-            , file = tempfile(paste0(basename(d), '_'), tmpdir, fileext = ".R"))
-    })
-    # remove directory from list and add temporary load_all directory
-    dirs <- c(dirs[-wpkg], tmpdir)
+  if( length(dirs) ){
+      wpkg <- which(sapply(file.path(dirs, 'DESCRIPTION'), file.exists))
+      if( length(wpkg) ){
+        # setup temporary directory to hold package loading script
+        tmpdir <- tempfile('BatchJobs_load_all_')
+        dir.create(tmpdir)
+        on.exit( unlink(tmpdir, recursive = TRUE) )
+        # generate loading scripts
+        lapply(dirs[wpkg], function(d){
+            cat(sprintf("# load source package\ndevtools::load_all('%s', reset = TRUE)\n", d)
+                , file = tempfile(paste0(basename(d), '_'), tmpdir, fileext = ".R"))
+        })
+        # remove directory from list and add temporary load_all directory
+        dirs <- c(dirs[-wpkg], tmpdir)
+      }
   } 
   ##
   
