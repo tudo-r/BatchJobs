@@ -30,9 +30,13 @@ makeClusterFunctionsSLURM = function(template.file, list.jobs.cmd = c("squeue", 
     res = runOSCommandLinux("sbatch", outfile, stop.on.exit.code = FALSE)
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
+    temp.error = "Socket timed out on send/recv operation"
     output = collapse(res$output, sep = "\n")
     if (grepl(max.jobs.msg, output, fixed = TRUE)) {
       makeSubmitJobResult(status = 1L, batch.job.id = NA_character_, msg = max.jobs.msg)
+    } else if (grepl(temp.error, output, fixed = TRUE)) {
+      # another temp error we want to catch
+      makeSubmitJobResult(status = 2L, batch.job.id = NA_character_, msg = temp.error)
     } else if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("sbatch", res$exit.code, res$output)
     } else {

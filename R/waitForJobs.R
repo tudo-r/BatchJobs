@@ -35,9 +35,9 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
     ids = dbFindSubmittedNotTerminated(reg)
   } else {
     ids = checkIds(reg, ids)
-    not.submitted = dbFindSubmitted(reg, ids, negate = TRUE)
-    if (length(not.submitted))
-      stopf("Not all jobs have been submitted, e.g. job with id %i", head(not.submitted, 1L))
+    not.submitted = dbFindSubmitted(reg, ids, negate = TRUE, limit = 1L)
+    if (length(not.submitted) > 0L)
+      stopf("Not all jobs have been submitted, e.g. job with id %i", not.submitted)
   }
   assertNumber(sleep, lower = 1)
   if (is.infinite(sleep))
@@ -78,8 +78,8 @@ waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = F
       # check if there are still jobs on the system and none has mystically disappeared
       # NOTE it seems like some schedulers are "laggy", we should not do this operation
       # in the first loop w/o a sleep
-      if (length(dbFindOnSystem(reg, ids, batch.ids = batch.ids)) == 0L) {
-        if (length(dbFindDisappeared(reg, ids, batch.ids = batch.ids)) > 0L)
+      if (length(dbFindOnSystem(reg, ids, limit = 1L, batch.ids = batch.ids)) == 0L) {
+        if (length(dbFindDisappeared(reg, ids, limit = 1L, batch.ids = batch.ids)) > 0L)
           bar$error(stop("Some jobs disappeared, i.e. were submitted but are now gone. Check your configuration and template file."))
         return(stats$error == 0L)
       }

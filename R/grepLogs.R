@@ -30,7 +30,7 @@ grepLogs = function(reg, ids, pattern = "warn", ignore.case = TRUE, verbose = FA
   if (missing(ids)) {
     ids = dbFindTerminated(reg)
   } else {
-    nterminated = dbFindTerminated(reg, ids, negate = TRUE)
+    nterminated = dbFindTerminated(reg, ids, negate = TRUE, limit = 1L)
     if (length(nterminated) > 0L)
       stopf("Not all jobs with provided ids have finished yet and therefore possess no log file, e.g. id=%i.",
             nterminated[1L])

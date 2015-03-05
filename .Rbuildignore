@@ -12,6 +12,8 @@ man-roxygen
 Makefile
 README.md
 test_all.R
-^.editorconfig$
+^\.editorconfig$
+^appveyor\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+BatchJobs.*.tar.gz

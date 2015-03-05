@@ -47,9 +47,9 @@ getJobResources = function(reg, ids, as.list = TRUE) {
     ids = dbFindSubmitted(reg)
   } else {
     ids = checkIds(reg, ids)
-    nsub = dbFindSubmitted(reg, ids, negate = TRUE)
+    nsub = dbFindSubmitted(reg, ids, negate = TRUE, limit = 1L)
     if (length(nsub) > 0L)
-      stopf("Some of your jobs have not been submitted, so no resources are available, e.g. for id=%i", nsub[1])
+      stopf("Some of your jobs have not been submitted, so no resources are available, e.g. for id=%i", nsub)
   }
   query = sprintf("SELECT job_id, resources_timestamp FROM %s_job_status", reg$id)
   df = dbSelectWithIds(reg, query, ids)

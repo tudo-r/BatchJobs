@@ -88,6 +88,9 @@ testJob = function(reg, id, resources = list(), external = TRUE) {
     on.exit(setOnSlave(FALSE))
     # FIXME: stuff we might need to store before: resources
     saveConf(reg)
+
+    # trigger loadExports, sourceRegistryFiles, ...
+    loadRegistry(reg$file.dir)
     res = applyJobFunction(reg, getJob(reg, id), makeFileCache(FALSE))
   }
   return(res)

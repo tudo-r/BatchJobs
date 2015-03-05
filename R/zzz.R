@@ -49,7 +49,7 @@ NULL
 .BatchJobs.conf = new.env()
 
 .onAttach = function(libname, pkgname) {
-  if (!isOnSlave()) {
+  if (getOption("BatchJobs.load.config", TRUE) && !isOnSlave()) {
     if (missing(libname) || missing(pkgname)) {
       # this can happen with testthat while loading from skel/
       readConfs(find.package(package = "BatchJobs"))

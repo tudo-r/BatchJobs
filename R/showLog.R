@@ -41,7 +41,7 @@ showLog = function(reg, id, pager = getOption("pager")) {
   header = c(sprintf("Showing log file for job with id=%i", id),
              sprintf("The string '%s' indicates start of requested job", exact1))
 
-  if (!is.function("pager")) {
+  if (!is.function(pager)) {
     sys.pager = Sys.getenv("PAGER")
     if ((grepl("/pager$", pager) || pager == "internal") && sys.pager != "") {
       # prefer the system pager
@@ -55,7 +55,7 @@ showLog = function(reg, id, pager = getOption("pager")) {
       pos = grep(exact2, readLines(fn), fixed = TRUE)
       if (length(pos) == 1L) {
         pos = pos + length(header) + 1L
-        if(pager == "less")
+        if (pager == "less")
           pager = function(files, header, title, delete.file) system2("less", c(sprintf("+%ig", pos), files))
         else
           pager = function(files, header, title, delete.file) system2("vim", c(sprintf("+%i", pos), files))
