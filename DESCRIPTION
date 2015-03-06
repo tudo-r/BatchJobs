@@ -30,7 +30,8 @@ Imports:
     utils
 Suggests:
     MASS,
-    testthat
+    testthat,
+    devtools
 LazyData: yes
 ByteCompile: yes
 Version: 1.6

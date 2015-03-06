@@ -1,3 +1,19 @@
+# internal overloading wrapper for BBmisc::requirePackages
+requirePackages <- function(pkg, ...){
+  
+  sapply(pkg, function(pkgname, ...){
+    # pre-load source packages
+    if( grepl("^[~./\\]", pkgname) ){
+        a <- devtools::load_all(pkgname, reset = FALSE) # reset = FALSE is very important
+        pkgname <- packageName(a$env)
+    } 
+    # standard require
+    BBmisc::requirePackages(pkgname, ...)
+    pkgname
+  }, ...)
+
+}
+
 makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   multiple.result.files, seed, packages, src.dirs, src.files) {
 
@@ -20,7 +36,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
 
   assertCharacter(packages, any.missing = FALSE)
   packages = union(packages, "BatchJobs")
-  requirePackages(packages, stop = TRUE, suppress.warnings = TRUE, default.method = "attach")
+  packages <- requirePackages(packages, stop = TRUE, suppress.warnings = TRUE, default.method = "attach")
 
   assertCharacter(src.dirs, any.missing = FALSE)
   src.dirs = sanitizePath(src.dirs, make.absolute = FALSE)
@@ -42,7 +58,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   checkDir(getExportDir(file.dir), create = TRUE, check.empty = TRUE)
   sourceRegistryFilesInternal(work.dir, src.dirs, src.files)
 
-  packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
+  packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), names(packages))
 
   setClasses(list(
     id = id,
@@ -95,13 +111,17 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
 #'   Default is a random number from 1 to \code{.Machine$integer.max/2}.
 #' @param packages [\code{character}]\cr
 #'   Packages that will always be loaded on each node.
+#'   Path to source package directories may also be specified (strings starting with 
+#'   a \code{.}, \code{/} , \code{~} or \code{\\} are considered package directory specifications).
 #'   Default is \code{character(0)}.
 #' @param src.dirs [\code{character}]\cr
-#'   Directories containing R scripts
+#'   Directories containing R scripts or source packages
 #'   to be sourced on registry load (both on slave and master).
 #'   Files not matching the pattern \dQuote{\\.[Rr]$} are ignored.
 #'   Useful if you have many helper functions that are needed during the execution of your jobs.
 #'   These files should only contain function definitions and no executable code.
+#'   Source package directory must contain a valid DESCRIPTION file and are loaded with 
+#'   \code{\link[devtools]{load_all}}.
 #'   Default is \code{character(0)}.
 #' @param src.files [\code{character}]\cr
 #'   R scripts files
