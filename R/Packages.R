@@ -12,7 +12,9 @@
 addRegistryPackages = function(reg, packages) {
   checkRegistry(reg)
   assertCharacter(packages, any.missing = FALSE)
-  packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
+  # load packages (this forces source packages to be loaded)
+  packages <- requirePackages(packages, stop = TRUE, suppress.warnings = TRUE, default.method = "attach")
+  packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), names(packages))
   p = c(reg$packages, packages)
   p = p[unique(names(p))]
   reg$packages = p
