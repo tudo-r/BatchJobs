@@ -267,5 +267,5 @@ removeRegistry = function(reg, ask = c("yes", "no")) {
 
   ## FIXME: Close database first?
 
-  removeDirs(reg$file.dir, recursive=TRUE, mustWork=TRUE)
+  removeDirs(reg$file.dir, recursive=TRUE, must.work=TRUE)
 }
