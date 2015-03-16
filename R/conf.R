@@ -71,7 +71,7 @@ assignConfDefaults = function() {
   conf$mail.done = "none"
   conf$mail.error = "none"
   conf$db.driver = "SQLite"
-  conf$db.options = list()
+  conf$db.options = list(pragmas = "busy_timeout=5000")
   conf$default.resources = list()
   conf$debug = FALSE
   conf$raise.warnings = FALSE
