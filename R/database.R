@@ -5,19 +5,17 @@ sqlQuote = function(x) {
   sprintf("'%s'", x)
 }
 
-dbGetConnection = function(drv, ...) {
-  # method dispatch tp support different DBMS
+dbGetConnection = function(drv, reg, ...) {
+  # method dispatch to support different DBMS
   UseMethod("dbGetConnection")
 }
 
 dbGetConnection.SQLiteDriver = function(drv, reg, flags = "ro", ...) {
   flags = switch(flags, "ro" = SQLITE_RO, "rw" = SQLITE_RW, "rwc" = SQLITE_RWC)
   opts = list(dbname = file.path(reg$file.dir, "BatchJobs.db"), flags = flags, drv = drv)
-  con = do.call(dbConnect, args = c(reg$db.options, opts))
-  res = dbSendQuery(con, "PRAGMA busy_timeout=5000")
-  dbClearResult(res)
-  res = dbSendQuery(con, "PRAGMA journal_mode=WAL")
-  dbClearResult(res)
+  con = do.call(dbConnect, args = c(dropNamed(reg$db.options, "pragmas"), opts))
+  for (pragma in reg$db.options$pragmas)
+    dbClearResult(dbSendQuery(con, sprintf("PRAGMA %s", pragma)))
   return(con)
 }
 

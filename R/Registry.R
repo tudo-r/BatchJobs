@@ -43,13 +43,14 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   sourceRegistryFilesInternal(work.dir, src.dirs, src.files)
 
   packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
+  conf = getConfig()
 
   setClasses(list(
     id = id,
     version = R.version,
     RNGkind = RNGkind(),
-    db.driver = "SQLite",
-    db.options = list(),
+    db.driver = conf$db.driver,
+    db.options = conf$db.options,
     seed = seed,
     file.dir = file.dir,
     sharding = sharding,
