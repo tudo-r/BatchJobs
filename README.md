@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/tudo-r/BatchJobs.png)](https://travis-ci.org/tudo-r/BatchJobs)
 [![Build status](https://ci.appveyor.com/api/projects/status/pkcy60csbp8k1ms9/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/batchjobs/branch/master)
+[![Coverage Status](https://coveralls.io/repos/tudo-r/BatchJobs/badge.svg)](https://coveralls.io/r/tudo-r/BatchJobs)
 
 Provides Map, Reduce and Filter variants to generate jobs on batch computing systems like PBS/Torque, LSF and Sun Grid Engine. Multicore and SSH systems are also supported.
 
