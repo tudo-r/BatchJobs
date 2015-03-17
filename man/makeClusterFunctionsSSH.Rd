@@ -46,6 +46,7 @@ cluster.functions = makeClusterFunctionsSSH(
 Other clusterFunctions: \code{\link{ClusterFunctions}},
   \code{\link{makeClusterFunctions}};
   \code{\link{makeClusterFunctionsInteractive}};
+  \code{\link{makeClusterFunctionsOpenLava}};
   \code{\link{makeClusterFunctionsLSF}};
   \code{\link{makeClusterFunctionsLocal}};
   \code{\link{makeClusterFunctionsMulticore}};
