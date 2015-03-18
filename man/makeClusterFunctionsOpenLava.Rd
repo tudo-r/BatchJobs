@@ -4,8 +4,8 @@
 \alias{makeClusterFunctionsOpenLava}
 \title{Create cluster functions for OpenLava systems.}
 \usage{
-makeClusterFunctionsOpenLava(template.file, list.jobs.cmd = c("bjobs", "-u $USER",
-  "-w"))
+makeClusterFunctionsOpenLava(template.file, list.jobs.cmd = c("bjobs",
+  "-u $USER", "-w"))
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
@@ -39,9 +39,9 @@ Examples can be found on
 Other clusterFunctions: \code{\link{ClusterFunctions}},
   \code{\link{makeClusterFunctions}};
   \code{\link{makeClusterFunctionsInteractive}};
+  \code{\link{makeClusterFunctionsLSF}};
   \code{\link{makeClusterFunctionsLocal}};
   \code{\link{makeClusterFunctionsMulticore}};
-  \code{\link{makeClusterFunctionsLSF}};
   \code{\link{makeClusterFunctionsSGE}};
   \code{\link{makeClusterFunctionsSLURM}};
   \code{\link{makeClusterFunctionsSSH}};

@@ -64,10 +64,10 @@ You must define the functions specified in the arguments.
 }
 \seealso{
 Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}};
-  \code{\link{makeClusterFunctionsOpenLava}};
   \code{\link{makeClusterFunctionsLSF}};
   \code{\link{makeClusterFunctionsLocal}};
   \code{\link{makeClusterFunctionsMulticore}};
+  \code{\link{makeClusterFunctionsOpenLava}};
   \code{\link{makeClusterFunctionsSGE}};
   \code{\link{makeClusterFunctionsSLURM}};
   \code{\link{makeClusterFunctionsSSH}};

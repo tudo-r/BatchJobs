@@ -28,10 +28,10 @@ and \code{killJob} returns at once (for the same reason).
 \seealso{
 Other clusterFunctions: \code{\link{ClusterFunctions}},
   \code{\link{makeClusterFunctions}};
-  \code{\link{makeClusterFunctionsOpenLava}};
   \code{\link{makeClusterFunctionsLSF}};
   \code{\link{makeClusterFunctionsLocal}};
   \code{\link{makeClusterFunctionsMulticore}};
+  \code{\link{makeClusterFunctionsOpenLava}};
   \code{\link{makeClusterFunctionsSGE}};
   \code{\link{makeClusterFunctionsSLURM}};
   \code{\link{makeClusterFunctionsSSH}};
