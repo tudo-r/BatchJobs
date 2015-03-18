@@ -1,3 +1,6 @@
+BatchJobs_1.7:
+- added OpenLava support (Thanks to ???)
+
 BatchJobs_1.6:
 - Added functions: getStatus, removeRegistry, findDisappeared
 - All find* function now support a 'limit' argument (default unlimited)
