@@ -58,6 +58,7 @@ Other clusterFunctions: \code{\link{ClusterFunctions}},
   \code{\link{makeClusterFunctionsInteractive}};
   \code{\link{makeClusterFunctionsLSF}};
   \code{\link{makeClusterFunctionsLocal}};
+  \code{\link{makeClusterFunctionsOpenLava}};
   \code{\link{makeClusterFunctionsSGE}};
   \code{\link{makeClusterFunctionsSLURM}};
   \code{\link{makeClusterFunctionsSSH}};

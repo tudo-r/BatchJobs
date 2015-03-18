@@ -1,19 +1,25 @@
 ## -*- mode: r -*-
 
-bibentry(bibtype="TechReport",
-         title="Computing on high performance clusters with R: Packages BatchJobs and BatchExperiments",
-         author=c(
-           person(given="Bernd", family="Bischl"),
-           person(given="Michel", family="Lang"),
-           person(given="Olaf", family="Mersmann"),
-           person(given="Joerg", family="Rahnenfuehrer"),
-           person(given="Claus", family="Weihs")
-         ),
-         institution="TU Dortmund",
-         number="1",         
-         year="2011",
-         url="http://sfb876.tu-dortmund.de/PublicPublicationFiles/bischl_etal_2012a.pdf",
-         textVersion="Bischl, Bernd, Lang, Michel, Mersmann, Olaf, Rahnenfuehrer, Joerg and Weihs,
-Claus (2011). Computing on high performance clusters with R:
-Packages BatchJobs and BatchExperiments. Technical Report 1, TU Dortmund. URL: http://sfb876.tu-dortmund.de/PublicPublicationFiles/bischl_etal_2012a.pdf"
+citHeader("To cite BatchJobs or BatchExperiments in publications use:")
+
+citEntry(entry = "Article",
+  title        = "{BatchJobs} and {BatchExperiments}: Abstraction Mechanisms for Using {R} in Batch Environments",
+  author       = personList(as.person("Bernd Bischl"),
+                   as.person("Michel Lang"),
+                   as.person("Olaf Mersmann"),
+                   as.person("J{\\\"o}rg Rahnenf{\\\"u}hrer"),
+                   as.person("Claus Weihs")),
+  journal      = "Journal of Statistical Software",
+  year         = "2015",
+  volume       = "64",
+  number       = "11",
+  pages        = "1--25",
+  url          = "http://www.jstatsoft.org/v64/i11/",
+
+  textVersion  =
+  paste("Bernd Bischl, Michel Lang, Olaf Mersmann, Joerg Rahnenfuehrer, Claus Weihs (2015).",
+        "BatchJobs and BatchExperiments: Abstraction Mechanisms for Using R in Batch Environments.",
+        "Journal of Statistical Software, 64(11), 1-25.",
+        "URL http://www.jstatsoft.org/v64/i11/.")
 )
+
