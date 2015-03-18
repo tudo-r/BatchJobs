@@ -1,15 +1,16 @@
-BatchJobs_1.5.1:
-- Added functions: getStatus, removeRegistry, findDisapperead
-- Fixed missing default for argument 'progressbar' in killJobs()
+BatchJobs_1.6:
+- Added functions: getStatus, removeRegistry, findDisappeared
 - All find* function now support a 'limit' argument (default unlimited)
 - We are less strict in arg checks of makeSSHWorker, so you can set a load higher than ncpus
-- Exported findDisapperead() heuristic to identify jobs the scheduler simply
-  "forgot" about
 - loadExports: added argument "what"
+- batchApply now works with arrays
+- filehandling for the registry, especially on Windows, was improved (Thx Henrik Bengtsson) 
 - You can set pragmas via db.options in your config file.
 - The SQLite pragma "busy_timeout" is now set per default with a value of
   5000ms.
 - The default number of cores is now retrieved from the option "mc.cores" rather
+- New configuration option BatchJobs.load.config
+- Fixed some minor things.
 
 BatchJobs_1.5:
 - Updated to use RSQLite >=1.0.0
