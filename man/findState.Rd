@@ -62,9 +62,9 @@ Registry.}
 Subset of job ids to restrict the result to.
 Default is all jobs.}
 
-\item{limit}{[\code{integer}]\cr
+\item{limit}{[\code{integer(1)}]\cr
 Limit the number of returned ids.
-Default is all ids}
+Default is all ids.}
 }
 \value{
 [\code{integer}]. Ids of jobs.
