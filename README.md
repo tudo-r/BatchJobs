@@ -24,7 +24,7 @@ Provides Map, Reduce and Filter variants to generate jobs on batch computing sys
 
 To cite BatchJobs or BatchExperiments in publications use:
 
-  Bernd Bischl, Michel Lang, Olaf Mersmann, Joerg Rahnenfuehrer, Claus Weihs (2015). BatchJobs and BatchExperiments: Abstraction Mechanisms for Using R in Batch Environments. Journal
+  Bernd Bischl, Michel Lang, Olaf Mersmann, Jörg Rahnenführer, Claus Weihs (2015). BatchJobs and BatchExperiments: Abstraction Mechanisms for Using R in Batch Environments. Journal
   of Statistical Software, 64(11), 1-25. URL http://www.jstatsoft.org/v64/i11/.
 
 A BibTeX entry for LaTeX users is
@@ -60,7 +60,7 @@ Proceed to [Configuration](../../wiki/Configuration) to set up cluster execution
 The package also allows a few R options to be set, see [here](http://www.rdocumentation.org/packages/BatchJobs/functions/BatchJobs).
 
 ## Documentation
-Probably the best way to get started in 5 minutes is to read Henrik Bengtsson [intro slides](http://goo.gl/s1eqBz).
+Probably the best way to get started in 5 minutes is to read our [paper](http://www.jstatsoft.org/v64/i11/) or Henrik Bengtsson's [intro slides](http://goo.gl/s1eqBz).
 If you have more time, read our [technical report](http://sfb876.tu-dortmund.de/PublicPublicationFiles/bischl_etal_2012a.pdf).
 For more detailed information on the functions consult the [R documentation](http://www.rdocumentation.org/packages/BatchJobs)
 We also provide a [FAQ](../../wiki/FAQ) in our [wiki](../../wiki).
