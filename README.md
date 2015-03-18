@@ -19,6 +19,27 @@ Provides Map, Reduce and Filter variants to generate jobs on batch computing sys
 
 * [Further installation instructions](https://github.com/tudo-r/PackagesInfo/wiki/Installation-Information)
 
+## If you use the package, please cite it
+  ```
+
+To cite BatchJobs or BatchExperiments in publications use:
+
+  Bernd Bischl, Michel Lang, Olaf Mersmann, Joerg Rahnenfuehrer, Claus Weihs (2015). BatchJobs and BatchExperiments: Abstraction Mechanisms for Using R in Batch Environments. Journal
+  of Statistical Software, 64(11), 1-25. URL http://www.jstatsoft.org/v64/i11/.
+
+A BibTeX entry for LaTeX users is
+
+  @Article{,
+    title = {{BatchJobs} and {BatchExperiments}: Abstraction Mechanisms for Using {R} in Batch Environments},
+    author = {Bernd Bischl and Michel Lang and Olaf Mersmann and J{\"o}rg Rahnenf{\"u}hrer and Claus Weihs},
+    journal = {Journal of Statistical Software},
+    year = {2015},
+    volume = {64},
+    number = {11},
+    pages = {1--25},
+    url = {http://www.jstatsoft.org/v64/i11/},
+  }
+  ```
 
 ## Core features
 * Create, submit and control [R](http://www.r-project.org/) jobs on batch systems
