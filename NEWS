@@ -1,5 +1,6 @@
 BatchJobs_1.7:
 - added OpenLava support (Thanks to ???)
+- getJobInfo now also displays time.running until an error occurred in the job, and not NA as before
 
 BatchJobs_1.6:
 - Added functions: getStatus, removeRegistry, findDisappeared
