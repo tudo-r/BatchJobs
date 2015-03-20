@@ -64,7 +64,7 @@
 #' chunked = chunk(getJobIds(reg), n.chunks = 2, shuffle = TRUE)
 #' submitJobs(reg, chunked)
 submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chunks.as.arrayjobs = FALSE,
-  job.delay = FALSE, progressbar = TRUE) {
+  job.delay = FALSE, progressbar = TRUE, np = 1L) {
   ### helper function to calculate the delay
   getDelays = function(cf, job.delay, n) {
     if (is.logical(job.delay)) {
@@ -215,6 +215,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
           batch.result = cf$submitJob(
             conf = conf,
             reg = reg,
+	    np = np,
             job.name = sprintf("%s-%i", reg$id, id1),
             rscript = rscripts[i],
             log.file = getLogFilePath(reg, id1),
