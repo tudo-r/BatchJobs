@@ -2,7 +2,7 @@ library(BatchJobs)
 
 conf = BatchJobs:::getBatchJobsConf()
 
-conf$cluster.functions = makeClusterFunctionsOpenLava("rmpi-batch.tmpl")
+conf$cluster.functions = makeClusterFunctionsOpenLava("/home/clusteradmin/BatchJobs/examples/cfOpenLava/openlava-rmpi.tmpl")
 
 reg = makeRegistry(id = "BatchJobsRmpiExample")
 
