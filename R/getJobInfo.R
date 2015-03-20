@@ -41,14 +41,18 @@ getJobInfoInternal = function(reg, ids, select, unit = "seconds", columns) {
   return(tab)
 }
 
-#' Get computational information of jobs.
+#' @title Get computational information of jobs.
 #'
+#' Returns time stamps (submitted, started, done, error),
+#' time running, approximate memory usage (in Mb),
 #' error messages (shortened, see \code{\link{showLog}} for detailed error messages),
-#' Returns time stamps (submitted, started, done), time running, approximate memory usage (in Mb, see note)
 #' time in queue, hostname of the host the job was executed,
 #' assigned batch ID, the R PID and the seed of the job.
 #'
-#' @note To estimate memory usage the sum of the last column of \code{\link[base]{gc}} is used.
+#' To estimate memory usage the sum of the last column of \code{\link[base]{gc}} is used.
+#'
+#' Column \dQuote{time.running} displays the time until either the job was done, or an error occured;
+#' it will by \code{NA} in case of time outs or hard R crashes.
 #'
 #' @template arg_reg
 #' @template arg_ids
