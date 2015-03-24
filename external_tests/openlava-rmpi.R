@@ -17,6 +17,7 @@ f = function(x) {
   mpi.spawn.Rslaves(nslaves=slaveno)
   mpi.remote.exec(paste("I am",mpi.comm.rank(),"of",mpi.comm.size()))
   mpi.close.Rslaves()
+  mpi.exit()
   
 }
 batchMap(reg, f, 1)
