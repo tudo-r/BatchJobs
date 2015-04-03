@@ -66,5 +66,6 @@ Probably the best way to get started in 5 minutes is to read our [paper](http://
 If you have more time, read our [technical report](http://sfb876.tu-dortmund.de/PublicPublicationFiles/bischl_etal_2012a.pdf).
 For more detailed information on the functions consult the [R documentation](http://www.rdocumentation.org/packages/BatchJobs)
 We also provide a [FAQ](../../wiki/FAQ) in our [wiki](../../wiki).
+And here is a nice intro article for BatchJobs with Torque on [R Bloggers](http://www.r-bloggers.com/configuring-the-r-batchjobs-package-for-torque-batch-queues/).
 
 We also have a [mailing list](http://groups.google.com/group/batchjobs).
