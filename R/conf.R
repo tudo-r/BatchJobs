@@ -71,7 +71,7 @@ assignConfDefaults = function() {
   conf$mail.done = "none"
   conf$mail.error = "none"
   conf$db.driver = "SQLite"
-  conf$db.options = list()
+  conf$db.options = list(pragmas = "busy_timeout=5000")
   conf$default.resources = list()
   conf$debug = FALSE
   conf$raise.warnings = FALSE
@@ -142,9 +142,9 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
   if (!missing(db.driver))
     assertString(db.driver)
   if (!missing(db.options))
-    assertList(db.options)
+    assertList(db.options, names = "named")
   if (!missing(default.resources))
-    assertList(default.resources)
+    assertList(default.resources, names = "named")
   if (!missing(debug))
     assertFlag(debug)
   if (!missing(raise.warnings))
@@ -182,8 +182,8 @@ printableConf = function(conf) {
     "  fs.timeout: %s\n",
     sep = "\n")
   sprintf(fmt, x$cluster.functions$name, x$mail.from, x$mail.to, x$mail.start, x$mail.done,
-          x$mail.error, convertToShortString(x$default.resources), x$debug, x$raise.warnings,
-          x$staged.queries, x$max.concurrent.jobs, x$fs.timeout)
+    x$mail.error, convertToShortString(x$default.resources), x$debug, x$raise.warnings,
+    x$staged.queries, x$max.concurrent.jobs, x$fs.timeout)
 }
 
 

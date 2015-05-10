@@ -25,6 +25,7 @@ Other clusterFunctions: \code{\link{ClusterFunctions}},
   \code{\link{makeClusterFunctionsInteractive}};
   \code{\link{makeClusterFunctionsLSF}};
   \code{\link{makeClusterFunctionsMulticore}};
+  \code{\link{makeClusterFunctionsOpenLava}};
   \code{\link{makeClusterFunctionsSGE}};
   \code{\link{makeClusterFunctionsSLURM}};
   \code{\link{makeClusterFunctionsSSH}};

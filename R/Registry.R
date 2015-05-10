@@ -19,7 +19,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   seed = if (missing(seed)) getRandomSeed() else asInt(seed)
 
   assertCharacter(packages, any.missing = FALSE)
-  packages = union(packages, "_BatchJobs")
+  packages = union(packages, "BatchJobs")
   requirePackages(packages, stop = TRUE, suppress.warnings = TRUE, default.method = "attach")
 
   assertCharacter(src.dirs, any.missing = FALSE)
@@ -42,15 +42,15 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   checkDir(getExportDir(file.dir), create = TRUE, check.empty = TRUE)
   sourceRegistryFilesInternal(work.dir, src.dirs, src.files)
 
-  packages = Map(function(name, req) list(version = packageVersion(name), req = req),
-    name = sub("^[!_]", "", packages), req = packages)
+  packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
+  conf = getConfig()
 
   setClasses(list(
     id = id,
     version = R.version,
     RNGkind = RNGkind(),
-    db.driver = "SQLite",
-    db.options = list(),
+    db.driver = conf$db.driver,
+    db.options = conf$db.options,
     seed = seed,
     file.dir = file.dir,
     sharding = sharding,
@@ -174,7 +174,7 @@ loadRegistry = function(file.dir, work.dir) {
   info("Loading registry: %s", fn)
   reg = load2(fn, "reg")
 
-  requirePackages(extractSubList(reg$packages, "req"), why = sprintf("registry %s", reg$id), default.method = "attach")
+  requirePackages(names(reg$packages), why = sprintf("registry %s", reg$id), default.method = "attach")
 
   if (!isOnSlave()) {
     # FIXME: check that no jobs are running, if possible, before updating
@@ -267,5 +267,5 @@ removeRegistry = function(reg, ask = c("yes", "no")) {
 
   ## FIXME: Close database first?
 
-  removeDirs(reg$file.dir, recursive=TRUE, mustWork=TRUE)
+  removeDirs(reg$file.dir, recursive=TRUE, must.work=TRUE)
 }

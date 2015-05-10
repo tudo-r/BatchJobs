@@ -1,6 +1,5 @@
 examples
 external_tests
-^makeR
 tests/testthat/unittests-files
 man-roxygen
 

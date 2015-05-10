@@ -42,6 +42,7 @@ Other clusterFunctions: \code{\link{ClusterFunctions}},
   \code{\link{makeClusterFunctionsLSF}};
   \code{\link{makeClusterFunctionsLocal}};
   \code{\link{makeClusterFunctionsMulticore}};
+  \code{\link{makeClusterFunctionsOpenLava}};
   \code{\link{makeClusterFunctionsSGE}};
   \code{\link{makeClusterFunctionsSSH}};
   \code{\link{makeClusterFunctionsTorque}}
