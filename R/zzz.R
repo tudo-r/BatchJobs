@@ -42,11 +42,25 @@ NULL
 #' @importFrom digest digest
 #' @importFrom brew brew
 #' @importFrom sendmailR sendmail
-#' @importFrom stringr str_extract
-#' @importFrom stringr str_trim
+#' @importFrom stringi stri_extract_first_regex
+#' @importFrom stringi stri_trim_both
+#' @importFrom stringi stri_split_fixed
+#' @importFrom stringi stri_split_regex
 NULL
 
-.BatchJobs.conf = new.env()
+.BatchJobs.conf = new.env(parent = emptyenv())
+.BatchJobs.conffiles = character(0L)
+
+.onAttach = function(libname, pkgname) {
+  if (getOption("BatchJobs.verbose", default = TRUE)) {
+    cf = .BatchJobs.conffiles
+    packageStartupMessage(sprintf("Sourced %i configuration files: ", length(cf)))
+    for (i in seq_along(cf))
+      packageStartupMessage(sprintf("  %i: %s", i, cf[i]))
+    conf = getConfig()
+    packageStartupMessage(printableConf(conf))
+  }
+}
 
 .onLoad = function(libname, pkgname) {
   options(BatchJobs.check.posix = getOption("BatchJobs.check.posix", default = !isWindows()))
@@ -55,14 +69,8 @@ NULL
   if (!isOnSlave()) {
     assignConfDefaults()
     if (getOption("BatchJobs.load.config", TRUE)) {
-      if (missing(libname) || missing(pkgname)) {
-        # this can happen with testthat while loading from skel/
-        readConfs(find.package(package = "BatchJobs"))
-      } else {
-        readConfs(file.path(libname, pkgname))
-      }
-      if (getOption("BatchJobs.verbose", default = TRUE))
-        packageStartupMessage(printableConf(getConfig()))
+      pkg = if(missing(libname) || missing(pkgname)) find.package(package = "BatchJobs") else file.path(libname, pkgname)
+      .BatchJobs.conffiles <<- readConfs(pkg)
     }
   }
 }

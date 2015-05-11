@@ -36,7 +36,7 @@ makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect"
     } else if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
     } else {
-      makeSubmitJobResult(status = 0L, batch.job.id = str_trim(output))
+      makeSubmitJobResult(status = 0L, batch.job.id = stri_trim_both(output))
     }
   }
 

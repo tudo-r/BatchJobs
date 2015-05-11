@@ -39,7 +39,7 @@ makeClusterFunctionsLSF = function(template.file, list.jobs.cmd = c("bjobs", "-u
       cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)
     } else {
       # collapse output strings and first number in string is batch.job.id
-      batch.job.id = str_extract(collapse(res$output, sep = " "), "\\d+")
+      batch.job.id = stri_extract_first_regex(collapse(res$output, sep = " "), "\\d+")
       makeSubmitJobResult(status = 0L, batch.job.id = batch.job.id)
     }
   }
@@ -61,7 +61,7 @@ makeClusterFunctionsLSF = function(template.file, list.jobs.cmd = c("bjobs", "-u
     # drop first header line of output
     out = tail(res$output, -1L)
     # first number in strings are batch.job.ids
-    str_extract(out, "\\d+")
+    stri_extract_first_regex(out, "\\d+")
   }
 
   getArrayEnvirName = function() "LSB_JOBINDEX"

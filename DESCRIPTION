@@ -27,7 +27,7 @@ Imports:
     RSQLite (>= 1.0.0),
     sendmailR,
     stats,
-    stringr,
+    stringi (>= 0.4-1),
     utils
 Suggests:
     MASS,

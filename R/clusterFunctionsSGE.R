@@ -34,7 +34,7 @@ makeClusterFunctionsSGE = function(template.file, list.jobs.cmd = c("qstat",  "-
       cfHandleUnknownSubmitError("qsub", res$exit.code, res$output)
     } else {
       # collapse output strings and first number in string is batch.job.id
-      batch.job.id = str_extract(collapse(res$output, sep = " "), "\\d+")
+      batch.job.id = stri_extract_first_regex(collapse(res$output, sep = " "), "\\d+")
       makeSubmitJobResult(status = 0L, batch.job.id = batch.job.id)
     }
   }
@@ -54,7 +54,7 @@ makeClusterFunctionsSGE = function(template.file, list.jobs.cmd = c("qstat",  "-
     # drop first 2 header lines
     out = tail(res$output, -2L)
     # first number in strings are batch.job.ids
-    str_extract(out, "\\d+")
+    stri_extract_first_regex(out, "\\d+")
   }
 
   getArrayEnvirName = function() "SGE_TASK_ID"

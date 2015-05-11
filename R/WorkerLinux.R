@@ -20,8 +20,10 @@ getWorkerNumberOfCPUs.WorkerLinux = function(worker) {
 #' @export
 getWorkerStatus.WorkerLinux = function(worker, file.dir) {
   res = runWorkerCommand(worker, "status", file.dir)
-  setNames(as.list(as.numeric(strsplit(res, " +")[[1L]])),
-           c("load", "n.rprocs", "n.rprocs.50", "n.jobs"))
+  setNames(
+    as.list(as.numeric(stri_split_regex(res, "\\s+")[[1L]])),
+    c("load", "n.rprocs", "n.rprocs.50", "n.jobs")
+  )
 }
 
 #' @export
