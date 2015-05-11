@@ -48,24 +48,21 @@ NULL
 
 .BatchJobs.conf = new.env()
 
-.onAttach = function(libname, pkgname) {
-  if (getOption("BatchJobs.load.config", TRUE) && !isOnSlave()) {
-    if (missing(libname) || missing(pkgname)) {
-      # this can happen with testthat while loading from skel/
-      readConfs(find.package(package = "BatchJobs"))
-    } else {
-      readConfs(file.path(libname, pkgname))
-    }
-    if (getOption("BatchJobs.verbose", default = TRUE))
-      packageStartupMessage(printableConf(getConfig()))
-  }
-}
-
 .onLoad = function(libname, pkgname) {
-# checking for posix might create problem in windwos tests
   options(BatchJobs.check.posix = getOption("BatchJobs.check.posix", default = !isWindows()))
   options(BatchJobs.clear.function.env = getOption("BatchJobs.clear.function.env", default = FALSE))
+
   if (!isOnSlave()) {
     assignConfDefaults()
+    if (getOption("BatchJobs.load.config", TRUE)) {
+      if (missing(libname) || missing(pkgname)) {
+        # this can happen with testthat while loading from skel/
+        readConfs(find.package(package = "BatchJobs"))
+      } else {
+        readConfs(file.path(libname, pkgname))
+      }
+      if (getOption("BatchJobs.verbose", default = TRUE))
+        packageStartupMessage(printableConf(getConfig()))
+    }
   }
 }

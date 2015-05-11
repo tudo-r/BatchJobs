@@ -1,4 +1,6 @@
 BatchJobs_1.7:
+- Configuration files are now sourced while loading the namespace, not while
+  attaching the package.
 - added OpenLava support (Thanks to ???)
 - getJobInfo now also displays time.running until an error occurred in the job, and not NA as before
 
@@ -8,7 +10,7 @@ BatchJobs_1.6:
 - We are less strict in arg checks of makeSSHWorker, so you can set a load higher than ncpus
 - loadExports: added argument "what"
 - batchApply now works with arrays
-- filehandling for the registry, especially on Windows, was improved (Thx Henrik Bengtsson) 
+- filehandling for the registry, especially on Windows, was improved (Thx Henrik Bengtsson)
 - You can set pragmas via db.options in your config file.
 - The SQLite pragma "busy_timeout" is now set per default with a value of
   5000ms.
