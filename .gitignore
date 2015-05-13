@@ -4,3 +4,4 @@ BatchJobs.Rcheck
 .Rproj.user
 BatchJobs.Rproj
 .Rbuildignore
+*.Rproj

@@ -41,13 +41,17 @@ assignConf = function(conf) {
   lapply(ls(conf), function(x) assign(x, conf[[x]], envir = conf.in.ns))
 }
 
-# reads package conf, userhome conf, working dir conf
-# then assigns them to namespace
-readConfs = function(path) {
+# locates package conf, userhome conf, working dir conf
+findConfigs = function(path=find.package("BatchJobs")) {
   fn.pack = file.path(path, "etc", "BatchJobs_global_config.R")
   fn.user = path.expand("~/.BatchJobs.R")
   fn.wd = suppressWarnings(normalizePath(".BatchJobs.R"))
-  conffiles = Filter(file.exists, unique(c(fn.pack, fn.user, fn.wd)))
+  Filter(file.exists, unique(c(fn.pack, fn.user, fn.wd)))
+}
+
+# reads available config files and assigns them to namespace
+readConfs = function(path=find.package("BatchJobs")) {
+  conffiles = findConfigs(path)
   if (length(conffiles) == 0L) {
     warning("No configuation found at all. Not in package, not in user.home, not in work dir!")
     assignConfDefaults()
@@ -76,6 +80,7 @@ assignConfDefaults = function() {
   conf$fs.timeout = NA_real_
   conf$ssh = FALSE
   conf$node = "none"
+  conf$max.arrayjobs = 1000
 }
 
 # loads conf into namespace on slave
@@ -106,7 +111,7 @@ getConfNames = function() {
   c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options",
     "default.resources", "debug", "raise.warnings", "staged.queries",
-    "max.concurrent.jobs", "fs.timeout", "ssh", "node")
+    "max.concurrent.jobs", "fs.timeout", "ssh", "node", "max.arrayjobs")
 }
 
 checkConf = function(conf) {
@@ -119,7 +124,7 @@ checkConf = function(conf) {
 
 checkConfElements = function(cluster.functions, mail.to, mail.from,
   mail.start, mail.done, mail.error, mail.control, db.driver, db.options, default.resources, debug,
-  raise.warnings, staged.queries, max.concurrent.jobs, fs.timeout, ssh, node) {
+  raise.warnings, staged.queries, max.concurrent.jobs, fs.timeout, ssh, node, max.arrayjobs) {
 
   mail.choices = c("none", "first", "last", "first+last", "all")
 
@@ -157,6 +162,8 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
     assertFlag(ssh)
   if (!missing(node))
     assertString(node)
+  if (!missing(max.arrayjobs))
+    assertNumber(max.arrayjobs)
 }
 
 getClusterFunctions = function(conf) {
@@ -183,11 +190,12 @@ printableConf = function(conf) {
     "  max.concurrent.jobs: %s",
     "  fs.timeout: %s",
     "  ssh: %s",
-    "  node: %s\n",
+    "  node: %s",
+    "  max.arrayjobs: %s\n",
     sep = "\n")
   sprintf(fmt, x$cluster.functions$name, x$mail.from, x$mail.to, x$mail.start, x$mail.done,
           x$mail.error, convertToShortString(x$default.resources), x$debug, x$raise.warnings,
-          x$staged.queries, x$max.concurrent.jobs, x$fs.timeout, x$ssh, x$node)
+          x$staged.queries, x$max.concurrent.jobs, x$fs.timeout, x$ssh, x$node, x$max.arrayjobs)
 }
 
 

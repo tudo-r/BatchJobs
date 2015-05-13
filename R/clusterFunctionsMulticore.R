@@ -7,7 +7,10 @@
 #'
 #' @param ncpus [\code{integer(1)}]\cr
 #'   Number of VPUs of worker.
-#'   Default means to query the worker via \dQuote{/proc/cpuinfo}.
+#'   Default is to use all cores but one, where total number of cores
+#'   "available" is given by option \code{\link[base:options]{mc.cores}}
+#'   and if that is not set it is inferred by
+#'   \code{\link[parallel]{detectCores}}.
 #' @param max.jobs [\code{integer(1)}]\cr
 #'   Maximal number of jobs that can run concurrently for the current registry.
 #'   Default is \code{ncpus}.
@@ -34,7 +37,8 @@
 #' @return [\code{\link{ClusterFunctions}}].
 #' @family clusterFunctions
 #' @export
-makeClusterFunctionsMulticore = function(ncpus, max.jobs, max.load, nice,
+#' @importFrom parallel detectCores
+makeClusterFunctionsMulticore = function(ncpus = max(getOption("mc.cores", detectCores()) - 1, 1), max.jobs, max.load, nice,
   r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {
 
   if (isWindows())

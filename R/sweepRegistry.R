@@ -30,7 +30,7 @@ sweepRegistry = function(reg, sweep = c("scripts", "conf")) {
 
   assertSubset(sweep, c("scripts", "logs", "resources", "conf"))
 
-  if (length(dbFindRunning(reg)) > 0L)
+  if (length(dbFindRunning(reg, limit = 1L)) > 0L)
     stop("Can't sweep registry while jobs are running")
 
   fd = reg$file.dir

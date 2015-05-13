@@ -20,7 +20,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
 
   assertCharacter(packages, any.missing = FALSE)
   packages = union(packages, "BatchJobs")
-  requirePackages(packages, stop = TRUE, suppress.warnings = TRUE)
+  requirePackages(packages, stop = TRUE, suppress.warnings = TRUE, default.method = "attach")
 
   assertCharacter(src.dirs, any.missing = FALSE)
   src.dirs = sanitizePath(src.dirs, make.absolute = FALSE)
@@ -152,7 +152,14 @@ print.Registry = function(x, ...) {
   cat("  Required packages:", collapse(names(x$packages), ", "), "\n")
 }
 
-#' Load a previously saved registry.
+#' @title Load a previously saved registry.
+#'
+#' @details
+#' Loads a previously created registry from the file system.
+#' The \code{file.dir} is automatically updated upon load, so be careful
+#' if you use the registry on multiple machines simultaneously, e.g.
+#' via sshfs or a samba share.
+#'
 #' @param file.dir [\code{character(1)}]\cr
 #'   Location of the file.dir to load the registry from.
 #' @param work.dir [\code{character(1)}]\cr
@@ -166,7 +173,7 @@ loadRegistry = function(file.dir, work.dir) {
   info("Loading registry: %s", fn)
   reg = load2(fn, "reg")
 
-  requirePackages(names(reg$packages), why = sprintf("registry %s", reg$id))
+  requirePackages(names(reg$packages), why = sprintf("registry %s", reg$id), default.method = "attach")
 
   if (!isOnSlave()) {
     # FIXME: check that no jobs are running, if possible, before updating
@@ -180,10 +187,8 @@ loadRegistry = function(file.dir, work.dir) {
 
     if (!isFALSE(adjusted) || !isFALSE(updated))
       saveRegistry(reg)
-  } else {
-    loadExports(reg)
   }
-
+  loadExports(reg)
   sourceRegistryFiles(reg)
 
   return(reg)
@@ -211,4 +216,55 @@ checkRegistry = function(reg, strict = FALSE) {
       stopf("Registry class mismatch: Expected argument of class '%s'", expected)
   }
   invisible(TRUE)
+}
+
+
+#' Remove a registry object.
+#'
+#' If there are no live/running jobs, the registry will be closed
+#' and all of its files will be removed from the file system.
+#' If there are live/running jobs, an informative error is generated.
+#' The default is to prompt the user for confirmation.
+#'
+#' @param reg [\code{\link{Registry}}]\cr
+#'   Registry.
+#' @param ask [\code{character(1)}]\cr
+#'   If \code{"yes"} the user is prompted to confirm the action.
+#'   If trying to prompt the user this way in a non-interactive
+#'   session, then an informative error is generated.
+#'   If \code{"no"}, the registry will be removed without
+#'   further confirmation.
+#'
+#' @return [\code{logical[1]}]
+#'
+#' @export
+removeRegistry = function(reg, ask = c("yes", "no")) {
+  ask = match.arg(ask)
+
+  if (ask == "yes") {
+    if (!interactive())
+      stopf("removeRegistry(..., ask = \"yes\") only works in interactive sessions.")
+    prompt = sprintf("Are you sure you wish to delete BatchJobs registry '%s' and all of it's files in directory '%s'? [y/N]: ", reg$id, reg$file.dir)
+    ans = 2L
+    repeat {
+      ans = tolower(readline(prompt))
+      ans = gsub("[ ]", "", ans)
+      if (ans == "") ans = "no"
+      ans = pmatch(ans, table=c("yes", "no"), nomatch=0L)
+      if (ans > 0L) break
+    }
+    if (ans != 1L) return(invisible(FALSE))
+  }
+
+
+  checkRegistry(reg)
+  syncRegistry(reg)
+
+  running = findOnSystem(reg)
+  if (length(running) > 0L)
+    stopf("Can't remove registry, because there are %d live jobs on the system.", length(running))
+
+  ## FIXME: Close database first?
+
+  removeDirs(reg$file.dir, recursive=TRUE, mustWork=TRUE)
 }

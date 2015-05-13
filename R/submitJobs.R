@@ -139,7 +139,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
 
   ### quick sanity check
   if (n > 5000L) {
-    warningf(collapse(c("You are about to submit '%i' jobs.",
+    warningf(collapse(c("You are about to submit %i jobs.",
                         "Consider chunking them to avoid heavy load on the scheduler.",
                         "Sleeping 5 seconds for safety reasons."), sep = "\n"), n)
     Sys.sleep(5)

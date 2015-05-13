@@ -13,7 +13,12 @@ dbGetConnection = function(drv, ...) {
 dbGetConnection.SQLiteDriver = function(drv, reg, flags = "ro", ...) {
   flags = switch(flags, "ro" = SQLITE_RO, "rw" = SQLITE_RW, "rwc" = SQLITE_RWC)
   opts = list(dbname = file.path(reg$file.dir, "BatchJobs.db"), flags = flags, drv = drv)
-  do.call(dbConnect, args = c(reg$db.options, opts))
+  con = do.call(dbConnect, args = c(reg$db.options, opts))
+  res = dbSendQuery(con, "PRAGMA busy_timeout=5000")
+  dbClearResult(res)
+  res = dbSendQuery(con, "PRAGMA journal_mode=WAL")
+  dbClearResult(res)
+  return(con)
 }
 
 dbConnectToJobsDB = function(reg, flags = "ro") {
@@ -21,34 +26,39 @@ dbConnectToJobsDB = function(reg, flags = "ro") {
   dbGetConnection(drv, reg, flags)
 }
 
-dbDoQueries = function(reg, queries, flags = "ro", max.retries = 200L, sleep = function(r) 1.025^r) {
+dbDoQueries = function(reg, queries, flags = "ro", max.retries = 100L, sleep = function(r) 1.025^r) {
   for (i in seq_len(max.retries)) {
-    con = dbConnectToJobsDB(reg, flags)
-    ok = try ({
-      dbBegin(con)
-      ress = lapply(queries, dbGetQuery, con = con)
-    }, silent = TRUE)
-    if (!is.error(ok)) {
-      # this can fail because DB is locked
-      ok2 = dbCommit(con)
-      if (ok2) {
-        dbDisconnect(con)
-        return(ress)
+    con = try(dbConnectToJobsDB(reg, flags), silent = TRUE)
+    if (is.error(con)) {
+      if (!grepl("(lock|i/o|readonly)", tolower(con)))
+        stopf("Error while etablishing the connection: %s", as.character(con))
+    } else {
+      ok = try ({
+        dbBegin(con)
+        ress = lapply(queries, dbGetQuery, con = con)
+      }, silent = TRUE)
+      if (!is.error(ok)) {
+        # this can fail because DB is locked
+        ok2 = dbCommit(con)
+        if (ok2) {
+          dbDisconnect(con)
+          return(ress)
+        } else {
+          dbRollback(con)
+          dbDisconnect(con)
+        }
       } else {
+        ok = as.character(ok)
         dbRollback(con)
         dbDisconnect(con)
+        # catch known temporary errors:
+        # - database is still locked
+        # - disk I/O error
+        # - disk I/O error
+        # - database is only readable
+        if(!grepl("(lock|i/o|readonly)", tolower(ok)))
+          stopf("Error in dbDoQueries. Displaying only 1st query. %s (%s)", ok, queries[1L])
       }
-    } else {
-      ok = as.character(ok)
-      dbRollback(con)
-      dbDisconnect(con)
-      # catch known temporary errors:
-      # - database is still locked
-      # - disk I/O error
-      # - disk I/O error
-      # - database is only readable
-      if(!grepl("(lock|i/o|readonly)", tolower(ok)))
-        stopf("Error in dbDoQueries. Displaying only 1st query. %s (%s)", ok, queries[1L])
     }
     # if we reach this here, DB was locked or temporary I/O error
     Sys.sleep(runif(1L, min = 1, max = sleep(i)))
@@ -56,19 +66,24 @@ dbDoQueries = function(reg, queries, flags = "ro", max.retries = 200L, sleep = f
   stopf("dbDoQueries: max retries (%i) reached, database is still locked!", max.retries)
 }
 
-dbDoQuery = function(reg, query, flags = "ro", max.retries = 200L, sleep = function(r) 1.025^r) {
+dbDoQuery = function(reg, query, flags = "ro", max.retries = 100L, sleep = function(r) 1.025^r) {
   for (i in seq_len(max.retries)) {
-    con = dbConnectToJobsDB(reg, flags)
-    res = try(dbGetQuery(con, query), silent = TRUE)
-    dbDisconnect(con)
-    if (! is.error(res))
-      return(res)
-    res = as.character(res)
-    if(grepl("(lock|i/o|readonly)", tolower(res))) {
-      Sys.sleep(runif(1L, min = 1, max = sleep(i)))
+    con = try(dbConnectToJobsDB(reg, flags), silent = TRUE)
+    if (is.error(con)) {
+      if (!grepl("(lock|i/o|readonly)", tolower(con)))
+        stopf("Error while etablishing the connection: %s", as.character(con))
     } else {
-      stopf("Error in dbDoQuery. %s (%s)", res, query)
+      res = try(dbGetQuery(con, query), silent = TRUE)
+      dbDisconnect(con)
+      if (!is.error(res))
+        return(res)
+      res = as.character(res)
+      if(!grepl("(lock|i/o|readonly)", tolower(res))) {
+        stopf("Error in dbDoQuery. %s (%s)", res, query)
+      }
     }
+    # if we reach this here, DB was locked or temporary I/O error
+    Sys.sleep(runif(1L, min = 1, max = sleep(i)))
   }
   stopf("dbDoQuery: max retries (%i) reached, database is still locked!", max.retries)
 }
@@ -90,12 +105,12 @@ dbAddData = function(reg, tab, data) {
   as.integer(dbGetQuery(con, "SELECT total_changes()"))
 }
 
-dbSelectWithIds = function(reg, query, ids, where = TRUE, group.by, limit, reorder = TRUE) {
+dbSelectWithIds = function(reg, query, ids, where = TRUE, group.by, limit = NULL, reorder = TRUE) {
   if(!missing(ids))
     query = sprintf("%s %s job_id IN (%s)", query, ifelse(where, "WHERE", "AND"), collapse(ids))
   if(!missing(group.by))
     query = sprintf("%s GROUP BY %s", query, collapse(group.by))
-  if(!missing(limit))
+  if(!is.null(limit))
     query = sprintf("%s LIMIT %i", query, limit)
 
   res = dbDoQuery(reg, query)
@@ -224,70 +239,70 @@ dbGetLastAddedIds = function(reg, tab, id.col, n) {
   rev(dbDoQuery(reg, query)$id_col)
 }
 
-dbFindDone = function(reg, ids, negate = FALSE) {
+dbFindDone = function(reg, ids, negate = FALSE, limit = NULL) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (done IS NOT NULL)", reg$id, if(negate) "NOT" else "")
-  dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
+  dbSelectWithIds(reg, query, ids, where = FALSE, limit = limit)$job_id
 }
 
-dbFindErrors = function(reg, ids, negate = FALSE) {
+dbFindErrors = function(reg, ids, negate = FALSE, limit = NULL) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (error IS NOT NULL)", reg$id, if(negate) "NOT" else "")
-  dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
+  dbSelectWithIds(reg, query, ids, where = FALSE, limit = limit)$job_id
 }
 
-dbFindTerminated = function(reg, ids, negate = FALSE) {
+dbFindTerminated = function(reg, ids, negate = FALSE, limit = NULL) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (done IS NOT NULL OR error IS NOT NULL)", reg$id, if(negate) "NOT" else "")
-  dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
+  dbSelectWithIds(reg, query, ids, where = FALSE, limit = limit)$job_id
 }
 
-dbFindSubmitted = function(reg, ids, negate = FALSE) {
+dbFindSubmitted = function(reg, ids, negate = FALSE, limit = NULL) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (submitted IS NOT NULL)", reg$id, if (negate) "NOT" else "")
-  dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
+  dbSelectWithIds(reg, query, ids, where = FALSE, limit = limit)$job_id
 }
 
-dbFindStarted = function(reg, ids, negate = FALSE) {
+dbFindStarted = function(reg, ids, negate = FALSE, limit = NULL) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (started IS NOT NULL)", reg$id, if (negate) "NOT" else "")
-  dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
+  dbSelectWithIds(reg, query, ids, where = FALSE, limit = limit)$job_id
 }
 
-dbFindOnSystem = function(reg, ids, negate = FALSE, batch.ids) {
+dbFindOnSystem = function(reg, ids, negate = FALSE, limit = NULL, batch.ids) {
   if (missing(batch.ids))
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
 
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN (%s))",
                   reg$id, if (negate) "NOT" else "", collapse(sqlQuote(batch.ids)))
-  dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
+  dbSelectWithIds(reg, query, ids, where = FALSE, limit = limit)$job_id
 }
 
-dbFindSubmittedNotTerminated = function(reg, ids, negate = FALSE) {
+dbFindSubmittedNotTerminated = function(reg, ids, negate = FALSE, limit = NULL) {
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (submitted IS NOT NULL AND done IS NULL AND error IS NULL)",
                   reg$id, if (negate) "NOT" else "")
-  dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
+  dbSelectWithIds(reg, query, ids, where = FALSE, limit = limit)$job_id
 }
 
-dbFindRunning = function(reg, ids, negate = FALSE, batch.ids) {
+dbFindRunning = function(reg, ids, negate = FALSE, limit = NULL, batch.ids) {
   if (missing(batch.ids))
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
 
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (batch_job_id IN (%s) AND started IS NOT NULL AND done IS NULL AND error IS NULL)",
                   reg$id, if (negate) "NOT" else "", collapse(sqlQuote(batch.ids)))
-  dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
+  dbSelectWithIds(reg, query, ids, where = FALSE, limit = limit)$job_id
 }
 
-dbFindExpiredJobs = function(reg, ids, negate = FALSE, batch.ids) {
+dbFindExpiredJobs = function(reg, ids, negate = FALSE, limit = NULL, batch.ids) {
   if (missing(batch.ids))
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
   # started, not terminated, not running
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (started IS NOT NULL AND done IS NULL AND error is NULL AND
                   batch_job_id NOT IN (%s))", reg$id, if (negate) "NOT" else "", collapse(sqlQuote(batch.ids)))
-  dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
+  dbSelectWithIds(reg, query, ids, where = FALSE, limit = limit)$job_id
 }
 
-dbFindDisappeared = function(reg, ids, negate = FALSE, batch.ids) {
+dbFindDisappeared = function(reg, ids, negate = FALSE, limit = NULL, batch.ids) {
   if (missing(batch.ids))
     batch.ids = getBatchIds(reg, "Cannot find jobs on system")
   query = sprintf("SELECT job_id FROM %s_job_status WHERE %s (submitted IS NOT NULL AND started IS NULL AND batch_job_id NOT IN (%s))",
                   reg$id, if (negate) "NOT" else "", collapse(sqlQuote(batch.ids)))
-  dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
+  dbSelectWithIds(reg, query, ids, where = FALSE, limit = limit)$job_id
 }
 
 dbGetFirstJobInChunkIds = function(reg, ids){
@@ -295,7 +310,7 @@ dbGetFirstJobInChunkIds = function(reg, ids){
   dbSelectWithIds(reg, query, ids)$first_job_in_chunk_id
 }
 
-dbGetErrorMsgs = function(reg, ids, filter = FALSE, limit) {
+dbGetErrorMsgs = function(reg, ids, filter = FALSE, limit = NULL) {
   query = sprintf("SELECT job_id, error from %s_job_status", reg$id)
   if (filter)
     query = sprintf("%s WHERE error IS NOT NULL", query)

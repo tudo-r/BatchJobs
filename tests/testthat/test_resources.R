@@ -6,7 +6,7 @@ test_that("resources", {
   # use resources on slave
   reg = makeTestRegistry()
   batchMap(reg, function(i) getResources(), 1:2)
-  res = list(walltime=60, memory=100)
+  res = list(walltime=5*60, memory=500)
   submitJobs(reg, resources=res)
   waitForJobs(reg)
   expect_equal(loadResult(reg, 1)[names(res)], res)
