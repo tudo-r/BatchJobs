@@ -138,7 +138,7 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
   if (!missing(mail.error))
     assertChoice(mail.error, mail.choices)
   if (!missing(mail.control))
-    assertList(mail.control)
+    assert( is.function(mail.control) || is.list(mail.control) )
   if (!missing(db.driver))
     assertString(db.driver)
   if (!missing(db.options))

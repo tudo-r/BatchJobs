@@ -34,6 +34,11 @@ sendMail = function(reg, ids, result.str, extra.msg = "",
     }
 
     # if a mail problem occurs, we only warn but do not terminate
+    if( is.function(conf$mail.control) ){ # use email function if nessecary
+      sendmail <- function(from, to, subj, msg, ...){
+        conf$mail.control(from, to, subj, msg)
+      }
+    }
     ok = try (sendmail(conf$mail.from, conf$mail.to, subj, msg, control = conf$mail.control))
     if (is.error(ok)) {
       warningf("Could not send mail to signal condition '%s'!\nFrom: %s\nTo: %s\nControl: %s\nError message: %s",
