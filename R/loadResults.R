@@ -79,7 +79,7 @@ getResults = function(reg, ids, part = NA_character_, missing.ok = FALSE,
   if (any(miss)) {
     if (!missing.ok)
       stopf("Some job result files do not exist, showing up to first 10:\n%s", collapse(head(fns[miss], 10L), "\n"))
-    ret = lapply(seq(along = ids), function(i) missing.value)
+    ret = rep.int(list(missing.value), times = length(ids))
     ret = replace(ret, !miss, lapply(fns[!miss], load2, "result"))
   } else {
       ret = lapply(fns, load2, "result")
