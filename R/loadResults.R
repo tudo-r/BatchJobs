@@ -18,10 +18,12 @@
 #'   If \code{FALSE} an error is thrown if the results are not found.
 #'   Otherwise missing results are imputed to \code{NULL}.
 #'   Default is \code{FALSE}.
+#' @param missing.value The value to return when no result is available.
+#'   Defaults to \code{NULL} (the previous behavior)
 #' @return [\code{list}]. Results of jobs as list, possibly named by ids.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-loadResults = function(reg, ids, part = NA_character_, simplify = FALSE, use.names = "ids", missing.ok = FALSE) {
+loadResults = function(reg, ids, part = NA_character_, simplify = FALSE, use.names = "ids", missing.ok = FALSE, missing.value = NULL) {
   checkRegistry(reg)
   syncRegistry(reg)
   if (missing(ids)) {
@@ -34,7 +36,8 @@ loadResults = function(reg, ids, part = NA_character_, simplify = FALSE, use.nam
   use.names = convertUseNames(use.names)
   assertFlag(missing.ok)
 
-  res = getResults(reg, ids, part, missing.ok)
+  res = getResults(reg, ids, part, missing.ok,
+                   missing.value = missing.value)
   names(res) = switch(use.names,
                       "none" = NULL,
                       "ids" = as.character(ids),
@@ -45,7 +48,8 @@ loadResults = function(reg, ids, part = NA_character_, simplify = FALSE, use.nam
   return(res)
 }
 
-getResults = function(reg, ids, part = NA_character_, missing.ok = FALSE) {
+getResults = function(reg, ids, part = NA_character_, missing.ok = FALSE,
+    missing.value = NULL) {
   if (reg$multiple.result.files) {
     read.files = function(id, dir, pattern) {
       fns = list.files(dir, pattern, full.names = TRUE)
@@ -71,10 +75,14 @@ getResults = function(reg, ids, part = NA_character_, missing.ok = FALSE) {
 
   fns = getResultFilePath(reg, ids, part)
   miss = !file.exists(fns)
+
   if (any(miss)) {
     if (!missing.ok)
       stopf("Some job result files do not exist, showing up to first 10:\n%s", collapse(head(fns[miss], 10L), "\n"))
-    return(replace(vector("list", length(ids)), !miss, lapply(fns[!miss], load2, "result")))
+    ret = rep.int(list(missing.value), times = length(ids))
+    ret = replace(ret, !miss, lapply(fns[!miss], load2, "result"))
+  } else {
+      ret = lapply(fns, load2, "result")
   }
-  return(lapply(fns, load2, "result"))
+  ret
 }
