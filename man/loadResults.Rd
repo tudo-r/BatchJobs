@@ -5,7 +5,7 @@
 \title{Loads result files for id vector.}
 \usage{
 loadResults(reg, ids, part = NA_character_, simplify = FALSE,
-  use.names = "ids", missing.ok = FALSE)
+  use.names = "ids", missing.ok = FALSE, impute.val = NULL)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -32,6 +32,10 @@ Default is \code{ids}.}
 If \code{FALSE} an error is thrown if the results are not found.
 Otherwise missing results are imputed to \code{NULL}.
 Default is \code{FALSE}.}
+
+\item{impute.val}{[any]\cr
+The value to return when no result is available.
+Defaults to \code{NULL} (the previous behavior)}
 }
 \value{
 [\code{list}]. Results of jobs as list, possibly named by ids.

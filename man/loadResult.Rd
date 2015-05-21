@@ -4,7 +4,8 @@
 \alias{loadResult}
 \title{Loads a specific result file.}
 \usage{
-loadResult(reg, id, part = NA_character_, missing.ok = FALSE)
+loadResult(reg, id, part = NA_character_, missing.ok = FALSE,
+  impute.val = NULL)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -21,6 +22,10 @@ Only useful for multiple result files, then defines which result file part(s) sh
 If \code{FALSE} an error is thrown if no result file is found.
 Otherwise \code{NULL} is returned.
 Default is \code{FALSE}.}
+
+\item{impute.val}{[any]\cr
+The value to return when no result is available.
+Defaults to \code{NULL} (the previous behavior)}
 }
 \value{
 [any]. Result of job.

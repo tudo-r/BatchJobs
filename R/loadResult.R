@@ -10,19 +10,22 @@
 #'   If \code{FALSE} an error is thrown if no result file is found.
 #'   Otherwise \code{NULL} is returned.
 #'   Default is \code{FALSE}.
+#' @param impute.val [any]\cr
+#'   The value to return when no result is available.
+#'   Defaults to \code{NULL} (the previous behavior)
 #' @return [any]. Result of job.
 #' @seealso \code{\link{reduceResults}}
 #' @export
-loadResult = function(reg, id, part = NA_character_, missing.ok = FALSE) {
+loadResult = function(reg, id, part = NA_character_, missing.ok = FALSE, impute.val = NULL) {
   checkRegistry(reg)
   syncRegistry(reg)
   id = checkId(reg, id)
   checkPart(reg, part)
   assertFlag(missing.ok)
 
-  getResult(reg, id, part, missing.ok)
+  getResult(reg, id, part, missing.ok, impute.val)
 }
 
-getResult = function(reg, id, part = NA_character_, missing.ok = FALSE) {
-  getResults(reg, id, part, missing.ok)[[1L]]
+getResult = function(reg, id, part = NA_character_, missing.ok = FALSE, impute.val = NULL) {
+  getResults(reg, id, part, missing.ok, impute.val)[[1L]]
 }
