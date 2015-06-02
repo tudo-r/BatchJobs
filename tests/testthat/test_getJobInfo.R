@@ -41,6 +41,18 @@ test_that("getJobInfo", {
   expect_error(getJobInfo(reg, select = "fooo"), "subset")
 })
 
+test_that("getJobInfo works with error and time.running", {
+  reg = makeTestRegistry()
+
+  f = function(x) {
+    if (x == 1) return(1) else stop("xxx")
+  }
+  batchMap(reg, f, 1:2)
+  submitJobs(reg)
+  i = getJobInfo(reg)
+  expect_equal(is.na(i$error), c(TRUE, FALSE))
+  expect_false(any(is.na(i$time.running)))
+})
 
 # FIXME: for some reason this test produced mem = NA, but only in R CMD check
 

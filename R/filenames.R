@@ -80,33 +80,37 @@ is.accessible = function(path) {
 
 # a more trusty version than file.exists()
 fileExists = function(path) {
-  if (file.exists(path)) return(TRUE)
+  if (file.exists(path))
+    return(TRUE)
   ## Double check with what dir() reports, because (at least) on Windows
   ## there seems to be a delay between a file/directory being removed
   ## and the directory listings being updated. /HB 2015-02-08
   filename = basename(path)
-  dirs = dir(path=dirname(path), all.files=TRUE, include.dirs = TRUE)
-  (filename %in% dirs)
+  dirs = dir(path = dirname(path), all.files = TRUE, include.dirs = TRUE)
+  return(filename %in% dirs)
 }
 
 # a more robust and insisting version than unlink()
-removeDirs = function(paths, recursive=FALSE, ..., mustWork=TRUE, maxTries=30L, interval=0.2) {
+removeDirs = function(paths, recursive=FALSE, ..., must.work=TRUE, max.tries=30L, interval=0.2) {
+  exists = vlapply(paths, fileExists)
 
-  exists = sapply(paths, FUN=fileExists)
   for (ii in which(exists)) {
     path = paths[ii]
-    for (kk in seq_len(maxTries)) {
+    for (kk in seq_len(max.tries)) {
       unlink(path, recursive=recursive, ...)
       exists[ii] = fileExists(path)
-      if (!exists[ii]) break
-      if (kk < maxTries) Sys.sleep(interval)
+      if (!exists[ii])
+        break
+      if (kk < max.tries)
+        Sys.sleep(interval)
     }
   }
-  exists = sapply(paths, FUN=fileExists)
+
+  exists = vlapply(paths, fileExists)
   failed = path[exists]
-  if (mustWork && length(failed) > 0L)
+  if (must.work && length(failed) > 0L)
     stop("Failed to remove files/directories: ", paste(sQuote(path), collapse=", "))
-  !exists
+  return(!exists)
 }
 
 isPathFromRoot = function(path) {

@@ -47,7 +47,7 @@ showLog = function(reg, id, pager = getOption("pager")) {
       # prefer the system pager
       pager = sys.pager
     }
-    bn = basename(strsplit(pager, " ", fixed = TRUE)[[1L]][1L])
+    bn = basename(stri_split_regex(pager, "\\s+")[[1L]][1L])
 
     # check for less or vim as pager
     # if we find the pattern, we jump to the matching line

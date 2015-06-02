@@ -1,4 +1,4 @@
-#' @title Create cluster functions for LSF systems.
+#' @title Create cluster functions for OpenLava systems.
 #'
 #' @description
 #' Job files are created based on the brew template
@@ -14,14 +14,14 @@
 #' It is the template file's job to choose a queue for the job
 #' and handle the desired resource allocations.
 #' Examples can be found on
-#' \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfLSF}.
+#' \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfOpenLava}.
 #'
 #' @template arg_template
 #' @template arg_list_jobs_cmd
 #' @template ret_cf
 #' @family clusterFunctions
 #' @export
-makeClusterFunctionsLSF = function(template.file, list.jobs.cmd = c("bjobs", "-u $USER", "-w")) {
+makeClusterFunctionsOpenLava = function(template.file, list.jobs.cmd = c("bjobs", "-u $USER", "-w")) {
   assertCharacter(list.jobs.cmd, min.len = 1L, any.missing = FALSE)
   template = cfReadBrewTemplate(template.file)
 
@@ -66,6 +66,6 @@ makeClusterFunctionsLSF = function(template.file, list.jobs.cmd = c("bjobs", "-u
 
   getArrayEnvirName = function() "LSB_JOBINDEX"
 
-  makeClusterFunctions(name = "LSF", submitJob = submitJob, killJob = killJob,
+  makeClusterFunctions(name = "OpenLava", submitJob = submitJob, killJob = killJob,
                        listJobs = listJobs, getArrayEnvirName = getArrayEnvirName)
 }

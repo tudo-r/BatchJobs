@@ -1,0 +1,7 @@
+#BSUB -J <%= job.name %>[1-<%= arrayjobs %>]   # name of the job / array jobs
+#BSUB -o <%= log.file %>                       # output is sent to logfile, stdout + stderr by default
+
+# very simple system, no resources....
+
+# we merge R output with stdout from OpenLava, which gets then logged via -o option
+R CMD BATCH --no-save --no-restore "<%= rscript %>" /dev/stdout

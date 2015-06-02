@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/tudo-r/BatchJobs.png)](https://travis-ci.org/tudo-r/BatchJobs)
 [![Build status](https://ci.appveyor.com/api/projects/status/pkcy60csbp8k1ms9/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/batchjobs/branch/master)
+[![Coverage Status](https://coveralls.io/repos/tudo-r/BatchJobs/badge.svg)](https://coveralls.io/r/tudo-r/BatchJobs)
 
 Provides Map, Reduce and Filter variants to generate jobs on batch computing systems like PBS/Torque, LSF and Sun Grid Engine. Multicore and SSH systems are also supported.
 
@@ -18,6 +19,29 @@ Provides Map, Reduce and Filter variants to generate jobs on batch computing sys
 
 * [Further installation instructions](https://github.com/tudo-r/PackagesInfo/wiki/Installation-Information)
 
+## If you use the package, please cite it and star it here
+
+JSS link: http://www.jstatsoft.org/v64/i11
+
+  ```
+To cite BatchJobs or BatchExperiments in publications use:
+
+  Bernd Bischl, Michel Lang, Olaf Mersmann, Jörg Rahnenführer, Claus Weihs (2015). BatchJobs and BatchExperiments: Abstraction Mechanisms for Using R in Batch Environments. Journal
+  of Statistical Software, 64(11), 1-25. URL http://www.jstatsoft.org/v64/i11/.
+
+A BibTeX entry for LaTeX users is
+
+  @Article{,
+    title = {{BatchJobs} and {BatchExperiments}: Abstraction Mechanisms for Using {R} in Batch Environments},
+    author = {Bernd Bischl and Michel Lang and Olaf Mersmann and J{\"o}rg Rahnenf{\"u}hrer and Claus Weihs},
+    journal = {Journal of Statistical Software},
+    year = {2015},
+    volume = {64},
+    number = {11},
+    pages = {1--25},
+    url = {http://www.jstatsoft.org/v64/i11/},
+  }
+  ```
 
 ## Core features
 * Create, submit and control [R](http://www.r-project.org/) jobs on batch systems
@@ -38,9 +62,10 @@ Proceed to [Configuration](../../wiki/Configuration) to set up cluster execution
 The package also allows a few R options to be set, see [here](http://www.rdocumentation.org/packages/BatchJobs/functions/BatchJobs).
 
 ## Documentation
-Probably the best way to get started in 5 minutes is to read Henrik Bengtsson [intro slides](http://goo.gl/s1eqBz).
+Probably the best way to get started in 5 minutes is to read our [paper](http://www.jstatsoft.org/v64/i11/) or Henrik Bengtsson's [intro slides](http://goo.gl/s1eqBz).
 If you have more time, read our [technical report](http://sfb876.tu-dortmund.de/PublicPublicationFiles/bischl_etal_2012a.pdf).
 For more detailed information on the functions consult the [R documentation](http://www.rdocumentation.org/packages/BatchJobs)
 We also provide a [FAQ](../../wiki/FAQ) in our [wiki](../../wiki).
+And here is a nice intro article for BatchJobs with Torque on [R Bloggers](http://www.r-bloggers.com/configuring-the-r-batchjobs-package-for-torque-batch-queues/).
 
 We also have a [mailing list](http://groups.google.com/group/batchjobs).

@@ -4,7 +4,7 @@ test_that("doJob", {
   id = 1L
   batchMap(reg, identity, 123)
   df = BatchJobs:::dbGetJobStatusTable(reg)
-  expect_true(is.data.frame(df) && nrow(df) == 1 && ncol(df) == 13)
+  expect_true(is.data.frame(df) && nrow(df) == 1L && ncol(df) == 14L)
   ids = findNotDone(reg)
   expect_equal(ids, id)
   BatchJobs:::saveConf(reg)

@@ -67,6 +67,11 @@ updateRegistry.Registry = function(reg) {
     dbDoQuery(reg, query, flags = "rwc")
   }
 
+  if (version.reg < package_version("1.7")) {
+    query = sprintf("ALTER TABLE %s_job_status ADD COLUMN error_time INTEGER", reg$id)
+    dbDoQuery(reg, query, flags = "rwc")
+  }
+
   reg$packages$BatchJobs$version = version.pkg
   reg
 }
