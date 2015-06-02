@@ -199,8 +199,8 @@ printableConf = function(conf) {
     "  max.arrayjobs: %s\n",
     sep = "\n")
   sprintf(fmt, x$cluster.functions$name, x$mail.from, x$mail.to, x$mail.start, x$mail.done,
-    x$mail.error, convertToShortString(x$default.resources), x$debug, x$raise.warnings,
-    x$staged.queries, x$max.concurrent.jobs, x$fs.timeout)
+          x$mail.error, convertToShortString(x$default.resources), x$debug, x$raise.warnings,
+          x$staged.queries, x$max.concurrent.jobs, x$fs.timeout, x$ssh, x$node, x$max.arrayjobs)
 }
 
 
