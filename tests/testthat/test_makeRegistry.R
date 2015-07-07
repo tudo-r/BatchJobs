@@ -8,7 +8,7 @@ test_that("makeRegistry", {
   expect_true(file.exists(file.path(reg$file.dir, "BatchJobs.db")))
   expect_output(print(reg), "Job registry")
   df = BatchJobs:::dbGetJobStatusTable(reg)
-  expect_true(is.data.frame(df) && nrow(df) == 0 && ncol(df) == 13)
+  expect_true(is.data.frame(df) && nrow(df) == 0L && ncol(df) == 14L)
 })
 
 
@@ -35,14 +35,8 @@ test_that("torturing makeRegistry/removeRegistry to create registries over and o
   ## This fails (at least) on Windows if we set the working directory
   ## to be the current working directory, i.e. ".".  This can be achieve
   ## using Sys.setenv("R_EXPENSIVE_EXAMPLE_OK"=TRUE).
-  pb = makeProgressBar(max=50L, style="text")
-  pb$set()
-
   for (ii in 1:50) {
-    pb$set(ii)
     reg = makeTestRegistry()
-    removeRegistry(reg, ask = "no")
+    expect_true(removeRegistry(reg, ask = "no"))
   }
-
-  pb$kill()
 })

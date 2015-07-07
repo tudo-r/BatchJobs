@@ -14,8 +14,6 @@ NULL
 sourceConfFile = function(conffile) {
   assertFile(conffile)
 
-  if (getOption("BatchJobs.verbose", default = TRUE))
-    packageStartupMessage(sprintf("Sourcing configuration file: '%s'", conffile))
   conf = new.env()
   x = try(sys.source(conffile, envir = conf))
   if (is.error(x))
@@ -42,7 +40,7 @@ assignConf = function(conf) {
 }
 
 # locates package conf, userhome conf, working dir conf
-findConfigs = function(path=find.package("BatchJobs")) {
+findConfigs = function(path = find.package("BatchJobs")) {
   fn.pack = file.path(path, "etc", "BatchJobs_global_config.R")
   fn.user = path.expand("~/.BatchJobs.R")
   fn.wd = suppressWarnings(normalizePath(".BatchJobs.R"))
@@ -50,7 +48,7 @@ findConfigs = function(path=find.package("BatchJobs")) {
 }
 
 # reads available config files and assigns them to namespace
-readConfs = function(path=find.package("BatchJobs")) {
+readConfs = function(path = find.package("BatchJobs")) {
   conffiles = findConfigs(path)
   if (length(conffiles) == 0L) {
     warning("No configuation found at all. Not in package, not in user.home, not in work dir!")
@@ -62,6 +60,7 @@ readConfs = function(path=find.package("BatchJobs")) {
   # and we might not see the error msg triggered in the checking of the config file
   conf = sourceConfFiles(conffiles)
   assignConf(conf)
+  invisible(conffiles)
 }
 
 assignConfDefaults = function() {
@@ -71,7 +70,7 @@ assignConfDefaults = function() {
   conf$mail.done = "none"
   conf$mail.error = "none"
   conf$db.driver = "SQLite"
-  conf$db.options = list()
+  conf$db.options = list(pragmas = "busy_timeout=5000")
   conf$default.resources = list()
   conf$debug = FALSE
   conf$raise.warnings = FALSE
@@ -145,9 +144,9 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
   if (!missing(db.driver))
     assertString(db.driver)
   if (!missing(db.options))
-    assertList(db.options)
+    assertList(db.options, names = "named")
   if (!missing(default.resources))
-    assertList(default.resources)
+    assertList(default.resources, names = "named")
   if (!missing(debug))
     assertFlag(debug)
   if (!missing(raise.warnings))
@@ -174,6 +173,12 @@ getClusterFunctions = function(conf) {
 # Used in packageStartupMessage and in print.Config
 printableConf = function(conf) {
   x = as.list(conf)
+
+  # This gem here is for R CMD check running examples
+  # where we get an empty config for some reasons?
+  if (length(x) == 0L)
+    return("<empty configuration>")
+
   x[setdiff(getConfNames(), names(x))] = ""
   fmt = paste(
     "BatchJobs configuration:",

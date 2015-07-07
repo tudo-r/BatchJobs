@@ -16,9 +16,9 @@ findState = function(reg, ids, fun, negate, limit) {
 #' @param ids [\code{integer}]\cr
 #'   Subset of job ids to restrict the result to.
 #'   Default is all jobs.
-#' @param limit [\code{integer}]\cr
+#' @param limit [\code{integer(1)}]\cr
 #'   Limit the number of returned ids.
-#'   Default is all ids
+#'   Default is all ids.
 #' @return [\code{integer}]. Ids of jobs.
 #' @export
 #' @rdname findState

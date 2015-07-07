@@ -110,7 +110,7 @@ makeClusterFunctionsSSH = function(..., workers) {
   }
 
   killJob = function(conf, reg, batch.job.id) {
-    parts = strsplit(batch.job.id, "#", fixed = TRUE)[[1L]]
+    parts = stri_split_fixed(batch.job.id, "#")[[1L]]
     nodename = parts[1L]
     pid = parts[2L]
     worker = workers[[nodename]]

@@ -121,12 +121,12 @@ reduceResults = function(reg, ids, part = NA_character_, fun, init, impute.val, 
       aggr = init
     }
 
-    for (id in ids) {
+    not.done = (ids %nin% done)
+    for (i in seq_along(ids)) {
       # use lazy evaluation
       aggr = fun(aggr,
-                 job = dbGetJobs(reg, id)[[1L]],
-                 res = if (with.impute && id %nin% done)
-                   impute.val else getResult(reg, id, part),
+                 job = dbGetJobs(reg, ids[i])[[1L]],
+                 res = if (with.impute && not.done[i]) impute.val else getResult(reg, ids[i], part),
                  ...)
       bar$inc(1L)
     }

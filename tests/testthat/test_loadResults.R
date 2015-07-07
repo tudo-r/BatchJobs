@@ -37,3 +37,15 @@ test_that("loadResults", {
   expect_equal(names(loadResults(reg, use.names = "ids")), as.character(1:26))
   expect_equal(names(loadResults(reg, use.names = "names")), letters)
 })
+
+test_that("impute.val works", {
+  reg = makeTestRegistry()
+  ids = 1:2
+  batchMap(reg, function(x) if (x > 1) stop("nope") else 0L, ids)
+  submitJobs(reg)
+  waitForJobs(reg)
+  expect_equal(loadResults(reg, use.names= "none"), list(0))
+  expect_error(loadResults(reg, ids = 1:2, use.names= "none"), "do not exist")
+  expect_equal(loadResults(reg, ids = 1:2, missing.ok = TRUE, use.names= "none"), list(0, NULL))
+  expect_equal(loadResults(reg, ids = 1:2, missing.ok = TRUE, impute.val = 1, use.names= "none"), list(0, 1))
+})
