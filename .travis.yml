@@ -1,15 +1,19 @@
 language: r
 
 r_github_packages:
+    - mllg/checkmate
     - jimhester/covr
 
 r_binary_packages:
-   - testthat
-   - knitr
-   # - microbenchmark
-   - ggplot2
-   - data.table
-   - dplyr
+    - BBmisc
+    - brew
+    - DBI
+    - digest
+    - fail
+    - RSQLite
+    - sendmailR
+    - stringi
+    - testthat
 
 before_script:
     - curl -L https://raw.githubusercontent.com/rdatsci/travis-r-tools/master/update-packages.r -o /tmp/update-packages.r
