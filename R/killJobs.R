@@ -38,7 +38,7 @@
 #' killJobs(reg, findNotTerminated(reg))
 #' }
 killJobs = function(reg, ids, progressbar = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   syncRegistry(reg)
   if (missing(ids))
     return(invisible(integer(0L)))

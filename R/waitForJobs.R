@@ -27,9 +27,8 @@
 #' @return [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated successfully
 #'   and \code{FALSE} if either an error occurred or the timeout is reached.
 #' @export
-waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE,
-  progressbar = TRUE) {
-  checkRegistry(reg)
+waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE, progressbar = TRUE) {
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = dbFindSubmittedNotTerminated(reg)

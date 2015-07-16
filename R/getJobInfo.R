@@ -83,6 +83,7 @@ getJobInfo = function(reg, ids, pars = FALSE, prefix.pars = FALSE, select, unit 
 #' @method getJobInfo Registry
 #' @export
 getJobInfo.Registry = function(reg, ids, pars = FALSE, prefix.pars = FALSE, select, unit = "seconds") {
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   assertFlag(pars)
   columns = c(id = "job_id")

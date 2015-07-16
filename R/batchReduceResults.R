@@ -45,8 +45,8 @@
 #' # now reduce one final time on master
 #' reduceResults(reg2, fun = myreduce)
 batchReduceResults = function(reg, reg2, fun, ids, part = NA_character_, init, block.size, more.args = list()) {
-  checkRegistry(reg)
-  checkRegistry(reg2)
+  checkRegistry(reg, writeable = FALSE)
+  checkRegistry(reg2, writeable = TRUE)
   syncRegistry(reg)
   syncRegistry(reg2)
   assertFunction(fun, c("aggr", "job", "res"))

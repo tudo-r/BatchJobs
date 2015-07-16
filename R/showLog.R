@@ -23,7 +23,7 @@
 #' @family debug
 #' @export
 showLog = function(reg, id, pager = getOption("pager")) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(id)) {
     id = dbGetJobId(reg)

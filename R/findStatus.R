@@ -1,5 +1,5 @@
 findState = function(reg, ids, fun, negate, limit) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)

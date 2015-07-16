@@ -16,7 +16,7 @@ showClusterStatus = function(reg) {
   if (missing(reg)) {
     file.dir = ""
   } else {
-    checkRegistry(reg)
+    checkRegistry(reg, writeable = FALSE)
     syncRegistry(reg)
     file.dir = reg$file.dir
   }

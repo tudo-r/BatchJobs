@@ -7,6 +7,7 @@
 #' @examples
 #' # see batchExpandGrid
 getJobParamDf = function(reg, ids) {
+  checkRegistry(reg, strict = TRUE, writeable = FALSE)
   syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)

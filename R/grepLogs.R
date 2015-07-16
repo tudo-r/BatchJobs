@@ -25,7 +25,7 @@
 #' @family debug
 #' @export
 grepLogs = function(reg, ids, pattern = "warn", ignore.case = TRUE, verbose = FALSE, range = 2L) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = dbFindTerminated(reg)

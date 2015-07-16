@@ -41,7 +41,7 @@ getResources = function() {
 #' @return [\code{list} | \code{data.frame}]. List (or data.frame) of resource lists as passed to \code{\link{submitJobs}}.
 #' @export
 getJobResources = function(reg, ids, as.list = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = dbFindSubmitted(reg)

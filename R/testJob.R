@@ -27,7 +27,7 @@
 #' batchMap(reg, f, 1:2)
 #' testJob(reg, 2)
 testJob = function(reg, id, resources = list(), external = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   #syncRegistry(reg)
   if (missing(id)) {
     id = dbGetJobId(reg)

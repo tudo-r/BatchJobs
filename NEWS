@@ -3,6 +3,9 @@ BatchJobs_1.7:
   attaching the package.
 - added OpenLava support (Thanks to ???)
 - getJobInfo now also displays time.running until an error occurred in the job, and not NA as before
+- loadRegisty() now returns a read-only registry if a heuristic detects that the
+  location of the registy changed and the new argument "adjust.paths" is not
+  explicitly set to TRUE.
 
 BatchJobs_1.6:
 - Added functions: getStatus, removeRegistry, findDisappeared

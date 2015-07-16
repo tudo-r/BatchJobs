@@ -27,7 +27,7 @@
 #' @family debug
 #' @export
 resetJobs = function(reg, ids, force = FALSE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   syncRegistry(reg)
   if (missing(ids) || length(ids) == 0L)
     return(integer(0L))

@@ -25,7 +25,7 @@
 #'   if some files could not be removed.
 #' @export
 sweepRegistry = function(reg, sweep = c("scripts", "conf")) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   syncRegistry(reg)
 
   assertSubset(sweep, c("scripts", "logs", "resources", "conf"))

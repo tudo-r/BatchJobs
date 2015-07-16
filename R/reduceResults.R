@@ -84,7 +84,7 @@
 #' # reduce results to a sum
 #' reduceResults(reg, fun = function(aggr, job, res) aggr+res$a, init = 0)
 reduceResults = function(reg, ids, part = NA_character_, fun, init, impute.val, progressbar = TRUE, ...) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = done = dbFindDone(reg)
@@ -138,7 +138,7 @@ reduceResults = function(reg, ids, part = NA_character_, fun, init, impute.val, 
 #' @rdname reduceResults
 reduceResultsList = function(reg, ids, part = NA_character_, fun, ..., use.names = "ids",
   impute.val, progressbar = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = done = dbFindDone(reg)

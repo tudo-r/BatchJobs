@@ -21,7 +21,7 @@
 #' # which square numbers are even:
 #' filterResults(reg, fun = function(job, res) res %% 2 == 0)
 filterResults = function(reg, ids, fun, ...) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   assertFunction(fun, c("job", "res"))
   if (missing(ids))

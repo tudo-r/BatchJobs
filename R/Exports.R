@@ -12,7 +12,7 @@
 #' @family exports
 #' @export
 loadExports = function(reg, what = NULL) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   if (!is.null(what))
     assertCharacter(what, any.missing = FALSE)
   f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE)
@@ -44,7 +44,7 @@ loadExports = function(reg, what = NULL) {
 #' @family exports
 #' @export
 batchExport = function(reg, ..., li = list(), overwrite = FALSE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   ddd = list(...)
   assertList(li, names = "strict")
   assertList(ddd, names = "strict")
@@ -80,7 +80,7 @@ batchExport = function(reg, ..., li = list(), overwrite = FALSE) {
 #' @family exports
 #' @export
 batchUnexport = function(reg, what) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   assertCharacter(what, any.missing = FALSE)
 
   f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE)

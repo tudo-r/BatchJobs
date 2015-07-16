@@ -20,7 +20,7 @@
 #' batchExpandGrid(reg, f, x = 1:2, y = 1:3)
 #' findJobs(reg, pars = (y > 2))
 findJobs = function(reg, ids, pars, jobnames) {
-  checkRegistry(reg, strict = TRUE)
+  checkRegistry(reg, strict = TRUE, writeable = FALSE)
   syncRegistry(reg)
   if (!missing(ids))
     checkIds(reg, ids)

@@ -31,6 +31,10 @@
 #' # should show 10 submitted jobs, which are all done.
 #' showStatus(reg)
 showStatus = function(reg, ids, run.and.exp = TRUE, errors = 10L) {
+  checkRegistry(reg, writeable = FALSE)
+  if (!missing(ids))
+    ids = checkIds(reg, ids)
+  assertFlag(run.and.exp)
   errors = asCount(errors)
 
   stats = getStatus(reg, ids = ids, run.and.exp = run.and.exp)
@@ -70,8 +74,9 @@ showStatus = function(reg, ids, run.and.exp = TRUE, errors = 10L) {
 #' @rdname showStatus
 #' @export getStatus
 getStatus = function(reg, ids, run.and.exp = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
+  assertFlag(run.and.exp)
   if (!missing(ids))
     ids = checkIds(reg, ids)
 

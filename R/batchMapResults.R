@@ -48,9 +48,9 @@
 #' reduceResults(reg2, fun = function(aggr,job,res) c(aggr, res))
 batchMapResults = function(reg, reg2, fun, ...,  ids, part = NA_character_, more.args = list()) {
   # FIXME conserve jobnames
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
-  checkRegistry(reg2)
+  checkRegistry(reg2, writeable = TRUE)
   syncRegistry(reg2)
   assertFunction(fun, c("job", "res"))
   if (missing(ids)) {
@@ -72,6 +72,5 @@ batchMapResults = function(reg, reg2, fun, ...,  ids, part = NA_character_, more
 }
 
 batchMapResultsWrapper = function(id, ..., .reg, .fun, .part) {
-  .fun(job = getJob(.reg, id, check.id = FALSE),
-    res = getResult(.reg, id, part = .part), ...)
+  .fun(job = getJob(.reg, id, check.id = FALSE), res = getResult(.reg, id, part = .part), ...)
 }

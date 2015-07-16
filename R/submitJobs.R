@@ -77,7 +77,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
   }
 
   ### argument checks on registry and ids
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = dbFindSubmitted(reg, negate = TRUE)

@@ -31,7 +31,7 @@
 #' # now reduce one final time on master
 #' reduceResults(reg, fun = function(aggr,job,res) f(aggr, res))
 batchReduce = function(reg, fun, xs, init, block.size, more.args = list()) {
-  checkRegistry(reg, strict = TRUE)
+  checkRegistry(reg, strict = TRUE, writeable = FALSE)
   syncRegistry(reg)
   assertFunction(fun, c("aggr", "x"))
   if (!is.vector(xs))
@@ -46,7 +46,6 @@ batchReduce = function(reg, fun, xs, init, block.size, more.args = list()) {
 }
 
 batchReduceWrapper = function(xs.block, .fun, .init, ...) {
-  fun = function(aggr, x)
-    .fun(aggr, x, ...)
+  fun = function(aggr, x) .fun(aggr, x, ...)
   Reduce(fun, xs.block, init = .init)
 }

@@ -5,7 +5,7 @@
 #' @keywords internal
 #' @export
 updateRegistry = function(reg) {
-    UseMethod("updateRegistry")
+  UseMethod("updateRegistry")
 }
 
 
@@ -70,6 +70,7 @@ updateRegistry.Registry = function(reg) {
   if (version.reg < package_version("1.7")) {
     query = sprintf("ALTER TABLE %s_job_status ADD COLUMN error_time INTEGER", reg$id)
     dbDoQuery(reg, query, flags = "rwc")
+    reg$read.only = FALSE
   }
 
   reg$packages$BatchJobs$version = version.pkg

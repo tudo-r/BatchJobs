@@ -10,7 +10,7 @@
 #' @family exports
 #' @export
 addRegistryPackages = function(reg, packages) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   assertCharacter(packages, any.missing = FALSE)
   packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
   p = c(reg$packages, packages)
@@ -31,7 +31,7 @@ addRegistryPackages = function(reg, packages) {
 #' @family exports
 #' @export
 removeRegistryPackages = function(reg, packages) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   assertCharacter(packages, any.missing = FALSE)
   reg$packages = reg$packages[setdiff(names(reg$packages), packages)]
   saveRegistry(reg)

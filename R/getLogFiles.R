@@ -8,7 +8,7 @@
 #' @family debug
 #' @export
 getLogFiles = function(reg, ids) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids))
     ids = getJobIds(reg)

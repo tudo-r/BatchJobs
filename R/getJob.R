@@ -26,7 +26,7 @@ getJob = function(reg, id, check.id = TRUE) {
 #' @return [list of \code{\link{Job}}].
 #' @export
 getJobs = function(reg, ids, check.ids = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   # syncRegistry(reg) NOT!
   assertFlag(check.ids)
   UseMethod("getJobs")
@@ -35,9 +35,7 @@ getJobs = function(reg, ids, check.ids = TRUE) {
 #' @method getJobs Registry
 #' @export
 getJobs.Registry = function(reg, ids, check.ids = TRUE) {
-  if (! missing(ids) && check.ids) {
+  if (!missing(ids) && check.ids)
     ids = checkIds(reg, ids)
-  }
-
   dbGetJobs(reg, ids)
 }

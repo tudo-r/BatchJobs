@@ -9,7 +9,7 @@
 #' @family debug
 #' @export
 getErrorMessages = function(reg, ids) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids))
     ids = dbFindErrors(reg)

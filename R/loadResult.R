@@ -17,7 +17,7 @@
 #' @seealso \code{\link{reduceResults}}
 #' @export
 loadResult = function(reg, id, part = NA_character_, missing.ok = FALSE, impute.val = NULL) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   id = checkId(reg, id)
   checkPart(reg, part)
