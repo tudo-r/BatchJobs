@@ -75,6 +75,7 @@ assignConfDefaults = function() {
   conf$debug = FALSE
   conf$raise.warnings = FALSE
   conf$staged.queries = TRUE
+  conf$sync.read.only = FALSE
   conf$max.concurrent.jobs = Inf
   conf$fs.timeout = NA_real_
 }
@@ -107,7 +108,7 @@ getConfNames = function() {
   c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options",
     "default.resources", "debug", "raise.warnings", "staged.queries",
-    "max.concurrent.jobs", "fs.timeout")
+    "sync.read.only", "max.concurrent.jobs", "fs.timeout")
 }
 
 checkConf = function(conf) {
@@ -120,7 +121,7 @@ checkConf = function(conf) {
 
 checkConfElements = function(cluster.functions, mail.to, mail.from,
   mail.start, mail.done, mail.error, mail.control, db.driver, db.options, default.resources, debug,
-  raise.warnings, staged.queries, max.concurrent.jobs, fs.timeout) {
+  raise.warnings, staged.queries, sync.read.only, max.concurrent.jobs, fs.timeout) {
 
   mail.choices = c("none", "first", "last", "first+last", "all")
 
@@ -150,6 +151,8 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
     assertFlag(raise.warnings)
   if (!missing(staged.queries))
     assertFlag(staged.queries)
+  if (!missing(sync.read.only))
+    assertFlag(sync.read.only)
   if (!missing(max.concurrent.jobs))
     assertCount(max.concurrent.jobs)
   if (!missing(fs.timeout))

@@ -1,6 +1,6 @@
 syncRegistry = function(reg) {
   conf = getBatchJobsConf()
-  if (conf$staged.queries && !isTRUE(reg$read.olny)) {
+  if (conf$staged.queries || (reg$read.only && conf$sync.read.only)) {
     if (conf$debug && isOnSlave())
       stop("SQL query sent from Worker")
 

@@ -156,7 +156,6 @@ print.Registry = function(x, ...) {
 
 
 saveRegistry = function(reg) {
-  stopifnot(isFALSE(reg$read.only)) # FIXME
   fn = getRegistryFilePath(reg$file.dir)
   info("Saving registry: %s", fn)
   save(file = fn, reg)
