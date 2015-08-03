@@ -35,7 +35,6 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
     ids = ids[array.id]
   }
 
-  staged = conf$staged.queries
   n = length(ids)
   results = character(n)
   error = logical(n)
@@ -51,9 +50,11 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
 
   for (i in seq_len(n)) {
     if (staged) {
-      job = getJob(reg, ids[i], check.id = FALSE)
+      fn = getJobFile(reg, ids[i])
+      messagef("Loading job from file '%s'", fn)
+      job = readRDS(fn)
     } else {
-      job = readRDS(getJobFile(reg, ids[i]))
+      job = getJob(reg, ids[i], check.id = FALSE)
     }
 
     messagef("########## Executing jid=%s ##########", job$id)

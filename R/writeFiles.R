@@ -30,10 +30,10 @@ writeFiles = function(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, di
 
   ### if staged is FALSE, also write jobs to file system
   if (staged) {
-    job.files = character(0L)
-  } else {
     job.files = getJobFile(reg, ids)
     Map(f = saveRDS, object = getJobs(reg, ids), file = job.files)
+  } else {
+    job.files = character(0L)
   }
 
   invisible(c(r.file, job.files))
