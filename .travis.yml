@@ -1,7 +1,15 @@
 language: r
 
+r_binary_packages:
+    - BBmisc
+    - checkmate
+    - brew
+    - DBI
+    - RSQLite
+    - stringi
+    - testthat
+
 r_github_packages:
-    - mllg/checkmate
     - jimhester/covr
 
 after_success:
