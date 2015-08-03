@@ -47,21 +47,16 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
   sendMail(reg, ids, results, "", disable.mail, condition = "start", first, last)
 
   # create buffer of started messages
-  msg.buf = buffer(init = lapply(ids, dbMakeMessageStarted, reg = reg),
-    capacity = 2L * n, value = TRUE)
+  msg.buf = buffer(capacity = 2L * n)
   next.flush = 0L
 
   for (i in seq_len(n)) {
-    now = now()
-    if (now > next.flush) {
-      if (dbSendMessages(reg, msg.buf$get(), staged = staged))
-        msg.buf$clear()
-      next.flush = now + runif(1L, 300, 600)
-    }
     job = getJob(reg, ids[i], check.id = FALSE)
 
     messagef("########## Executing jid=%s ##########", job$id)
-    messagef("Timestamp: %s" , Sys.time())
+    started = Sys.time()
+    msg.buf$push(dbMakeMessageStarted(reg, ids[i], time = as.integer(started)))
+    messagef("Timestamp: %s" , started)
     print(job)
 
     message("Setting seed: ", job$seed)
@@ -99,6 +94,11 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
       } else {
         saveOne(result, NA_character_)
       }
+    }
+    if (now() > next.flush) {
+      if (dbSendMessages(reg, msg.buf$get(), staged = staged))
+        msg.buf$clear()
+      next.flush = now() + as.integer(runif(1L, 300, 601))
     }
   }
 
