@@ -4,6 +4,8 @@ r_binary_packages:
     - BBmisc
     - checkmate
     - brew
+    - digest
+    - fail
     - DBI
     - RSQLite
     - stringi
