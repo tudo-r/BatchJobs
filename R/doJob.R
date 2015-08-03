@@ -1,4 +1,4 @@
-doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, array.id) {
+doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, last, array.id) {
   saveOne = function(result, name) {
     fn = getResultFilePath(reg, job$id, name)
     message("Writing result file: ", fn)
@@ -10,7 +10,6 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
   }
 
   # Get the conf
-  loadConf(reg)
   conf = getBatchJobsConf()
 
   # Say hi.
@@ -51,7 +50,11 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
   next.flush = 0L
 
   for (i in seq_len(n)) {
-    job = getJob(reg, ids[i], check.id = FALSE)
+    if (staged) {
+      job = getJob(reg, ids[i], check.id = FALSE)
+    } else {
+      job = readRDS(getJobFile(reg, ids[i]))
+    }
 
     messagef("########## Executing jid=%s ##########", job$id)
     started = Sys.time()
@@ -98,7 +101,7 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
     if (now() > next.flush) {
       if (dbSendMessages(reg, msg.buf$get(), staged = staged))
         msg.buf$clear()
-      next.flush = now() + as.integer(runif(1L, 300, 601))
+      next.flush = now() + runif(1L, 300, 600)
     }
   }
 

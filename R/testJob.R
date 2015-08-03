@@ -69,8 +69,8 @@ testJob = function(reg, id, resources = list(), external = TRUE) {
 
     # write r script
     resources.timestamp = saveResources(reg, resources)
-    writeRscripts(reg, getClusterFunctions(getBatchJobsConf()), id, chunks.as.arrayjobs = FALSE,
-      resources.timestamp = resources.timestamp, disable.mail = TRUE, delays = 0)
+    writeFiles(reg, getClusterFunctions(getBatchJobsConf()), id, chunks.as.arrayjobs = FALSE,
+      resources.timestamp = resources.timestamp, disable.mail = TRUE, staged = FALSE, delay = 0)
 
     # execute
     now = Sys.time()

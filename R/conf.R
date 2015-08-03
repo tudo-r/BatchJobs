@@ -53,6 +53,7 @@ readConfs = function(path = find.package("BatchJobs")) {
   if (length(conffiles) == 0L) {
     warning("No configuation found at all. Not in package, not in user.home, not in work dir!")
     assignConfDefaults()
+    return(character(0L))
   }
 
   # really do this in 2 steps
@@ -83,13 +84,11 @@ assignConfDefaults = function() {
 # loads conf into namespace on slave
 loadConf = function(reg) {
   fn = getConfFilePath(reg)
-  info("Loading conf: ", fn)
-  ee = new.env()
-  load(fn, envir = ee)
-  ns = ls(ee$conf)
+  info("Loading conf: %s", fn)
+  loaded = load2(fn, simplify = FALSE)$conf
   # assign all stuff to conf in namespace
   conf = getBatchJobsConf()
-  lapply(ns, function(x) assign(x, ee$conf[[x]], envir = conf))
+  lapply(ls(loaded), function(x) assign(x, loaded[[x]], envir = conf))
   invisible(NULL)
 }
 
@@ -170,8 +169,10 @@ printableConf = function(conf) {
 
   # This gem here is for R CMD check running examples
   # where we get an empty config for some reasons?
-  if (length(x) == 0L)
-    return("<empty configuration>")
+  if (length(x) == 0L) {
+    assignConfDefaults()
+    x = as.list(getBatchJobsConf())
+  }
 
   x[setdiff(getConfNames(), names(x))] = ""
   fmt = paste(

@@ -9,7 +9,7 @@ test_that("doJob", {
   expect_equal(ids, id)
   BatchJobs:::saveConf(reg)
   expect_output({
-    y = BatchJobs:::doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
+    y = BatchJobs:::doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_, staged = TRUE)
   }, "BatchJobs job")
   waitForJobs(reg)
   expect_equal(y, TRUE)
@@ -35,7 +35,7 @@ test_that("doJob", {
   batchMap(reg, f, 1)
   BatchJobs:::saveConf(reg)
   expect_output({
-    y = BatchJobs:::doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_)
+    y = BatchJobs:::doJob(reg, id, multiple.result.files=FALSE, disable.mail=TRUE, last=id, array.id=NA_integer_, staged = TRUE)
   }, "BatchJobs job")
   expect_equal(y, TRUE)
   expect_equal(loadResult(reg, 1L), bar + 1)

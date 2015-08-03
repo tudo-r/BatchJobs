@@ -141,6 +141,9 @@ getFunDir = function(file.dir)
 getFunFilePath = function(reg, fun.id)
   file.path(getFunDir(reg$file.dir), sprintf("%s.RData", fun.id))
 
+getJobFile = function(reg, id)
+  getFilePaths(reg, id, NULL, "rds")
+
 getConfFilePath = function(reg)
   file.path(reg$file.dir, "conf.RData")
 
