@@ -63,6 +63,12 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
     messagef("Timestamp: %s" , started)
     print(job)
 
+    if (now() > next.flush) {
+      if (dbSendMessages(reg, msg.buf$get(), staged = staged))
+        msg.buf$clear()
+      next.flush = now() + runif(1L, 300, 600)
+    }
+
     message("Setting seed: ", job$seed)
     seed = seeder(reg, job$seed)
     gc(reset = TRUE)
@@ -98,11 +104,6 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
       } else {
         saveOne(result, NA_character_)
       }
-    }
-    if (now() > next.flush) {
-      if (dbSendMessages(reg, msg.buf$get(), staged = staged))
-        msg.buf$clear()
-      next.flush = now() + runif(1L, 300, 600)
     }
   }
 
