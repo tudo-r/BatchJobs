@@ -47,16 +47,16 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
   # create buffer of started messages
   msg.buf = buffer(capacity = 2L * n)
   next.flush = 0L
+  if (staged) {
+    fn = getJobFile(reg, first)
+    messagef("Loading jobs from file '%s'", fn)
+    jobs = readRDS(fn)
+  } else {
+    jobs = getJobs(reg, ids, check.ids = FALSE)
+  }
 
   for (i in seq_len(n)) {
-    if (staged) {
-      fn = getJobFile(reg, ids[i])
-      messagef("Loading job from file '%s'", fn)
-      job = readRDS(fn)
-    } else {
-      job = getJob(reg, ids[i], check.id = FALSE)
-    }
-
+    job = jobs[[i]]
     messagef("########## Executing jid=%s ##########", job$id)
     started = Sys.time()
     msg.buf$push(dbMakeMessageStarted(reg, ids[i], time = as.integer(started)))
@@ -66,7 +66,7 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
     if (now() > next.flush) {
       if (dbSendMessages(reg, msg.buf$get(), staged = staged))
         msg.buf$clear()
-      next.flush = now() + runif(1L, 300, 600)
+      next.flush = now() + as.integer(runif(1L, 300, 601))
     }
 
     message("Setting seed: ", job$seed)
