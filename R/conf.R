@@ -11,11 +11,11 @@
 NULL
 
 # sources 1 config file and returns the envir
-sourceConfFile = function(conffile) {
+sourceConfFile = function(conffile, ...) {
   assertFile(conffile)
 
   conf = new.env()
-  x = try(sys.source(conffile, envir = conf))
+  x = try(sys.source(conffile, envir = conf, ...))
   if (is.error(x))
     stopf("There was an error in sourcing your configuration file '%s': %s!", conffile, as.character(x))
   checkConf(conf)
@@ -205,12 +205,14 @@ print.Config = function(x, ...) {
 #' @param conffile [\code{character(1)}]\cr
 #'   Location of the configuration file to load.
 #'   Default is \dQuote{.BatchJobs.conf} in the current working directory.
+#' @param ... 
+#'   Further arguments to \code{sys.source} (currently just \code{chdir})
 #' @return Invisibly returns a list of configuration settings.
 #' @family conf
 #' @export
-loadConfig = function(conffile = ".BatchJobs.R") {
+loadConfig = function(conffile = ".BatchJobs.R", ...) {
   # checks are done in sourceConfFile
-  conf = sourceConfFile(conffile)
+  conf = sourceConfFile(conffile, ...)
   assignConf(conf)
   invisible(setClasses(as.list(conf), "Config"))
 }
