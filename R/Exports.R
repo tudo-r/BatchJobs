@@ -15,7 +15,7 @@ loadExports = function(reg, what = NULL) {
   checkRegistry(reg, writeable = FALSE)
   if (!is.null(what))
     assertCharacter(what, any.missing = FALSE)
-  f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE)
+  f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE, all.files = TRUE)
   keys = f$ls()
   if (!is.null(what))
     keys = intersect(keys, what)
@@ -54,7 +54,7 @@ batchExport = function(reg, ..., li = list(), overwrite = FALSE) {
   if (dup > 0L)
     stopf("Object for export provided more than once: '%s'", keys[dup])
 
-  f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE)
+  f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE, all.files = TRUE)
 
   if (!overwrite) {
     collision = which.first(keys %in% f$ls())
@@ -83,7 +83,7 @@ batchUnexport = function(reg, what) {
   checkRegistry(reg, writeable = FALSE)
   assertCharacter(what, any.missing = FALSE)
 
-  f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE)
+  f = fail(getExportDir(reg$file.dir), extension = "RData", simplify = FALSE, all.files = TRUE)
   keys = intersect(f$ls(), what)
   f$remove(keys)
   invisible(keys)

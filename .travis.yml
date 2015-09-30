@@ -5,7 +5,6 @@ r_binary_packages:
     - checkmate
     - brew
     - digest
-    - fail
     - DBI
     - RSQLite
     - stringi
@@ -13,6 +12,7 @@ r_binary_packages:
 
 r_github_packages:
     - jimhester/covr
+    - mllg/fail
 
 after_success:
     - Rscript -e 'library(covr); coveralls()'

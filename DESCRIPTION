@@ -22,7 +22,7 @@ Imports:
     checkmate (>= 1.6.1),
     DBI,
     digest,
-    fail (>= 1.2),
+    fail (>= 1.3),
     parallel,
     RSQLite (>= 1.0.0),
     sendmailR,
