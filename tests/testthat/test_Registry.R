@@ -1,4 +1,4 @@
-context("Registy")
+context("Registry")
 
 test_that("registry with read.only set works", {
   reg = makeTestRegistry()
