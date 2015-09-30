@@ -26,6 +26,7 @@ Other exports: \code{\link{addRegistryPackages}};
   \code{\link{batchExport}}; \code{\link{batchUnexport}};
   \code{\link{loadExports}};
   \code{\link{removeRegistryPackages}};
-  \code{\link{removeRegistrySourceDirs}}
+  \code{\link{removeRegistrySourceDirs}};
+  \code{\link{setRegistryPackages}}
 }
 

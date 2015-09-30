@@ -7,6 +7,7 @@ BatchJobs_1.7:
   location of the registy changed and the new argument "adjust.paths" is not
   explicitly set to TRUE.
 - Fixed a bug where time.started was incorrectly stored if chunking was used.
+- Packages are now loaded in user provided order instead of alphabetically.
 
 BatchJobs_1.6:
 - Added functions: getStatus, removeRegistry, findDisappeared

@@ -31,6 +31,7 @@ Other exports: \code{\link{addRegistryPackages}};
   \code{\link{loadExports}};
   \code{\link{removeRegistryPackages}};
   \code{\link{removeRegistrySourceDirs}};
-  \code{\link{removeRegistrySourceFiles}}
+  \code{\link{removeRegistrySourceFiles}};
+  \code{\link{setRegistryPackages}}
 }
 

@@ -19,7 +19,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   seed = if (missing(seed)) getRandomSeed() else asInt(seed)
 
   assertCharacter(packages, any.missing = FALSE)
-  packages = union(packages, "BatchJobs")
+  packages = unique(c("BatchJobs", packages))
   requirePackages(packages, stop = TRUE, suppress.warnings = TRUE, default.method = "attach")
 
   assertCharacter(src.dirs, any.missing = FALSE)
@@ -43,6 +43,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   sourceRegistryFilesInternal(work.dir, src.dirs, src.files)
 
   packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
+  packages$BatchJobs$mandatory = TRUE
   conf = getConfig()
 
   setClasses(list(
@@ -59,7 +60,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
     src.dirs = src.dirs,
     src.files = src.files,
     multiple.result.files = multiple.result.files,
-    packages = packages[order(names(packages))]
+    packages = packages
   ), "Registry")
 }
 
