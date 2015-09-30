@@ -67,7 +67,7 @@ makeWorker = function(ssh, nodename, rhome, r.options = c("--no-save", "--no-res
     max.jobs = asCount(max.jobs)
   }
   if (missing(max.load)) {
-    max.load = ncpus-1L
+    max.load = max(getOption("mc.cores", parallel::detectCores()) - 1L, 1L)
   } else {
     assertNumber(max.load, lower = 0)
   }
