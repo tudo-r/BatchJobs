@@ -65,9 +65,8 @@ listWorkerJobs.WorkerLinux = function(worker, file.dir) {
 runOSCommandLinux = function(cmd, args = character(0L), stdin = "", stop.on.exit.code = TRUE, ssh = FALSE, nodename) {
   conf = getBatchJobsConf()
   if (ssh) {
-    sys.cmd = "ssh"
-    ssh.cmd = sprintf("'%s'", collapse(c(cmd, args), sep = " "))
-    sys.args = c(nodename, ssh.cmd)
+    sys.cmd = getOption("BatchJobs.ssh.cmd", "ssh")
+    sys.args = c(getOption("BatchJobs.ssh.args", character(0L)), nodename, sprintf("'%s'", collapse(c(cmd, args), sep = " ")))
   } else {
     sys.cmd = cmd
     sys.args = args

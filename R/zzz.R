@@ -25,6 +25,8 @@
 #'     But on some OS this check might be too strict and cause problems.
 #'     Setting the flag to \code{FALSE} allows to disable the check entirely.
 #'     The default is \code{FALSE} on Windows systems and \code{TRUE} else.}
+#'   \item{BatchJobs.ssh.cmd}{Name of CLI programm to call for a SSH connection. Default is \dQuote{SSH}.}
+#'   \item{BatchJobs.ssh.args}{Arguments to pass to SSH program. Default is no argument.}
 #' }
 #'
 #' @docType package
