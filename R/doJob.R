@@ -5,10 +5,6 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
     save2(file = fn, result = result)
   }
 
-  getMemoryUsage = function() {
-    sum(gc()[, 6L])
-  }
-
   # Get the conf
   conf = getBatchJobsConf()
 
@@ -71,9 +67,12 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
 
     message("Setting seed: ", job$seed)
     seed = seeder(reg, job$seed)
-    gc(reset = TRUE)
+    if (conf$measure.mem)
+      gc(reset = TRUE)
+
     result = try(applyJobFunction(reg, job, cache), silent = TRUE)
-    mem.used = getMemoryUsage()
+
+    mem.used = if (conf$measure.mem) sum(gc()[, 6L]) else NA_real_
     seed$reset()
 
     catf("Result:")
