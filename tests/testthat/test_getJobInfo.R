@@ -31,6 +31,7 @@ test_that("getJobInfo", {
   tab = getJobInfo(reg, pars=TRUE)
   expect_equal(tab$X, 1:3)
   expect_equal(tab$i, rep(2, 3))
+  expect_equal(tab$pars, NULL)
 
   tab = getJobInfo(reg, select = "time.running")
   expect_true(ncol(tab) == 2) # id always selected

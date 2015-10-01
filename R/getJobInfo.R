@@ -90,15 +90,14 @@ getJobInfo.Registry = function(reg, ids, pars = FALSE, prefix.pars = FALSE, sele
   if (pars)
     columns = c(columns, c(pars = "pars"))
 
-  tab = getJobInfoInternal(reg, ids, select, unit, columns)
+  tab = getJobInfoInternal(reg, ids = ids, select = select, unit = unit, columns = columns)
 
-  # unserialize parameters
-  if (pars && !is.null(tab$pars)) {
-    pars = convertListOfRowsToDataFrame(lapply(tab$pars,
-      function(x) unserialize(charToRaw(x))))
+  if (pars && nrow(tab) > 0L && !is.null(tab$pars)) {
+    pars = deserialize(tab$pars)
     if (prefix.pars)
-      names(pars) = sprintf("job.par.%s", names(pars))
-    tab = cbind(subset(tab, select = -pars), pars)
+      setnames(pars, sprintf("job.par.%s", names(pars)))
+    tab = cbind(dropNamed(tab, "pars"), pars)
   }
+
   return(tab)
 }

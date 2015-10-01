@@ -8,6 +8,12 @@ BatchJobs_1.7:
   explicitly set to TRUE.
 - Fixed a bug where time.started was incorrectly stored if chunking was used.
 - Packages are now loaded in user provided order instead of alphabetically.
+- showClusterStatus now returns its information visibly and does not print it
+  per default
+- The 'max.load' setting for multicore and SSH is now set to a more aggressive
+  default.
+- New options "BatchJobs.ssh.cmd" and "BatchJobs.ssh.args" to make SSH commands
+  more configurable
 
 BatchJobs_1.6:
 - Added functions: getStatus, removeRegistry, findDisappeared

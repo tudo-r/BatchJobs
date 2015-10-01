@@ -12,9 +12,8 @@ getJobParamDf = function(reg, ids) {
   if (!missing(ids))
     ids = checkIds(reg, ids)
   tab = dbGetExpandedJobsTable(reg, ids, cols = c("job_id", "pars"))
-  # rownames are set by db* call
-  # unserialize parameters
-  res = convertListOfRowsToDataFrame(lapply(tab$pars,
-      function(x) unserialize(charToRaw(x))), row.names = rownames(tab))
-  return(dropNamed(res, "job_id"))
+  res = deserialize(tab$pars)
+  setDF(res, rownames = rownames(tab))
+
+  return(res)
 }

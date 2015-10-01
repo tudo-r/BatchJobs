@@ -57,7 +57,10 @@ getJobResources = function(reg, ids, as.list = TRUE) {
   for(ts in unique(df$resources_timestamp)) {
     res[df$resources_timestamp == ts] = load2(getResourcesFilePath(reg, ts), simplify = FALSE)
   }
-  if (!as.list)
-    res = convertListOfRowsToDataFrame(res)
+
+  if (!as.list) {
+    res = rbindlist(res)
+    setDF(res, rownames = as.character(df$job_id))
+  }
   return(res)
 }

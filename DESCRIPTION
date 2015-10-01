@@ -20,6 +20,7 @@ Depends:
 Imports:
     brew,
     checkmate (>= 1.6.1),
+    data.table (>= 1.9.6),
     DBI,
     digest,
     fail (>= 1.3),

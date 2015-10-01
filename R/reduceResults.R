@@ -228,3 +228,12 @@ reduceResultsDataFrame = function(reg, ids, part = NA_character_, fun, ..., use.
 
   convertListOfRowsToDataFrame(res, strings.as.factors = strings.as.factors)
 }
+
+#' @export
+#' @rdname reduceResults
+reduceResultsDataTable = function(reg, ids, part = NA_character_, fun, ..., use.names = "ids", impute.val) {
+  res = reduceResultsList(reg, ids, part, fun, ..., use.names = use.names, impute.val = impute.val)
+  if (!length(res))
+    return(data.table())
+  rbindlist(res, fill = TRUE)
+}

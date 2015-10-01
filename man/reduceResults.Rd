@@ -3,6 +3,7 @@
 \name{reduceResults}
 \alias{reduceResults}
 \alias{reduceResultsDataFrame}
+\alias{reduceResultsDataTable}
 \alias{reduceResultsList}
 \alias{reduceResultsMatrix}
 \alias{reduceResultsVector}
@@ -23,6 +24,9 @@ reduceResultsMatrix(reg, ids, part = NA_character_, fun, ..., rows = TRUE,
 reduceResultsDataFrame(reg, ids, part = NA_character_, fun, ...,
   use.names = "ids", impute.val,
   strings.as.factors = default.stringsAsFactors())
+
+reduceResultsDataTable(reg, ids, part = NA_character_, fun, ...,
+  use.names = "ids", impute.val)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr

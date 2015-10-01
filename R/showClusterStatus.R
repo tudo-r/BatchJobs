@@ -11,7 +11,6 @@
 #'   Must not be passed and this is the default.
 #' @return [\code{data.frame}]. Returns the displayed table invisibly.
 #' @export
-# FIXME: allow to get a quick overview by passing nodenames
 showClusterStatus = function(reg) {
   if (missing(reg)) {
     file.dir = ""
@@ -25,9 +24,8 @@ showClusterStatus = function(reg) {
   if (cf$name %nin% c("Multicore", "SSH"))
     stop("showWorkerStatus can only be used in multicore or SSH mode!")
   workers = environment(cf$submitJob)$workers
-  data = lapply(workers, getWorkerStatus, file.dir = file.dir)
-  data = do.call(rbind, lapply(data, as.data.frame))
-  data = cbind(ncpus = extractSubList(workers, "ncpus"), data)
-  print(data)
-  invisible(data)
+  data = rbindlist(lapply(workers, getWorkerStatus, file.dir = file.dir))
+  data$ncpus = extractSubList(workers, "ncpus")
+  setDF(data, rownames = names(workers))
+  return(data)
 }
