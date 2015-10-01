@@ -62,7 +62,7 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
     if (now() > next.flush) {
       if (dbSendMessages(reg, msg.buf$get(), staged = staged))
         msg.buf$clear()
-      next.flush = now() + as.integer(runif(1L, 300, 601))
+      next.flush = now() + as.integer(runif(1L, 1200L, 24001L))
     }
 
     message("Setting seed: ", job$seed)
