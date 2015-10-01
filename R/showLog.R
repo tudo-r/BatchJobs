@@ -30,7 +30,7 @@ showLog = function(reg, id, pager = getOption("pager")) {
     if (length(id) == 0L)
       stop("No jobs in registry!")
   } else {
-    id = checkId(reg, id)
+    id = checkIds(reg, id, len = 1L)
   }
 
   fn = getLogFiles(reg, id)

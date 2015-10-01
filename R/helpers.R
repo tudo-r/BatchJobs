@@ -1,17 +1,3 @@
-checkIds = function(reg, ids, check.present = TRUE) {
-  ids = asInteger(ids, any.missing = FALSE, unique = TRUE)
-  if (check.present)
-    dbCheckJobIds(reg, ids)
-  return(ids)
-}
-
-checkId = function(reg, id, check.present = TRUE) {
-  id = asInt(id)
-  if (check.present)
-    dbCheckJobIds(reg, id)
-  return(id)
-}
-
 checkMoreArgs = function(more.args, reserved) {
   assertList(more.args, names = "strict")
   n = names(more.args)

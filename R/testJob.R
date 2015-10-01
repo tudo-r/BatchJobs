@@ -35,7 +35,7 @@ testJob = function(reg, id, resources = list(), external = TRUE) {
       stop("Registry is empty!")
     messagef("Testing job with id=%i ...", id)
   } else {
-    id = checkId(reg, id)
+    id = checkIds(reg, id, len = 1L)
   }
   assertList(resources)
   resources = resrc(resources)

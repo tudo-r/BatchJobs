@@ -10,7 +10,7 @@
 #' @export
 getJob = function(reg, id, check.id = TRUE) {
   if (check.id)
-    id = checkId(reg, id)
+    id = checkIds(reg, id, len = 1L)
   getJobs(reg, id, check.ids = FALSE)[[1L]]
 }
 

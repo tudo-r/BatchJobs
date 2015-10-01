@@ -19,7 +19,7 @@
 loadResult = function(reg, id, part = NA_character_, missing.ok = FALSE, impute.val = NULL) {
   checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
-  id = checkId(reg, id)
+  id = checkIds(reg, id, len = 1L)
   checkPart(reg, part)
   assertFlag(missing.ok)
 
