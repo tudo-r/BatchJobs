@@ -10,10 +10,10 @@ batchQuery(reg, query, flags = "ro")
 \item{reg}{[\code{Registry}]\cr
 Registry.}
 
-\item{query}{[\character(1)]\cr
+\item{query}{[\code{character(1)}]\cr
 SQL query to send to the database.}
 
-\item{flags}{[\character(1)]\cr
+\item{flags}{[\code{character(1)}]\cr
 One of \dQuote{ro}, \dQuote{rw} or \dQuote{rwc} which is translated
 to \code{SQLITE_RO}, \code{SQLITE_RW} or \code{SQLITE_RWC}, respectively.
 See \link[RSQLite]{SQLITE_RO} for more info.}

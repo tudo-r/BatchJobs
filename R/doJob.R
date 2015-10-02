@@ -6,7 +6,7 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
   }
 
   # Get the conf
-  conf = loadConf()
+  conf = loadConf(reg)
 
   # Say hi.
   messagef("%s: Starting job on node %s.", Sys.time(), Sys.info()["nodename"])
