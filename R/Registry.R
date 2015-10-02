@@ -190,8 +190,7 @@ checkRegistry = function(reg, strict = FALSE, writeable = TRUE) {
 #' If there are live/running jobs, an informative error is generated.
 #' The default is to prompt the user for confirmation.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ask [\code{character(1)}]\cr
 #'   If \code{"yes"} the user is prompted to confirm the action.
 #'   If trying to prompt the user this way in a non-interactive

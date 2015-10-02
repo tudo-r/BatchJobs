@@ -1,3 +1,3 @@
-#' @param reg [\code{Registry}]\cr
+#' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 

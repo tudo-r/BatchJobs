@@ -14,7 +14,6 @@
 #' batchMap(reg, identity, i = 1:10)
 #' batchQuery(reg, "SELECT * FROM test_job_status")
 batchQuery = function(reg, query, flags = "ro") {
-  checkRegistry(reg)
   assertString(query)
   assertChoice(flags, c("ro", "rw", "rwc"))
   dbDoQuery(reg, query = query, flags = flags, max.retries = 3L)

@@ -8,8 +8,7 @@
 #'
 #' Note that by default the computational state of the affected jobs is also reset.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs.
 #'   Default is all jobs.

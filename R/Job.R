@@ -24,8 +24,7 @@ makeJob = function(id = NA_integer_, fun, fun.id = digest(fun), pars, name, seed
 }
 
 #' Get number of jobs in registry.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @return [\code{integer(1)}].
 #' @export
 getJobNr = function(reg) {
@@ -34,8 +33,7 @@ getJobNr = function(reg) {
 }
 
 #' Get ids of jobs in registry.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @return [\code{character}].
 #' @export
 getJobIds = function(reg) {

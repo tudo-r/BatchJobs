@@ -1,7 +1,6 @@
 #' Find all results where a specific condition is true.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs whose results you want to test for the condition.
 #'   Default is all jobs for which results are available.

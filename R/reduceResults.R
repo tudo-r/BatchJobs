@@ -5,8 +5,7 @@
 #' vectors, lists, matrices or data.frames) or to arbitrarily aggregate them, which is a more general
 #' operation.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of selected jobs.
 #'   Default is all jobs for which results are available.

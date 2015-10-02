@@ -1,6 +1,5 @@
 #' Get job from registry by id.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param id [\code{integer(1)}]\cr
 #'   Id of job.
 #' @param check.id [\code{logical(1)}]\cr
@@ -15,8 +14,7 @@ getJob = function(reg, id, check.id = TRUE) {
 }
 
 #' Get jobs from registry by id.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs.
 #'   Default is all jobs.

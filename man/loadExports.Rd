@@ -7,7 +7,7 @@
 loadExports(reg, what = NULL)
 }
 \arguments{
-\item{reg}{[\code{Registry}]\cr
+\item{reg}{[\code{\link{Registry}}]\cr
 Registry.}
 
 \item{what}{[\code{character}]\cr

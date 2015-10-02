@@ -3,8 +3,7 @@
 #' @description
 #' Searches for occurence of \code{pattern} in log files.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs to grep.
 #'   Default is all terminated jobs (done + errors).

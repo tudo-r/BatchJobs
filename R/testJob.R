@@ -3,8 +3,7 @@
 #' @description
 #' Useful for debugging.
 #' Note that neither the registry, database or file directory are changed.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param id [\code{integer(1)}]\cr
 #'   Id of job to test.
 #'   Default is first job id of registry.

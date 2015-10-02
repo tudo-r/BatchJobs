@@ -160,8 +160,7 @@ dbCreateExpandedJobsView = function(reg) {
 ############################################
 
 #' ONLY FOR INTERNAL USAGE.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of selected jobs.
 #' @return [list of \code{\link{Job}}]. Retrieved jobs from DB.

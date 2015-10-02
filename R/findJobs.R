@@ -1,7 +1,6 @@
 #' Finds ids of jobs that match a query.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Subset of job ids to restrict the result to.
 #'   Default is all jobs.

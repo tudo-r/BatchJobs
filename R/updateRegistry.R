@@ -1,6 +1,5 @@
 #' ONLY FOR INTERNAL USAGE.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @return [any]. Updated \code{\link{Registry}} or \code{FALSE} if no updates were performed.
 #' @keywords internal
 #' @export

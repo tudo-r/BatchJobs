@@ -3,8 +3,7 @@
 #' @description
 #' Sources all files found in \code{src.dirs} and specified via \code{src.files}.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param envir [\code{environment}]\cr
 #'   Environment to source the files into. Default is the global environment.
 #' @return Nothing.

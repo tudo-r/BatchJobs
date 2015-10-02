@@ -7,7 +7,7 @@
 addRegistrySourceDirs(reg, src.dirs, src.now = TRUE)
 }
 \arguments{
-\item{reg}{[\code{Registry}]\cr
+\item{reg}{[\code{\link{Registry}}]\cr
 Registry.}
 
 \item{src.dirs}{[\code{character}]\cr

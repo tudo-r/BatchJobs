@@ -4,9 +4,8 @@
 #' E.g.: How many there are, how many are done, any errors, etc.
 #' \code{showStatus} displays on the console, \code{getStatus} returns an informative result
 #' without console output.
-#
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#'
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of selected jobs.
 #'   Default is all jobs.

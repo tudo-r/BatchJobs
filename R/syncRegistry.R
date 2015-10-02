@@ -6,8 +6,7 @@
 #' This function checks for such files and merges the information into the database.
 #' Usually you do not have to call this function yourself.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @return Invisibly returns \code{TRUE} on success.
 #' @export
 syncRegistry = function(reg) {

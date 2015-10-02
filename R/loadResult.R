@@ -1,6 +1,5 @@
 #' Loads a specific result file.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param id [\code{integer(1)}]\cr
 #'   Id of job.
 #' @param part [\code{character}]

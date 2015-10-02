@@ -7,7 +7,7 @@
 removeRegistryPackages(reg, packages)
 }
 \arguments{
-\item{reg}{[\code{Registry}]\cr
+\item{reg}{[\code{\link{Registry}}]\cr
 Registry.}
 
 \item{packages}{[\code{character}]\cr

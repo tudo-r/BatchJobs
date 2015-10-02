@@ -7,7 +7,7 @@
 batchQuery(reg, query, flags = "ro")
 }
 \arguments{
-\item{reg}{[\code{Registry}]\cr
+\item{reg}{[\code{\link{Registry}}]\cr
 Registry.}
 
 \item{query}{[\code{character(1)}]\cr

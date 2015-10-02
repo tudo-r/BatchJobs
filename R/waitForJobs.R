@@ -9,8 +9,7 @@
 #' with an R exception and \dQuote{R} for number of jobs currently running
 #' on the system.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Vector of job ids.
 #'   Default is all submitted jobs not yet terminated.

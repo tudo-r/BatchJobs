@@ -7,7 +7,7 @@
 batchExport(reg, ..., li = list(), overwrite = FALSE)
 }
 \arguments{
-\item{reg}{[\code{Registry}]\cr
+\item{reg}{[\code{\link{Registry}}]\cr
 Registry.}
 
 \item{...}{[any]\cr

@@ -7,7 +7,7 @@
 getJobParamDf(reg, ids)
 }
 \arguments{
-\item{reg}{[\code{Registry}]\cr
+\item{reg}{[\code{\link{Registry}}]\cr
 Registry.}
 
 \item{ids}{[\code{integer}]\cr

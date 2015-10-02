@@ -4,8 +4,7 @@
 #' Simply checks if probided vector of job ids is valid and
 #' throws an error if something is odd.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Vector of job ids.
 #' @param check.present [\code{logical(1)}]\cr

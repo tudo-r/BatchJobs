@@ -17,8 +17,7 @@
 #' terminal.
 #'
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Vector for job id or list of vectors of chunked job ids.
 #'   Only corresponding jobs are submitted. Chunked jobs will get executed
