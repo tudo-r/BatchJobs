@@ -89,7 +89,7 @@ loadConf = function(reg) {
   # assign all stuff to conf in namespace
   conf = getBatchJobsConf()
   lapply(ls(loaded), function(x) assign(x, loaded[[x]], envir = conf))
-  invisible(NULL)
+  invisible(conf)
 }
 
 getBatchJobsConf = function() {
