@@ -72,7 +72,7 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
 
     result = try(applyJobFunction(reg, job, cache), silent = TRUE)
 
-    mem.used = if (conf$measure.mem) sum(gc()[, 6L]) else NA_real_
+    mem.used = if (conf$measure.mem) sum(gc()[, 6L]) else -1
     seed$reset()
 
     catf("Result:")

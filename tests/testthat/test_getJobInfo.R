@@ -73,5 +73,5 @@ test_that("turn off memory calculation", {
     submitJobs(reg, ids)
     waitForJobs(reg, ids)
     mem = getJobInfo(reg, select = "memory")$memory
-    expect_true(allMissing(mem))
+    expect_equal(mem, c(-1, -1))
 })
