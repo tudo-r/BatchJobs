@@ -86,7 +86,6 @@ dbDoQuery = function(reg, query, flags = "ro", max.retries = 100L, sleep = funct
   stopf("dbDoQuery: max retries (%i) reached, database is still locked!", max.retries)
 }
 
-
 dbAddData = function(reg, tab, data) {
   query = sprintf("INSERT INTO %s_%s (%s) VALUES(%s)", reg$id, tab,
                   collapse(colnames(data)), collapse(rep.int("?", ncol(data))))
