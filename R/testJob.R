@@ -74,7 +74,8 @@ testJob = function(reg, id, resources = list(), external = TRUE) {
     # execute
     now = Sys.time()
     message("### Output of new R process starts here ###")
-    system3(file.path(R.home("bin"), "Rscript"), getRScriptFilePath(reg, id), wait = TRUE)
+    r.interp = file.path(R.home("bin"), sprintf("%s%s", "Rscript", ifelse(isWindows(), ".exe", "")))
+    system3(r.interp, getRScriptFilePath(reg, id), wait = TRUE)
     message("### Output of new R process ends here ###")
     dt = difftime(Sys.time(), now)
     messagef("### Approximate running time: %.2f %s", as.double(dt), units(dt))
