@@ -357,18 +357,6 @@ dbMatchJobNames = function(reg, ids, jobnames) {
 }
 
 ############################################
-### DELETE
-############################################
-dbRemoveJobs = function(reg, ids) {
-  query = sprintf("DELETE FROM %s_job_status WHERE job_id IN (%s)", reg$id, collapse(ids))
-  dbDoQuery(reg, query, flags = "rw")
-  query = sprintf("DELETE FROM %1$s_job_def WHERE job_def_id NOT IN (SELECT DISTINCT job_def_id FROM %1$s_job_status)", reg$id)
-  dbDoQuery(reg, query, flags = "rw")
-  return(invisible(TRUE))
-}
-
-
-############################################
 ### Messages
 ############################################
 dbSendMessage = function(reg, msg, staged = useStagedQueries(), fs.timeout = NA_real_) {
