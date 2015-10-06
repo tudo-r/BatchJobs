@@ -12,7 +12,7 @@ Registry.
 Must not be passed and this is the default.}
 }
 \value{
-[\code{data.frame}]. Returns the displayed table invisibly.
+[\code{data.frame}].
 }
 \description{
 Currently only supported for multicore and SSH mode.

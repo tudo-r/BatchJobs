@@ -2,8 +2,14 @@
 
 # Abstract base class constructor for general workers.
 #
+# @param ssh [\code{logical(1)})]\cr
+#   Use ssh for remote node?
 # @param nodename [\code{character(1)}]\cr
 #   Host name of node.
+# @param ssh.cmd [\code{character(1)})]\cr
+#   CLI command to ssh into remote node.
+# @param ssh.args [\code{character}]\cr
+#   CLI args for \code{ssh.cmd}.
 # @param rhome [\code{character(1)}]\cr
 #  Path to R installation on worker.
 #  \dQuote{} means R installation on the PATH is used.
@@ -30,15 +36,17 @@
 #   Extra classes, more specific than dQuote{Worker}.
 #   Will be added to the class attribute of the object.
 # @return [\code{\link{Worker}}].
-makeWorker = function(ssh, nodename, rhome, r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
+makeWorker = function(ssh, nodename, ssh.cmd, ssh.args, rhome, r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
   script, ncpus, max.jobs, max.load, nice, classes) {
   assertFlag(ssh)
   assertString(nodename)
+  assertString(ssh.cmd)
+  assertCharacter(ssh.args, any.missing = FALSE)
   assertString(rhome)
   assertCharacter(r.options, any.missing = FALSE)
   if (missing(script)) {
     # FIXME: dont use linux specific in base class
-    script = findHelperScriptLinux(rhome, r.options, ssh, nodename)
+    script = findHelperScriptLinux(rhome, r.options, ssh, ssh.cmd, ssh.args, nodename)
   } else {
     assertString(script)
   }
@@ -46,6 +54,8 @@ makeWorker = function(ssh, nodename, rhome, r.options = c("--no-save", "--no-res
   # construct object partially so we can query ncpus
   w = as.environment(list(
     ssh = ssh,
+    ssh.cmd = ssh.cmd,
+    ssh.args = ssh.args,
     nodename = nodename,
     rhome = rhome,
     r.options = r.options,

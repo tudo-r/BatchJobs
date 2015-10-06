@@ -4,12 +4,21 @@
 \alias{debugSSH}
 \title{Helper function to debug SSH mode.}
 \usage{
-debugSSH(nodename, rhome = "", r.options = c("--no-save", "--no-restore",
-  "--no-init-file", "--no-site-file"), dir = getwd())
+debugSSH(nodename, ssh.cmd = "ssh", ssh.args = character(0L), rhome = "",
+  r.options = c("--no-save", "--no-restore", "--no-init-file",
+  "--no-site-file"), dir = getwd())
 }
 \arguments{
 \item{nodename}{[\code{character(1)}]\cr
 Node on which worker should be constructed for the test.}
+
+\item{ssh.cmd}{[\code{character(1)})]\cr
+CLI command to ssh into remote node.
+Default is \dQuote{ssh}.}
+
+\item{ssh.args}{[\code{character}]\cr
+CLI args for \code{ssh.cmd}.
+Default is none.}
 
 \item{rhome}{[\code{character(1)}]\cr
 Path to R installation on the worker.

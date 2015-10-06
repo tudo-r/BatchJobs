@@ -15,8 +15,7 @@ BatchJobs_1.7:
   default.
 - New argument 'impute.val' for loadResult() and loadResults()
 - New config options: "measure.mem" to disable memory measurements on the slave
-- New options "BatchJobs.ssh.cmd" and "BatchJobs.ssh.args" to make SSH commands
-  more configurable
+- SSH: makeSSHWorker, debugSSH: ssh.cmd and ssh.args were added to customize the remote login
 - New functions:
   -- setRegistryPackages()
   -- reduceResultsDataTable()
