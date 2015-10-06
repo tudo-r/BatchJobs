@@ -110,6 +110,15 @@ test_that("reduceResultsReturnValue", {
   y = data.frame(a=rep("a", 2), b=rep("b", 2), stringsAsFactors=TRUE)
   rownames(y) = as.character(rownames(y))
   expect_equal(reduceResultsDataFrame(reg, strings.as.factors=TRUE), y)
+
+  library(data.table)
+  reg = makeTestRegistry()
+  batchMap(reg, function(i) list(a="a", b="b"), 1:2)
+  submitJobs(reg)
+  waitForJobs(reg)
+  x = reduceResultsDataTable(reg)
+  y = data.table(a=rep("a", 2), b=rep("b", 2))
+  expect_equal(x, y)
 })
 
 test_that("reduceResultsReturnValue works with empty results", {
