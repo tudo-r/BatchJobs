@@ -48,7 +48,7 @@ A BibTeX entry for LaTeX users is
 ## Core features
 * Create, submit and control [R](http://www.r-project.org/) jobs on batch systems
 * Provides the functional programming tools Map, Reduce and Filter to operate on the cluster
-* Supported systems include Torque/PBS, SGE, SLURM and LSF
+* Supported systems include Torque/PBS, SGE, SLURM, OpenLava and LSF
 * Support for makeshift SSH clusters and local (multicore) execution
 * Convenient collection and aggregation of results
 * Further Map and Reduce results from previous jobs as batch jobs
