@@ -9,7 +9,7 @@
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Registry.
 #'   Must not be passed and this is the default.
-#' @return [\code{data.frame}]. Returns the displayed table invisibly.
+#' @return [\code{data.frame}].
 #' @export
 showClusterStatus = function(reg) {
   if (missing(reg)) {
