@@ -1,13 +1,18 @@
 BatchJobs_1.7:
+- New functions: setRegistryPackages(), reduceResultsDataTable(),
+  getJobLocation(), batchQuery()
 - Configuration files are now sourced while loading the namespace, not while
   attaching the package.
-- added OpenLava support (Thanks to ???)
-- getJobInfo now also displays time.running until an error occurred in the job, and not NA as before
+- Added OpenLava support
+- getJobInfo() now also displays time.running until an error occurred in the job,
+  and not NA as before
 - loadRegisty() now returns a read-only registry if a heuristic detects that the
   location of the registy changed and the new argument "adjust.paths" is not
   explicitly set to TRUE.
+- New argument 'impute.val' for loadResult() and loadResults()
 - Fixed a bug where time.started was incorrectly stored if chunking was used.
 - Packages are now loaded in user provided order instead of alphabetically.
+- New config option "measure.mem" to disable memory measurements on the slave
 - showClusterStatus now returns its information visibly and does not print it
   per default
 - The 'max.load' setting for multicore and SSH is now set to a more aggressive
