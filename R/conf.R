@@ -110,8 +110,8 @@ getConfNames = function() {
   c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options",
     "default.resources", "debug", "raise.warnings", "staged.queries",
-    "max.concurrent.jobs", "fs.timeout", "ssh", "node", "max.concurrent.jobs", 
-    "measure.mem")
+    "max.concurrent.jobs", "fs.timeout",
+    "measure.mem", "max.concurrent.jobs", "ssh", "node", "max.arrayjobs")
 }
 
 checkConf = function(conf) {
@@ -199,14 +199,14 @@ printableConf = function(conf) {
     "  staged.queries: %s",
     "  max.concurrent.jobs: %s",
     "  fs.timeout: %s",
-    "  measure.mem: %s\n",
+    "  measure.mem: %s",
     "  ssh: %s",
     "  node: %s",
     "  max.arrayjobs: %s\n",
     sep = "\n")
   sprintf(fmt, x$cluster.functions$name, x$mail.from, x$mail.to, x$mail.start, x$mail.done,
           x$mail.error, convertToShortString(x$default.resources), x$debug, x$raise.warnings,
-          x$staged.queries, x$max.concurrent.jobs, x$fs.timeout, x$measure.mem, x$ssh, x$node, 
+          x$staged.queries, x$max.concurrent.jobs, x$fs.timeout, x$measure.mem, x$ssh, x$node,
           x$max.arrayjobs)
 }
 
