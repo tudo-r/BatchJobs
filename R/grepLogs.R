@@ -3,8 +3,7 @@
 #' @description
 #' Searches for occurence of \code{pattern} in log files.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs to grep.
 #'   Default is all terminated jobs (done + errors).
@@ -25,7 +24,7 @@
 #' @family debug
 #' @export
 grepLogs = function(reg, ids, pattern = "warn", ignore.case = TRUE, verbose = FALSE, range = 2L) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = dbFindTerminated(reg)

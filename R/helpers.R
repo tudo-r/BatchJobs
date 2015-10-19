@@ -1,17 +1,3 @@
-checkIds = function(reg, ids, check.present = TRUE) {
-  ids = asInteger(ids, any.missing = FALSE, unique = TRUE)
-  if (check.present)
-    dbCheckJobIds(reg, ids)
-  return(ids)
-}
-
-checkId = function(reg, id, check.present = TRUE) {
-  id = asInt(id)
-  if (check.present)
-    dbCheckJobIds(reg, id)
-  return(id)
-}
-
 checkMoreArgs = function(more.args, reserved) {
   assertList(more.args, names = "strict")
   n = names(more.args)
@@ -168,4 +154,14 @@ checkUserFunction = function(fun) {
     }
   }
   fun
+}
+
+deserialize = function(pars) {
+  pars = lapply(pars, function(x) unserialize(charToRaw(x)))
+  if (length(pars) == 0L)
+    return(data.table())
+  pn = make.names(names2(pars[[1L]], missing.val = ""), unique = TRUE)
+  pars = rbindlist(pars)
+  setnames(pars, pn)
+  pars
 }

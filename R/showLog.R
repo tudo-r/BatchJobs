@@ -8,8 +8,7 @@
 #' of the old, failed job as well. \code{showLog} tries to jump to the correct part
 #' of the new log file with a supported pager.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param id [\code{integer(1)}]\cr
 #'   Id of selected job.
 #'   Default is first id in registry.
@@ -23,14 +22,14 @@
 #' @family debug
 #' @export
 showLog = function(reg, id, pager = getOption("pager")) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(id)) {
     id = dbGetJobId(reg)
     if (length(id) == 0L)
       stop("No jobs in registry!")
   } else {
-    id = checkId(reg, id)
+    id = checkIds(reg, id, len = 1L)
   }
 
   fn = getLogFiles(reg, id)

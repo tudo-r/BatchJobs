@@ -7,7 +7,7 @@
 addRegistryPackages(reg, packages)
 }
 \arguments{
-\item{reg}{[\code{Registry}]\cr
+\item{reg}{[\code{\link{Registry}}]\cr
 Registry.}
 
 \item{packages}{[\code{character}]\cr
@@ -26,6 +26,7 @@ Other exports: \code{\link{addRegistrySourceDirs}};
   \code{\link{loadExports}};
   \code{\link{removeRegistryPackages}};
   \code{\link{removeRegistrySourceDirs}};
-  \code{\link{removeRegistrySourceFiles}}
+  \code{\link{removeRegistrySourceFiles}};
+  \code{\link{setRegistryPackages}}
 }
 

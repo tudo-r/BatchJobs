@@ -5,8 +5,7 @@
 #' vectors, lists, matrices or data.frames) or to arbitrarily aggregate them, which is a more general
 #' operation.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of selected jobs.
 #'   Default is all jobs for which results are available.
@@ -84,7 +83,7 @@
 #' # reduce results to a sum
 #' reduceResults(reg, fun = function(aggr, job, res) aggr+res$a, init = 0)
 reduceResults = function(reg, ids, part = NA_character_, fun, init, impute.val, progressbar = TRUE, ...) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = done = dbFindDone(reg)
@@ -138,7 +137,7 @@ reduceResults = function(reg, ids, part = NA_character_, fun, init, impute.val, 
 #' @rdname reduceResults
 reduceResultsList = function(reg, ids, part = NA_character_, fun, ..., use.names = "ids",
   impute.val, progressbar = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = done = dbFindDone(reg)
@@ -227,4 +226,13 @@ reduceResultsDataFrame = function(reg, ids, part = NA_character_, fun, ..., use.
     return(data.frame())
 
   convertListOfRowsToDataFrame(res, strings.as.factors = strings.as.factors)
+}
+
+#' @export
+#' @rdname reduceResults
+reduceResultsDataTable = function(reg, ids, part = NA_character_, fun, ..., use.names = "ids", impute.val) {
+  res = reduceResultsList(reg, ids, part, fun, ..., use.names = use.names, impute.val = impute.val)
+  if (!length(res))
+    return(data.table())
+  rbindlist(res, fill = TRUE)
 }

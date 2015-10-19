@@ -3,14 +3,13 @@
 #' @description
 #' Sources all files found in \code{src.dirs} and specified via \code{src.files}.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param envir [\code{environment}]\cr
 #'   Environment to source the files into. Default is the global environment.
 #' @return Nothing.
 #' @export
 sourceRegistryFiles = function(reg, envir = .GlobalEnv) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   assertEnvironment(envir)
   sourceRegistryFilesInternal(reg$work.dir, reg$src.dirs, reg$src.files)
 }
@@ -60,7 +59,7 @@ getRScripts = function(dirs) {
 #' @family exports
 #' @export
 addRegistrySourceFiles = function(reg, src.files, src.now = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   assertCharacter(src.files, any.missing = FALSE)
   assertFlag(src.now)
   src.files = sanitizePath(src.files, make.absolute = FALSE)
@@ -86,8 +85,9 @@ addRegistrySourceFiles = function(reg, src.files, src.now = TRUE) {
 #' @family exports
 #' @export
 addRegistrySourceDirs = function(reg, src.dirs, src.now = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   assertCharacter(src.dirs, any.missing = FALSE)
+  assertFlag(src.now)
   src.dirs = sanitizePath(src.dirs, make.absolute = FALSE)
   if (src.now)
     sourceRegistryFilesInternal(reg$work.dir, src.dirs, character(0L))
@@ -108,7 +108,7 @@ addRegistrySourceDirs = function(reg, src.dirs, src.now = TRUE) {
 #' @family exports
 #' @export
 removeRegistrySourceFiles = function(reg, src.files) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   assertCharacter(src.files, any.missing = FALSE)
   reg$src.files = setdiff(reg$src.files, src.files)
   saveRegistry(reg)
@@ -126,7 +126,7 @@ removeRegistrySourceFiles = function(reg, src.files) {
 #' @family exports
 #' @export
 removeRegistrySourceDirs = function(reg, src.dirs) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   assertCharacter(src.dirs, any.missing = FALSE)
   reg$src.dirs = setdiff(reg$src.dirs, src.dirs)
   saveRegistry(reg)

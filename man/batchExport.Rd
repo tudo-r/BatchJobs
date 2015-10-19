@@ -7,7 +7,7 @@
 batchExport(reg, ..., li = list(), overwrite = FALSE)
 }
 \arguments{
-\item{reg}{[\code{Registry}]\cr
+\item{reg}{[\code{\link{Registry}}]\cr
 Registry.}
 
 \item{...}{[any]\cr
@@ -34,6 +34,7 @@ Other exports: \code{\link{addRegistryPackages}};
   \code{\link{batchUnexport}}; \code{\link{loadExports}};
   \code{\link{removeRegistryPackages}};
   \code{\link{removeRegistrySourceDirs}};
-  \code{\link{removeRegistrySourceFiles}}
+  \code{\link{removeRegistrySourceFiles}};
+  \code{\link{setRegistryPackages}}
 }
 

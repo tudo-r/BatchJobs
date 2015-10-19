@@ -23,7 +23,7 @@
 #' print(reg)
 #' @export
 batchMap = function(reg, fun, ..., more.args = list(), use.names = FALSE) {
-  checkRegistry(reg, strict = TRUE)
+  checkRegistry(reg, strict = TRUE, writeable = TRUE)
   assertFunction(fun)
   ddd = list(...)
   if (length(ddd) == 0L)

@@ -1,17 +1,12 @@
-doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, array.id) {
+doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, last, array.id) {
   saveOne = function(result, name) {
     fn = getResultFilePath(reg, job$id, name)
     message("Writing result file: ", fn)
     save2(file = fn, result = result)
   }
 
-  getMemoryUsage = function() {
-    sum(gc()[, 6L])
-  }
-
   # Get the conf
-  loadConf(reg)
-  conf = getBatchJobsConf()
+  conf = loadConf(reg)
 
   # Say hi.
   messagef("%s: Starting job on node %s.", Sys.time(), Sys.info()["nodename"])
@@ -36,7 +31,6 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
     ids = chunk(ids, n.chunks = conf$max.arrayjobs)[[array.id]]
   }
 
-  staged = conf$staged.queries
   n = length(ids)
   results = character(n)
   error = logical(n)
@@ -47,28 +41,38 @@ doJob = function(reg, ids, multiple.result.files, disable.mail, first, last, arr
   sendMail(reg, ids, results, "", disable.mail, condition = "start", first, last)
 
   # create buffer of started messages
-  msg.buf = buffer(init = lapply(ids, dbMakeMessageStarted, reg = reg),
-    capacity = 2L * n, value = TRUE)
+  msg.buf = buffer(capacity = 2L * n)
   next.flush = 0L
+  if (staged) {
+    fn = getJobFile(reg, first)
+    messagef("Loading jobs from file '%s'", fn)
+    jobs = readRDS(fn)
+  } else {
+    jobs = getJobs(reg, ids, check.ids = FALSE)
+  }
 
   for (i in seq_len(n)) {
-    now = now()
-    if (now > next.flush) {
+    job = jobs[[i]]
+    messagef("########## Executing jid=%s ##########", job$id)
+    started = Sys.time()
+    msg.buf$push(dbMakeMessageStarted(reg, ids[i], time = as.integer(started)))
+    messagef("Timestamp: %s" , started)
+    print(job)
+
+    if (now() > next.flush) {
       if (dbSendMessages(reg, msg.buf$get(), staged = staged))
         msg.buf$clear()
-      next.flush = now + runif(1L, 300, 600)
+      next.flush = now() + as.integer(runif(1L, 1200L, 24001L))
     }
-    job = getJob(reg, ids[i], check.id = FALSE)
-
-    messagef("########## Executing jid=%s ##########", job$id)
-    messagef("Timestamp: %s" , Sys.time())
-    print(job)
 
     message("Setting seed: ", job$seed)
     seed = seeder(reg, job$seed)
-    gc(reset = TRUE)
+    if (conf$measure.mem)
+      gc(reset = TRUE)
+
     result = try(applyJobFunction(reg, job, cache), silent = TRUE)
-    mem.used = getMemoryUsage()
+
+    mem.used = if (conf$measure.mem) sum(gc()[, 6L]) else -1
     seed$reset()
 
     catf("Result:")

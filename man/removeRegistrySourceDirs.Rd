@@ -7,7 +7,7 @@
 removeRegistrySourceDirs(reg, src.dirs)
 }
 \arguments{
-\item{reg}{[\code{Registry}]\cr
+\item{reg}{[\code{\link{Registry}}]\cr
 Registry.}
 
 \item{src.dirs}{[\code{character}]\cr
@@ -26,6 +26,7 @@ Other exports: \code{\link{addRegistryPackages}};
   \code{\link{batchExport}}; \code{\link{batchUnexport}};
   \code{\link{loadExports}};
   \code{\link{removeRegistryPackages}};
-  \code{\link{removeRegistrySourceFiles}}
+  \code{\link{removeRegistrySourceFiles}};
+  \code{\link{setRegistryPackages}}
 }
 

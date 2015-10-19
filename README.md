@@ -1,5 +1,7 @@
 # BatchJobs
 
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/BatchJobs)](http://cran.r-project.org/web/packages/BatchJobs)
+[![CRAN Downloads](http://cranlogs.r-pkg.org/badges/BatchJobs)](http://cran.rstudio.com/web/packages/BatchJobs/index.html)
 [![Build Status](https://travis-ci.org/tudo-r/BatchJobs.png)](https://travis-ci.org/tudo-r/BatchJobs)
 [![Build status](https://ci.appveyor.com/api/projects/status/pkcy60csbp8k1ms9/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/batchjobs/branch/master)
 [![Coverage Status](https://coveralls.io/repos/tudo-r/BatchJobs/badge.svg)](https://coveralls.io/r/tudo-r/BatchJobs)
@@ -46,7 +48,7 @@ A BibTeX entry for LaTeX users is
 ## Core features
 * Create, submit and control [R](http://www.r-project.org/) jobs on batch systems
 * Provides the functional programming tools Map, Reduce and Filter to operate on the cluster
-* Supported systems include Torque/PBS, SGE, SLURM and LSF
+* Supported systems include Torque/PBS, SGE, SLURM, OpenLava and LSF
 * Support for makeshift SSH clusters and local (multicore) execution
 * Convenient collection and aggregation of results
 * Further Map and Reduce results from previous jobs as batch jobs

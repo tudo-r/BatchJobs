@@ -194,4 +194,3 @@ callFunctionOnSSHWorkers = function(nodenames, fun, ...,
     results = simplify2array(results)
   return(results)
 }
-

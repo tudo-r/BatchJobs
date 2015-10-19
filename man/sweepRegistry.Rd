@@ -7,7 +7,7 @@
 sweepRegistry(reg, sweep = c("scripts", "conf"))
 }
 \arguments{
-\item{reg}{[\code{Registry}]\cr
+\item{reg}{[\code{\link{Registry}}]\cr
 Registry.}
 
 \item{sweep}{[\code{character}]\cr

@@ -3,8 +3,7 @@
 #' @description
 #' Useful for debugging.
 #' Note that neither the registry, database or file directory are changed.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param id [\code{integer(1)}]\cr
 #'   Id of job to test.
 #'   Default is first job id of registry.
@@ -27,7 +26,7 @@
 #' batchMap(reg, f, 1:2)
 #' testJob(reg, 2)
 testJob = function(reg, id, resources = list(), external = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   #syncRegistry(reg)
   if (missing(id)) {
     id = dbGetJobId(reg)
@@ -35,7 +34,7 @@ testJob = function(reg, id, resources = list(), external = TRUE) {
       stop("Registry is empty!")
     messagef("Testing job with id=%i ...", id)
   } else {
-    id = checkId(reg, id)
+    id = checkIds(reg, id, len = 1L)
   }
   assertList(resources)
   resources = resrc(resources)
@@ -69,13 +68,14 @@ testJob = function(reg, id, resources = list(), external = TRUE) {
 
     # write r script
     resources.timestamp = saveResources(reg, resources)
-    writeRscripts(reg, getClusterFunctions(getBatchJobsConf()), id, chunks.as.arrayjobs = FALSE,
-      resources.timestamp = resources.timestamp, disable.mail = TRUE, delays = 0)
+    writeFiles(reg, getClusterFunctions(getBatchJobsConf()), id, chunks.as.arrayjobs = FALSE,
+      resources.timestamp = resources.timestamp, disable.mail = TRUE, staged = FALSE, delay = 0)
 
     # execute
     now = Sys.time()
     message("### Output of new R process starts here ###")
-    system3(file.path(R.home("bin"), "Rscript"), getRScriptFilePath(reg, id), wait = TRUE)
+    r.interp = file.path(R.home("bin"), sprintf("%s%s", "Rscript", ifelse(isWindows(), ".exe", "")))
+    system3(r.interp, getRScriptFilePath(reg, id), wait = TRUE)
     message("### Output of new R process ends here ###")
     dt = difftime(Sys.time(), now)
     messagef("### Approximate running time: %.2f %s", as.double(dt), units(dt))

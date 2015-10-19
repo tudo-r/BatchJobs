@@ -86,7 +86,6 @@ dbDoQuery = function(reg, query, flags = "ro", max.retries = 100L, sleep = funct
   stopf("dbDoQuery: max retries (%i) reached, database is still locked!", max.retries)
 }
 
-
 dbAddData = function(reg, tab, data) {
   query = sprintf("INSERT INTO %s_%s (%s) VALUES(%s)", reg$id, tab,
                   collapse(colnames(data)), collapse(rep.int("?", ncol(data))))
@@ -161,8 +160,7 @@ dbCreateExpandedJobsView = function(reg) {
 ############################################
 
 #' ONLY FOR INTERNAL USAGE.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of selected jobs.
 #' @return [list of \code{\link{Job}}]. Retrieved jobs from DB.
@@ -356,18 +354,6 @@ dbMatchJobNames = function(reg, ids, jobnames) {
   query = sprintf("SELECT job_id FROM %s_expanded_jobs WHERE jobname IN (%s)", reg$id, collapse(sqlQuote(jobnames)))
   dbSelectWithIds(reg, query, ids, where = FALSE)$job_id
 }
-
-############################################
-### DELETE
-############################################
-dbRemoveJobs = function(reg, ids) {
-  query = sprintf("DELETE FROM %s_job_status WHERE job_id IN (%s)", reg$id, collapse(ids))
-  dbDoQuery(reg, query, flags = "rw")
-  query = sprintf("DELETE FROM %1$s_job_def WHERE job_def_id NOT IN (SELECT DISTINCT job_def_id FROM %1$s_job_status)", reg$id)
-  dbDoQuery(reg, query, flags = "rw")
-  return(invisible(TRUE))
-}
-
 
 ############################################
 ### Messages

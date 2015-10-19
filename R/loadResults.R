@@ -1,6 +1,5 @@
 #' Loads result files for id vector.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs.
 #'   Default is all done jobs.
@@ -25,7 +24,7 @@
 #' @seealso \code{\link{reduceResults}}
 #' @export
 loadResults = function(reg, ids, part = NA_character_, simplify = FALSE, use.names = "ids", missing.ok = FALSE, impute.val = NULL) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = dbFindDone(reg)

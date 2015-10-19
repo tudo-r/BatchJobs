@@ -4,9 +4,10 @@
 \alias{makeClusterFunctionsMulticore}
 \title{Use multiple cores on local Linux machine to spawn parallel jobs.}
 \usage{
-makeClusterFunctionsMulticore(ncpus = max(getOption("mc.cores", detectCores())
-  - 1, 1), max.jobs, max.load, nice, r.options = c("--no-save",
-  "--no-restore", "--no-init-file", "--no-site-file"), script)
+makeClusterFunctionsMulticore(ncpus = max(getOption("mc.cores",
+  parallel::detectCores()) - 1L, 1L), max.jobs, max.load, nice,
+  r.options = c("--no-save", "--no-restore", "--no-init-file",
+  "--no-site-file"), script)
 }
 \arguments{
 \item{ncpus}{[\code{integer(1)}]\cr
@@ -23,7 +24,7 @@ Default is \code{ncpus}.}
 \item{max.load}{[\code{numeric(1)}]\cr
 Load average (of the last 5 min) at which the worker is considered occupied,
 so that no job can be submitted.
-Default is \code{ncpus-1}.}
+Default is inferred by \code{\link[parallel]{detectCores}}, cf. argument \code{ncpus}.}
 
 \item{nice}{[\code{integer(1)}]\cr
 Process priority to run R with set via nice. Integers between -20 and 19 are allowed.

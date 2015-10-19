@@ -7,7 +7,7 @@
 loadExports(reg, what = NULL)
 }
 \arguments{
-\item{reg}{[\code{Registry}]\cr
+\item{reg}{[\code{\link{Registry}}]\cr
 Registry.}
 
 \item{what}{[\code{character}]\cr
@@ -28,6 +28,7 @@ Other exports: \code{\link{addRegistryPackages}};
   \code{\link{batchExport}}; \code{\link{batchUnexport}};
   \code{\link{removeRegistryPackages}};
   \code{\link{removeRegistrySourceDirs}};
-  \code{\link{removeRegistrySourceFiles}}
+  \code{\link{removeRegistrySourceFiles}};
+  \code{\link{setRegistryPackages}}
 }
 

@@ -1,7 +1,6 @@
 #' Find all results where a specific condition is true.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs whose results you want to test for the condition.
 #'   Default is all jobs for which results are available.
@@ -21,7 +20,7 @@
 #' # which square numbers are even:
 #' filterResults(reg, fun = function(job, res) res %% 2 == 0)
 filterResults = function(reg, ids, fun, ...) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   assertFunction(fun, c("job", "res"))
   if (missing(ids))

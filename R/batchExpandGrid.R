@@ -5,7 +5,6 @@
 #' Internally \code{\link{expand.grid}} is used to compute the combinations, then
 #' \code{\link{batchMap}} is called.
 #'
-#'
 #' @param reg [\code{\link{Registry}}]\cr
 #'   Empty Registry that will store jobs for the mapping.
 #' @param fun [\code{function}]\cr
@@ -30,7 +29,7 @@
 #' grid = getJobParamDf(reg)
 #' cbind(grid, y = y)
 batchExpandGrid = function(reg, fun, ..., more.args = list()) {
-  checkRegistry(reg, strict = TRUE)
+  checkRegistry(reg, strict = TRUE, writeable = TRUE)
   assertFunction(fun)
   args = list(...)
   ns = names(args)

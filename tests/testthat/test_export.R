@@ -33,7 +33,7 @@ test_that("exports with batchExport and batchUnexport", {
   submitJobs(reg, 1)
   waitForJobs(reg)
   expect_equal(length(findErrors(reg)), 1)
-  expect_true(grepl("not found", getErrorMessages(reg, 1), fixed = TRUE))
+  expect_true(grepl("(found|gefunden)", getErrorMessages(reg, 1), fixed = FALSE))
 })
 
 test_that("export: load defined files with loadExports", {

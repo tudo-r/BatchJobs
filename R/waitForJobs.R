@@ -9,8 +9,7 @@
 #' with an R exception and \dQuote{R} for number of jobs currently running
 #' on the system.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Vector of job ids.
 #'   Default is all submitted jobs not yet terminated.
@@ -27,9 +26,8 @@
 #' @return [\code{logical(1)}]. Returns \code{TRUE} if all jobs terminated successfully
 #'   and \code{FALSE} if either an error occurred or the timeout is reached.
 #' @export
-waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE,
-  progressbar = TRUE) {
-  checkRegistry(reg)
+waitForJobs = function(reg, ids, sleep = 10, timeout = 604800, stop.on.error = FALSE, progressbar = TRUE) {
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = dbFindSubmittedNotTerminated(reg)

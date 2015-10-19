@@ -1,13 +1,13 @@
 # ******************** Constructors ********************
 
 # Construct a remote worker for a Linux machine via SSH.
-makeWorkerRemoteLinux = function(nodename, rhome, r.options, script, ncpus, max.jobs, max.load, nice) {
-  makeWorker(ssh = TRUE, nodename, rhome, r.options, script, ncpus, max.jobs, max.load, nice, c("WorkerRemoteLinux", "WorkerLinux"))
+makeWorkerRemoteLinux = function(nodename, ssh.cmd, ssh.args, rhome, r.options, script, ncpus, max.jobs, max.load, nice) {
+  makeWorker(ssh = TRUE, nodename, ssh.cmd, ssh.args, rhome, r.options, script, ncpus, max.jobs, max.load, nice, c("WorkerRemoteLinux", "WorkerLinux"))
 }
 
 # Construct a worker for local Linux machine to spawn parallel jobs.
 makeWorkerLocalLinux = function(r.options, script, ncpus, max.jobs, max.load, nice) {
-  makeWorker(ssh = FALSE, "localhost", R.home(), r.options, script, ncpus, max.jobs, max.load, nice, c("WorkerLocalLinux", "WorkerLinux"))
+  makeWorker(ssh = FALSE, nodename = "localhost", ssh.cmd = NULL, ssh.args = NULL, R.home(), r.options, script, ncpus, max.jobs, max.load, nice, c("WorkerLocalLinux", "WorkerLinux"))
 }
 
 # ******************** Interface implementation ********************
@@ -62,12 +62,11 @@ listWorkerJobs.WorkerLinux = function(worker, file.dir) {
 # @param nodename [\code{character(1)}]
 #   Nodename for SSH.
 # @return See \code{\link{system3}}.
-runOSCommandLinux = function(cmd, args = character(0L), stdin = "", stop.on.exit.code = TRUE, ssh = FALSE, nodename) {
+runOSCommandLinux = function(cmd, args = character(0L), stdin = "", stop.on.exit.code = TRUE, ssh = FALSE, ssh.cmd, ssh.args, nodename) {
   conf = getBatchJobsConf()
   if (ssh) {
-    sys.cmd = "ssh"
-    ssh.cmd = sprintf("'%s'", collapse(c(cmd, args), sep = " "))
-    sys.args = c(nodename, ssh.cmd)
+    sys.cmd = ssh.cmd
+    sys.args = c(ssh.args, nodename, sprintf("'%s'", collapse(c(cmd, args), sep = " ")))
   } else {
     sys.cmd = cmd
     sys.args = args
@@ -97,7 +96,7 @@ runOSCommandLinux = function(cmd, args = character(0L), stdin = "", stop.on.exit
 # @param nodename [\code{character(1)}]
 #   Nodename for SSH.
 # @return [\code{character(1)}]. Path of script.
-findHelperScriptLinux = function(rhome, r.options, ssh = FALSE, nodename) {
+findHelperScriptLinux = function(rhome, r.options, ssh = FALSE, ssh.cmd, ssh.args, nodename) {
   # i think we dont need to quote anything here, because system2 uses shQuote
   if (rhome == "")
     rscript = "Rscript"
@@ -106,7 +105,7 @@ findHelperScriptLinux = function(rhome, r.options, ssh = FALSE, nodename) {
   minus.e = "-e \"message(normalizePath(system.file(\\\"bin/linux-helper\\\", package = \\\"BatchJobs\\\")))\""
   args = c(r.options, minus.e)
   # only take the last line, if stuff is printed by Rscript before our message
-  tail(runOSCommandLinux(rscript, args, ssh = ssh, nodename = nodename)$output, 1L)
+  tail(runOSCommandLinux(rscript, args, ssh = ssh, ssh.cmd = ssh.cmd, ssh.args = ssh.args, nodename = nodename)$output, 1L)
 }
 
 # Perform a batch helper command on a Linux machine.
@@ -121,6 +120,7 @@ runWorkerCommand = function(worker, command, args = character(0L)) {
   # in paths can be whitespaces and other bad stuff, quote it!
   args = sprintf("\"%s\"", args)
   script.args = c(command, args)
-  runOSCommandLinux(worker$script, script.args, ssh = worker$ssh, nodename = worker$nodename)$output
+  runOSCommandLinux(worker$script, script.args, ssh = worker$ssh,
+    ssh.cmd = worker$ssh.cmd, ssh.args = worker$ssh.args, nodename = worker$nodename)$output
 }
 

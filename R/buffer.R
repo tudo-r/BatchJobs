@@ -8,51 +8,36 @@ buffer = function(type = "list", capacity = 0L, value = TRUE, init = NULL, ...) 
     n = length(init)
   }
   rm(type)
+  rm(init)
   force(capacity)
   force(value)
-  rm(init)
-
-  get = function() {
-    head(st, n)
-  }
-
-  push = function(x) {
-    if (n == capacity)
-      clear()
-    n <<- n + 1L
-    st[[n]] <<- x
-  }
-
-  pop = function() {
-    n <<- min(0L, n - 1L)
-  }
-
-  top = function() {
-    if (n == 0L)
-      return(vector(type, 0L))
-    st[[n]]
-  }
+  ddd = list(...)
 
   clear = function() {
     if (is.function(value))
-      ret = value(get(), ...)
+      ret = do.call(value, c(list(head(st, n)), ddd))
     else
       ret = value
     n <<- 0L
     ret
   }
 
-  pos = function() {
-    n
-  }
-
-  empty = function() {
-    n == 0L
-  }
-
-  full = function() {
-    n == capacity
-  }
-
-  list(get = get, push = push, pop = pop, top = top, clear = clear, pos = pos, empty = empty, full = full)
+  list(
+    get = function() {
+      head(st, n)
+    },
+    clear = clear,
+    push = function(x) {
+      if (n == capacity)
+        clear()
+      n <<- n + 1L
+      st[[n]] <<- x
+    },
+    pos = function() {
+      n
+    },
+    empty = function() {
+      n == 0L
+    }
+  )
 }

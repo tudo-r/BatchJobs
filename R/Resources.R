@@ -30,8 +30,7 @@ getResources = function() {
 #'
 #' Throws an error if call it for unsubmitted jobs.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs.
 #'   Default is all submitted jobs.
@@ -41,7 +40,7 @@ getResources = function() {
 #' @return [\code{list} | \code{data.frame}]. List (or data.frame) of resource lists as passed to \code{\link{submitJobs}}.
 #' @export
 getJobResources = function(reg, ids, as.list = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = dbFindSubmitted(reg)
@@ -57,7 +56,10 @@ getJobResources = function(reg, ids, as.list = TRUE) {
   for(ts in unique(df$resources_timestamp)) {
     res[df$resources_timestamp == ts] = load2(getResourcesFilePath(reg, ts), simplify = FALSE)
   }
-  if (!as.list)
-    res = convertListOfRowsToDataFrame(res)
+
+  if (!as.list) {
+    res = rbindlist(res)
+    setDF(res, rownames = as.character(df$job_id))
+  }
   return(res)
 }

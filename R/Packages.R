@@ -10,12 +10,11 @@
 #' @family exports
 #' @export
 addRegistryPackages = function(reg, packages) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   assertCharacter(packages, any.missing = FALSE)
+  packages = setdiff(packages, names(reg$packages))
   packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
-  p = c(reg$packages, packages)
-  p = p[unique(names(p))]
-  reg$packages = p
+  reg$packages = c(reg$packages, packages)
   saveRegistry(reg)
 }
 
@@ -31,8 +30,29 @@ addRegistryPackages = function(reg, packages) {
 #' @family exports
 #' @export
 removeRegistryPackages = function(reg, packages) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   assertCharacter(packages, any.missing = FALSE)
-  reg$packages = reg$packages[setdiff(names(reg$packages), packages)]
+  mandatory = names(filterNull(extractSubList(reg$packages, "mandatory")))
+  reg$packages = reg$packages[names(reg$packages) %nin% setdiff(packages, mandatory)]
+  saveRegistry(reg)
+}
+
+#' @title Set packages for a registry.
+#'
+#' @description
+#' Mutator function for \code{packages} in \code{\link{makeRegistry}}.
+#'
+#' @template arg_reg
+#' @param packages [\code{character}]\cr
+#'   Character vector of package names to load.
+#' @template ret_reg_mut
+#' @family exports
+#' @export
+setRegistryPackages = function(reg, packages) {
+  checkRegistry(reg, writeable = TRUE)
+  assertCharacter(packages, any.missing = FALSE)
+  mandatory = names(filterNull(extractSubList(reg$packages, "mandatory")))
+  packages = unique(c(mandatory, packages))
+  reg$packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
   saveRegistry(reg)
 }

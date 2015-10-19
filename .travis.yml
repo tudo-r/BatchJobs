@@ -1,26 +1,23 @@
-# travis config, based on https://github.com/craigcitro/r-travis
+language: r
 
-language: c
-script: ./travis-tool.sh run_tests
-before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
-install:
-  - ./travis-tool.sh github_package berndbischl/BBmisc
-  - ./travis-tool.sh github_package jimhester/covr
-  - ./travis-tool.sh install_deps
-branches:
-  except:
-   - /-expt$/
+r_binary_packages:
+    - BBmisc
+    - checkmate
+    - brew
+    - digest
+    - DBI
+    - RSQLite
+    - stringi
+    - testthat
 
-after_failure:
-  - ./travis-tool.sh dump_logs
+r_github_packages:
+    - jimhester/covr
+    - mllg/fail
 
 after_success:
-  - Rscript -e 'library(covr);coveralls()'
+    - Rscript -e 'library(covr); coveralls()'
 
 notifications:
   email:
     on_success: change
-    on_failure: change
+    on_failure: always

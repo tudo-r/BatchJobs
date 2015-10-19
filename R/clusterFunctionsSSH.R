@@ -2,6 +2,12 @@
 #'
 #' @param nodename [\code{character(1)}]\cr
 #'   Host name of node.
+#' @param ssh.cmd [\code{character(1)})]\cr
+#'   CLI command to ssh into remote node.
+#'   Default is \dQuote{ssh}.
+#' @param ssh.args [\code{character}]\cr
+#'   CLI args for \code{ssh.cmd}.
+#'   Default is none.
 #' @param rhome [\code{character(1)}]\cr
 #'   Path to R installation on worker.
 #'   \dQuote{} means R installation on the PATH is used,
@@ -22,7 +28,7 @@
 #'   Process priority to run R with set via nice. Integers between -20 and 19 are allowed.
 #'   If missing, processes are not nice'd and the system default applies (usually 0).
 #'   Default is no niceing.
-#' @param r.options [\code{character}]
+#' @param r.options [\code{character}]\cr
 #'   Options for R and Rscript, one option per element of the vector,
 #'   a la \dQuote{--vanilla}.
 #'   Default is \code{c("--no-save", "--no-restore", "--no-init-file", "--no-site-file")}.
@@ -38,10 +44,10 @@
 #' @return [\code{\link{SSHWorker}}].
 #' @export
 #' @aliases SSHWorker
-makeSSHWorker = function(nodename, rhome = "", ncpus, max.jobs, max.load, nice,
+makeSSHWorker = function(nodename, ssh.cmd = "ssh", ssh.args = character(0L), rhome = "", ncpus, max.jobs, max.load, nice,
   r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"), script) {
 
-  worker = makeWorkerRemoteLinux(nodename, rhome, r.options, script, ncpus, max.jobs, max.load, nice)
+  worker = makeWorkerRemoteLinux(nodename, ssh.cmd, ssh.args, rhome, r.options, script, ncpus, max.jobs, max.load, nice)
   class(worker) = c("SSHWorker", class(worker))
   return(worker)
 }

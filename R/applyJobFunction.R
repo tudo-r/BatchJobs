@@ -1,7 +1,6 @@
 #' applyJobFunction
 #' ONLY FOR INTERNAL USAGE.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param job [\code{\link{Job}}]\cr
 #'   Job.
 #' @param cache [\code{FileCache}]\cr
