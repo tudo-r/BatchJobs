@@ -40,17 +40,20 @@ loadRegistry = function(file.dir, work.dir, adjust.paths = FALSE) {
         warning("It seems like you've moved the registry to a new location or system. ",
                  "To update the paths, call 'loadRegistry' with option 'adjust.paths' set to TRUE. ",
                  "But make sure that there are no jobs running on the system. ",
-                 "Returning a read-only registry.")
+                 "Returning a read-only registry, and not updating the database to the latest layout, ",
+                 "i.e. your registry may be defunct.")
         read.only = TRUE
       }
       reg = adjusted
       save.reg = TRUE
     }
 
-    updated = updateRegistry(reg)
-    if (!isFALSE(updated)) {
-      reg = updated
-      save.reg = TRUE
+    if (!read.only) {
+      updated = updateRegistry(reg)
+      if (!isFALSE(updated)) {
+        reg = updated
+        save.reg = TRUE
+      }
     }
 
     if (save.reg) {
