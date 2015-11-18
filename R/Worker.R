@@ -40,8 +40,10 @@ makeWorker = function(ssh, nodename, ssh.cmd, ssh.args, rhome, r.options = c("--
   script, ncpus, max.jobs, max.load, nice, classes) {
   assertFlag(ssh)
   assertString(nodename)
-  assertString(ssh.cmd)
-  assertCharacter(ssh.args, any.missing = FALSE)
+  if (!is.null(ssh.cmd))
+    assertString(ssh.cmd)
+  if (!is.null(ssh.args))
+    assertCharacter(ssh.args, any.missing = FALSE)
   assertString(rhome)
   assertCharacter(r.options, any.missing = FALSE)
   if (missing(script)) {
