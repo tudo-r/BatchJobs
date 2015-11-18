@@ -1,6 +1,6 @@
 #' @title Load a previously saved registry.
 #'
-#' @details
+#' @description
 #' Loads a previously created registry from the file system.
 #' The \code{file.dir} is automatically updated upon load if \code{adjust.paths} is set to
 #' \code{TRUE}, so be careful if you use the registry on multiple machines simultaneously,

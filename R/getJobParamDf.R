@@ -1,4 +1,7 @@
-#' @title Returns parameters for all jobs as the rows of a data.frame.
+#' @title Retrieve Job Parameters.
+#'
+#' @description
+#' Returns parameters for all jobs as the rows of a data.frame.
 #'
 #' @template arg_reg
 #' @template arg_ids
