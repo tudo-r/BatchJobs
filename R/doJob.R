@@ -54,7 +54,7 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
   }
 
   for (i in seq_len(n)) {
-    job = jobs[[i]]
+    job = jobs[[ids[i]]]
     messagef("########## Executing jid=%s ##########", job$id)
     started = Sys.time()
     msg.buf$push(dbMakeMessageStarted(reg, ids[i], time = as.integer(started)))
