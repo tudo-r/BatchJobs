@@ -6,7 +6,8 @@
 ##    R-2.15.3-gcc-4.7.2,     with ICC, but R compiled with ICC is in general faster.
 ##    R-2.15.3-gcc-4.8.0,     From R-2.15.1-gcc-4.7.1 on all R versions should have gotoblas support and should in general be
 ##    R-3.0.1-gcc-4.8.1-base, faster for linear algebra operations, otherwise complain!
-##    R-3.1.0-gcc-4.8.2-base]
+##    R-3.1.0-gcc-4.8.2-base,
+##    R-3.2.2-gcc-4.8.5-base]
 ##
 ## modules [character]:       Extra modules you would like to load on slaves. Please note that the following
 ##                            modules are handled automatically by the previous argument "R" and should not be
@@ -57,7 +58,8 @@ assertChoice(R, choices = c(
   "R-2.14.1-icc-11.1", "R-2.15.1-gcc-4.3.5",
   "R-2.15.1-gcc-4.7.1", "R-2.15.3-gcc-4.7.2", "R-2.15.3-gcc-4.8.0",
   "R-3.0.1-gcc-4.8.1-base",
-  "R-3.1.0-gcc-4.8.2-base"
+  "R-3.1.0-gcc-4.8.2-base",
+  "R-3.2.2-gcc-4.8.5-base"
 ))
 assertCharacter(modules, any.missing = FALSE)
 
@@ -104,7 +106,7 @@ modules2 = switch(R,
   "R-2.15.3-gcc-4.7.2" = c("openmpi/ge/gcc4.7.x/64/1.4.5", "binutils", "gcc/4.7.2", "gotoblas/shared/64/1.26", "R/2.15.3-gcc47"),
   "R-2.15.3-gcc-4.8.0" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.0", "gotoblas/shared/64/1.26", "R/2.15.3-gcc48"),
   "R-3.0.1-gcc-4.8.1-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.1", "gotoblas/shared/64/1.26", "R/3.0.1-gcc48-base"),
-  "R-3.1.0-gcc-4.8.2-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.2", "gotoblas/shared/64/1.26", "R/3.1.0p-gcc48-base")
+  "R-3.2.2-gcc-4.8.5-base" = c("openmpi/ge/gcc4.8.x/64/1.6.4", "binutils", "gcc/4.8.5", "gotoblas/shared/64/1.26", "R/3.2.2-gcc48-base")
 )
 if(nodes == 1L)
   modules2 = modules2[-1]
@@ -133,6 +135,7 @@ if (length(grep("^/data/", log.file)) > 0) {
 #PBS -N <%= job.name %>
 #PBS -j oe
 #PBS -o <%= log.file %>
+
 #PBS -l walltime=<%= walltime %>,nodes=<%= nodes %>,vmem=<%= vmem %>M
 #PBS -q <%= queue %>
 

@@ -43,6 +43,7 @@ getJobInfoInternal = function(reg, ids, select, unit = "seconds", columns) {
 
 #' @title Get computational information of jobs.
 #'
+#' @description
 #' Returns time stamps (submitted, started, done, error),
 #' time running, approximate memory usage (in Mb),
 #' error messages (shortened, see \code{\link{showLog}} for detailed error messages),

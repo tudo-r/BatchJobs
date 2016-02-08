@@ -461,3 +461,12 @@ dbSetJobNames = function(reg, ids, jobnames) {
   queries = sprintf("UPDATE %1$s_job_def SET jobname = '%2$s' WHERE job_def_id IN (SELECT job_def_id FROM %1$s_job_status WHERE job_id IN (%3$i))", reg$id, jobnames, ids)
   dbDoQueries(reg, queries, flags = "rw")
 }
+
+# this is used in parallelMap :/
+dbRemoveJobs = function(reg, ids) {
+  query = sprintf("DELETE FROM %s_job_status WHERE job_id IN (%s)", reg$id, collapse(ids))
+  dbDoQuery(reg, query, flags = "rw")
+  query = sprintf("DELETE FROM %1$s_job_def WHERE job_def_id NOT IN (SELECT DISTINCT job_def_id FROM %1$s_job_status)", reg$id)
+  dbDoQuery(reg, query, flags = "rw")
+  return(invisible(TRUE))
+}
