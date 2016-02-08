@@ -29,7 +29,13 @@ makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect"
     arrayjobs = min(arrayjobs, conf$max.arrayjobs)
 
     outfile = cfBrewTemplate(conf, template, rscript, "pbs")
-    res = runOSCommandLinux("qsub", outfile, stop.on.exit.code = FALSE, ssh = conf$ssh, nodename = conf$node, ssh.cmd = "ssh", ssh.args = "")
+    res = runOSCommandLinux("qsub",
+                            outfile,
+                            stop.on.exit.code = FALSE,
+                            ssh = conf$ssh,
+                            nodename = conf$node,
+                            ssh.cmd = "ssh",
+                            ssh.args = "")
 
     max.jobs.msg = "Maximum number of jobs already in queue"
     output = collapse(res$output, sep = "\n")
@@ -48,12 +54,14 @@ makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect"
 
   listJobs = function(conf, reg, alljobs = FALSE) {
     # Result is lines of fully quantified batch.job.ids
-    batch.ids = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L], ssh = conf$ssh, nodename = conf$node, ssh.cmd = "ssh", ssh.args = "")$output
+    batch.ids = runOSCommandLinux(list.jobs.cmd[1L],
+                                  list.jobs.cmd[-1L],
+                                  ssh = conf$ssh,
+                                  nodename = conf$node,
+                                  ssh.cmd = "ssh",
+                                  ssh.args = "")$output
     # simplify batch ids of array jobs, i.e. remove the array id from the batch id
-    if(!alljobs & any(grepl('\\[\\d+\\]', batch.ids))) {
-      batch.ids = unique(c(batch.ids, gsub('(.+\\[)\\d+(\\].?)', '\\1\\2', batch.ids)))
-    }
-    return(batch.ids)
+    unique(gsub("\\[[[:digit:]]*\\]", "[]", batch.ids))
   }
 
   getArrayEnvirName = function() {
