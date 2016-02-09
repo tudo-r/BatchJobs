@@ -1,4 +1,5 @@
 library(BBmisc)
+library(checkmate)
 options(BBmisc.ProgressBar.style = "off")
 options(BatchJobs.verbose = FALSE)
 

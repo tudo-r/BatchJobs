@@ -15,8 +15,7 @@
 #' batch jobs again. If this fails again for some jobs, the function gives up. Only jobs that could be
 #' killed are reset in the DB.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs to kill.
 #'   Default is none.
@@ -38,7 +37,7 @@
 #' killJobs(reg, findNotTerminated(reg))
 #' }
 killJobs = function(reg, ids, progressbar = TRUE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   syncRegistry(reg)
   if (missing(ids))
     return(invisible(integer(0L)))

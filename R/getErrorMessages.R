@@ -1,6 +1,5 @@
 #' Get error messages of jobs.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs.
 #'   Default is all jobs with errors.
@@ -9,7 +8,7 @@
 #' @family debug
 #' @export
 getErrorMessages = function(reg, ids) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (missing(ids))
     ids = dbFindErrors(reg)

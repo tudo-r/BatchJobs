@@ -1,6 +1,5 @@
 #' Loads a specific result file.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param id [\code{integer(1)}]\cr
 #'   Id of job.
 #' @param part [\code{character}]
@@ -17,9 +16,9 @@
 #' @seealso \code{\link{reduceResults}}
 #' @export
 loadResult = function(reg, id, part = NA_character_, missing.ok = FALSE, impute.val = NULL) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
-  id = checkId(reg, id)
+  id = checkIds(reg, id, len = 1L)
   checkPart(reg, part)
   assertFlag(missing.ok)
 

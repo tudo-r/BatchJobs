@@ -1,5 +1,5 @@
 findState = function(reg, ids, fun, negate, limit) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = FALSE)
   syncRegistry(reg)
   if (!missing(ids))
     ids = checkIds(reg, ids)
@@ -11,8 +11,7 @@ findState = function(reg, ids, fun, negate, limit) {
 #' Find jobs depending on computional state.
 #'
 #' \code{findDone}: Find jobs which succesfully terminated.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Subset of job ids to restrict the result to.
 #'   Default is all jobs.

@@ -14,8 +14,7 @@
 #' the database integrity. In this case you HAVE to make externally sure that none of the jobs
 #' you want to reset are still running.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of jobs to kill.
 #'   Default is none.
@@ -27,7 +26,7 @@
 #' @family debug
 #' @export
 resetJobs = function(reg, ids, force = FALSE) {
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   syncRegistry(reg)
   if (missing(ids) || length(ids) == 0L)
     return(integer(0L))

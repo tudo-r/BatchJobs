@@ -86,7 +86,6 @@ dbDoQuery = function(reg, query, flags = "ro", max.retries = 100L, sleep = funct
   stopf("dbDoQuery: max retries (%i) reached, database is still locked!", max.retries)
 }
 
-
 dbAddData = function(reg, tab, data) {
   query = sprintf("INSERT INTO %s_%s (%s) VALUES(%s)", reg$id, tab,
                   collapse(colnames(data)), collapse(rep.int("?", ncol(data))))
@@ -161,8 +160,7 @@ dbCreateExpandedJobsView = function(reg) {
 ############################################
 
 #' ONLY FOR INTERNAL USAGE.
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Ids of selected jobs.
 #' @return [list of \code{\link{Job}}]. Retrieved jobs from DB.
@@ -358,18 +356,6 @@ dbMatchJobNames = function(reg, ids, jobnames) {
 }
 
 ############################################
-### DELETE
-############################################
-dbRemoveJobs = function(reg, ids) {
-  query = sprintf("DELETE FROM %s_job_status WHERE job_id IN (%s)", reg$id, collapse(ids))
-  dbDoQuery(reg, query, flags = "rw")
-  query = sprintf("DELETE FROM %1$s_job_def WHERE job_def_id NOT IN (SELECT DISTINCT job_def_id FROM %1$s_job_status)", reg$id)
-  dbDoQuery(reg, query, flags = "rw")
-  return(invisible(TRUE))
-}
-
-
-############################################
 ### Messages
 ############################################
 dbSendMessage = function(reg, msg, staged = useStagedQueries(), fs.timeout = NA_real_) {
@@ -474,4 +460,13 @@ dbSetJobFunction = function(reg, ids, fun.id) {
 dbSetJobNames = function(reg, ids, jobnames) {
   queries = sprintf("UPDATE %1$s_job_def SET jobname = '%2$s' WHERE job_def_id IN (SELECT job_def_id FROM %1$s_job_status WHERE job_id IN (%3$i))", reg$id, jobnames, ids)
   dbDoQueries(reg, queries, flags = "rw")
+}
+
+# this is used in parallelMap :/
+dbRemoveJobs = function(reg, ids) {
+  query = sprintf("DELETE FROM %s_job_status WHERE job_id IN (%s)", reg$id, collapse(ids))
+  dbDoQuery(reg, query, flags = "rw")
+  query = sprintf("DELETE FROM %1$s_job_def WHERE job_def_id NOT IN (SELECT DISTINCT job_def_id FROM %1$s_job_status)", reg$id)
+  dbDoQuery(reg, query, flags = "rw")
+  return(invisible(TRUE))
 }

@@ -10,6 +10,12 @@
 #'
 #' @param nodename [\code{character(1)}]\cr
 #'   Node on which worker should be constructed for the test.
+#' @param ssh.cmd [\code{character(1)})]\cr
+#'   CLI command to ssh into remote node.
+#'   Default is \dQuote{ssh}.
+#' @param ssh.args [\code{character}]\cr
+#'   CLI args for \code{ssh.cmd}.
+#'   Default is none.
 #' @param rhome [\code{character(1)}]\cr
 #'   Path to R installation on the worker.
 #'   \dQuote{} means R installation on the PATH is used,
@@ -27,10 +33,12 @@
 #' @return Nothing.
 #' @family debug
 #' @export
-debugSSH = function(nodename, rhome = "",
+debugSSH = function(nodename, ssh.cmd = "ssh", ssh.args = character(0L), rhome = "",
   r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
   dir = getwd()) {
 
+  assertString(ssh.cmd)
+  assertCharacter(ssh.args, any.missing = FALSE)
   assertString(nodename)
   assertString(rhome)
   assertString(dir)
@@ -44,19 +52,19 @@ debugSSH = function(nodename, rhome = "",
   catf("\n")
 
   messagef("*** which R on slave: ***")
-  res = runOSCommandLinux(cmd = "which", args = "R", ssh = TRUE, nodename = nodename, stop.on.exit.code = TRUE)
+  res = runOSCommandLinux(cmd = "which", args = "R", ssh = TRUE, ssh.cmd = ssh.cmd, ssh.args = ssh.args, nodename = nodename, stop.on.exit.code = TRUE)
   messagef("which R result:")
   print(res)
   catf("\n")
 
   messagef("*** Find helper script on slave: ***")
-  res = findHelperScriptLinux(rhome, r.options, ssh = TRUE, nodename = nodename)
+  res = findHelperScriptLinux(rhome, r.options, ssh = TRUE, ssh.cmd = ssh.cmd, ssh.args = ssh.args, nodename = nodename)
   messagef("Find helper script result:")
   print(res)
   catf("\n")
 
   messagef("*** Auto-detecting ncpus for slave: ***")
-  worker = makeWorkerRemoteLinux(nodename = nodename, rhome = rhome, r.options = r.options, ncpus = 1)
+  worker = makeWorkerRemoteLinux(ssh.cmd = ssh.cmd, ssh.args = ssh.args, nodename = nodename, rhome = rhome, r.options = r.options, ncpus = 1)
   res = runWorkerCommand(worker = worker, command = "number-of-cpus")
   messagef("Auto-detecting ncpus result:")
   print(res)
@@ -74,7 +82,7 @@ debugSSH = function(nodename, rhome = "",
   queryWorkerStatus()
 
   messagef("*** Submitting 1 job: ***")
-  ssh.workers = list(makeSSHWorker(nodename = nodename, rhome = rhome, r.options = r.options))
+  ssh.workers = list(makeSSHWorker(ssh.cmd = ssh.cmd, ssh.args = ssh.args, nodename = nodename, rhome = rhome, r.options = r.options))
   conf$cluster.functions = do.call(makeClusterFunctionsSSH, ssh.workers)
   id = "debug_ssh_1"
   reg = makeRegistry(id = id, file.dir = file.path(dir, id), work.dir = wd, sharding = FALSE)

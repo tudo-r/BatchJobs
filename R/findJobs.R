@@ -1,7 +1,6 @@
 #' Finds ids of jobs that match a query.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Subset of job ids to restrict the result to.
 #'   Default is all jobs.
@@ -20,7 +19,7 @@
 #' batchExpandGrid(reg, f, x = 1:2, y = 1:3)
 #' findJobs(reg, pars = (y > 2))
 findJobs = function(reg, ids, pars, jobnames) {
-  checkRegistry(reg, strict = TRUE)
+  checkRegistry(reg, strict = TRUE, writeable = FALSE)
   syncRegistry(reg)
   if (!missing(ids))
     checkIds(reg, ids)

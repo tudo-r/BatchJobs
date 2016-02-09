@@ -31,6 +31,7 @@ test_that("getJobInfo", {
   tab = getJobInfo(reg, pars=TRUE)
   expect_equal(tab$X, 1:3)
   expect_equal(tab$i, rep(2, 3))
+  expect_equal(tab$pars, NULL)
 
   tab = getJobInfo(reg, select = "time.running")
   expect_true(ncol(tab) == 2) # id always selected
@@ -49,23 +50,28 @@ test_that("getJobInfo works with error and time.running", {
   }
   batchMap(reg, f, 1:2)
   submitJobs(reg)
+  waitForJobs(reg)
   i = getJobInfo(reg)
   expect_equal(is.na(i$error), c(TRUE, FALSE))
   expect_false(any(is.na(i$time.running)))
 })
 
-# FIXME: for some reason this test produced mem = NA, but only in R CMD check
+test_that("turn off memory calculation", {
+    reg = makeTestRegistry()
+    ids = batchMap(reg, function(n) { x = 1:(10^n); x + rev(x) }, n = c(1, 5))
+    submitJobs(reg, ids)
+    waitForJobs(reg, ids)
+    mem = getJobInfo(reg, select = "memory")$memory
+    expect_numeric(mem, any.missing = FALSE)
+    expect_true(mem[2] >= mem[1])
 
-# test_that("getJobInfo: memory correctly reported", {
-#   if (!isWindows() && isExpensiveExampleOk()) {
-#     reg = makeTestRegistry()
-#     conf = getConfig()
-#     on.exit(setConfig(conf = conf))
-#     setConfig(cluster.functions = makeClusterFunctionsLocal())
-#     ids = batchMap(reg, function(n) { x = 1:(10^n); x + rev(x) }, n = c(1, 6))
-#     submitJobs(reg, ids)
-#     waitForJobs(reg, ids)
-#     mem = getJobInfo(reg, select = "memory")$memory
-#     expect_true(testNumeric(mem, any.missing = FALSE))
-#   }
-# })
+    conf = getConfig()
+    on.exit(setConfig(conf = conf))
+    setConfig(measure.mem = FALSE)
+    reg = makeTestRegistry()
+    ids = batchMap(reg, function(n) { x = 1:(10^n); x + rev(x) }, n = c(1, 5))
+    submitJobs(reg, ids)
+    waitForJobs(reg, ids)
+    mem = getJobInfo(reg, select = "memory")$memory
+    expect_equal(mem, c(-1, -1))
+})

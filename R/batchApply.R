@@ -31,6 +31,7 @@
 #  waitForJobs(reg)
 #  reduceResultsVector(reg, use.names = FALSE) == rowSums(X)
 batchApply = function(reg, X, margin, fun, chunk.size, n.chunks, ..., use.names = FALSE) {
+  checkRegistry(reg, strict = TRUE, writeable = TRUE)
   assert(checkMatrix(X), checkArray(X))
   dX = dim(X)
   margin = asInt(margin, lower = 1L, upper = length(dX))

@@ -1,6 +1,8 @@
 # BatchJobs
 
-[![Build Status](https://travis-ci.org/tudo-r/BatchJobs.png)](https://travis-ci.org/tudo-r/BatchJobs)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/BatchJobs)](http://cran.r-project.org/web/packages/BatchJobs/)
+[![CRAN Downloads](http://cranlogs.r-pkg.org/badges/BatchJobs)](https://cran.rstudio.com/web/packages/BatchJobs/index.html)
+[![Build Status](https://travis-ci.org/tudo-r/BatchJobs.svg)](https://travis-ci.org/tudo-r/BatchJobs)
 [![Build status](https://ci.appveyor.com/api/projects/status/pkcy60csbp8k1ms9/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/batchjobs/branch/master)
 [![Coverage Status](https://coveralls.io/repos/tudo-r/BatchJobs/badge.svg)](https://coveralls.io/r/tudo-r/BatchJobs)
 
@@ -17,7 +19,7 @@ Provides Map, Reduce and Filter variants to generate jobs on batch computing sys
   devtools::install_github("tudo-r/BatchJobs")
   ```
 
-* [Further installation instructions](https://github.com/tudo-r/PackagesInfo/wiki/Installation-Information)
+* [Further installation instructions](https://github.com/rdatsci/PackagesInfo/wiki/Installation-Information)
 
 ## If you use the package, please cite it and star it here
 
@@ -46,11 +48,11 @@ A BibTeX entry for LaTeX users is
 ## Core features
 * Create, submit and control [R](http://www.r-project.org/) jobs on batch systems
 * Provides the functional programming tools Map, Reduce and Filter to operate on the cluster
-* Supported systems include Torque/PBS, SGE, SLURM and LSF
+* Supported systems include Torque/PBS, SGE, SLURM, OpenLava and LSF
 * Support for makeshift SSH clusters and local (multicore) execution
 * Convenient collection and aggregation of results
 * Further Map and Reduce results from previous jobs as batch jobs
-* Optional mail sending using [sendmailR](http://cran.r-project.org/web/packages/sendmailR) after job completion
+* Optional mail sending using [sendmailR](http://cran.r-project.org/web/packages/sendmailR/) after job completion
 * Query status of jobs and display log files inside R
 * Possibility to write your own simple cluster interface if your architecture is not supported
 * [BatchExperiments](https://github.com/tudo-r/Batchexperiments) extends this package with functionality required for comprehensive computer experiments and simulation studies.

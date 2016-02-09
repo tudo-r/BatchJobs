@@ -17,8 +17,7 @@
 #' terminal.
 #'
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ids [\code{integer}]\cr
 #'   Vector for job id or list of vectors of chunked job ids.
 #'   Only corresponding jobs are submitted. Chunked jobs will get executed
@@ -77,7 +76,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
   }
 
   ### argument checks on registry and ids
-  checkRegistry(reg)
+  checkRegistry(reg, writeable = TRUE)
   syncRegistry(reg)
   if (missing(ids)) {
     ids = dbFindSubmitted(reg, negate = TRUE)
@@ -157,7 +156,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
   # use staged queries on master if fs.timeout is set
   # -> this way we are relatively sure that db transactions are performed in the intended order
   fs.timeout = conf$fs.timeout
-  staged = conf$staged.queries && !is.na(fs.timeout)
+  staged = conf$staged.queries || !is.na(fs.timeout)
   interrupted = FALSE
 
   submit.msgs = buffer(type = "list", capacity = 1000L, value = dbSendMessages,
@@ -165,6 +164,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
                        staged = staged, fs.timeout = fs.timeout)
 
   logger = makeSimpleFileLogger(file.path(reg$file.dir, "submit.log"), touch = FALSE, keep = 1L)
+  resources.timestamp = saveResources(reg, resources)
 
   ### set on exit handler to avoid inconsistencies caused by user interrupts
   on.exit({
@@ -184,25 +184,24 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
                logger$getSize(), logger$getLogfile(), logger$getMessages(1L))
   })
 
-  ### write R scripts
-  info("Writing %i R scripts...", n)
-  resources.timestamp = saveResources(reg, resources)
-  rscripts = writeRscripts(reg, cf, ids, chunks.as.arrayjobs, resources.timestamp, disable.mail = FALSE,
-    delays = getDelays(cf, job.delay, n))
-  waitForFiles(rscripts, timeout = fs.timeout)
-
   ### reset status of jobs: delete errors, done, ...
   dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids), type = "first"), staged = staged, fs.timeout = fs.timeout)
 
   ### initialize progress bar
   bar = getProgressBar(progressbar, max = n, label = "SubmitJobs")
   bar$set()
+  delays = getDelays(cf, job.delay, n)
 
   tryCatch({
     for (i in seq_along(ids)) {
       id = ids[[i]]
       id1 = id[1L]
       retries = 0L
+
+      ### write R scripts
+      files = writeFiles(reg, cf, id, chunks.as.arrayjobs, resources.timestamp,
+                         disable.mail = FALSE, staged = staged, delay = delays[i])
+      waitForFiles(files, timeout = fs.timeout)
 
       repeat { # max.retries may be Inf
         if (limit.concurrent.jobs && length(cf$listJobs(conf, reg, alljobs = TRUE)) >= conf$max.concurrent.jobs) {
@@ -216,7 +215,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
             conf = conf,
             reg = reg,
             job.name = sprintf("%s-%i", reg$id, id1),
-            rscript = rscripts[i],
+            rscript = files[1],
             log.file = getLogFilePath(reg, id1),
             job.dir = getJobDirs(reg, id1),
             resources = resources,

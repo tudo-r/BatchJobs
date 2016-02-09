@@ -31,14 +31,15 @@
 #' @name BatchJobs
 NULL
 
-#' @import BBmisc
-#' @import checkmate
 #' @import utils
 #' @import stats
+#' @import methods
+#' @import BBmisc
+#' @import checkmate
+#' @import data.table
 #' @import DBI
 #' @import RSQLite
 #' @import fail
-#' @import methods
 #' @importFrom digest digest
 #' @importFrom brew brew
 #' @importFrom sendmailR sendmail

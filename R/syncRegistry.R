@@ -1,6 +1,23 @@
+#' Syncronize staged queries into the registry.
+#'
+#' @description
+#' If the option \dQuote{staged.queries} is enabled, all communication from the nodes
+#' to the master is done via files in the subdirectory \dQuote{pending} of the \code{file.dir}.
+#' This function checks for such files and merges the information into the database.
+#' Usually you do not have to call this function yourself.
+#'
+#' @template arg_reg
+#' @return Invisibly returns \code{TRUE} on success.
+#' @export
 syncRegistry = function(reg) {
   conf = getBatchJobsConf()
-  if (conf$staged.queries) {
+
+  # use staged queries on master if fs.timeout is set
+  # -> this way we are relatively sure that db transactions are performed in the intended order
+  fs.timeout = conf$fs.timeout
+  staged = conf$staged.queries || !is.na(fs.timeout)
+
+  if (staged) {
     if (conf$debug && isOnSlave())
       stop("SQL query sent from Worker")
 

@@ -19,7 +19,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   seed = if (missing(seed)) getRandomSeed() else asInt(seed)
 
   assertCharacter(packages, any.missing = FALSE)
-  packages = union(packages, "BatchJobs")
+  packages = unique(c("BatchJobs", packages))
   requirePackages(packages, stop = TRUE, suppress.warnings = TRUE, default.method = "attach")
 
   assertCharacter(src.dirs, any.missing = FALSE)
@@ -43,10 +43,12 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
   sourceRegistryFilesInternal(work.dir, src.dirs, src.files)
 
   packages = setNames(lapply(packages, function(pkg) list(version = packageVersion(pkg))), packages)
+  packages$BatchJobs$mandatory = TRUE
   conf = getConfig()
 
   setClasses(list(
     id = id,
+    read.only = FALSE,
     version = R.version,
     RNGkind = RNGkind(),
     db.driver = conf$db.driver,
@@ -58,7 +60,7 @@ makeRegistryInternal = function(id, file.dir, sharding, work.dir,
     src.dirs = src.dirs,
     src.files = src.files,
     multiple.result.files = multiple.result.files,
-    packages = packages[order(names(packages))]
+    packages = packages
   ), "Registry")
 }
 
@@ -153,47 +155,6 @@ print.Registry = function(x, ...) {
   cat("  Required packages:", collapse(names(x$packages), ", "), "\n")
 }
 
-#' @title Load a previously saved registry.
-#'
-#' @details
-#' Loads a previously created registry from the file system.
-#' The \code{file.dir} is automatically updated upon load, so be careful
-#' if you use the registry on multiple machines simultaneously, e.g.
-#' via sshfs or a samba share.
-#'
-#' @param file.dir [\code{character(1)}]\cr
-#'   Location of the file.dir to load the registry from.
-#' @param work.dir [\code{character(1)}]\cr
-#'   Location of the work. Unchanged if missing.
-#' @return [\code{\link{Registry}}].
-#' @export
-loadRegistry = function(file.dir, work.dir) {
-  fn = getRegistryFilePath(file.dir)
-  if (!file.exists(fn))
-    stopf("No registry found in '%s'", file.dir)
-  info("Loading registry: %s", fn)
-  reg = load2(fn, "reg")
-
-  requirePackages(names(reg$packages), why = sprintf("registry %s", reg$id), default.method = "attach")
-
-  if (!isOnSlave()) {
-    # FIXME: check that no jobs are running, if possible, before updating
-    adjusted = adjustRegistryPaths(reg, file.dir, work.dir)
-    if (!isFALSE(adjusted))
-      reg = adjusted
-
-    updated = updateRegistry(reg)
-    if (!isFALSE(updated))
-      reg = updated
-
-    if (!isFALSE(adjusted) || !isFALSE(updated))
-      saveRegistry(reg)
-  }
-  loadExports(reg)
-  sourceRegistryFiles(reg)
-
-  return(reg)
-}
 
 saveRegistry = function(reg) {
   fn = getRegistryFilePath(reg$file.dir)
@@ -206,7 +167,7 @@ isRegistryDir = function(dir) {
   isDirectory(dir) && file.exists(getRegistryFilePath(dir))
 }
 
-checkRegistry = function(reg, strict = FALSE) {
+checkRegistry = function(reg, strict = FALSE, writeable = TRUE) {
   cl = class(reg)
   expected = "Registry"
   if (strict) {
@@ -216,6 +177,8 @@ checkRegistry = function(reg, strict = FALSE) {
     if (expected %nin% cl)
       stopf("Registry class mismatch: Expected argument of class '%s'", expected)
   }
+  if (writeable && isTRUE(reg$read.only))
+    stop("Registry is read-only. Operation not permitted.")
   invisible(TRUE)
 }
 
@@ -227,8 +190,7 @@ checkRegistry = function(reg, strict = FALSE) {
 #' If there are live/running jobs, an informative error is generated.
 #' The default is to prompt the user for confirmation.
 #'
-#' @param reg [\code{\link{Registry}}]\cr
-#'   Registry.
+#' @template arg_reg
 #' @param ask [\code{character(1)}]\cr
 #'   If \code{"yes"} the user is prompted to confirm the action.
 #'   If trying to prompt the user this way in a non-interactive
@@ -240,6 +202,8 @@ checkRegistry = function(reg, strict = FALSE) {
 #'
 #' @export
 removeRegistry = function(reg, ask = c("yes", "no")) {
+  checkRegistry(reg, writeable = TRUE)
+  syncRegistry(reg)
   ask = match.arg(ask)
 
   if (ask == "yes") {
@@ -257,15 +221,9 @@ removeRegistry = function(reg, ask = c("yes", "no")) {
     if (ans != 1L) return(invisible(FALSE))
   }
 
-
-  checkRegistry(reg)
-  syncRegistry(reg)
-
   running = findOnSystem(reg)
   if (length(running) > 0L)
     stopf("Can't remove registry, because there are %d live jobs on the system.", length(running))
-
-  ## FIXME: Close database first?
 
   removeDirs(reg$file.dir, recursive=TRUE, must.work=TRUE)
 }
