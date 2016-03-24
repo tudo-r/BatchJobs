@@ -359,12 +359,16 @@ dbMatchJobNames = function(reg, ids, jobnames) {
 ### Messages
 ############################################
 dbSendMessage = function(reg, msg, staged = useStagedQueries(), fs.timeout = NA_real_) {
+  ## AD HOC/FIXME: Avoid partial matching; some functions pass 'msg' with
+  ## field 'msgs' and some with field 'msg' (e.g. dbMakeMessageError()).
+  msgT <- if ("msgs" %in% names(msg)) msg$msgs else msg$msg
+
   if (staged) {
     fn = getPendingFile(reg, msg$type, msg$ids[1L])
-    writeSQLFile(msg$msgs, fn)
+    writeSQLFile(msgT, fn)
     waitForFiles(fn, timeout = fs.timeout)
   } else {
-    dbDoQuery(reg, msg$msgs, flags = "rw")
+    dbDoQuery(reg, msgT, flags = "rw")
   }
 }
 
