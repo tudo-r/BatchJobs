@@ -361,10 +361,10 @@ dbMatchJobNames = function(reg, ids, jobnames) {
 dbSendMessage = function(reg, msg, staged = useStagedQueries(), fs.timeout = NA_real_) {
   if (staged) {
     fn = getPendingFile(reg, msg$type, msg$ids[1L])
-    writeSQLFile(msg$msg, fn)
+    writeSQLFile(msg$msgs, fn)
     waitForFiles(fn, timeout = fs.timeout)
   } else {
-    dbDoQuery(reg, msg$msg, flags = "rw")
+    dbDoQuery(reg, msg$msgs, flags = "rw")
   }
 }
 
