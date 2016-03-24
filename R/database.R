@@ -33,7 +33,7 @@ dbDoQueries = function(reg, queries, flags = "ro", max.retries = 100L, sleep = f
     } else {
       ok = try ({
         dbBegin(con)
-        ress = lapply(queries, dbGetQuery, con = con)
+        ress = lapply(queries, dbGetQuery, conn = con)
       }, silent = TRUE)
       if (!is.error(ok)) {
         # this can fail because DB is locked
