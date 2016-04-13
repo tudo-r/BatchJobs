@@ -28,9 +28,9 @@
 #' @family clusterFunctions
 #' @export
 makeClusterFunctionsSLURM = function(template.file, list.jobs.cmd = c("squeue", "-h", "-o %i", "-u $USER"),
-                                     list.job.line.skip = 0L, cluster.name) {
+                                     list.job.line.skip = 0L, cluster.name = NULL) {
   
-  if (!missing(cluster.name)) {
+  if (!is.null(cluster.name)) {
     assertString(cluster.name)
     list.jobs.cmd = append(list.jobs.cmd, paste0("--clusters=", cluster.name))
   }
@@ -58,17 +58,19 @@ makeClusterFunctionsSLURM = function(template.file, list.jobs.cmd = c("squeue", 
   }
 
   killJob = function(conf, reg, batch.job.id) {
+
     
-    killCmd = "scancel"
-    if (!missing(cluster.name)) {
-      killCmd = paste0(killCmd, " --clusters=", cluster.name)
+    if (!is.null(cluster.name)) {
+      cfKillBatchJob("scancel",paste0("--clusters=", cluster.name, " ", batch.job.id))
     }
-    cfKillBatchJob(killCmd, batch.job.id)
+    cfKillBatchJob("scancel", batch.job.id)
   }
 
   listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
     jids = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L])$output
+    # if squeue returns additional information (like cluster name), one or more
+    # lines can be omitted
     if (list.job.line.skip > 0L) {
       jids = jids[-seq_len(list.job.line.skip)]
     }
