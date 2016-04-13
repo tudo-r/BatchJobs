@@ -69,10 +69,9 @@ makeClusterFunctionsSLURM = function(template.file, list.jobs.cmd = c("squeue", 
   listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
     jids = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L])$output
-    if (list.job.line.skip > 0) {
-      jids <- jids[-seq_len(list.job.line.skip)]
+    if (list.job.line.skip > 0L) {
+      jids = jids[-seq_len(list.job.line.skip)]
     }
-    jids 
     stri_extract_first_regex(jids, "[0-9]+")
   }
 
