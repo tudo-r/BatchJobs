@@ -29,6 +29,7 @@ makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect"
     arrayjobs = min(arrayjobs, conf$max.arrayjobs)
 
     outfile = cfBrewTemplate(conf, template, rscript, "pbs")
+    waitForFiles(outfile)
     res = runOSCommandLinux("qsub",
                             outfile,
                             stop.on.exit.code = FALSE,
