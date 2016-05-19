@@ -31,11 +31,12 @@ makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect"
     outfile = cfBrewTemplate(conf, template, rscript, "pbs")
     while(BatchJobs:::runOSCommandLinux(cmd = "test",
                                         args = c("-f", outfile),
-                                        ssh = TRUE, ssh.cmd = "ssh",
-                                        nodename = "login",
+                                        ssh = conf$ssh,
+                                        ssh.cmd = "ssh",
+                                        nodename = conf$node,
                                         ssh.args = "",
                                         stop.on.exit.code = FALSE)$exit.code) {
-      message("pbs file does not yet exist...")
+      Sys.sleep(1)
     }
     res = runOSCommandLinux("qsub",
                             outfile,
