@@ -4,12 +4,14 @@
 \alias{loadConfig}
 \title{Load a specific configuration file.}
 \usage{
-loadConfig(conffile = ".BatchJobs.R")
+loadConfig(conffile = ".BatchJobs.R", ...)
 }
 \arguments{
 \item{conffile}{[\code{character(1)}]\cr
 Location of the configuration file to load.
 Default is \dQuote{.BatchJobs.conf} in the current working directory.}
+
+\item{...}{Further arguments to \code{sys.source} (currently just \code{chdir})}
 }
 \value{
 Invisibly returns a list of configuration settings.
