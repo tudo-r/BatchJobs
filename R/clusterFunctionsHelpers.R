@@ -12,7 +12,7 @@
 #' @return [\code{character}].
 #' @export
 cfReadBrewTemplate = function(template.file) {
-  assertFile(template.file, "r")
+  assertFileExists(template.file, "r")
   tmpl = readLines(template.file)
   if (length(tmpl) == 0L)
     stopf("Error reading template '%s' or empty template", template.file)
