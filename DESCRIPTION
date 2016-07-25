@@ -19,7 +19,7 @@ Depends:
     methods
 Imports:
     brew,
-    checkmate (>= 1.6.1),
+    checkmate (>= 1.8.0),
     data.table (>= 1.9.6),
     DBI,
     digest,

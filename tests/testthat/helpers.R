@@ -28,7 +28,7 @@ getTempDir = function() {
 }
 
 makeTestRegistry = function(packages = character(0L), work.dir = getWorkDir(), file.dir = getTempDir(), ...) {
-  dir.create(file.dir, recursive = TRUE, showWarning = FALSE)
+  dir.create(file.dir, recursive = TRUE, showWarnings = FALSE)
   makeRegistry(
     id = "unittests",
     seed = 1L,

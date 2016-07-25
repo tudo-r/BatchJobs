@@ -33,7 +33,7 @@ dbDoQueries = function(reg, queries, flags = "ro", max.retries = 100L, sleep = f
     } else {
       ok = try ({
         dbBegin(con)
-        ress = lapply(queries, dbGetQuery, con = con)
+        ress = lapply(queries, dbGetQuery, conn = con)
       }, silent = TRUE)
       if (!is.error(ok)) {
         # this can fail because DB is locked
@@ -359,12 +359,16 @@ dbMatchJobNames = function(reg, ids, jobnames) {
 ### Messages
 ############################################
 dbSendMessage = function(reg, msg, staged = useStagedQueries(), fs.timeout = NA_real_) {
+  ## AD HOC/FIXME: Avoid partial matching; some functions pass 'msg' with
+  ## field 'msgs' and some with field 'msg' (e.g. dbMakeMessageError()).
+  msgT <- if ("msgs" %in% names(msg)) msg$msgs else msg$msg
+
   if (staged) {
     fn = getPendingFile(reg, msg$type, msg$ids[1L])
-    writeSQLFile(msg$msg, fn)
+    writeSQLFile(msgT, fn)
     waitForFiles(fn, timeout = fs.timeout)
   } else {
-    dbDoQuery(reg, msg$msg, flags = "rw")
+    dbDoQuery(reg, msgT, flags = "rw")
   }
 }
 
