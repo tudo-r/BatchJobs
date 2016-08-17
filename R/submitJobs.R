@@ -204,7 +204,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
       waitForFiles(files, timeout = fs.timeout)
 
       repeat { # max.retries may be Inf
-        if (limit.concurrent.jobs && length(cf$listJobs(conf, reg, alljobs = TRUE)) >= conf$max.concurrent.jobs) {
+        if (limit.concurrent.jobs && length(cf$listJobs(conf, reg)) >= conf$max.concurrent.jobs) {
           # emulate a temporary erroneous batch result
           batch.result = makeSubmitJobResult(status = 10L, batch.job.id = NA_character_, "Max concurrent jobs exhausted")
         } else {

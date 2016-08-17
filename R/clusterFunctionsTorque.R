@@ -61,7 +61,7 @@ makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect"
     cfKillBatchJob("qdel", batch.job.id)
   }
 
-  listJobs = function(conf, reg, alljobs = FALSE) {
+  listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
     batch.ids = runOSCommandLinux(list.jobs.cmd[1L],
                                   list.jobs.cmd[-1L],
