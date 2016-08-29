@@ -27,7 +27,12 @@ makeClusterFunctionsSLURM = function(template.file, list.jobs.cmd = c("squeue", 
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
     outfile = cfBrewTemplate(conf, template, rscript, "sb")
-    res = runOSCommandLinux("sbatch", outfile, stop.on.exit.code = FALSE)
+    res = runOSCommandLinux("sbatch", outfile,
+                            stop.on.exit.code = FALSE,
+                            ssh = conf$ssh,
+                            nodename = conf$node,
+                            ssh.cmd = "ssh",
+                            ssh.args = "")
 
     max.jobs.msg = "sbatch: error: Batch job submission failed: Job violates accounting policy (job submit limit, user's size and/or time limits)"
     temp.error = "Socket timed out on send/recv operation"
@@ -50,7 +55,11 @@ makeClusterFunctionsSLURM = function(template.file, list.jobs.cmd = c("squeue", 
 
   listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
-    jids = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L])$output
+    jids = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L],
+                             ssh = conf$ssh,
+                             nodename = conf$node,
+                             ssh.cmd = "ssh",
+                             ssh.args = "")$output
     stri_extract_first_regex(jids, "[0-9]+")
   }
 
