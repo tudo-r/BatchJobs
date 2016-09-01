@@ -12,7 +12,7 @@ NULL
 
 # sources 1 config file and returns the envir
 sourceConfFile = function(conffile) {
-  assertFile(conffile)
+  assertFileExists(conffile)
 
   conf = new.env()
   x = try(sys.source(conffile, envir = conf))
