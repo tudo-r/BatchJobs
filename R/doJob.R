@@ -28,7 +28,7 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
     # FIXME better send error to database here, we don't see those errors on the master :(
     array.id = asInt(as.integer(array.id), lower = 1L, upper = length(ids))
     messagef("Processing array id %s", array.id)
-    ids = chunk(ids, n.chunks = conf$max.arrayjobs)[[array.id]]
+    ids = ids[array.id]
   }
 
   n = length(ids)
