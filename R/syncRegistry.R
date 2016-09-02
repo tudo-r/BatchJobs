@@ -11,13 +11,7 @@
 #' @export
 syncRegistry = function(reg) {
   conf = getBatchJobsConf()
-
-  # use staged queries on master if fs.timeout is set
-  # -> this way we are relatively sure that db transactions are performed in the intended order
-  fs.timeout = conf$fs.timeout
-  staged = conf$staged.queries || !is.na(fs.timeout)
-
-  if (staged) {
+  if (conf$staged.queries) {
     if (conf$debug && isOnSlave())
       stop("SQL query sent from Worker")
 
