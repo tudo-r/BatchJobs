@@ -113,6 +113,7 @@ cfKillBatchJob = function(cmd, batch.job.id, max.tries = 3L) {
   max.tries = asCount(max.tries)
   assertCount(max.tries)
 
+  conf = getBatchJobsConf()
   for (tmp in seq_len(max.tries)) {
     res = runOSCommandLinux(cmd, batch.job.id,
                             stop.on.exit.code = FALSE,
