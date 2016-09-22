@@ -11,8 +11,7 @@ loadExports(reg, what = NULL)
 Registry.}
 
 \item{what}{[\code{character}]\cr
-Names of objects and corresponding \dQuote{RData} files which should be loaded.
-Default \code{NULL} loads all files.}
+Names of objects to load. Defaults to all objects exported.}
 }
 \value{
 [\code{character}]. Invisibly returns a character vector of loaded objects.

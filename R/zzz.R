@@ -39,7 +39,6 @@ NULL
 #' @import data.table
 #' @import DBI
 #' @import RSQLite
-#' @import fail
 #' @importFrom digest digest
 #' @importFrom brew brew
 #' @importFrom sendmailR sendmail
