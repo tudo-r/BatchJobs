@@ -13,6 +13,7 @@ r_binary_packages:
 r_github_packages:
     - jimhester/covr
     - mllg/fail
+    - rstats-db/RSQLite
 
 after_success:
     - Rscript -e 'library(covr); coveralls()'
