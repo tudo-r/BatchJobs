@@ -91,14 +91,22 @@ dbAddData = function(reg, tab, data) {
                   collapse(colnames(data)), collapse(rep.int("?", ncol(data))))
   con = dbConnectToJobsDB(reg, flags = "rw")
   on.exit(dbDisconnect(con))
-  dbBegin(con)
-  ok = try(dbGetPreparedQuery(con, query, bind.data = data))
-  if(is.error(ok)) {
-    dbRollback(con)
-    stopf("Error in dbAddData: %s", as.character(ok))
-  }
 
+  dbBegin(con)
+  res = dbSendQuery(con, query)
+  for (i in seq_row(data)) {
+    row = unname(as.list(data[i, ]))
+    dbBind(res, row)
+    ok = try(dbFetch(res))
+    if(is.error(ok)) {
+      dbClearResult(res)
+      dbRollback(con)
+      stopf("Error in dbAddData: %s", as.character(ok))
+    }
+  }
+  dbClearResult(res)
   dbCommit(con)
+
   as.integer(dbGetQuery(con, "SELECT total_changes()"))
 }
 
