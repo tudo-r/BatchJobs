@@ -52,6 +52,8 @@ NULL
 .BatchJobs.conffiles = character(0L)
 
 .onAttach = function(libname, pkgname) {
+  packageStartupMessage("The development of BatchJobs and BatchExperiments is discontinued.")
+  packageStartupMessage("Consider switching to 'batchtools' for new features and improved stability")
   if (getOption("BatchJobs.verbose", default = TRUE)) {
     cf = .BatchJobs.conffiles
     packageStartupMessage(sprintf("Sourced %i configuration files: ", length(cf)))
