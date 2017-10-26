@@ -47,4 +47,3 @@ Other debug: \code{\link{debugMulticore}},
   \code{\link{resetJobs}}, \code{\link{setJobFunction}},
   \code{\link{showLog}}
 }
-

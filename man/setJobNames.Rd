@@ -25,4 +25,3 @@ Named vector of job ids.
 \description{
 Set job names.
 }
-

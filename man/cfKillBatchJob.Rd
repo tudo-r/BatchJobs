@@ -28,4 +28,3 @@ If the command returns an exit code > 0, the command is repeated
 after a 1 second sleep \code{max.tries-1} times.
 If the command failed in all tries, an exception is generated.
 }
-

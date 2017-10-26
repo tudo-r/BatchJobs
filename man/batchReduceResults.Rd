@@ -63,4 +63,3 @@ waitForJobs(reg2)
 # now reduce one final time on master
 reduceResults(reg2, fun = myreduce)
 }
-

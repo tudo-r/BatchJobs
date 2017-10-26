@@ -29,4 +29,3 @@ reg = makeRegistry("test", file.dir = tempfile())
 batchMap(reg, identity, i = 1:10)
 batchQuery(reg, "SELECT * FROM test_job_status")
 }
-

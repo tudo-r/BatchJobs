@@ -2,11 +2,11 @@
 % Please edit documentation in R/reduceResults.R
 \name{reduceResults}
 \alias{reduceResults}
+\alias{reduceResultsList}
+\alias{reduceResultsVector}
+\alias{reduceResultsMatrix}
 \alias{reduceResultsDataFrame}
 \alias{reduceResultsDataTable}
-\alias{reduceResultsList}
-\alias{reduceResultsMatrix}
-\alias{reduceResultsVector}
 \title{Reduce results from result directory.}
 \usage{
 reduceResults(reg, ids, part = NA_character_, fun, init, impute.val,
@@ -127,4 +127,3 @@ print(str(reduceResultsDataFrame(reg)))
 # reduce results to a sum
 reduceResults(reg, fun = function(aggr, job, res) aggr+res$a, init = 0)
 }
-

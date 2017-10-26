@@ -36,4 +36,3 @@ Other clusterFunctions: \code{\link{makeClusterFunctionsLSF}},
   \code{\link{makeClusterFunctionsTorque}},
   \code{\link{makeClusterFunctions}}
 }
-

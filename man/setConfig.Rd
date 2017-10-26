@@ -23,4 +23,3 @@ Set and overwrite configuration settings
 Other conf: \code{\link{configuration}},
   \code{\link{getConfig}}, \code{\link{loadConfig}}
 }
-

@@ -29,4 +29,3 @@ Other exports: \code{\link{addRegistryPackages}},
   \code{\link{removeRegistrySourceFiles}},
   \code{\link{setRegistryPackages}}
 }
-

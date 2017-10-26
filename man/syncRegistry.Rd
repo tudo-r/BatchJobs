@@ -19,4 +19,3 @@ to the master is done via files in the subdirectory \dQuote{pending} of the \cod
 This function checks for such files and merges the information into the database.
 Usually you do not have to call this function yourself.
 }
-

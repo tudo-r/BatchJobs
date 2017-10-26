@@ -44,4 +44,3 @@ jobs successfully terminated, \dQuote{E} for number ofjobs terminated
 with an R exception and \dQuote{R} for number of jobs currently running
 on the system.
 }
-

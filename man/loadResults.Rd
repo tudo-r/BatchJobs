@@ -46,4 +46,3 @@ Loads result files for id vector.
 \seealso{
 \code{\link{reduceResults}}
 }
-
