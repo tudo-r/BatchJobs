@@ -45,7 +45,6 @@ NULL
 #' @importFrom stringi stri_trim_both
 #' @importFrom stringi stri_split_fixed
 #' @importFrom stringi stri_split_regex
-#' @importFrom backports isFALSE
 #' @importFrom BBmisc %nin%
 #' @importFrom BBmisc chunk
 #' @importFrom BBmisc checkListElementClass
@@ -98,6 +97,7 @@ NULL
 .onLoad = function(libname, pkgname) {
   options(BatchJobs.check.posix = getOption("BatchJobs.check.posix", default = !isWindows()))
   options(BatchJobs.clear.function.env = getOption("BatchJobs.clear.function.env", default = FALSE))
+  backports::import(pkgname)
 
   if (!isOnSlave()) {
     assignConfDefaults()
