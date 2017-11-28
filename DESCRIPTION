@@ -18,6 +18,7 @@ Depends:
     BBmisc (>= 1.9),
     methods
 Imports:
+    backports (>= 1.1.1),
     brew,
     checkmate (>= 1.8.0),
     data.table (>= 1.9.6),

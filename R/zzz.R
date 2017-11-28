@@ -34,7 +34,6 @@ NULL
 #' @import utils
 #' @import stats
 #' @import methods
-#' @import BBmisc
 #' @import checkmate
 #' @import data.table
 #' @import DBI
@@ -46,6 +45,38 @@ NULL
 #' @importFrom stringi stri_trim_both
 #' @importFrom stringi stri_split_fixed
 #' @importFrom stringi stri_split_regex
+#' @importFrom backports isFALSE
+#' @importFrom BBmisc %nin%
+#' @importFrom BBmisc chunk
+#' @importFrom BBmisc checkListElementClass
+#' @importFrom BBmisc clipString
+#' @importFrom BBmisc collapse
+#' @importFrom BBmisc convertToShortString
+#' @importFrom BBmisc convertListOfRowsToDataFrame
+#' @importFrom BBmisc dropNamed
+#' @importFrom BBmisc extractSubList
+#' @importFrom BBmisc filterNull
+#' @importFrom BBmisc insert
+#' @importFrom BBmisc isDirectory
+#' @importFrom BBmisc is.error
+#' @importFrom BBmisc isProperlyNamed
+#' @importFrom BBmisc isScalarNA
+#' @importFrom BBmisc isWindows
+#' @importFrom BBmisc lsort
+#' @importFrom BBmisc namedList
+#' @importFrom BBmisc names2
+#' @importFrom BBmisc makeFileCache
+#' @importFrom BBmisc makeProgressBar
+#' @importFrom BBmisc makeSimpleFileLogger
+#' @importFrom BBmisc save2 load2
+#' @importFrom BBmisc requirePackages
+#' @importFrom BBmisc setClasses setColNames setRowNames
+#' @importFrom BBmisc seq_col seq_row
+#' @importFrom BBmisc suppressAll
+#' @importFrom BBmisc system3
+#' @importFrom BBmisc vcapply viapply vlapply vnapply
+#' @importFrom BBmisc warningf stopf messagef catf
+#' @importFrom BBmisc which.first
 NULL
 
 .BatchJobs.conf = new.env(parent = emptyenv())
