@@ -14,7 +14,7 @@ MailingList: batchjobs@googlegroups.com
 License: BSD_2_clause + file LICENSE
 Roxygen: list(wrap = FALSE)
 Depends:
-    R (>= 2.15.0),
+    R (>= 3.0.0),
     BBmisc (>= 1.9),
     methods
 Imports:
