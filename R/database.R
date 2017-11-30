@@ -33,7 +33,15 @@ dbDoQueries = function(reg, queries, flags = "ro", max.retries = 100L, sleep = f
     } else {
       ok = try ({
         dbBegin(con)
-        ress = lapply(queries, dbGetQuery, conn = con)
+        for (query in queries) {
+          if (startsWith(query, "SELECT")) {
+            ress = dbGetQuery(con, query)
+          } else {
+            ress = dbSendQuery(con, query)
+            if (dbHasCompleted(ress))
+              dbClearResult(ress)
+          }
+        }
       }, silent = TRUE)
       if (!is.error(ok)) {
         # this can fail because DB is locked
@@ -71,7 +79,13 @@ dbDoQuery = function(reg, query, flags = "ro", max.retries = 100L, sleep = funct
       if (!grepl("(lock|i/o|readonly)", tolower(con)))
         stopf("Error while etablishing the connection: %s", as.character(con))
     } else {
-      res = try(dbGetQuery(con, query), silent = TRUE)
+      if (startsWith(query, "SELECT")) {
+        res = try(dbGetQuery(con, query), silent = TRUE)
+      } else {
+        res = try(dbSendQuery(con, query), silent = TRUE)
+        if (!is.error(res))
+          dbClearResult(res)
+      }
       dbDisconnect(con)
       if (!is.error(res))
         return(res)
@@ -96,8 +110,7 @@ dbAddData = function(reg, tab, data) {
   res = dbSendQuery(con, query)
   for (i in seq_row(data)) {
     row = unname(as.list(data[i, ]))
-    dbBind(res, row)
-    ok = try(dbFetch(res))
+    ok = try(dbBind(res, row))
     if(is.error(ok)) {
       dbClearResult(res)
       dbRollback(con)

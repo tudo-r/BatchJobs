@@ -156,7 +156,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
   # use staged queries on master if fs.timeout is set
   # -> this way we are relatively sure that db transactions are performed in the intended order
   fs.timeout = conf$fs.timeout
-  staged = conf$staged.queries || !is.na(fs.timeout)
+  staged = useStagedQueries() || !is.na(fs.timeout)
   interrupted = FALSE
 
   submit.msgs = buffer(type = "list", capacity = 1000L, value = dbSendMessages,
