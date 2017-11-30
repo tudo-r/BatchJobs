@@ -13,15 +13,11 @@ cache:
 
 environment:
   matrix:
-    - R_VERSION: devel
     - R_VERSION: release
     - R_VERSION: oldrel
-      RTOOLS_VERSION: 32
-      CRAN: http://cran.rstudio.com
 
 build_script:
   - travis-tool.sh install_deps
-  - travis-tool.sh install_github rstats-db/RSQLite
 
 test_script:
   - travis-tool.sh run_tests
