@@ -79,6 +79,20 @@ NULL
 NULL
 
 .BatchJobs.conf = new.env(parent = emptyenv())
+.BatchJobs.conf$cluster.functions = makeClusterFunctionsInteractive()
+.BatchJobs.conf$mail.start = "none"
+.BatchJobs.conf$mail.done = "none"
+.BatchJobs.conf$mail.error = "none"
+.BatchJobs.conf$db.driver = "SQLite"
+.BatchJobs.conf$db.options = list(pragmas = "busy_timeout=5000")
+.BatchJobs.conf$default.resources = list()
+.BatchJobs.conf$debug = FALSE
+.BatchJobs.conf$raise.warnings = FALSE
+.BatchJobs.conf$staged.queries = TRUE
+.BatchJobs.conf$max.concurrent.jobs = Inf
+.BatchJobs.conf$fs.timeout = NA_real_
+.BatchJobs.conf$measure.mem = TRUE
+
 .BatchJobs.conffiles = character(0L)
 
 .onAttach = function(libname, pkgname) {
@@ -100,7 +114,6 @@ NULL
   backports::import(pkgname)
 
   if (!isOnSlave()) {
-    assignConfDefaults()
     if (getOption("BatchJobs.load.config", TRUE)) {
       pkg = if(missing(libname) || missing(pkgname)) find.package(package = "BatchJobs") else file.path(libname, pkgname)
       .BatchJobs.conffiles <<- readConfs(pkg)

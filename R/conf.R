@@ -51,8 +51,7 @@ findConfigs = function(path = find.package("BatchJobs")) {
 readConfs = function(path = find.package("BatchJobs")) {
   conffiles = findConfigs(path)
   if (length(conffiles) == 0L) {
-    warning("No configuation found at all. Not in package, not in user.home, not in work dir!")
-    assignConfDefaults()
+    warning("No configuration found at all. Not in package, not in user.home, not in work dir!")
     return(character(0L))
   }
 
@@ -62,23 +61,6 @@ readConfs = function(path = find.package("BatchJobs")) {
   conf = sourceConfFiles(conffiles)
   assignConf(conf)
   invisible(conffiles)
-}
-
-assignConfDefaults = function() {
-  conf = getBatchJobsConf()
-  conf$cluster.functions = makeClusterFunctionsInteractive()
-  conf$mail.start = "none"
-  conf$mail.done = "none"
-  conf$mail.error = "none"
-  conf$db.driver = "SQLite"
-  conf$db.options = list(pragmas = "busy_timeout=5000")
-  conf$default.resources = list()
-  conf$debug = FALSE
-  conf$raise.warnings = FALSE
-  conf$staged.queries = TRUE
-  conf$max.concurrent.jobs = Inf
-  conf$fs.timeout = NA_real_
-  conf$measure.mem = TRUE
 }
 
 # loads conf into namespace on slave
@@ -93,7 +75,7 @@ loadConf = function(reg) {
 }
 
 getBatchJobsConf = function() {
-  get(".BatchJobs.conf", envir = getNamespace("BatchJobs"))
+  .BatchJobs.conf
 }
 
 saveConf = function(reg) {
@@ -166,13 +148,6 @@ getClusterFunctions = function(conf) {
 # Used in packageStartupMessage and in print.Config
 printableConf = function(conf) {
   x = as.list(conf)
-
-  # This gem here is for R CMD check running examples
-  # where we get an empty config for some reasons?
-  if (length(x) == 0L) {
-    assignConfDefaults()
-    x = as.list(getBatchJobsConf())
-  }
 
   x[setdiff(getConfNames(), names(x))] = ""
   fmt = paste(

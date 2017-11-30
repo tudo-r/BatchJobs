@@ -144,7 +144,6 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
     Sys.sleep(5)
   }
 
-
   ### save config, start the work
   saveConf(reg)
   is.chunked = is.list(ids)
@@ -183,7 +182,6 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
       messagef("%i temporary submit errors logged to file '%s'.\nFirst message: %s",
                logger$getSize(), logger$getLogfile(), logger$getMessages(1L))
   })
-
   ### reset status of jobs: delete errors, done, ...
   dbSendMessage(reg, dbMakeMessageKilled(reg, unlist(ids), type = "first"), staged = staged, fs.timeout = fs.timeout)
 
