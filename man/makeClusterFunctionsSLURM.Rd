@@ -5,7 +5,7 @@
 \title{Create cluster functions for SLURM-based systems.}
 \usage{
 makeClusterFunctionsSLURM(template.file, list.jobs.cmd = c("squeue", "-h",
-  "-o \%i", "-u $USER"))
+  "-o \%i", "-u $USER"), list.job.line.skip = 0L, cluster.name)
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
@@ -15,6 +15,14 @@ Path to a brew template file that is used for the PBS job file.}
 Change default system command / options to list jobs.
 The first entry is the command, the following the options.
 See \code{\link[BBmisc]{system3}}.}
+
+\item{list.job.line.skip}{[\code{integer(1)}]\cr
+Change how many lines of the job list should be skipped. Can be useful if \code{squeue} is giving
+additional output.}
+
+\item{cluster.name}{[\code{character(1)}]\cr
+If an additional cluster name has to be specified for listing or deleting jobs it can be 
+supplied with this argument. it will be added as \code{--clusters=cluster.name} for SLURM.}
 }
 \value{
 [\code{\link{ClusterFunctions}}].
