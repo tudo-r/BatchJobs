@@ -82,4 +82,3 @@ waitForJobs(reg)
 chunked = chunk(getJobIds(reg), n.chunks = 2, shuffle = TRUE)
 submitJobs(reg, chunked)
 }
-

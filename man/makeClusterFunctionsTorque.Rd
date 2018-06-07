@@ -46,4 +46,3 @@ Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctions}}
 }
-

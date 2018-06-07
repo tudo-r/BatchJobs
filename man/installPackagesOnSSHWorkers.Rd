@@ -43,4 +43,3 @@ of each each worker.
 \seealso{
 \code{\link{callFunctionOnSSHWorkers}}
 }
-

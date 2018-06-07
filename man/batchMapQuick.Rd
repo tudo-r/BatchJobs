@@ -61,4 +61,3 @@ for quick computations on the cluster.
 Should only be used by skilled users who know what they are doing.
 Creates the file.dir, maps function, potentially chunks jobs and submits them.
 }
-

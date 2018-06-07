@@ -65,4 +65,3 @@ In \code{\link{makeSSHWorker}} various options for load
 management are possible. Note that these will be
 ignored for the current call to execute it immediatly.
 }
-

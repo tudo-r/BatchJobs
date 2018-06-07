@@ -41,4 +41,3 @@ y = reduceResultsVector(reg)
 grid = getJobParamDf(reg)
 cbind(grid, y = y)
 }
-

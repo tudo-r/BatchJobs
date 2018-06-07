@@ -23,4 +23,3 @@ Returns parameters for all jobs as the rows of a data.frame.
 \examples{
 # see batchExpandGrid
 }
-

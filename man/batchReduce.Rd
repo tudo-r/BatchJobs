@@ -46,4 +46,3 @@ waitForJobs(reg)
 # now reduce one final time on master
 reduceResults(reg, fun = function(aggr,job,res) f(aggr, res))
 }
-

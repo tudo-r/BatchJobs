@@ -36,4 +36,3 @@ Loads a specific result file.
 \seealso{
 \code{\link{reduceResults}}
 }
-

@@ -66,4 +66,3 @@ waitForJobs(reg2)
 # check results
 reduceResults(reg2, fun = function(aggr,job,res) c(aggr, res))
 }
-

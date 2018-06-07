@@ -16,4 +16,3 @@ nodes, walltime, etc.
 \details{
 Can only be called in job function during job execution on slave.
 }
-

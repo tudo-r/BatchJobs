@@ -24,4 +24,3 @@ Default is \code{TRUE}.}
 \description{
 Throws an error if call it for unsubmitted jobs.
 }
-

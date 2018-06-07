@@ -26,4 +26,3 @@ Invisibly returns the vector of ids, converted to integer.
 Simply checks if probided vector of job ids is valid and
 throws an error if something is odd.
 }
-
