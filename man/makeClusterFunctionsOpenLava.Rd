@@ -46,3 +46,4 @@ Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsTorque}},
   \code{\link{makeClusterFunctions}}
 }
+\concept{clusterFunctions}

@@ -19,7 +19,11 @@ test_that("testJob", {
   reg = makeTestRegistry()
   f = function(i) {library(xxxxx);1}
   batchMap(reg, f, 1)
-  expect_error(testJob(reg, id, external=FALSE), "xxxxx")
+  if (getRversion() >= "3.6.0") {
+    expect_error(testJob(reg, id, external=FALSE), "xxxxx", class = "packageNotFoundError")
+  } else {
+    expect_error(testJob(reg, id, external=FALSE), "xxxxx")
+  }
   ids = findNotDone(reg)
   expect_equal(ids, id)
   expect_output({

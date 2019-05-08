@@ -73,3 +73,4 @@ Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsSSH}},
   \code{\link{makeClusterFunctionsTorque}}
 }
+\concept{clusterFunctions}

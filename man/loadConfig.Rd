@@ -21,3 +21,4 @@ Load a specific configuration file.
 Other conf: \code{\link{configuration}},
   \code{\link{getConfig}}, \code{\link{setConfig}}
 }
+\concept{conf}

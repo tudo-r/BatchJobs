@@ -28,3 +28,4 @@ Other debug: \code{\link{debugSSH}},
   \code{\link{setJobFunction}}, \code{\link{showLog}},
   \code{\link{testJob}}
 }
+\concept{debug}

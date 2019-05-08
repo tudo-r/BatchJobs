@@ -13,3 +13,4 @@ please read
 Other conf: \code{\link{getConfig}},
   \code{\link{loadConfig}}, \code{\link{setConfig}}
 }
+\concept{conf}

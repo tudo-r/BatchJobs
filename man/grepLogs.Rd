@@ -4,8 +4,8 @@
 \alias{grepLogs}
 \title{Grep log files for a pattern.}
 \usage{
-grepLogs(reg, ids, pattern = "warn", ignore.case = TRUE, verbose = FALSE,
-  range = 2L)
+grepLogs(reg, ids, pattern = "warn", ignore.case = TRUE,
+  verbose = FALSE, range = 2L)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -46,3 +46,4 @@ Other debug: \code{\link{debugMulticore}},
   \code{\link{setJobFunction}}, \code{\link{showLog}},
   \code{\link{testJob}}
 }
+\concept{debug}

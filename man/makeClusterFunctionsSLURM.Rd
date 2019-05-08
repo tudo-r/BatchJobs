@@ -4,8 +4,8 @@
 \alias{makeClusterFunctionsSLURM}
 \title{Create cluster functions for SLURM-based systems.}
 \usage{
-makeClusterFunctionsSLURM(template.file, list.jobs.cmd = c("squeue", "-h",
-  "-o \%i", "-u $USER"))
+makeClusterFunctionsSLURM(template.file, list.jobs.cmd = c("squeue",
+  "-h", "-o \%i", "-u $USER"))
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
@@ -46,3 +46,4 @@ Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsTorque}},
   \code{\link{makeClusterFunctions}}
 }
+\concept{clusterFunctions}

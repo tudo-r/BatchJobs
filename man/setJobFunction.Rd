@@ -49,3 +49,4 @@ Other debug: \code{\link{debugMulticore}},
   \code{\link{resetJobs}}, \code{\link{showLog}},
   \code{\link{testJob}}
 }
+\concept{debug}

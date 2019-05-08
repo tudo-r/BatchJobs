@@ -29,3 +29,4 @@ Other exports: \code{\link{addRegistrySourceDirs}},
   \code{\link{removeRegistrySourceFiles}},
   \code{\link{setRegistryPackages}}
 }
+\concept{exports}

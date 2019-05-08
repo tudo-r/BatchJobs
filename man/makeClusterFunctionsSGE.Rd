@@ -4,7 +4,8 @@
 \alias{makeClusterFunctionsSGE}
 \title{Create cluster functions for Sun Grid Engine systems.}
 \usage{
-makeClusterFunctionsSGE(template.file, list.jobs.cmd = c("qstat", "-u $USER"))
+makeClusterFunctionsSGE(template.file, list.jobs.cmd = c("qstat",
+  "-u $USER"))
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
@@ -45,3 +46,4 @@ Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsTorque}},
   \code{\link{makeClusterFunctions}}
 }
+\concept{clusterFunctions}

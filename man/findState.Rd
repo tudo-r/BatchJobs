@@ -71,43 +71,4 @@ Default is all ids.}
 }
 \description{
 \code{findDone}: Find jobs which succesfully terminated.
-
-\code{findNotDone}: Find jobs for which results are still missing.
-
-\code{findMissingResults}: Deprecated. Alias for findNotDone.
-
-\code{findErrors}: Find jobs where errors occured.
-
-\code{findNotErrors}: Find jobs where no errors occured.
-
-\code{findTerminated}: Find jobs which have terminated (done / error).
-
-\code{findNotTerminated}: Find jobs which have not terminated (not done / no error).
-
-\code{findSubmitted}: Find jobs which have been submitted.
-
-\code{findNotSubmitted}: Find jobs which have not been submitted.
-
-\code{findOnSystem}: Find jobs which are present on the batch system at the moment.
-
-\code{findNotOnSystem}: Find jobs which are not present on the batch system at the moment.
-
-\code{findRunning}: Find jobs which are running.
-
-\code{findNotRunning}: Find jobs which are not running.
-
-\code{findStarted}: Find jobs which have been started on the batch system.
-
-\code{findStarted}: Find jobs which have not been started on the batch system.
-\code{findNotRunning}: Find jobs which are not running.
-
-\code{findExpired}: Find jobs where walltime was probably hit.
-Right now the heuristic is as follows:
-Find all jobs that have started, did not abort with an error,
-did not complete with a result and are not submitted or running anymore.
-Note that this heuristic does not include jobs the scheduler looses before starting.
-
-\code{findDisappeared}: Find jobs which disappeared from the system.
-Right now the heuristic is as follows:
-Find all jobs that are submitted but not started nor on the system anymore.
 }

@@ -4,8 +4,8 @@
 \alias{makeClusterFunctionsLSF}
 \title{Create cluster functions for LSF systems.}
 \usage{
-makeClusterFunctionsLSF(template.file, list.jobs.cmd = c("bjobs", "-u $USER",
-  "-w"))
+makeClusterFunctionsLSF(template.file, list.jobs.cmd = c("bjobs",
+  "-u $USER", "-w"))
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
@@ -46,3 +46,4 @@ Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
   \code{\link{makeClusterFunctionsTorque}},
   \code{\link{makeClusterFunctions}}
 }
+\concept{clusterFunctions}

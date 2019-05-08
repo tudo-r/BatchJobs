@@ -16,3 +16,4 @@ Returns a list of BatchJobs configuration settings
 Other conf: \code{\link{configuration}},
   \code{\link{loadConfig}}, \code{\link{setConfig}}
 }
+\concept{conf}

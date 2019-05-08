@@ -44,3 +44,4 @@ Other debug: \code{\link{debugMulticore}},
   \code{\link{setJobFunction}}, \code{\link{showLog}},
   \code{\link{testJob}}
 }
+\concept{debug}

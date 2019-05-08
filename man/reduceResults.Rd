@@ -18,8 +18,8 @@ reduceResultsList(reg, ids, part = NA_character_, fun, ...,
 reduceResultsVector(reg, ids, part = NA_character_, fun, ...,
   use.names = "ids", impute.val)
 
-reduceResultsMatrix(reg, ids, part = NA_character_, fun, ..., rows = TRUE,
-  use.names = "ids", impute.val)
+reduceResultsMatrix(reg, ids, part = NA_character_, fun, ...,
+  rows = TRUE, use.names = "ids", impute.val)
 
 reduceResultsDataFrame(reg, ids, part = NA_character_, fun, ...,
   use.names = "ids", impute.val,

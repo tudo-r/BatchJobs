@@ -6,8 +6,9 @@
 \title{Create SSH worker for SSH cluster functions.}
 \usage{
 makeSSHWorker(nodename, ssh.cmd = "ssh", ssh.args = character(0L),
-  rhome = "", ncpus, max.jobs, max.load, nice, r.options = c("--no-save",
-  "--no-restore", "--no-init-file", "--no-site-file"), script)
+  rhome = "", ncpus, max.jobs, max.load, nice,
+  r.options = c("--no-save", "--no-restore", "--no-init-file",
+  "--no-site-file"), script)
 }
 \arguments{
 \item{nodename}{[\code{character(1)}]\cr
