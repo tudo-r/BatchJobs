@@ -4,8 +4,10 @@
 \alias{makeClusterFunctionsSLURM}
 \title{Create cluster functions for SLURM-based systems.}
 \usage{
-makeClusterFunctionsSLURM(template.file, list.jobs.cmd = c("squeue",
-  "-h", "-o \%i", "-u $USER"))
+makeClusterFunctionsSLURM(
+  template.file,
+  list.jobs.cmd = c("squeue", "-h", "-o \%i", "-u $USER")
+)
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
@@ -36,14 +38,15 @@ Examples can be found on
 \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfSLURM}.
 }
 \seealso{
-Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLSF}},
-  \code{\link{makeClusterFunctionsLocal}},
-  \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsOpenLava}},
-  \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctionsTorque}},
-  \code{\link{makeClusterFunctions}}
+Other clusterFunctions: 
+\code{\link{makeClusterFunctionsInteractive}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsLocal}()},
+\code{\link{makeClusterFunctionsMulticore}()},
+\code{\link{makeClusterFunctionsOpenLava}()},
+\code{\link{makeClusterFunctionsSGE}()},
+\code{\link{makeClusterFunctionsSSH}()},
+\code{\link{makeClusterFunctionsTorque}()},
+\code{\link{makeClusterFunctions}()}
 }
 \concept{clusterFunctions}

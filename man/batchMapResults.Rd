@@ -4,8 +4,15 @@
 \alias{batchMapResults}
 \title{Maps a function over the results of a registry by using batchMap.}
 \usage{
-batchMapResults(reg, reg2, fun, ..., ids, part = NA_character_,
-  more.args = list())
+batchMapResults(
+  reg,
+  reg2,
+  fun,
+  ...,
+  ids,
+  part = NA_character_,
+  more.args = list()
+)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr

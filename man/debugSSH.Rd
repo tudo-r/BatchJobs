@@ -4,9 +4,14 @@
 \alias{debugSSH}
 \title{Helper function to debug SSH mode.}
 \usage{
-debugSSH(nodename, ssh.cmd = "ssh", ssh.args = character(0L),
-  rhome = "", r.options = c("--no-save", "--no-restore",
-  "--no-init-file", "--no-site-file"), dir = getwd())
+debugSSH(
+  nodename,
+  ssh.cmd = "ssh",
+  ssh.args = character(0L),
+  rhome = "",
+  r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
+  dir = getwd()
+)
 }
 \arguments{
 \item{nodename}{[\code{character(1)}]\cr
@@ -49,11 +54,16 @@ Note that this function does not access nor use information specified for
 your cluster functions in your configuration.
 }
 \seealso{
-Other debug: \code{\link{debugMulticore}},
-  \code{\link{getErrorMessages}}, \code{\link{getJobInfo}},
-  \code{\link{getLogFiles}}, \code{\link{grepLogs}},
-  \code{\link{killJobs}}, \code{\link{resetJobs}},
-  \code{\link{setJobFunction}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+Other debug: 
+\code{\link{debugMulticore}()},
+\code{\link{getErrorMessages}()},
+\code{\link{getJobInfo}()},
+\code{\link{getLogFiles}()},
+\code{\link{grepLogs}()},
+\code{\link{killJobs}()},
+\code{\link{resetJobs}()},
+\code{\link{setJobFunction}()},
+\code{\link{showLog}()},
+\code{\link{testJob}()}
 }
 \concept{debug}

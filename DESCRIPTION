@@ -12,7 +12,6 @@ URL: https://github.com/tudo-r/BatchJobs
 BugReports: https://github.com/tudo-r/BatchJobs/issues
 MailingList: batchjobs@googlegroups.com
 License: BSD_2_clause + file LICENSE
-Roxygen: list(wrap = FALSE)
 Depends:
     R (>= 3.0.0),
     BBmisc (>= 1.9),
@@ -36,5 +35,5 @@ Suggests:
 LazyData: yes
 ByteCompile: yes
 Version: 1.8
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Encoding: UTF-8

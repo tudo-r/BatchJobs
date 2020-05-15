@@ -20,13 +20,15 @@ Packages to add to registry.}
 Mutator function for \code{packages} in \code{\link{makeRegistry}}.
 }
 \seealso{
-Other exports: \code{\link{addRegistrySourceDirs}},
-  \code{\link{addRegistrySourceFiles}},
-  \code{\link{batchExport}}, \code{\link{batchUnexport}},
-  \code{\link{loadExports}},
-  \code{\link{removeRegistryPackages}},
-  \code{\link{removeRegistrySourceDirs}},
-  \code{\link{removeRegistrySourceFiles}},
-  \code{\link{setRegistryPackages}}
+Other exports: 
+\code{\link{addRegistrySourceDirs}()},
+\code{\link{addRegistrySourceFiles}()},
+\code{\link{batchExport}()},
+\code{\link{batchUnexport}()},
+\code{\link{loadExports}()},
+\code{\link{removeRegistryPackages}()},
+\code{\link{removeRegistrySourceDirs}()},
+\code{\link{removeRegistrySourceFiles}()},
+\code{\link{setRegistryPackages}()}
 }
 \concept{exports}

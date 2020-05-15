@@ -13,7 +13,9 @@ getConfig()
 Returns a list of BatchJobs configuration settings
 }
 \seealso{
-Other conf: \code{\link{configuration}},
-  \code{\link{loadConfig}}, \code{\link{setConfig}}
+Other conf: 
+\code{\link{configuration}},
+\code{\link{loadConfig}()},
+\code{\link{setConfig}()}
 }
 \concept{conf}

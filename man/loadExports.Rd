@@ -21,13 +21,15 @@ Loads exported \code{RData} object files in the \dQuote{exports} subdirectory of
 and assigns the objects to the global environment.
 }
 \seealso{
-Other exports: \code{\link{addRegistryPackages}},
-  \code{\link{addRegistrySourceDirs}},
-  \code{\link{addRegistrySourceFiles}},
-  \code{\link{batchExport}}, \code{\link{batchUnexport}},
-  \code{\link{removeRegistryPackages}},
-  \code{\link{removeRegistrySourceDirs}},
-  \code{\link{removeRegistrySourceFiles}},
-  \code{\link{setRegistryPackages}}
+Other exports: 
+\code{\link{addRegistryPackages}()},
+\code{\link{addRegistrySourceDirs}()},
+\code{\link{addRegistrySourceFiles}()},
+\code{\link{batchExport}()},
+\code{\link{batchUnexport}()},
+\code{\link{removeRegistryPackages}()},
+\code{\link{removeRegistrySourceDirs}()},
+\code{\link{removeRegistrySourceFiles}()},
+\code{\link{setRegistryPackages}()}
 }
 \concept{exports}

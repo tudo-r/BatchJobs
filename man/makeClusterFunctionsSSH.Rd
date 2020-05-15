@@ -43,14 +43,15 @@ cluster.functions = makeClusterFunctionsSSH(
 \seealso{
 \code{\link{makeSSHWorker}}
 
-Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLSF}},
-  \code{\link{makeClusterFunctionsLocal}},
-  \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsOpenLava}},
-  \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSLURM}},
-  \code{\link{makeClusterFunctionsTorque}},
-  \code{\link{makeClusterFunctions}}
+Other clusterFunctions: 
+\code{\link{makeClusterFunctionsInteractive}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsLocal}()},
+\code{\link{makeClusterFunctionsMulticore}()},
+\code{\link{makeClusterFunctionsOpenLava}()},
+\code{\link{makeClusterFunctionsSGE}()},
+\code{\link{makeClusterFunctionsSLURM}()},
+\code{\link{makeClusterFunctionsTorque}()},
+\code{\link{makeClusterFunctions}()}
 }
 \concept{clusterFunctions}

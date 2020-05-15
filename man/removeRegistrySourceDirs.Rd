@@ -20,13 +20,15 @@ Paths to remove from registry.}
 Mutator function for \code{src.dirs} in \code{\link{makeRegistry}}.
 }
 \seealso{
-Other exports: \code{\link{addRegistryPackages}},
-  \code{\link{addRegistrySourceDirs}},
-  \code{\link{addRegistrySourceFiles}},
-  \code{\link{batchExport}}, \code{\link{batchUnexport}},
-  \code{\link{loadExports}},
-  \code{\link{removeRegistryPackages}},
-  \code{\link{removeRegistrySourceFiles}},
-  \code{\link{setRegistryPackages}}
+Other exports: 
+\code{\link{addRegistryPackages}()},
+\code{\link{addRegistrySourceDirs}()},
+\code{\link{addRegistrySourceFiles}()},
+\code{\link{batchExport}()},
+\code{\link{batchUnexport}()},
+\code{\link{loadExports}()},
+\code{\link{removeRegistryPackages}()},
+\code{\link{removeRegistrySourceFiles}()},
+\code{\link{setRegistryPackages}()}
 }
 \concept{exports}

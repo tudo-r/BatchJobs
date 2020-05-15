@@ -20,7 +20,9 @@ Invisibly returns a list of configuration settings.
 Set and overwrite configuration settings
 }
 \seealso{
-Other conf: \code{\link{configuration}},
-  \code{\link{getConfig}}, \code{\link{loadConfig}}
+Other conf: 
+\code{\link{configuration}},
+\code{\link{getConfig}()},
+\code{\link{loadConfig}()}
 }
 \concept{conf}

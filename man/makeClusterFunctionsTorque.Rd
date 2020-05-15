@@ -4,8 +4,10 @@
 \alias{makeClusterFunctionsTorque}
 \title{Create cluster functions for torque-based systems.}
 \usage{
-makeClusterFunctionsTorque(template.file, list.jobs.cmd = c("qselect",
-  "-u $USER", "-s EHQRTW"))
+makeClusterFunctionsTorque(
+  template.file,
+  list.jobs.cmd = c("qselect", "-u $USER", "-s EHQRTW")
+)
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
@@ -36,14 +38,15 @@ Examples can be found on
 \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfTorque}.
 }
 \seealso{
-Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLSF}},
-  \code{\link{makeClusterFunctionsLocal}},
-  \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsOpenLava}},
-  \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSLURM}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctions}}
+Other clusterFunctions: 
+\code{\link{makeClusterFunctionsInteractive}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsLocal}()},
+\code{\link{makeClusterFunctionsMulticore}()},
+\code{\link{makeClusterFunctionsOpenLava}()},
+\code{\link{makeClusterFunctionsSGE}()},
+\code{\link{makeClusterFunctionsSLURM}()},
+\code{\link{makeClusterFunctionsSSH}()},
+\code{\link{makeClusterFunctions}()}
 }
 \concept{clusterFunctions}

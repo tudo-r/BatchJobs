@@ -4,8 +4,14 @@
 \alias{waitForJobs}
 \title{Wait for termination of jobs on the batch system.}
 \usage{
-waitForJobs(reg, ids, sleep = 10, timeout = 604800,
-  stop.on.error = FALSE, progressbar = TRUE)
+waitForJobs(
+  reg,
+  ids,
+  sleep = 10,
+  timeout = 604800,
+  stop.on.error = FALSE,
+  progressbar = TRUE
+)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr

@@ -4,8 +4,7 @@
 \alias{setJobFunction}
 \title{Sets the job function for already existing jobs.}
 \usage{
-setJobFunction(reg, ids, fun, more.args = list(), reset = TRUE,
-  force = FALSE)
+setJobFunction(reg, ids, fun, more.args = list(), reset = TRUE, force = FALSE)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -42,11 +41,16 @@ associate the jobs with the corrected function.
 Note that by default the computational state of the affected jobs is also reset.
 }
 \seealso{
-Other debug: \code{\link{debugMulticore}},
-  \code{\link{debugSSH}}, \code{\link{getErrorMessages}},
-  \code{\link{getJobInfo}}, \code{\link{getLogFiles}},
-  \code{\link{grepLogs}}, \code{\link{killJobs}},
-  \code{\link{resetJobs}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+Other debug: 
+\code{\link{debugMulticore}()},
+\code{\link{debugSSH}()},
+\code{\link{getErrorMessages}()},
+\code{\link{getJobInfo}()},
+\code{\link{getLogFiles}()},
+\code{\link{grepLogs}()},
+\code{\link{killJobs}()},
+\code{\link{resetJobs}()},
+\code{\link{showLog}()},
+\code{\link{testJob}()}
 }
 \concept{debug}
