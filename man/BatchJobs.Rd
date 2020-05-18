@@ -4,6 +4,12 @@
 \name{BatchJobs}
 \alias{BatchJobs}
 \title{The BatchJobs package}
+\description{
+Provides Map, Reduce and Filter variants to generate jobs on batch
+computing systems like PBS/Torque, LSF, SLURM and Sun Grid Engine.
+Multicore and SSH systems are also supported. For further details see the
+project web page.
+}
 \section{Additional information}{
 
 
