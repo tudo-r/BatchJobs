@@ -40,11 +40,16 @@ batchMap(reg, f, 1:2)
 testJob(reg, 2)
 }
 \seealso{
-Other debug: \code{\link{debugMulticore}},
-  \code{\link{debugSSH}}, \code{\link{getErrorMessages}},
-  \code{\link{getJobInfo}}, \code{\link{getLogFiles}},
-  \code{\link{grepLogs}}, \code{\link{killJobs}},
-  \code{\link{resetJobs}}, \code{\link{setJobFunction}},
-  \code{\link{showLog}}
+Other debug: 
+\code{\link{debugMulticore}()},
+\code{\link{debugSSH}()},
+\code{\link{getErrorMessages}()},
+\code{\link{getJobInfo}()},
+\code{\link{getLogFiles}()},
+\code{\link{grepLogs}()},
+\code{\link{killJobs}()},
+\code{\link{resetJobs}()},
+\code{\link{setJobFunction}()},
+\code{\link{showLog}()}
 }
 \concept{debug}

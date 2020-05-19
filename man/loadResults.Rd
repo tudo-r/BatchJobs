@@ -4,8 +4,15 @@
 \alias{loadResults}
 \title{Loads result files for id vector.}
 \usage{
-loadResults(reg, ids, part = NA_character_, simplify = FALSE,
-  use.names = "ids", missing.ok = FALSE, impute.val = NULL)
+loadResults(
+  reg,
+  ids,
+  part = NA_character_,
+  simplify = FALSE,
+  use.names = "ids",
+  missing.ok = FALSE,
+  impute.val = NULL
+)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr

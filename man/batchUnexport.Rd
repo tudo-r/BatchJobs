@@ -21,13 +21,15 @@ Removes \code{RData} files from the \dQuote{exports} subdirectory of your \code{
 and thereby prevents loading on the slave.
 }
 \seealso{
-Other exports: \code{\link{addRegistryPackages}},
-  \code{\link{addRegistrySourceDirs}},
-  \code{\link{addRegistrySourceFiles}},
-  \code{\link{batchExport}}, \code{\link{loadExports}},
-  \code{\link{removeRegistryPackages}},
-  \code{\link{removeRegistrySourceDirs}},
-  \code{\link{removeRegistrySourceFiles}},
-  \code{\link{setRegistryPackages}}
+Other exports: 
+\code{\link{addRegistryPackages}()},
+\code{\link{addRegistrySourceDirs}()},
+\code{\link{addRegistrySourceFiles}()},
+\code{\link{batchExport}()},
+\code{\link{loadExports}()},
+\code{\link{removeRegistryPackages}()},
+\code{\link{removeRegistrySourceDirs}()},
+\code{\link{removeRegistrySourceFiles}()},
+\code{\link{setRegistryPackages}()}
 }
 \concept{exports}

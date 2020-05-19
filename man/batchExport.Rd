@@ -28,13 +28,15 @@ Saves objects as \code{RData} files in the \dQuote{exports} subdirectory of your
 to be later loaded on the slaves.
 }
 \seealso{
-Other exports: \code{\link{addRegistryPackages}},
-  \code{\link{addRegistrySourceDirs}},
-  \code{\link{addRegistrySourceFiles}},
-  \code{\link{batchUnexport}}, \code{\link{loadExports}},
-  \code{\link{removeRegistryPackages}},
-  \code{\link{removeRegistrySourceDirs}},
-  \code{\link{removeRegistrySourceFiles}},
-  \code{\link{setRegistryPackages}}
+Other exports: 
+\code{\link{addRegistryPackages}()},
+\code{\link{addRegistrySourceDirs}()},
+\code{\link{addRegistrySourceFiles}()},
+\code{\link{batchUnexport}()},
+\code{\link{loadExports}()},
+\code{\link{removeRegistryPackages}()},
+\code{\link{removeRegistrySourceDirs}()},
+\code{\link{removeRegistrySourceFiles}()},
+\code{\link{setRegistryPackages}()}
 }
 \concept{exports}

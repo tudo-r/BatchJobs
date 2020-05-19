@@ -4,10 +4,14 @@
 \alias{makeClusterFunctionsMulticore}
 \title{Use multiple cores on local Linux machine to spawn parallel jobs.}
 \usage{
-makeClusterFunctionsMulticore(ncpus = max(getOption("mc.cores",
-  parallel::detectCores()) - 1L, 1L), max.jobs, max.load, nice,
-  r.options = c("--no-save", "--no-restore", "--no-init-file",
-  "--no-site-file"), script)
+makeClusterFunctionsMulticore(
+  ncpus = max(getOption("mc.cores", parallel::detectCores()) - 1L, 1L),
+  max.jobs,
+  max.load,
+  nice,
+  r.options = c("--no-save", "--no-restore", "--no-init-file", "--no-site-file"),
+  script
+)
 }
 \arguments{
 \item{ncpus}{[\code{integer(1)}]\cr
@@ -54,14 +58,15 @@ Jobs are spawned by starting multiple R sessions on the commandline
 Packages \code{parallel} or \code{multicore} are not used in any way.
 }
 \seealso{
-Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLSF}},
-  \code{\link{makeClusterFunctionsLocal}},
-  \code{\link{makeClusterFunctionsOpenLava}},
-  \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSLURM}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctionsTorque}},
-  \code{\link{makeClusterFunctions}}
+Other clusterFunctions: 
+\code{\link{makeClusterFunctionsInteractive}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsLocal}()},
+\code{\link{makeClusterFunctionsOpenLava}()},
+\code{\link{makeClusterFunctionsSGE}()},
+\code{\link{makeClusterFunctionsSLURM}()},
+\code{\link{makeClusterFunctionsSSH}()},
+\code{\link{makeClusterFunctionsTorque}()},
+\code{\link{makeClusterFunctions}()}
 }
 \concept{clusterFunctions}

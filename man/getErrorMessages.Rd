@@ -22,11 +22,16 @@ Default is all jobs with errors.}
 Get error messages of jobs.
 }
 \seealso{
-Other debug: \code{\link{debugMulticore}},
-  \code{\link{debugSSH}}, \code{\link{getJobInfo}},
-  \code{\link{getLogFiles}}, \code{\link{grepLogs}},
-  \code{\link{killJobs}}, \code{\link{resetJobs}},
-  \code{\link{setJobFunction}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+Other debug: 
+\code{\link{debugMulticore}()},
+\code{\link{debugSSH}()},
+\code{\link{getJobInfo}()},
+\code{\link{getLogFiles}()},
+\code{\link{grepLogs}()},
+\code{\link{killJobs}()},
+\code{\link{resetJobs}()},
+\code{\link{setJobFunction}()},
+\code{\link{showLog}()},
+\code{\link{testJob}()}
 }
 \concept{debug}

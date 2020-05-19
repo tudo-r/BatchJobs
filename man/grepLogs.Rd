@@ -4,8 +4,14 @@
 \alias{grepLogs}
 \title{Grep log files for a pattern.}
 \usage{
-grepLogs(reg, ids, pattern = "warn", ignore.case = TRUE,
-  verbose = FALSE, range = 2L)
+grepLogs(
+  reg,
+  ids,
+  pattern = "warn",
+  ignore.case = TRUE,
+  verbose = FALSE,
+  range = 2L
+)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -39,11 +45,16 @@ Default is \code{2}.}
 Searches for occurence of \code{pattern} in log files.
 }
 \seealso{
-Other debug: \code{\link{debugMulticore}},
-  \code{\link{debugSSH}}, \code{\link{getErrorMessages}},
-  \code{\link{getJobInfo}}, \code{\link{getLogFiles}},
-  \code{\link{killJobs}}, \code{\link{resetJobs}},
-  \code{\link{setJobFunction}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+Other debug: 
+\code{\link{debugMulticore}()},
+\code{\link{debugSSH}()},
+\code{\link{getErrorMessages}()},
+\code{\link{getJobInfo}()},
+\code{\link{getLogFiles}()},
+\code{\link{killJobs}()},
+\code{\link{resetJobs}()},
+\code{\link{setJobFunction}()},
+\code{\link{showLog}()},
+\code{\link{testJob}()}
 }
 \concept{debug}

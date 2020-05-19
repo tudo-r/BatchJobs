@@ -4,8 +4,16 @@
 \alias{submitJobs}
 \title{Submit jobs or chunks of jobs to batch system via cluster function.}
 \usage{
-submitJobs(reg, ids, resources = list(), wait, max.retries = 10L,
-  chunks.as.arrayjobs = FALSE, job.delay = FALSE, progressbar = TRUE)
+submitJobs(
+  reg,
+  ids,
+  resources = list(),
+  wait,
+  max.retries = 10L,
+  chunks.as.arrayjobs = FALSE,
+  job.delay = FALSE,
+  progressbar = TRUE
+)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr

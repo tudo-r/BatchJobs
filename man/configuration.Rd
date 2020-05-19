@@ -10,7 +10,9 @@ please read
 \url{https://github.com/tudo-r/BatchJobs/wiki/Configuration}.
 }
 \seealso{
-Other conf: \code{\link{getConfig}},
-  \code{\link{loadConfig}}, \code{\link{setConfig}}
+Other conf: 
+\code{\link{getConfig}()},
+\code{\link{loadConfig}()},
+\code{\link{setConfig}()}
 }
 \concept{conf}

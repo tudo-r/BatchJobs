@@ -4,8 +4,7 @@
 \alias{makeClusterFunctionsSGE}
 \title{Create cluster functions for Sun Grid Engine systems.}
 \usage{
-makeClusterFunctionsSGE(template.file, list.jobs.cmd = c("qstat",
-  "-u $USER"))
+makeClusterFunctionsSGE(template.file, list.jobs.cmd = c("qstat", "-u $USER"))
 }
 \arguments{
 \item{template.file}{[\code{character(1)}]\cr
@@ -36,14 +35,15 @@ Examples can be found on
 \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfSGE}.
 }
 \seealso{
-Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLSF}},
-  \code{\link{makeClusterFunctionsLocal}},
-  \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsOpenLava}},
-  \code{\link{makeClusterFunctionsSLURM}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctionsTorque}},
-  \code{\link{makeClusterFunctions}}
+Other clusterFunctions: 
+\code{\link{makeClusterFunctionsInteractive}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsLocal}()},
+\code{\link{makeClusterFunctionsMulticore}()},
+\code{\link{makeClusterFunctionsOpenLava}()},
+\code{\link{makeClusterFunctionsSLURM}()},
+\code{\link{makeClusterFunctionsSSH}()},
+\code{\link{makeClusterFunctionsTorque}()},
+\code{\link{makeClusterFunctions}()}
 }
 \concept{clusterFunctions}

@@ -5,8 +5,15 @@
 \alias{ClusterFunctions}
 \title{Create a ClusterFuntions object.}
 \usage{
-makeClusterFunctions(name, submitJob, killJob, listJobs, getArrayEnvirName,
-  class = NULL, ...)
+makeClusterFunctions(
+  name,
+  submitJob,
+  killJob,
+  listJobs,
+  getArrayEnvirName,
+  class = NULL,
+  ...
+)
 }
 \arguments{
 \item{name}{[\code{character(1)}]\cr
@@ -63,14 +70,15 @@ Use this funtion when you implement a backend for a batch system.
 You must define the functions specified in the arguments.
 }
 \seealso{
-Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLSF}},
-  \code{\link{makeClusterFunctionsLocal}},
-  \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsOpenLava}},
-  \code{\link{makeClusterFunctionsSGE}},
-  \code{\link{makeClusterFunctionsSLURM}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctionsTorque}}
+Other clusterFunctions: 
+\code{\link{makeClusterFunctionsInteractive}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsLocal}()},
+\code{\link{makeClusterFunctionsMulticore}()},
+\code{\link{makeClusterFunctionsOpenLava}()},
+\code{\link{makeClusterFunctionsSGE}()},
+\code{\link{makeClusterFunctionsSLURM}()},
+\code{\link{makeClusterFunctionsSSH}()},
+\code{\link{makeClusterFunctionsTorque}()}
 }
 \concept{clusterFunctions}

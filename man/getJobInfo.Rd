@@ -4,8 +4,14 @@
 \alias{getJobInfo}
 \title{Get computational information of jobs.}
 \usage{
-getJobInfo(reg, ids, pars = FALSE, prefix.pars = FALSE, select,
-  unit = "seconds")
+getJobInfo(
+  reg,
+  ids,
+  pars = FALSE,
+  prefix.pars = FALSE,
+  select,
+  unit = "seconds"
+)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -52,11 +58,16 @@ Column \dQuote{time.running} displays the time until either the job was done, or
 it will by \code{NA} in case of time outs or hard R crashes.
 }
 \seealso{
-Other debug: \code{\link{debugMulticore}},
-  \code{\link{debugSSH}}, \code{\link{getErrorMessages}},
-  \code{\link{getLogFiles}}, \code{\link{grepLogs}},
-  \code{\link{killJobs}}, \code{\link{resetJobs}},
-  \code{\link{setJobFunction}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+Other debug: 
+\code{\link{debugMulticore}()},
+\code{\link{debugSSH}()},
+\code{\link{getErrorMessages}()},
+\code{\link{getLogFiles}()},
+\code{\link{grepLogs}()},
+\code{\link{killJobs}()},
+\code{\link{resetJobs}()},
+\code{\link{setJobFunction}()},
+\code{\link{showLog}()},
+\code{\link{testJob}()}
 }
 \concept{debug}

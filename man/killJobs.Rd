@@ -51,11 +51,16 @@ killJobs(reg, findNotTerminated(reg))
 }
 }
 \seealso{
-Other debug: \code{\link{debugMulticore}},
-  \code{\link{debugSSH}}, \code{\link{getErrorMessages}},
-  \code{\link{getJobInfo}}, \code{\link{getLogFiles}},
-  \code{\link{grepLogs}}, \code{\link{resetJobs}},
-  \code{\link{setJobFunction}}, \code{\link{showLog}},
-  \code{\link{testJob}}
+Other debug: 
+\code{\link{debugMulticore}()},
+\code{\link{debugSSH}()},
+\code{\link{getErrorMessages}()},
+\code{\link{getJobInfo}()},
+\code{\link{getLogFiles}()},
+\code{\link{grepLogs}()},
+\code{\link{resetJobs}()},
+\code{\link{setJobFunction}()},
+\code{\link{showLog}()},
+\code{\link{testJob}()}
 }
 \concept{debug}
