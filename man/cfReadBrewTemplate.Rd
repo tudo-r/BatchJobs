@@ -20,4 +20,3 @@ Simply reads your template and returns it as a character vector.
 If you do this in the constructor of your cluster functions once, you can avoid this
 repeated file access later on.
 }
-

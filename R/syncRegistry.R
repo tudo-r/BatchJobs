@@ -11,7 +11,7 @@
 #' @export
 syncRegistry = function(reg) {
   conf = getBatchJobsConf()
-  if (conf$staged.queries) {
+  if (useStagedQueries()) {
     if (conf$debug && isOnSlave())
       stop("SQL query sent from Worker")
 
@@ -49,7 +49,7 @@ writeSQLFile = function(x, con) {
 }
 
 useStagedQueries = function() {
-  getBatchJobsConf()$staged.queries
+  isTRUE(getBatchJobsConf()$staged.queries)
 }
 
 .OrderChars = setNames(letters[1L:6L], c("first", "submitted", "started", "done", "error", "last"))

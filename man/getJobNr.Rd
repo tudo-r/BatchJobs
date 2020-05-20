@@ -16,4 +16,3 @@ Registry.}
 \description{
 Get number of jobs in registry.
 }
-

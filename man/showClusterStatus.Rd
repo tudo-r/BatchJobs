@@ -20,4 +20,3 @@ Displays: Name of node, current load, number of running R processes, number of R
 with more than 50% load, number of BatchJobs jobs running.
 The latter counts either jobs belonging to \code{reg} or all BatchJobs jobs if reg was not passed.
 }
-

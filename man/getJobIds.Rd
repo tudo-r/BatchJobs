@@ -16,4 +16,3 @@ Registry.}
 \description{
 Get ids of jobs in registry.
 }
-

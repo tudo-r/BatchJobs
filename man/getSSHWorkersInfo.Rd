@@ -23,4 +23,3 @@ and \code{\link{installPackagesOnSSHWorkers}} will not work.
 \seealso{
 \code{\link{callFunctionOnSSHWorkers}}
 }
-

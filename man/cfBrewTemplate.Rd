@@ -31,4 +31,3 @@ If debug mode is turned on in the configuration, the file is stored at the same 
 corresponding R script in the \dQuote{jobs}-subdir of your files directory,
 otherwise in the temp dir via \code{\link{tempfile}}.
 }
-

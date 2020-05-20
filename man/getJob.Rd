@@ -23,4 +23,3 @@ Default is \code{TRUE}.}
 \description{
 Get job from registry by id.
 }
-

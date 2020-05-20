@@ -4,8 +4,13 @@
 \alias{loadResult}
 \title{Loads a specific result file.}
 \usage{
-loadResult(reg, id, part = NA_character_, missing.ok = FALSE,
-  impute.val = NULL)
+loadResult(
+  reg,
+  id,
+  part = NA_character_,
+  missing.ok = FALSE,
+  impute.val = NULL
+)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -36,4 +41,3 @@ Loads a specific result file.
 \seealso{
 \code{\link{reduceResults}}
 }
-

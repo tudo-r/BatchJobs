@@ -33,7 +33,15 @@ dbDoQueries = function(reg, queries, flags = "ro", max.retries = 100L, sleep = f
     } else {
       ok = try ({
         dbBegin(con)
-        ress = lapply(queries, dbGetQuery, conn = con)
+        for (query in queries) {
+          if (startsWith(query, "SELECT")) {
+            ress = dbGetQuery(con, query)
+          } else {
+            ress = dbSendQuery(con, query)
+            if (dbHasCompleted(ress))
+              dbClearResult(ress)
+          }
+        }
       }, silent = TRUE)
       if (!is.error(ok)) {
         # this can fail because DB is locked
@@ -71,7 +79,13 @@ dbDoQuery = function(reg, query, flags = "ro", max.retries = 100L, sleep = funct
       if (!grepl("(lock|i/o|readonly)", tolower(con)))
         stopf("Error while etablishing the connection: %s", as.character(con))
     } else {
-      res = try(dbGetQuery(con, query), silent = TRUE)
+      if (startsWith(query, "SELECT")) {
+        res = try(dbGetQuery(con, query), silent = TRUE)
+      } else {
+        res = try(dbSendQuery(con, query), silent = TRUE)
+        if (!is.error(res))
+          dbClearResult(res)
+      }
       dbDisconnect(con)
       if (!is.error(res))
         return(res)
@@ -91,14 +105,21 @@ dbAddData = function(reg, tab, data) {
                   collapse(colnames(data)), collapse(rep.int("?", ncol(data))))
   con = dbConnectToJobsDB(reg, flags = "rw")
   on.exit(dbDisconnect(con))
-  dbBegin(con)
-  ok = try(dbGetPreparedQuery(con, query, bind.data = data))
-  if(is.error(ok)) {
-    dbRollback(con)
-    stopf("Error in dbAddData: %s", as.character(ok))
-  }
 
+  dbBegin(con)
+  res = dbSendQuery(con, query)
+  for (i in seq_row(data)) {
+    row = unname(as.list(data[i, ]))
+    ok = try(dbBind(res, row))
+    if(is.error(ok)) {
+      dbClearResult(res)
+      dbRollback(con)
+      stopf("Error in dbAddData: %s", as.character(ok))
+    }
+  }
+  dbClearResult(res)
   dbCommit(con)
+
   as.integer(dbGetQuery(con, "SELECT total_changes()"))
 }
 

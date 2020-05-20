@@ -7,6 +7,15 @@ init:
 install:
   ps: Bootstrap
 
+
+cache:
+  - C:\RLibrary
+
+environment:
+  matrix:
+    - R_VERSION: release
+    - R_VERSION: oldrel
+
 build_script:
   - travis-tool.sh install_deps
 

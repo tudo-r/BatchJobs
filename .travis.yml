@@ -1,18 +1,11 @@
 language: r
+sudo: false
+cache: packages
 
-r_binary_packages:
-    - BBmisc
-    - checkmate
-    - brew
-    - digest
-    - DBI
-    - RSQLite
-    - stringi
-    - testthat
-
-r_github_packages:
-    - jimhester/covr
-    - mllg/fail
+r:
+  - oldrel
+  - release
+  - devel
 
 after_success:
     - Rscript -e 'library(covr); coveralls()'

@@ -20,4 +20,3 @@ Ids of selected jobs.}
 ONLY FOR INTERNAL USAGE.
 }
 \keyword{internal}
-

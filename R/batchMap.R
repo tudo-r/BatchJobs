@@ -60,9 +60,9 @@ batchMap = function(reg, fun, ..., more.args = list(), use.names = FALSE) {
   }
 
   # add jobs to DB
-  n = dbAddData(reg, "job_def", data = data.frame(fun_id = fun.id, pars = pars, jobname = jobname))
+  n = dbAddData(reg, "job_def", data = data.frame(fun_id = fun.id, pars = pars, jobname = jobname, stringsAsFactors = FALSE))
   job.def.ids = dbGetLastAddedIds(reg, "job_def", "job_def_id", n)
-  n = dbAddData(reg, "job_status", data = data.frame(job_def_id = job.def.ids, seed = seeds))
+  n = dbAddData(reg, "job_status", data = data.frame(job_def_id = job.def.ids, seed = seeds, stringsAsFactors = FALSE))
   job.ids = dbGetLastAddedIds(reg, "job_status", "job_id", n)
 
   # we can only create the dir after we have obtained the ids from the DB
