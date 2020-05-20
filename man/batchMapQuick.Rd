@@ -4,9 +4,18 @@
 \alias{batchMapQuick}
 \title{Combination of makeRegistry, batchMap and submitJobs.}
 \usage{
-batchMapQuick(fun, ..., more.args = list(), file.dir = NULL,
-  packages = character(0L), chunk.size, n.chunks,
-  chunks.as.arrayjobs = FALSE, inds, resources = list())
+batchMapQuick(
+  fun,
+  ...,
+  more.args = list(),
+  file.dir = NULL,
+  packages = character(0L),
+  chunk.size,
+  n.chunks,
+  chunks.as.arrayjobs = FALSE,
+  inds,
+  resources = list()
+)
 }
 \arguments{
 \item{fun}{[\code{function}]\cr

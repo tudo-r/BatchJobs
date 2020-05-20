@@ -64,7 +64,7 @@ is.accessible = function(path) {
     ok = try({
       fileCreate(tf1) && dir.create(td1) &&
       dir.create(td2) && length(list.files(td1)) == 1L && fileCreate(tf2) &&
-      removeDirs(c(tf2, td2, tf1, td1), recursive = TRUE)
+      all(removeDirs(c(tf2, td2, tf1, td1), recursive = TRUE))
     })
 
     if (is.error(ok) || !isTRUE(ok))

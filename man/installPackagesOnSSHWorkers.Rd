@@ -4,8 +4,14 @@
 \alias{installPackagesOnSSHWorkers}
 \title{Install packages on SSH workers.}
 \usage{
-installPackagesOnSSHWorkers(nodenames, pkgs, repos = getOption("repos"),
-  consecutive = TRUE, show.output = consecutive, ...)
+installPackagesOnSSHWorkers(
+  nodenames,
+  pkgs,
+  repos = getOption("repos"),
+  consecutive = TRUE,
+  show.output = consecutive,
+  ...
+)
 }
 \arguments{
 \item{nodenames}{[\code{character}]\cr
