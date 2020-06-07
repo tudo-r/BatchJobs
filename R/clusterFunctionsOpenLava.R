@@ -30,10 +30,16 @@ makeClusterFunctionsOpenLava = function(template.file, list.jobs.cmd = c("bjobs"
   # or a non-existent job ID is entered.
   Sys.setenv(LSB_BJOBS_CONSISTENT_EXIT_CODE = "Y")
 
-  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
+  submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs, np = 1L) {
     outfile = cfBrewTemplate(conf, template, rscript, "job")
     # returns: "Job <128952> is submitted to default queue <s_amd>."
-    res = runOSCommandLinux("bsub", stdin = outfile, stop.on.exit.code = FALSE)
+    if (np > 1L) {
+      args <- paste(c("-n ", np), collapse="")
+      res = runOSCommandLinux("bsub", args = args, stdin = outfile, stop.on.exit.code = FALSE)
+    } else {
+      res = runOSCommandLinux("bsub", stdin = outfile, stop.on.exit.code = FALSE)
+    }
+
     # FIXME filled queues
     if (res$exit.code > 0L) {
       cfHandleUnknownSubmitError("bsub", res$exit.code, res$output)

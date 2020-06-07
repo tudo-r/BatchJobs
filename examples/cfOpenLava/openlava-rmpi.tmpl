@@ -1,0 +1,7 @@
+#BSUB -J <%= job.name %>   # name of the job
+#BSUB -o <%= log.file %>                       # output is sent to logfile, stdout + stderr by default
+
+# very simple system, no resources....
+
+# we merge R output with stdout from OpenLava, which gets then logged via -o option
+/opt/openlava/bin/openmpi-mpirun -np 1 R CMD BATCH "<%= rscript %>" /dev/stdout
