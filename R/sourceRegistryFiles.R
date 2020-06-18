@@ -28,7 +28,7 @@ sourceRegistryFilesInternal = function(work.dir, dirs, files, envir = .GlobalEnv
   if (length(w))
     stopf("Directories to source not found, e.g. %s", dirs[w])
 
-  lapply(c(getRScripts(dirs), files), sys.source, envir = envir)
+  lapply(c(getRScripts(dirs), files), sys.source, envir = envir, chdir = TRUE)
   invisible(TRUE)
 }
 

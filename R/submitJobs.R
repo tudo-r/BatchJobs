@@ -219,6 +219,7 @@ submitJobs = function(reg, ids, resources = list(), wait, max.retries = 10L, chu
             resources = resources,
             arrayjobs = if(chunks.as.arrayjobs) length(id) else 1L
           )
+          Sys.sleep(1)
         }
 
         ### validate status returned from cluster functions

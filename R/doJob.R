@@ -52,7 +52,7 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
   }
 
   for (i in seq_len(n)) {
-    job = jobs[[i]]
+    job = jobs[[as.character(ids[i])]]
     messagef("########## Executing jid=%s ##########", job$id)
     started = Sys.time()
     msg.buf$push(dbMakeMessageStarted(reg, ids[i], time = as.integer(started)))
@@ -86,7 +86,7 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
         results[i] = "multiple.result.files is TRUE, but your algorithm did not return a list!"
         error[i] = TRUE
       } else if (!isProperlyNamed(result)) {
-         results[i] = "multiple.result.files is TRUE, but some the returned lists is not fully, distinctly named!"
+        results[i] = "multiple.result.files is TRUE, but some the returned lists is not fully, distinctly named!"
         error[i] = TRUE
       }
     }
@@ -118,9 +118,9 @@ doJob = function(reg, ids, multiple.result.files, staged, disable.mail, first, l
   # check if there are still remaining messages
   if (!msg.buf$empty()) {
     mail.extra.msg = paste("Some DB messages could not be flushed.",
-      "This indicates some DB problem or too much communication with the DB.",
-      "Everything should still be ok, you only might have to resubmit some jobs as they are not recorded as 'done'.",
-      sep = "\n")
+                           "This indicates some DB problem or too much communication with the DB.",
+                           "Everything should still be ok, you only might have to resubmit some jobs as they are not recorded as 'done'.",
+                           sep = "\n")
     warningf(mail.extra.msg)
   }
 
