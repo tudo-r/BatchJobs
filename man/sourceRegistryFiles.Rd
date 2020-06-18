@@ -19,4 +19,3 @@ Nothing.
 \description{
 Sources all files found in \code{src.dirs} and specified via \code{src.files}.
 }
-

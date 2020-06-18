@@ -11,13 +11,7 @@
 #' @export
 syncRegistry = function(reg) {
   conf = getBatchJobsConf()
-
-  # use staged queries on master if fs.timeout is set
-  # -> this way we are relatively sure that db transactions are performed in the intended order
-  fs.timeout = conf$fs.timeout
-  staged = conf$staged.queries || !is.na(fs.timeout)
-
-  if (staged) {
+  if (useStagedQueries()) {
     if (conf$debug && isOnSlave())
       stop("SQL query sent from Worker")
 
@@ -55,7 +49,7 @@ writeSQLFile = function(x, con) {
 }
 
 useStagedQueries = function() {
-  getBatchJobsConf()$staged.queries
+  isTRUE(getBatchJobsConf()$staged.queries)
 }
 
 .OrderChars = setNames(letters[1L:6L], c("first", "submitted", "started", "done", "error", "last"))

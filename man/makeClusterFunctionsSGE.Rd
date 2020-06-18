@@ -35,14 +35,15 @@ Examples can be found on
 \url{https://github.com/tudo-r/BatchJobs/tree/master/examples/cfSGE}.
 }
 \seealso{
-Other clusterFunctions: \code{\link{makeClusterFunctionsInteractive}},
-  \code{\link{makeClusterFunctionsLSF}},
-  \code{\link{makeClusterFunctionsLocal}},
-  \code{\link{makeClusterFunctionsMulticore}},
-  \code{\link{makeClusterFunctionsOpenLava}},
-  \code{\link{makeClusterFunctionsSLURM}},
-  \code{\link{makeClusterFunctionsSSH}},
-  \code{\link{makeClusterFunctionsTorque}},
-  \code{\link{makeClusterFunctions}}
+Other clusterFunctions: 
+\code{\link{makeClusterFunctionsInteractive}()},
+\code{\link{makeClusterFunctionsLSF}()},
+\code{\link{makeClusterFunctionsLocal}()},
+\code{\link{makeClusterFunctionsMulticore}()},
+\code{\link{makeClusterFunctionsOpenLava}()},
+\code{\link{makeClusterFunctionsSLURM}()},
+\code{\link{makeClusterFunctionsSSH}()},
+\code{\link{makeClusterFunctionsTorque}()},
+\code{\link{makeClusterFunctions}()}
 }
-
+\concept{clusterFunctions}

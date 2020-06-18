@@ -2,31 +2,76 @@
 % Please edit documentation in R/reduceResults.R
 \name{reduceResults}
 \alias{reduceResults}
+\alias{reduceResultsList}
+\alias{reduceResultsVector}
+\alias{reduceResultsMatrix}
 \alias{reduceResultsDataFrame}
 \alias{reduceResultsDataTable}
-\alias{reduceResultsList}
-\alias{reduceResultsMatrix}
-\alias{reduceResultsVector}
 \title{Reduce results from result directory.}
 \usage{
-reduceResults(reg, ids, part = NA_character_, fun, init, impute.val,
-  progressbar = TRUE, ...)
+reduceResults(
+  reg,
+  ids,
+  part = NA_character_,
+  fun,
+  init,
+  impute.val,
+  progressbar = TRUE,
+  ...
+)
 
-reduceResultsList(reg, ids, part = NA_character_, fun, ...,
-  use.names = "ids", impute.val, progressbar = TRUE)
+reduceResultsList(
+  reg,
+  ids,
+  part = NA_character_,
+  fun,
+  ...,
+  use.names = "ids",
+  impute.val,
+  progressbar = TRUE
+)
 
-reduceResultsVector(reg, ids, part = NA_character_, fun, ...,
-  use.names = "ids", impute.val)
+reduceResultsVector(
+  reg,
+  ids,
+  part = NA_character_,
+  fun,
+  ...,
+  use.names = "ids",
+  impute.val
+)
 
-reduceResultsMatrix(reg, ids, part = NA_character_, fun, ..., rows = TRUE,
-  use.names = "ids", impute.val)
+reduceResultsMatrix(
+  reg,
+  ids,
+  part = NA_character_,
+  fun,
+  ...,
+  rows = TRUE,
+  use.names = "ids",
+  impute.val
+)
 
-reduceResultsDataFrame(reg, ids, part = NA_character_, fun, ...,
-  use.names = "ids", impute.val,
-  strings.as.factors = default.stringsAsFactors())
+reduceResultsDataFrame(
+  reg,
+  ids,
+  part = NA_character_,
+  fun,
+  ...,
+  use.names = "ids",
+  impute.val,
+  strings.as.factors = NULL
+)
 
-reduceResultsDataTable(reg, ids, part = NA_character_, fun, ...,
-  use.names = "ids", impute.val)
+reduceResultsDataTable(
+  reg,
+  ids,
+  part = NA_character_,
+  fun,
+  ...,
+  use.names = "ids",
+  impute.val
+)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -81,7 +126,7 @@ Default is \code{TRUE}.}
 
 \item{strings.as.factors}{[\code{logical(1)}]
 Should all character columns in result be converted to factors?
-Default is \code{default.stringsAsFactors()}.}
+Default is \code{default.stringsAsFactors()} for R < 4.1.0 and \code{FALSE} otherwise.}
 }
 \value{
 Aggregated results, return type depends on function. If \code{ids} is empty: \code{reduceResults}
@@ -127,4 +172,3 @@ print(str(reduceResultsDataFrame(reg)))
 # reduce results to a sum
 reduceResults(reg, fun = function(aggr, job, res) aggr+res$a, init = 0)
 }
-

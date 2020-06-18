@@ -26,4 +26,3 @@ This function is only intended for use in your own cluster functions implementat
 Simply constructs a \code{\link{SubmitJobResult}} object with status code 101,
 NA as batch job id and an informative error message containing the output of the OS command in \code{output}.
 }
-

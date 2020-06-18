@@ -26,4 +26,3 @@ and all of its files will be removed from the file system.
 If there are live/running jobs, an informative error is generated.
 The default is to prompt the user for confirmation.
 }
-

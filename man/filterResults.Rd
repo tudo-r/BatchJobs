@@ -36,4 +36,3 @@ waitForJobs(reg)
 # which square numbers are even:
 filterResults(reg, fun = function(job, res) res \%\% 2 == 0)
 }
-

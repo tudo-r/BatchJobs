@@ -26,25 +26,8 @@ makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect"
   template = cfReadBrewTemplate(template.file)
 
   submitJob = function(conf, reg, job.name, rscript, log.file, job.dir, resources, arrayjobs) {
-    arrayjobs = min(arrayjobs, conf$max.arrayjobs)
-
     outfile = cfBrewTemplate(conf, template, rscript, "pbs")
-    while(BatchJobs:::runOSCommandLinux(cmd = "test",
-                                        args = c("-f", outfile),
-                                        ssh = conf$ssh,
-                                        ssh.cmd = "ssh",
-                                        nodename = conf$node,
-                                        ssh.args = "",
-                                        stop.on.exit.code = FALSE)$exit.code) {
-      Sys.sleep(1)
-    }
-    res = runOSCommandLinux("qsub",
-                            outfile,
-                            stop.on.exit.code = FALSE,
-                            ssh = conf$ssh,
-                            nodename = conf$node,
-                            ssh.cmd = "ssh",
-                            ssh.args = "")
+    res = runOSCommandLinux("qsub", outfile, stop.on.exit.code = FALSE)
 
     max.jobs.msg = "Maximum number of jobs already in queue"
     output = collapse(res$output, sep = "\n")
@@ -61,21 +44,14 @@ makeClusterFunctionsTorque = function(template.file, list.jobs.cmd = c("qselect"
     cfKillBatchJob("qdel", batch.job.id)
   }
 
-  listJobs = function(conf, reg, alljobs = FALSE) {
+  listJobs = function(conf, reg) {
     # Result is lines of fully quantified batch.job.ids
-    batch.ids = runOSCommandLinux(list.jobs.cmd[1L],
-                                  list.jobs.cmd[-1L],
-                                  ssh = conf$ssh,
-                                  nodename = conf$node,
-                                  ssh.cmd = "ssh",
-                                  ssh.args = "")$output
+    batch.ids = runOSCommandLinux(list.jobs.cmd[1L], list.jobs.cmd[-1L])$output
     # simplify batch ids of array jobs, i.e. remove the array id from the batch id
-    unique(gsub("\\[[[:digit:]]*\\]", "[]", batch.ids))
+    unique(gsub("\\[[[:digit:]]\\]", "[]", batch.ids))
   }
 
-  getArrayEnvirName = function() {
-    "PBS_ARRAYID"
-  }
+  getArrayEnvirName = function() "PBS_ARRAYID"
 
   makeClusterFunctions(name = "Torque", submitJob = submitJob, killJob = killJob,
                        listJobs = listJobs, getArrayEnvirName = getArrayEnvirName)

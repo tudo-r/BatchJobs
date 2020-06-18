@@ -4,9 +4,16 @@
 \alias{callFunctionOnSSHWorkers}
 \title{Call an arbitrary function on specified SSH workers.}
 \usage{
-callFunctionOnSSHWorkers(nodenames, fun, ..., consecutive = FALSE,
-  show.output = consecutive, simplify = TRUE, use.names = TRUE,
-  dir = getwd())
+callFunctionOnSSHWorkers(
+  nodenames,
+  fun,
+  ...,
+  consecutive = FALSE,
+  show.output = consecutive,
+  simplify = TRUE,
+  use.names = TRUE,
+  dir = getwd()
+)
 }
 \arguments{
 \item{nodenames}{[\code{character}]\cr
@@ -65,4 +72,3 @@ In \code{\link{makeSSHWorker}} various options for load
 management are possible. Note that these will be
 ignored for the current call to execute it immediatly.
 }
-

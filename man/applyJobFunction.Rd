@@ -25,4 +25,3 @@ applyJobFunction
 ONLY FOR INTERNAL USAGE.
 }
 \keyword{internal}
-

@@ -113,8 +113,14 @@ cfKillBatchJob = function(cmd, batch.job.id, max.tries = 3L) {
   max.tries = asCount(max.tries)
   assertCount(max.tries)
 
+  conf = getBatchJobsConf()
   for (tmp in seq_len(max.tries)) {
-    res = runOSCommandLinux(cmd, batch.job.id, stop.on.exit.code = FALSE)
+    res = runOSCommandLinux(cmd, batch.job.id,
+                            stop.on.exit.code = FALSE,
+                            ssh = conf$ssh,
+                            nodename = conf$node,
+                            ssh.cmd = "ssh",
+                            ssh.args = "")
     if (res$exit.code == 0L)
       return()
     Sys.sleep(1)

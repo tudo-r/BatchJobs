@@ -4,9 +4,18 @@
 \alias{batchMapQuick}
 \title{Combination of makeRegistry, batchMap and submitJobs.}
 \usage{
-batchMapQuick(fun, ..., more.args = list(), file.dir = NULL,
-  packages = character(0L), chunk.size, n.chunks,
-  chunks.as.arrayjobs = FALSE, inds, resources = list())
+batchMapQuick(
+  fun,
+  ...,
+  more.args = list(),
+  file.dir = NULL,
+  packages = character(0L),
+  chunk.size,
+  n.chunks,
+  chunks.as.arrayjobs = FALSE,
+  inds,
+  resources = list()
+)
 }
 \arguments{
 \item{fun}{[\code{function}]\cr
@@ -61,4 +70,3 @@ for quick computations on the cluster.
 Should only be used by skilled users who know what they are doing.
 Creates the file.dir, maps function, potentially chunks jobs and submits them.
 }
-

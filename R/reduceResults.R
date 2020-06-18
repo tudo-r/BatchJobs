@@ -44,7 +44,7 @@
 #'   Default is \code{TRUE}.
 #' @param strings.as.factors [\code{logical(1)}]
 #'   Should all character columns in result be converted to factors?
-#'   Default is \code{default.stringsAsFactors()}.
+#'   Default is \code{default.stringsAsFactors()} for R < 4.1.0 and \code{FALSE} otherwise.
 #' @return Aggregated results, return type depends on function. If \code{ids} is empty: \code{reduceResults}
 #'   returns \code{init} (if available) or \code{NULL}, \code{reduceResultsVector} returns \code{c()},
 #'   \code{reduceResultsList} returns \code{list()}, \code{reduceResultsMatrix} returns \code{matrix(0,0,0)},
@@ -218,7 +218,13 @@ reduceResultsMatrix = function(reg, ids, part = NA_character_, fun, ..., rows = 
 #' @export
 #' @rdname reduceResults
 reduceResultsDataFrame = function(reg, ids, part = NA_character_, fun, ..., use.names = "ids", impute.val,
-  strings.as.factors = default.stringsAsFactors()) {
+  strings.as.factors = NULL) {
+  if (is.null(strings.as.factors)) {
+    if(getRversion() < "4.1.0")
+      strings.as.factors = default.stringsAsFactors()
+    else
+      strings.as.factors = FALSE
+  }
   assertFlag(strings.as.factors)
 
   res = reduceResultsList(reg, ids, part, fun, ..., use.names = use.names, impute.val = impute.val)

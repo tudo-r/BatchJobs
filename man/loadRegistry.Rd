@@ -30,4 +30,3 @@ e.g. via sshfs or a samba share.
 There is a heuristic included which tries to detect if the location of the registry
 has changed and returns a read-only registry if necessary.
 }
-

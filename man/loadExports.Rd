@@ -11,8 +11,7 @@ loadExports(reg, what = NULL)
 Registry.}
 
 \item{what}{[\code{character}]\cr
-Names of objects and corresponding \dQuote{RData} files which should be loaded.
-Default \code{NULL} loads all files.}
+Names of objects to load. Defaults to all objects exported.}
 }
 \value{
 [\code{character}]. Invisibly returns a character vector of loaded objects.
@@ -22,13 +21,15 @@ Loads exported \code{RData} object files in the \dQuote{exports} subdirectory of
 and assigns the objects to the global environment.
 }
 \seealso{
-Other exports: \code{\link{addRegistryPackages}},
-  \code{\link{addRegistrySourceDirs}},
-  \code{\link{addRegistrySourceFiles}},
-  \code{\link{batchExport}}, \code{\link{batchUnexport}},
-  \code{\link{removeRegistryPackages}},
-  \code{\link{removeRegistrySourceDirs}},
-  \code{\link{removeRegistrySourceFiles}},
-  \code{\link{setRegistryPackages}}
+Other exports: 
+\code{\link{addRegistryPackages}()},
+\code{\link{addRegistrySourceDirs}()},
+\code{\link{addRegistrySourceFiles}()},
+\code{\link{batchExport}()},
+\code{\link{batchUnexport}()},
+\code{\link{removeRegistryPackages}()},
+\code{\link{removeRegistrySourceDirs}()},
+\code{\link{removeRegistrySourceFiles}()},
+\code{\link{setRegistryPackages}()}
 }
-
+\concept{exports}

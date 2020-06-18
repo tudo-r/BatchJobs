@@ -51,8 +51,7 @@ findConfigs = function(path = find.package("BatchJobs")) {
 readConfs = function(path = find.package("BatchJobs")) {
   conffiles = findConfigs(path)
   if (length(conffiles) == 0L) {
-    warning("No configuation found at all. Not in package, not in user.home, not in work dir!")
-    assignConfDefaults()
+    warning("No configuration found at all. Not in package, not in user.home, not in work dir!")
     return(character(0L))
   }
 
@@ -62,26 +61,6 @@ readConfs = function(path = find.package("BatchJobs")) {
   conf = sourceConfFiles(conffiles)
   assignConf(conf)
   invisible(conffiles)
-}
-
-assignConfDefaults = function() {
-  conf = getBatchJobsConf()
-  conf$cluster.functions = makeClusterFunctionsInteractive()
-  conf$mail.start = "none"
-  conf$mail.done = "none"
-  conf$mail.error = "none"
-  conf$db.driver = "SQLite"
-  conf$db.options = list(pragmas = "busy_timeout=5000")
-  conf$default.resources = list()
-  conf$debug = FALSE
-  conf$raise.warnings = FALSE
-  conf$staged.queries = TRUE
-  conf$max.concurrent.jobs = Inf
-  conf$fs.timeout = NA_real_
-  conf$ssh = FALSE
-  conf$node = "none"
-  conf$max.arrayjobs = 1000
-  conf$measure.mem = TRUE
 }
 
 # loads conf into namespace on slave
@@ -96,7 +75,7 @@ loadConf = function(reg) {
 }
 
 getBatchJobsConf = function() {
-  get(".BatchJobs.conf", envir = getNamespace("BatchJobs"))
+  .BatchJobs.conf
 }
 
 saveConf = function(reg) {
@@ -110,8 +89,7 @@ getConfNames = function() {
   c("cluster.functions", "mail.start", "mail.done", "mail.error",
     "mail.from", "mail.to", "mail.control", "db.driver", "db.options",
     "default.resources", "debug", "raise.warnings", "staged.queries",
-    "max.concurrent.jobs", "fs.timeout",
-    "measure.mem", "max.concurrent.jobs", "ssh", "node", "max.arrayjobs")
+    "max.concurrent.jobs", "fs.timeout", "measure.mem", "ssh", "node")
 }
 
 checkConf = function(conf) {
@@ -124,7 +102,7 @@ checkConf = function(conf) {
 
 checkConfElements = function(cluster.functions, mail.to, mail.from,
   mail.start, mail.done, mail.error, mail.control, db.driver, db.options, default.resources, debug,
-  max.arrayjobs, raise.warnings, staged.queries, max.concurrent.jobs, fs.timeout, ssh, node, measure.mem) {
+  raise.warnings, staged.queries, max.concurrent.jobs, fs.timeout, ssh, node, measure.mem) {
 
   mail.choices = c("none", "first", "last", "first+last", "all")
 
@@ -162,8 +140,6 @@ checkConfElements = function(cluster.functions, mail.to, mail.from,
     assertFlag(ssh)
   if (!missing(node))
     assertString(node)
-  if (!missing(max.arrayjobs))
-    assertNumber(max.arrayjobs)
   if (!missing(measure.mem))
     assertFlag(measure.mem)
 }
@@ -176,13 +152,6 @@ getClusterFunctions = function(conf) {
 # Used in packageStartupMessage and in print.Config
 printableConf = function(conf) {
   x = as.list(conf)
-
-  # This gem here is for R CMD check running examples
-  # where we get an empty config for some reasons?
-  if (length(x) == 0L) {
-    assignConfDefaults()
-    x = as.list(getBatchJobsConf())
-  }
 
   x[setdiff(getConfNames(), names(x))] = ""
   fmt = paste(
@@ -201,13 +170,11 @@ printableConf = function(conf) {
     "  fs.timeout: %s",
     "  measure.mem: %s",
     "  ssh: %s",
-    "  node: %s",
-    "  max.arrayjobs: %s\n",
+    "  node: %s\n",
     sep = "\n")
   sprintf(fmt, x$cluster.functions$name, x$mail.from, x$mail.to, x$mail.start, x$mail.done,
           x$mail.error, convertToShortString(x$default.resources), x$debug, x$raise.warnings,
-          x$staged.queries, x$max.concurrent.jobs, x$fs.timeout, x$measure.mem, x$ssh, x$node,
-          x$max.arrayjobs)
+          x$staged.queries, x$max.concurrent.jobs, x$fs.timeout, x$measure.mem, x$ssh, x$node)
 }
 
 

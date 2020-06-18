@@ -4,8 +4,16 @@
 \alias{batchReduceResults}
 \title{Reduces results via a binary function and adds jobs for this to a registry.}
 \usage{
-batchReduceResults(reg, reg2, fun, ids, part = NA_character_, init,
-  block.size, more.args = list())
+batchReduceResults(
+  reg,
+  reg2,
+  fun,
+  ids,
+  part = NA_character_,
+  init,
+  block.size,
+  more.args = list()
+)
 }
 \arguments{
 \item{reg}{[\code{\link{Registry}}]\cr
@@ -63,4 +71,3 @@ waitForJobs(reg2)
 # now reduce one final time on master
 reduceResults(reg2, fun = myreduce)
 }
-

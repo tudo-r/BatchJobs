@@ -1,3 +1,6 @@
+BatchJobs_1.8:
+- Maintenance release. Fixed some warnings.
+
 BatchJobs_1.7:
 - Configuration files are now sourced while loading the namespace, not while
   attaching the package.
