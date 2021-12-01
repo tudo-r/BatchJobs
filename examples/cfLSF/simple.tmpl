@@ -1,6 +1,8 @@
 ## Default resources can be set in your .BatchJobs.R by defining the variable 
 ## 'default.resources' as a named list.
 
+## The BSUB commands below *must* be prepended with a hash (#). Use a double hash (##) to comment them.
+
 ## remove everthing in [] if your cluster does not support arrayjobs
 #BSUB-J <%= job.name %>[1-<%= arrayjobs %>]         # name of the job / array jobs
 #BSUB-o <%= log.file %>                             # output is sent to logfile, stdout + stderr by default
