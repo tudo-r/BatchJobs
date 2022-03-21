@@ -60,7 +60,7 @@ reduceResultsDataFrame(
   ...,
   use.names = "ids",
   impute.val,
-  strings.as.factors = NULL
+  strings.as.factors = FALSE
 )
 
 reduceResultsDataTable(
@@ -126,7 +126,7 @@ Default is \code{TRUE}.}
 
 \item{strings.as.factors}{[\code{logical(1)}]
 Should all character columns in result be converted to factors?
-Default is \code{default.stringsAsFactors()} for R < 4.1.0 and \code{FALSE} otherwise.}
+Default is \code{FALSE}.}
 }
 \value{
 Aggregated results, return type depends on function. If \code{ids} is empty: \code{reduceResults}

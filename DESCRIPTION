@@ -32,8 +32,6 @@ Imports:
 Suggests:
     MASS,
     testthat
-LazyData: yes
-ByteCompile: yes
-Version: 1.8
-RoxygenNote: 7.1.0
+Version: 1.9
+RoxygenNote: 7.1.2
 Encoding: UTF-8

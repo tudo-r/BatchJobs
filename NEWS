@@ -1,3 +1,6 @@
+BatchJobs_1.9:
+- Maintenance release. Removed calls to deprecated `default.stringAsFactors()`.
+
 BatchJobs_1.8:
 - Maintenance release. Fixed some warnings.
 
