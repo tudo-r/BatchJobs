@@ -1,6 +1,6 @@
 # BatchJobs
 
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/BatchJobs)](http://cran.r-project.org/web/packages/BatchJobs/)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/BatchJobs)](https://cran.r-project.org/package=BatchJobs)
 [![CRAN Downloads](https://cranlogs.r-pkg.org/badges/BatchJobs)](https://cran.rstudio.com/web/packages/BatchJobs/index.html)
 [![Build Status](https://travis-ci.org/tudo-r/BatchJobs.svg)](https://travis-ci.org/tudo-r/BatchJobs)
 [![Build status](https://ci.appveyor.com/api/projects/status/pkcy60csbp8k1ms9/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/batchjobs/branch/master)
