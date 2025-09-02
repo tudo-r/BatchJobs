@@ -3,6 +3,7 @@
 S3method(applyJobFunction,Registry)
 S3method(copyRequiredJobFiles,Registry)
 S3method(dbCreateJobDefTable,Registry)
+S3method(dbGetConnection,SQLiteDriver)
 S3method(dbGetJobs,Registry)
 S3method(getJobInfo,Registry)
 S3method(getJobs,Registry)

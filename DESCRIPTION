@@ -1,21 +1,23 @@
 Package: BatchJobs
 Title: Batch Computing with R
-Description: Provides Map, Reduce and Filter variants to generate jobs on batch
-    computing systems like PBS/Torque, LSF, SLURM and Sun Grid Engine.
-    Multicore and SSH systems are also supported. For further details see the
-    project web page.
-Author: Bernd Bischl <bernd_bischl@gmx.net>,
-    Michel Lang <michellang@gmail.com>,
-    Henrik Bengtsson <henrikb@braju.com>
+Version: 1.9
+Authors@R: c(
+    person("Bernd", "Bischl", , "bernd_bischl@gmx.net", role = c("aut", "cre")),
+    person("Michel", "Lang", , "michellang@gmail.com", role = "aut"),
+    person("Henrik", "Bengtsson", , "henrikb@braju.com", role = "aut")
+  )
 Maintainer: Bernd Bischl <bernd_bischl@gmx.net>
+Description: Provides Map, Reduce and Filter variants to generate jobs on
+    batch computing systems like PBS/Torque, LSF, SLURM and Sun Grid
+    Engine.  Multicore and SSH systems are also supported. For further
+    details see the project web page.
+License: BSD_2_clause + file LICENSE
 URL: https://github.com/tudo-r/BatchJobs
 BugReports: https://github.com/tudo-r/BatchJobs/issues
-MailingList: batchjobs@googlegroups.com
-License: BSD_2_clause + file LICENSE
 Depends:
-    R (>= 3.0.0),
     BBmisc (>= 1.9),
-    methods
+    methods,
+    R (>= 3.0.0)
 Imports:
     backports (>= 1.1.1),
     brew,
@@ -32,6 +34,6 @@ Imports:
 Suggests:
     MASS,
     testthat
-Version: 1.9
-RoxygenNote: 7.1.2
 Encoding: UTF-8
+MailingList: batchjobs@googlegroups.com
+RoxygenNote: 7.3.2

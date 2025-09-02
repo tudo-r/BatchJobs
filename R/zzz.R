@@ -33,9 +33,8 @@
 #'     The default is \code{FALSE} on Windows systems and \code{TRUE} else.}
 #' }
 #'
-#' @docType package
 #' @name BatchJobs
-NULL
+"_PACKAGE"
 
 #' @import utils
 #' @import stats

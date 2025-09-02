@@ -10,6 +10,7 @@ dbGetConnection = function(drv, reg, ...) {
   UseMethod("dbGetConnection")
 }
 
+#' @export
 dbGetConnection.SQLiteDriver = function(drv, reg, flags = "ro", ...) {
   flags = switch(flags, "ro" = SQLITE_RO, "rw" = SQLITE_RW, "rwc" = SQLITE_RWC)
   opts = list(dbname = file.path(reg$file.dir, "BatchJobs.db"), flags = flags, drv = drv)

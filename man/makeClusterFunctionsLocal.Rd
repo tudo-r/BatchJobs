@@ -21,6 +21,7 @@ and \code{killJob} returns at once (for the same reason).
 }
 \seealso{
 Other clusterFunctions: 
+\code{\link{makeClusterFunctions}()},
 \code{\link{makeClusterFunctionsInteractive}()},
 \code{\link{makeClusterFunctionsLSF}()},
 \code{\link{makeClusterFunctionsMulticore}()},
@@ -28,7 +29,6 @@ Other clusterFunctions:
 \code{\link{makeClusterFunctionsSGE}()},
 \code{\link{makeClusterFunctionsSLURM}()},
 \code{\link{makeClusterFunctionsSSH}()},
-\code{\link{makeClusterFunctionsTorque}()},
-\code{\link{makeClusterFunctions}()}
+\code{\link{makeClusterFunctionsTorque}()}
 }
 \concept{clusterFunctions}
