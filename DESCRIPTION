@@ -1,6 +1,6 @@
 Package: BatchJobs
 Title: Batch Computing with R
-Version: 1.9
+Version: 1.10
 Authors@R: c(
     person("Bernd", "Bischl", , "bernd_bischl@gmx.net", role = c("aut", "cre")),
     person("Michel", "Lang", , "michellang@gmail.com", role = "aut"),
