@@ -6,7 +6,6 @@ Authors@R: c(
     person("Michel", "Lang", , "michellang@gmail.com", role = "aut"),
     person("Henrik", "Bengtsson", , "henrikb@braju.com", role = "aut")
   )
-Maintainer: Bernd Bischl <bernd_bischl@gmx.net>
 Description: Provides Map, Reduce and Filter variants to generate jobs on
     batch computing systems like PBS/Torque, LSF, SLURM and Sun Grid
     Engine.  Multicore and SSH systems are also supported. For further
