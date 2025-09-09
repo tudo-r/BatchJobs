@@ -2,9 +2,9 @@
 
 citHeader("To cite BatchJobs or BatchExperiments in publications use:")
 
-citEntry(entry = "Article",
+bibentry("Article",
   title        = "{BatchJobs} and {BatchExperiments}: Abstraction Mechanisms for Using {R} in Batch Environments",
-  author       = personList(as.person("Bernd Bischl"),
+  author       = c(as.person("Bernd Bischl"),
                    as.person("Michel Lang"),
                    as.person("Olaf Mersmann"),
                    as.person("J{\\\"o}rg Rahnenf{\\\"u}hrer"),

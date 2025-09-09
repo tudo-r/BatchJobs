@@ -2,6 +2,7 @@
 % Please edit documentation in R/zzz.R
 \docType{package}
 \name{BatchJobs}
+\alias{BatchJobs-package}
 \alias{BatchJobs}
 \title{The BatchJobs package}
 \description{
@@ -39,3 +40,21 @@ either in your R profile file or a script via \code{\link{options}}:
 }
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/tudo-r/BatchJobs}
+  \item Report bugs at \url{https://github.com/tudo-r/BatchJobs/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Bernd Bischl \email{bernd_bischl@gmx.net}
+
+Authors:
+\itemize{
+  \item Michel Lang \email{michellang@gmail.com}
+  \item Henrik Bengtsson \email{henrikb@braju.com}
+}
+
+}
